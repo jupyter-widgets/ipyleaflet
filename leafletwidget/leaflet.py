@@ -75,3 +75,7 @@ class Map(widgets.DOMWidget):
         msg = {'method': 'add_geojson', 'data': data}
         msg['style'] = style
         self.send(msg)
+
+class Layer(widgets.Widget):
+
+    _view_name = Unicode('LeafletLayerView', sync=True)

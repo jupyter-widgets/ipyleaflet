@@ -17,7 +17,7 @@ setup(
     classifiers=['Development Status :: 4 - Beta',
                  'Programming Language :: Python :: 2.7',
                  'License :: OSI Approved :: MIT License'],
-    packages=['leaflet'],
+    packages=['leafletwidget'],
     package_data={'': ['*.js',
                        '*.css',
                        'static/*.js',

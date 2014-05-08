@@ -141,6 +141,7 @@ require(["widgets/js/widget", "leaflet"], function(WidgetManager, leaflet) {
     var LeafletRectangleView = LeafletPolygonView.extend({
         
         create_obj: function () {
+            console.log('Rectangle',this.model.get('bounds'), this.get_options());
             this.obj = leaflet.rectangle(
                 this.model.get('bounds'),
                 this.get_options()

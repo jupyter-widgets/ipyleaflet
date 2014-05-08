@@ -102,7 +102,7 @@ class Polygon(Polyline):
 
 
 class Rectangle(Polygon):
-    _view_name = Unicode('LeafletPolygonView', sync=True)
+    _view_name = Unicode('LeafletRectangleView', sync=True)
     bounds = List([], sync=True, help="list of SW and NE location tuples")
 
 
@@ -225,7 +225,7 @@ class Map(widgets.DOMWidget):
         return self._west
     
     @property
-    def bounding_polygon(self):
+    def bounds_polygon(self):
         return [(self.north,self.west),(self.north,self.east),(self.south,self.east),(self.south,self.west)]
 
     @property
@@ -265,6 +265,18 @@ class Map(widgets.DOMWidget):
 
     def clear_layers(self):
         self.layers = ()
+
+    def __iadd__(self, layer):
+        self.add_layer(layer)
+        return self
+
+    def __isub__(self, layer):
+        self.remove_layer(layer)
+        return self
+
+    def __add__(self, layer):
+        self.add_layer(layer)
+        return self
 
     # def _handle_msg(self, msg):
     #     print(msg)

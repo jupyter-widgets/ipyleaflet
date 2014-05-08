@@ -252,13 +252,6 @@ require(["widgets/js/widget", "leaflet"], function(WidgetManager, leaflet) {
             var that = this;
             console.log('options', this.get_options());
             this.create_obj();
-            // this.map = leaflet.map(this.$el.get(0));
-            // this.map.setView(this.model.get('location'), this.model.get('zoom_start'));
-            leaflet.tileLayer(this.model.get('tiles_url'), {
-                attribution: this.model.get('tiles_attr'),
-                maxZoom: this.model.get('max_zoom'),
-                minZoom: this.model.get('min_zoom'),
-            }).addTo(this.obj);
             this.update_layers([], this.model.get('layers'));
             this.leaflet_events();
             this.model_events();

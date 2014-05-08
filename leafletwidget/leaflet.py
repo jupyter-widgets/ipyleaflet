@@ -196,10 +196,6 @@ class Map(widgets.DOMWidget):
     def _options_default(self):
         return [name for name in self.traits(o=True)]
 
-    tiles_url = Unicode('http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', sync=True)
-    tiles_attr = Unicode('Map data (c) <a href="http://openstreetmap.org">OpenStreetMap</a> contributors', sync=True)
-
-
     _south = Float(def_loc[0], sync=True)
     _north = Float(def_loc[0], sync=True)
     _east = Float(def_loc[1], sync=True)
@@ -207,6 +203,10 @@ class Map(widgets.DOMWidget):
 
     layers = Tuple(trait=Instance(Layer), default_value=(), allow_none=False, sync=True)
     layer_ids = List(default_value=[], allow_none=False)
+
+    default_tiles = Instance(TileLayer, allow_none=True)
+    def _default_tiles_default(self):
+        return TileLayer()
 
     @property
     def north(self):
@@ -235,6 +235,9 @@ class Map(widgets.DOMWidget):
     def __init__(self, **kwargs):
         super(Map, self).__init__(**kwargs)
         self.on_displayed(self._fire_layers_displayed)
+        # self.default_tiles = TileLayer()
+        if self.default_tiles is not None:
+            self.layers = (self.default_tiles,)
         # self.on_msg(self._handle_msg)
 
     def _fire_layers_displayed(self, widget, **kwargs):

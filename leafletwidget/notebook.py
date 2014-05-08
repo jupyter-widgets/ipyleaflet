@@ -12,6 +12,6 @@ def get_static_path():
 
 def initialize_notebook(leaflet_css=leaflet_css, leaflet_js=leaflet_css):
     display(HTML(leaflet_css))
-    for filename in ['map.js', 'layer.js']:
-        with open(os.path.join(get_static_path(), 'js', filename)) as f:
+    for filename in ['leaflet.js']:
+        with open(os.path.join(get_static_path(), filename)) as f:
             display(Javascript(f.read()))

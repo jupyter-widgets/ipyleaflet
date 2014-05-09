@@ -17,9 +17,29 @@ class LayerException(Exception):
 class Layer(widgets.Widget):
     _view_name = Unicode('LeafletLayerView', sync=True)
     bottom = Bool(False, sync=True)
+
     options = List(trait=Unicode, allow_none=False, sync=True)
     def _options_default(self):
         return [name for name in self.traits(o=True)]
+
+    _map = None
+
+    visible = Bool(False)
+    def _visible_changed(self, name, was_visible, will_visible):
+        if self._map is None:
+            # If Map.add_layer has never been called raise
+            raise LayerException('Map.add_layer() must be called first')
+        else:
+            # Map.add_layer() was called
+            if (not was_visible) and will_visible:
+                # Only add if we aren't already in self._map.layers
+                if self.model_id not in self._map.layer_ids:
+                    self._map.add_layer(self)
+            # Map.remove_layer() was called
+            elif was_visible and (not will_visible):
+                # Only remove if we are in self._map.layers
+                if self.model_id in self._map.layer_ids:
+                    self._map.remove_layer(self)
 
 
 class UILayer(Layer):
@@ -147,9 +167,29 @@ class ControlException(Exception):
 
 class Control(widgets.Widget):
     _view_name = Unicode('LeafletControlView', sync=True)
+
     options = List(trait=Unicode, allow_none=False, sync=True)
     def _options_default(self):
         return [name for name in self.traits(o=True)]
+
+    _map = None
+
+    visible = Bool(False)
+    def _visible_changed(self, name, was_visible, will_visible):
+        if self._map is None:
+            # If Map.add_control has never been called raise
+            raise ControlException('Map.add_control() must be called first')
+        else:
+            # Map.add_control() was called
+            if (not was_visible) and will_visible:
+                # Only add if we aren't already in self._map.controls
+                if self.model_id not in self._map.control_ids:
+                    self._map.add_control(self)
+            # Map.remove_controls() was called
+            elif was_visible and (not will_visible):
+                # Only remove if we are in self._map.controls
+                if self.model_id in self._map.control_ids:
+                    self._map.remove_control(self)
 
 
 class DrawControl(Control):
@@ -286,12 +326,16 @@ class Map(widgets.DOMWidget):
     def add_layer(self, layer):
         if layer.model_id in self.layer_ids:
             raise LayerException('layer already on map: %r' % layer)
+        layer._map = self
         self.layers = tuple([l for l in self.layers] + [layer])
+        layer.visible = True
 
     def remove_layer(self, layer):
         if layer.model_id not in self.layer_ids:
             raise LayerException('layer not on map: %r' % layer)
+        layer._map = None
         self.layers = tuple([l for l in self.layers if l.model_id != layer.model_id])
+        layer.visible = False
 
     def clear_layers(self):
         self.layers = ()
@@ -311,12 +355,16 @@ class Map(widgets.DOMWidget):
     def add_control(self, control):
         if control.model_id in self.control_ids:
             raise ControlException('control already on map: %r' % control)
+        control._map = self
         self.controls = tuple([c for c in self.controls] + [control])
+        control.visible = True
 
     def remove_control(self, control):
         if control.model_id not in self.control_ids:
             raise ControlException('control not on map: %r' % control)
+        control._map = None
         self.controls = tuple([c for c in self.controls if c.model_id != control.model_id])
+        control.visible = False
 
     def clear_controls(self):
         self.controls = ()

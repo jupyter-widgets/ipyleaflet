@@ -9,6 +9,7 @@ from IPython.html import widgets
 
 def_loc = [32.3226932,-90.9019257]
 
+
 class LayerException(Exception):
     pass
 
@@ -121,21 +122,6 @@ class LayerGroup(Layer):
     _view_name = Unicode('LeafletLayerGroupView', sync=True)
     layers = List(Instance(Layer), sync=True)
 
-    def add_layer(self, layer):
-        if layer in self.layers:
-            return
-        self.layers = [l for l in self.layers] + [layer]
-
-    def remove_layer(self, layer):
-        if layer not in self.layers:
-            return
-        self.layers = [l for l in self.layers if l != layer]
-    
-    def has_layer(self, layer):
-        return layer in self.layers
-    
-    def clear_layers(self):
-        self.layers = []
 
 class FeatureGroup(Layer):
     _view_name = Unicode('LeafletFeatureGroupView', sync=True)
@@ -154,6 +140,51 @@ class MultiPolyline(FeatureGroup):
 class MultiPolygon(FeatureGroup):
     _view_name = Unicode('LeafletMultiPolygonView', sync=True)
 
+
+class ControlException(Exception):
+    pass
+
+
+class Control(widgets.Widget):
+    _view_name = Unicode('LeafletControlView', sync=True)
+    options = List(trait=Unicode, allow_none=False, sync=True)
+    def _options_default(self):
+        return [name for name in self.traits(o=True)]
+
+
+class DrawControl(Control):
+    _view_name = Unicode('LeafletDrawControlView', sync=True)
+    layer = Instance(FeatureGroup, sync=True)
+    def _layer_default(self):
+        return FeatureGroup()
+    # Enable each of the following drawing by giving them a non empty dict of options
+    # You can add Leaflet style options in the shapeOptions sub-dict
+    # See https://github.com/Leaflet/Leaflet.draw#polylineoptions
+    polyline = Dict({'shapeOptions':{}}, sync=True)
+    # See https://github.com/Leaflet/Leaflet.draw#polygonoptions
+    polygon = Dict({'shapeOptions':{}}, sync=True)
+    # Leave empty to disable these
+    circle = Dict({}, sync=True)
+    rectangle = Dict({}, sync=True)
+    marker = Dict({}, sync=True)
+
+    _draw_callbacks = Instance(widgets.CallbackDispatcher, ())
+
+    def __init__(self, **kwargs):
+        super(DrawControl, self).__init__(**kwargs)
+        self.on_msg(self._handle_leaflet_event)
+
+    def _handle_leaflet_event(self, _, content):
+        print(content)
+        if content.get('event', '').startswith('draw'):
+            event, action = content.get('event').split(':')
+            self.draw = content.get('geo_json')
+            self.action = action
+            print(action)
+            self._draw_callbacks(self, action=action, geo_json=self.draw)
+
+    def on_draw(self, callback, remove=False):
+        self._draw_callbacks.register_callback(callback, remove=remove)
 
 class Map(widgets.DOMWidget):
 
@@ -201,9 +232,6 @@ class Map(widgets.DOMWidget):
     _east = Float(def_loc[1], sync=True)
     _west = Float(def_loc[1], sync=True)
 
-    layers = Tuple(trait=Instance(Layer), default_value=(), allow_none=False, sync=True)
-    layer_ids = List(default_value=[], allow_none=False)
-
     default_tiles = Instance(TileLayer, allow_none=True)
     def _default_tiles_default(self):
         return TileLayer()
@@ -234,15 +262,19 @@ class Map(widgets.DOMWidget):
 
     def __init__(self, **kwargs):
         super(Map, self).__init__(**kwargs)
-        self.on_displayed(self._fire_layers_displayed)
-        # self.default_tiles = TileLayer()
+        self.on_displayed(self._fire_children_displayed)
         if self.default_tiles is not None:
             self.layers = (self.default_tiles,)
-        # self.on_msg(self._handle_msg)
+        self.on_msg(self._handle_leaflet_event)
 
-    def _fire_layers_displayed(self, widget, **kwargs):
+    def _fire_children_displayed(self, widget, **kwargs):
         for layer in self.layers:
             layer._handle_displayed(**kwargs)
+        for control in self.controls:
+            control._handle_displayed(**kwargs)
+
+    layers = Tuple(trait=Instance(Layer), default_value=(), allow_none=False, sync=True)
+    layer_ids = List(default_value=[], allow_none=False)
 
     def _layers_changed(self, name, old, new):
         """Validate layers list.
@@ -259,28 +291,59 @@ class Map(widgets.DOMWidget):
         self.layers = tuple([l for l in self.layers] + [layer])
 
     def remove_layer(self, layer):
-        if layer not in self.layers:
+        if layer.model_id not in self.layer_ids:
             raise LayerException('layer not on map: %r' % layer)
         self.layers = tuple([l for l in self.layers if l.model_id != layer.model_id])
 
     def clear_layers(self):
         self.layers = ()
 
-    def __iadd__(self, layer):
-        self.add_layer(layer)
+    controls = Tuple(trait=Instance(Control), default_value=(), allow_none=False, sync=True)
+    control_ids = List(default_value=[], allow_none=False)
+
+    def _controls_changed(self, name, old, new):
+        """Validate controls list.
+
+        Makes sure only one instance of any given layer can exist in the 
+        controls list."""
+        self.control_ids = [c.model_id for c in new]
+        if len(set(self.control_ids)) != len(self.control_ids):
+            raise ControlException('duplicate control detected, only use each control once')
+
+    def add_control(self, control):
+        if control.model_id in self.control_ids:
+            raise ControlException('control already on map: %r' % control)
+        self.controls = tuple([c for c in self.controls] + [control])
+
+    def remove_control(self, control):
+        if control.model_id not in self.control_ids:
+            raise ControlException('control not on map: %r' % control)
+        self.controls = tuple([c for c in self.controls if c.model_id != control.model_id])
+
+    def clear_controls(self):
+        self.controls = ()
+
+    def __iadd__(self, item):
+        if isinstance(item, Layer):
+            self.add_layer(item)
+        elif isinstance(item, Control):
+            self.add_control(item)
         return self
 
-    def __isub__(self, layer):
-        self.remove_layer(layer)
+    def __isub__(self, item):
+        if isinstance(item, Layer):
+            self.remove_layer(item)
+        elif isinstance(item, Control):
+            self.remove_control(item)
         return self
 
-    def __add__(self, layer):
-        self.add_layer(layer)
+    def __add__(self, item):
+        if isinstance(item, Layer):
+            self.add_layer(item)
+        elif isinstance(item, Control):
+            self.add_control(item)
         return self
 
-    # def _handle_msg(self, msg):
-    #     print(msg)
-        # content = msg['content']['data']['content']
-        # if content.get('method') == 'update_bounds':
-        #     pass
+    def _handle_leaflet_event(self, _, content):
+        pass
 

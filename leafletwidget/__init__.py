@@ -3,7 +3,9 @@ from .leaflet import (
     Marker,
     TileLayer, ImageOverlay,
     Polyline, Polygon, Rectangle, Circle, CircleMarker,
-    GeoJSON
+    GeoJSON,
+    LayerGroup, FeatureGroup,
+    DrawControl
 )
 from .notebook import initialize_notebook, get_static_path
 

@@ -7,8 +7,8 @@ from IPython.utils.traitlets import (
 )
 from IPython.html import widgets
 
-def_loc = [32.3226932,-90.9019257]
-
+# def_loc = [32.3226932,-90.9019257]
+def_loc = [0.0, 0.0]
 
 class LayerException(Exception):
     pass
@@ -175,13 +175,11 @@ class DrawControl(Control):
         self.on_msg(self._handle_leaflet_event)
 
     def _handle_leaflet_event(self, _, content):
-        print(content)
         if content.get('event', '').startswith('draw'):
             event, action = content.get('event').split(':')
-            self.draw = content.get('geo_json')
-            self.action = action
-            print(action)
-            self._draw_callbacks(self, action=action, geo_json=self.draw)
+            self.last_draw = content.get('geo_json')
+            self.last_action = action
+            self._draw_callbacks(self, action=action, geo_json=self.last_draw)
 
     def on_draw(self, callback, remove=False):
         self._draw_callbacks.register_callback(callback, remove=remove)

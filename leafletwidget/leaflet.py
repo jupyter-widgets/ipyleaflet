@@ -42,12 +42,9 @@ class Layer(widgets.Widget):
                 if self.model_id in self._map.layer_ids:
                     self._map.remove_layer(self)
     
-    interact_widgets = Dict(allow_none=False)
-    def _interact_widgets_default(self):
-        d = {
-            'visible': (widgets.CheckboxWidget, {}, 'value')
-        }
-        return d
+    interact_widgets = Dict({
+        'visible': (widgets.CheckboxWidget, {}, 'value')
+    }, allow_none=False)
 
     def interact(self, name):
         """Automatically build and link a widget for the attribute name."""

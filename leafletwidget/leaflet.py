@@ -6,6 +6,7 @@ from IPython.utils.traitlets import (
     Float, Unicode, Int, Tuple, List, Instance, Bool, Dict
 )
 from IPython.html import widgets
+from IPython.utils.traitlets import link
 
 # def_loc = [32.3226932,-90.9019257]
 def_loc = [0.0, 0.0]
@@ -40,6 +41,25 @@ class Layer(widgets.Widget):
                 # Only remove if we are in self._map.layers
                 if self.model_id in self._map.layer_ids:
                     self._map.remove_layer(self)
+    
+    interact_widgets = Dict(allow_none=False)
+    def _interact_widgets_default(self):
+        d = {
+            'visible': (widgets.CheckboxWidget, {}, 'value')
+        }
+        return d
+
+    def interact(self, name):
+        """Automatically build and link a widget for the attribute name."""
+        if name in self.interact_widgets:
+            wdata = self.interact_widgets[name]
+            klass = wdata[0]
+            kwargs = wdata[1]
+            widget_attr = wdata[2]
+            kwargs[widget_attr] = getattr(self, name)
+            w = klass(**kwargs)
+            link((w,widget_attr),(self,name))
+            return w
 
 
 class UILayer(Layer):
@@ -333,7 +353,6 @@ class Map(widgets.DOMWidget):
     def remove_layer(self, layer):
         if layer.model_id not in self.layer_ids:
             raise LayerException('layer not on map: %r' % layer)
-        layer._map = None
         self.layers = tuple([l for l in self.layers if l.model_id != layer.model_id])
         layer.visible = False
 
@@ -362,7 +381,6 @@ class Map(widgets.DOMWidget):
     def remove_control(self, control):
         if control.model_id not in self.control_ids:
             raise ControlException('control not on map: %r' % control)
-        control._map = None
         self.controls = tuple([c for c in self.controls if c.model_id != control.model_id])
         control.visible = False
 

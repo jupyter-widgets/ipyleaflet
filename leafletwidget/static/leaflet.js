@@ -32,8 +32,31 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
     
         render: function () {
             this.create_obj();
+            this.leaflet_events();
+            this.model_events();
         },
-    
+
+        leaflet_events: function () {
+            // this.obj.on('moveend', function (e) {
+            //     var c = e.target.getCenter();
+            //     that.model.set('center', [c.lat, c.lng]);
+            //     that.touch();
+            //     that.update_bounds();
+            // });
+        },
+
+        model_events: function () {
+            var that = this;
+            var key;
+            var o = this.model.get('options');
+            for (var i=0; i<o.length; i++) {
+                key = o[i];
+                this.model.on('change:'+key, function () {
+                    that.obj.setStyle(that.get_options())
+                })
+            }
+        },
+
         get_options: function () {
             var o = this.model.get('options');
             var options = {};
@@ -45,6 +68,7 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
             }
             return options;
         },
+
     });
     WidgetManager.register_widget_view('LeafletLayerView', LeafletLayerView);
 

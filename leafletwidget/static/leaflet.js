@@ -37,24 +37,9 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
         },
 
         leaflet_events: function () {
-            // this.obj.on('moveend', function (e) {
-            //     var c = e.target.getCenter();
-            //     that.model.set('center', [c.lat, c.lng]);
-            //     that.touch();
-            //     that.update_bounds();
-            // });
         },
 
         model_events: function () {
-            var that = this;
-            var key;
-            var o = this.model.get('options');
-            for (var i=0; i<o.length; i++) {
-                key = o[i];
-                this.model.on('change:'+key, function () {
-                    that.obj.setStyle(that.get_options())
-                })
-            }
         },
 
         get_options: function () {
@@ -87,7 +72,15 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
                 this.get_options()
             );
         },
-        
+
+        model_events: function () {
+            LeafletMarkerView.__super__.model_events.apply(this, arguments);
+            var that = this;
+            this.model.on('change:opacity', function () {
+                that.obj.setOpacity(that.model.get('opacity'));
+            });
+        },
+
     });
     WidgetManager.register_widget_view('LeafletMarkerView', LeafletMarkerView);
     
@@ -137,6 +130,20 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
     
     
     var LeafletPathView = LeafletVectorLayerView.extend({
+        
+        model_events: function () {
+            LeafletPathView.__super__.model_events.apply(this, arguments);
+            var that = this;
+            var key;
+            var o = this.model.get('options');
+            for (var i=0; i<o.length; i++) {
+                key = o[i];
+                this.model.on('change:'+key, function () {
+                    that.obj.setStyle(that.get_options())
+                })
+            }
+        },
+
     });
     WidgetManager.register_widget_view('LeafletPathView', LeafletPathView);
     

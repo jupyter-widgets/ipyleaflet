@@ -6,6 +6,7 @@ from IPython.utils.traitlets import (
     Float, Unicode, Int, Tuple, List, Instance, Bool, Dict
 )
 from IPython.html import widgets
+from IPython.html.widgets.interaction import _widget_from_abbrev
 from IPython.utils.traitlets import link
 
 # def_loc = [32.3226932,-90.9019257]
@@ -15,7 +16,22 @@ class LayerException(Exception):
     pass
 
 
-class Layer(widgets.Widget):
+class InteractMixin(object):
+
+    def interact(self, **kwargs):
+        c = []
+        for name, abbrev in kwargs.items():
+            default = getattr(self, name)
+            widget = _widget_from_abbrev(abbrev, default)
+            if not widget.description:
+                widget.description = name
+            widget.link = link((widget,'value'),(self,name))
+            c.append(widget)
+        cont = widgets.ContainerWidget(children=c)
+        return cont
+    
+
+class Layer(widgets.Widget, InteractMixin):
     _view_name = Unicode('LeafletLayerView', sync=True)
     bottom = Bool(False, sync=True)
 
@@ -41,22 +57,6 @@ class Layer(widgets.Widget):
                 # Only remove if we are in self._map.layers
                 if self.model_id in self._map.layer_ids:
                     self._map.remove_layer(self)
-    
-    interact_widgets = Dict({
-        'visible': (widgets.CheckboxWidget, {}, 'value')
-    }, allow_none=False)
-
-    def interact(self, name):
-        """Automatically build and link a widget for the attribute name."""
-        if name in self.interact_widgets:
-            wdata = self.interact_widgets[name]
-            klass = wdata[0]
-            kwargs = wdata[1]
-            widget_attr = wdata[2]
-            kwargs[widget_attr] = getattr(self, name)
-            w = klass(**kwargs)
-            link((w,widget_attr),(self,name))
-            return w
 
 
 class UILayer(Layer):
@@ -241,10 +241,10 @@ class DrawControl(Control):
     def on_draw(self, callback, remove=False):
         self._draw_callbacks.register_callback(callback, remove=remove)
 
-class Map(widgets.DOMWidget):
+class Map(widgets.DOMWidget, InteractMixin):
 
     _view_name = Unicode('LeafletMapView', sync=True)
-    
+
     # Map options
     center = List(def_loc, sync=True, o=True)
     width = Unicode('600px', sync=True, o=True)

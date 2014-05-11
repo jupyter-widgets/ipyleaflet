@@ -426,13 +426,11 @@ class Map(widgets.DOMWidget, InteractMixin):
         north, east = northeast
         w = east - west
         h = north - south
-        _ = self.bounds
         (cur_south, cur_west), (cur_north, cur_east) = self.bounds
         cur_w = cur_east - cur_west
         cur_h = cur_north - cur_south
         delta_zoom = math.floor(
             min(math.log(cur_w/w, 2), math.log(cur_h/h, 2)))
-
         self.zoom += int(delta_zoom)
         self.center = [(north + south)/2, (east + west)/2]
 

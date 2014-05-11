@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import json
+import math
 
 from IPython.utils.traitlets import (
     Float, Unicode, Int, Tuple, List, Instance, Bool, Dict
@@ -407,4 +408,31 @@ class Map(widgets.DOMWidget, InteractMixin):
 
     def _handle_leaflet_event(self, _, content):
         pass
+
+    def fitBounds(self, southwest, northeast):
+        """Set the map's center and zoom such that the map's extent
+        fits the given bounds.
+
+        The `southwest` arg is a pair of (south, west) values and
+        the `northeast` arg is a pair of (north, east) values. The
+        statement
+
+            map.fitBounds(*map.bounds)
+
+        would therefore be a no-op. NB: until a map has been displayed,
+        its extent is undetermined.
+        """
+        south, west = southwest
+        north, east = northeast
+        w = east - west
+        h = north - south
+        _ = self.bounds
+        (cur_south, cur_west), (cur_north, cur_east) = self.bounds
+        cur_w = cur_east - cur_west
+        cur_h = cur_north - cur_south
+        delta_zoom = math.floor(
+            min(math.log(cur_w/w, 2), math.log(cur_h/h, 2)))
+
+        self.zoom += int(delta_zoom)
+        self.center = [(north + south)/2, (east + west)/2]
 

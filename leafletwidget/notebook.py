@@ -1,18 +1,19 @@
 from __future__ import print_function
 
 import os
+from urlparse import urljoin
 
 from IPython.display import display, HTML, Javascript
 
-leaflet_css = '//cdn.leafletjs.com/leaflet-0.7.2/leaflet.css'
-# leaftlet_js = "//cdn.leafletjs.com/leaflet-0.7.2/leaflet"
+leaflet_css = 'leaflet.css'
+# leaflet_url = '/nbextensions/leaflet-0.7.2'
+leaflet_js = 'leaflet'
+leaflet_url = '//cdn.leafletjs.com/leaflet-0.7.2'
 
-# leaflet_draw_js = ['//cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw-src.js',
-#                    '//cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.js']
-# leaflet_draw_png = ['//cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/images/spritesheet-2x.png',
-#                     '//cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/images/spritesheet.png']
-leaflet_draw_css = '//cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.css'
-
+leaflet_draw_url = '//cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3'
+# leaflet_draw_url = '/nbextensions/leaflet.draw/0.2.3'
+leaflet_draw_css = 'leaflet.draw.css'
+leaflet_draw_js = 'leaflet.draw'
 
 
 def get_static_path():
@@ -23,10 +24,27 @@ css_template = '<link rel="stylesheet" href="{}" />'
 def display_css(url):
     display(HTML(css_template.format(url)))
 
-def initialize_notebook(leaflet_css=leaflet_css, leaflet_js=leaflet_css):
-    display_css(leaflet_css)
-    display_css(leaflet_draw_css)
+def initialize_notebook(leaflet_url=leaflet_url, leaflet_draw_url=leaflet_draw_url):
+    """Initialize the JavaScript for this widget.
+    
+    When called as::
+    
+        initialize_notebook()
+    
+    an internet connection is required.
+    
+    To run without an internet connection, run the script `install-nbextension.py` in
+    the source tree of this project and then call::
+    
+        initialize_notebook(leaflet_url='/nbextensions/leaflet-0.7.2',
+                            leaflet_draw_url='/nbextensions/leaflet.draw/0.2.3')
 
-    for filename in ['leaflet.js']:
-        with open(os.path.join(get_static_path(), filename)) as f:
-            display(Javascript(f.read()))
+    This will still require an internet connection for map tiles.
+    """
+    display_css(leaflet_url+'/'+leaflet_css)
+    display_css(leaflet_draw_url+'/'+leaflet_draw_css)
+
+    with open(os.path.join(get_static_path(), 'leaflet.js')) as f:
+        template = f.read()
+        template = template % (leaflet_url+'/'+leaflet_js, leaflet_draw_url+'/'+leaflet_draw_js)
+        display(Javascript(template))

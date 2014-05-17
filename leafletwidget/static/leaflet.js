@@ -2,8 +2,8 @@
 
 require.config({
     paths: {
-        leaflet: "http://cdn.leafletjs.com/leaflet-0.7.2/leaflet",
-        leaflet_draw: "http://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw"
+        leaflet: "%s",
+        leaflet_draw: "%s"
     },
     shim: {leaflet_draw: "leaflet"}
 });

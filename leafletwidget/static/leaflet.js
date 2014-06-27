@@ -292,8 +292,14 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
             if ($.isEmptyObject(rectangle)) {rectangle=false;}
             var marker = this.model.get('marker');
             if ($.isEmptyObject(marker)) {marker=false;}
+            var edit = this.model.get('edit')
+            var remove = this.model.get('remove');
             this.obj = new L.Control.Draw({
-                edit: {featureGroup: this.layer_view.obj},
+                edit: {
+                    featureGroup: this.layer_view.obj,
+                    edit: edit,
+                    remove: remove
+                },
                 draw: {
                     polyline: polyline,
                     polygon: polygon,

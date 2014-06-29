@@ -224,6 +224,9 @@ class DrawControl(Control):
     circle = Dict({}, sync=True)
     rectangle = Dict({}, sync=True)
     marker = Dict({}, sync=True)
+    # Edit tools
+    edit = Bool(True, sync=True)
+    remove = Bool(True, sync=True)
 
     _draw_callbacks = Instance(widgets.CallbackDispatcher, ())
 

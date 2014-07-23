@@ -1,4 +1,4 @@
-leaftletwidget
+leafletwidget
 ==============
 
 An IPython Widget for Leaflet Maps.

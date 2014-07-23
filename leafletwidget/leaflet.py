@@ -464,5 +464,4 @@ class Map(widgets.DOMWidget, InteractMixin):
 
         self.center = [0.5 * (north + south), 0.5 * (east + west)]
         self.zoom = max(min(lat_zoom, lng_zoom, self.max_zoom), self.min_zoom)
-        print(lat_zoom, lng_zoom)
 

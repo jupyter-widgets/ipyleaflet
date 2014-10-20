@@ -1,7 +1,10 @@
 from __future__ import print_function
 
 import os
-from urlparse import urljoin
+try:
+    from urlparse import urljoin
+except ImportError:
+    from urllib.parse import urljoin
 
 from IPython.display import display, HTML, Javascript
 
@@ -26,16 +29,16 @@ def display_css(url):
 
 def initialize_notebook(leaflet_url=leaflet_url, leaflet_draw_url=leaflet_draw_url):
     """Initialize the JavaScript for this widget.
-    
+
     When called as::
-    
+
         initialize_notebook()
-    
+
     an internet connection is required.
-    
+
     To run without an internet connection, run the script `install-nbextension.py` in
     the source tree of this project and then call::
-    
+
         initialize_notebook(leaflet_url='/nbextensions/leaflet-0.7.2',
                             leaflet_draw_url='/nbextensions/leaflet.draw/0.2.3')
 

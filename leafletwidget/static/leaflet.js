@@ -5,7 +5,14 @@ require.config({
         leaflet: "%s",
         leaflet_draw: "%s"
     },
-    shim: {leaflet_draw: "leaflet"}
+    shim: {
+	leaflet: {
+	    exports: 'L'
+	},
+	leaflet_draw: {
+	    deps: ['leaflet']
+	}
+    }
 });
 
 require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager, L) {

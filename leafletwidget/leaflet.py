@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import json
+import math
 
 from IPython.utils.traitlets import (
     Float, Unicode, Int, Tuple, List, Instance, Bool, Dict
@@ -410,4 +411,57 @@ class Map(widgets.DOMWidget, InteractMixin):
 
     def _handle_leaflet_event(self, _, content):
         pass
+
+    def fitBounds(self, southwest, northeast):
+        """Set the map's center and zoom such that the map's extent
+        fits the given bounds.
+
+        The `southwest` arg is a pair of (south, west) values and
+        the `northeast` arg is a pair of (north, east) values.
+        This function is necessary because the statement
+
+            map.fitBounds(*map.bounds)
+
+        is possible only after the map has been displayed.
+        """
+        def convert_latitude(lat):
+            """Convert degrees latitude ('lat' arg) to mercator projection distance.
+            """
+            sin = math.sin(lat * math.pi / 180.)
+            y = 0.5 * math.log((1. + sin) / (1. - sin))
+            return max(min(y, math.pi), -math.pi)
+
+        def zoom(map_html_pixels, map_tile_pixels, fraction):
+            """Calculate zoom level to contain map fraction.
+
+            'map_html_pixels' arg is pixel size of html DOM element
+            'map_tile_pixels' arg is pixel size of map image tiles
+            'fraction' arg is decimal fraction of map to be visible
+            """
+            return int(math.floor(math.log(map_html_pixels / map_tile_pixels / fraction) / math.log(2.)))
+
+        south, west = southwest
+        north, east = northeast
+        # must account for bounds crossing the 180th meridian
+        if west > 0 and east < 0:
+            east = east + 360.
+
+        lat_fraction = (convert_latitude(north) - convert_latitude(south)) / (2. * math.pi)
+        if self.height.isdigit():
+            height = int(self.height)
+        else:
+            assert 'px' in self.height, "Height must be in pixels"
+            height = int(''.join(c for c in self.height if c.isdigit()))
+        lat_zoom = zoom(height, self.default_tiles.tile_size, lat_fraction)
+
+        lng_fraction = (east - west) / 360.
+        if self.width.isdigit():
+            width = int(self.width)
+        else:
+            assert 'px' in self.width, "Width must be in pixels"
+            width = int(''.join(c for c in self.width if c.isdigit()))
+        lng_zoom = zoom(width, self.default_tiles.tile_size, lng_fraction)
+
+        self.zoom = max(min(lat_zoom, lng_zoom, self.max_zoom), self.min_zoom)
+        self.center = [0.5 * (north + south), 0.5 * (east + west)]
 

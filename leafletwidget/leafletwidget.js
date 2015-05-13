@@ -1,22 +1,17 @@
-
-
 require.config({
     paths: {
-        leaflet: "%s",
-        leaflet_draw: "%s"
+        leaflet: "/nbextensions/leafletwidget/leaflet/0.7.3/leaflet",
+        leaflet_draw: "/nbextensions/leafletwidget/leaflet.draw/0.2.4/leaflet.draw"
     },
     shim: {
-	leaflet: {
-	    exports: 'L'
-	},
-	leaflet_draw: {
-	    deps: ['leaflet']
-	}
-    }
+	leaflet_draw: {deps: ['leaflet']},
+	leaflet: {exports: 'L'}
+    },
 });
 
-require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager, L) {
-
+define(['jqueryui','widgets/js/manager','widgets/js/widget', "leaflet", "leaflet_draw"], function($, manager, widget, L) {
+    console.log("loading leafletwidget");
+    
     function camel_case(input) {
         // Convert from foo_bar to fooBar 
         return input.toLowerCase().replace(/_(.)/g, function(match, group1) {
@@ -24,10 +19,10 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
         });
     }
     
-    var LeafletLayerView = IPython.WidgetView.extend({
+    var LeafletLayerView = widget.WidgetView.extend({
         
         initialize: function (parameters) {
-            LeafletLayerView.__super__.initialize.apply(this, arguments);
+            LeafletLayerView.__super__.initialize.apply(this,[parameters]);
             // Remove this line after testing...
             this.model.on('displayed', this.test_display, this);
             this.map_view = this.options.map_view;
@@ -62,13 +57,13 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
         },
 
     });
-    WidgetManager.register_widget_view('LeafletLayerView', LeafletLayerView);
+    manager.WidgetManager.register_widget_view('LeafletLayerView', LeafletLayerView);
 
 
     // UILayer
     var LeafletUILayerView = LeafletLayerView.extend({
     });
-    WidgetManager.register_widget_view('LeafletUILayerView', LeafletUILayerView);
+    manager.WidgetManager.register_widget_view('LeafletUILayerView', LeafletUILayerView);
     
     
     var LeafletMarkerView = LeafletUILayerView.extend({
@@ -89,18 +84,18 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
         },
 
     });
-    WidgetManager.register_widget_view('LeafletMarkerView', LeafletMarkerView);
+    manager.WidgetManager.register_widget_view('LeafletMarkerView', LeafletMarkerView);
     
     
     var LeafletPopupView = LeafletUILayerView.extend({
     });
-    WidgetManager.register_widget_view('LeafletPopupView', LeafletPopupView);
+    manager.WidgetManager.register_widget_view('LeafletPopupView', LeafletPopupView);
     
     
     // RasterLayer
     var LeafletRasterLayerView = LeafletLayerView.extend({
     });
-    WidgetManager.register_widget_view('LeafletRasterLayerView', LeafletRasterLayerView);
+    manager.WidgetManager.register_widget_view('LeafletRasterLayerView', LeafletRasterLayerView);
     
     
     var LeafletTileLayerView = LeafletRasterLayerView.extend({
@@ -113,7 +108,7 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
         },
         
     });
-    WidgetManager.register_widget_view('LeafletTileLayerView', LeafletTileLayerView);
+    manager.WidgetManager.register_widget_view('LeafletTileLayerView', LeafletTileLayerView);
     
     
     var LeafletImageOverlayView = LeafletRasterLayerView.extend({
@@ -127,13 +122,13 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
         },
         
     });
-    WidgetManager.register_widget_view('LeafletImageOverlayView', LeafletImageOverlayView);
+    manager.WidgetManager.register_widget_view('LeafletImageOverlayView', LeafletImageOverlayView);
     
     
     // VectorLayer
     var LeafletVectorLayerView = LeafletLayerView.extend({
     });
-    WidgetManager.register_widget_view('LeafletVectorLayerView', LeafletVectorLayerView);
+    manager.WidgetManager.register_widget_view('LeafletVectorLayerView', LeafletVectorLayerView);
     
     
     var LeafletPathView = LeafletVectorLayerView.extend({
@@ -152,7 +147,7 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
         },
 
     });
-    WidgetManager.register_widget_view('LeafletPathView', LeafletPathView);
+    manager.WidgetManager.register_widget_view('LeafletPathView', LeafletPathView);
     
     
     var LeafletPolylineView = LeafletPathView.extend({
@@ -165,7 +160,7 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
         },
         
     });
-    WidgetManager.register_widget_view('LeafletPolylineView', LeafletPolylineView);
+    manager.WidgetManager.register_widget_view('LeafletPolylineView', LeafletPolylineView);
     
     
     var LeafletPolygonView = LeafletPolylineView.extend({
@@ -175,7 +170,7 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
         },
     
     });
-    WidgetManager.register_widget_view('LeafletPolygonView', LeafletPolygonView);
+    manager.WidgetManager.register_widget_view('LeafletPolygonView', LeafletPolygonView);
     
     
     var LeafletRectangleView = LeafletPolygonView.extend({
@@ -188,7 +183,7 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
         },
 
     });
-    WidgetManager.register_widget_view('LeafletRectangleView', LeafletRectangleView);
+    manager.WidgetManager.register_widget_view('LeafletRectangleView', LeafletRectangleView);
     
     
     var LeafletCircleView = LeafletPathView.extend({
@@ -201,7 +196,7 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
         },
     
     });
-    WidgetManager.register_widget_view('LeafletCircleView', LeafletCircleView);
+    manager.WidgetManager.register_widget_view('LeafletCircleView', LeafletCircleView);
     
     
     var LeafletCircleMarkerView = LeafletCircleView.extend({
@@ -214,7 +209,7 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
         },
     
     });
-    WidgetManager.register_widget_view('LeafletCircleMarkerView', LeafletCircleMarkerView);
+    manager.WidgetManager.register_widget_view('LeafletCircleMarkerView', LeafletCircleMarkerView);
     
     
     // LayerGroup
@@ -225,7 +220,7 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
         },
         
     });
-    WidgetManager.register_widget_view('LeafletLayerGroupView', LeafletLayerGroupView);
+    manager.WidgetManager.register_widget_view('LeafletLayerGroupView', LeafletLayerGroupView);
     
     
     var LeafletFeatureGroupView = LeafletLayerGroupView.extend({
@@ -235,12 +230,12 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
         },
         
     });
-    WidgetManager.register_widget_view('LeafletFeatureGroupView', LeafletFeatureGroupView);
+    manager.WidgetManager.register_widget_view('LeafletFeatureGroupView', LeafletFeatureGroupView);
     
     
     var LeafletMultiPolylineView = LeafletFeatureGroupView.extend({
     });
-    WidgetManager.register_widget_view('LeafletMultiPolylineView', LeafletMultiPolylineView);
+    manager.WidgetManager.register_widget_view('LeafletMultiPolylineView', LeafletMultiPolylineView);
     
     
     var LeafletGeoJSONView = LeafletFeatureGroupView.extend({
@@ -255,29 +250,29 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
             this.obj = L.geoJson(this.model.get('data'), {style: style});
         },
     });
-    WidgetManager.register_widget_view('LeafletGeoJSONView', LeafletGeoJSONView);
+    manager.WidgetManager.register_widget_view('LeafletGeoJSONView', LeafletGeoJSONView);
 
 
     var LeafletMultiPolygonView = LeafletFeatureGroupView.extend({
     });
-    WidgetManager.register_widget_view('LeafletMultiPolygonView', LeafletMultiPolygonView);
+    manager.WidgetManager.register_widget_view('LeafletMultiPolygonView', LeafletMultiPolygonView);
 
 
-    var LeafletControlView = IPython.WidgetView.extend({
+    var LeafletControlView = widget.WidgetView.extend({
         
         initialize: function (parameters) {
-            LeafletControlView.__super__.initialize.apply(this, arguments);
+            LeafletControlView.__super__.initialize.apply(this,[parameters]);
             this.map_view = this.options.map_view;
         },
 
     });
-    WidgetManager.register_widget_view('LeafletControlView', LeafletControlView);
+    manager.WidgetManager.register_widget_view('LeafletControlView', LeafletControlView);
 
 
     var LeafletDrawControlView = LeafletControlView.extend({
         
         initialize: function (parameters) {
-            LeafletDrawControlView.__super__.initialize.apply(this, arguments);
+            LeafletDrawControlView.__super__.initialize.apply(this,[parameters]);
             this.map_view = this.options.map_view;
         },
 
@@ -351,45 +346,55 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
         },
 
     });
-    WidgetManager.register_widget_view('LeafletDrawControlView', LeafletDrawControlView);
+    manager.WidgetManager.register_widget_view('LeafletDrawControlView', LeafletDrawControlView);
 
 
-    var LeafletMapView = IPython.DOMWidgetView.extend({
+    var LeafletMapView = widget.DOMWidgetView.extend({
         
-        initialize: function (options) {
-            LeafletMapView.__super__.initialize.apply(this, arguments);
-            this.rendered = false;
+        initialize: function() {
+            console.log('MapView initialized');
+            LeafletMapView.__super__.initialize.apply(this,arguments);
+            this.rendered=false;
         },
     
         // Layer management
         update_layers: function (old_list, new_list) {
-            this.do_diff(
-                old_list,
-                new_list, 
-                $.proxy(this.remove_layer_model, this),
-                $.proxy(this.add_layer_model, this)
-            );
+	    console.log('inside updating layers');
+	    console.log(old_list);
+	    console.log(new_list);
+            //_.difference(old_list,new_list).map(function(c) {this.remove_layer_model(c);});
+	    console.log('the difference');
+	    console.log(_.difference(new_list,old_list));
+	    console.log('adding new layers');
+            //_.difference(new_list,old_list).map(function(c) {$el.addClass(c);});
+	    this.add_layer_model(new_list[0]);
         },
     
         remove_layer_model: function (child_model) {
+	    console.log('remove');
             var child_view = this.child_views[child_model.id];
             this.obj.removeLayer(child_view.obj);
             this.delete_child_view(child_model);
         },
     
         add_layer_model: function (child_model) {
+	    console.log('adding layer model');
+	    console.log('create_child_view');
             var child_view = this.create_child_view(child_model, {map_view: this});
-            this.obj.addLayer(child_view.obj);
+	    console.log('obj addLayer');
+	    console.log(child_view);
+            this.obj.addLayer(child_view);
         },
 
         // Control Management
         update_controls: function (old_list, new_list) {
-            this.do_diff(
-                old_list,
-                new_list, 
-                $.proxy(this.remove_control_model, this),
-                $.proxy(this.add_control_model, this)
-            );
+	    console.log('skipping controls');
+            // this.do_diff(
+            //     old_list,
+            //     new_list, 
+            //     $.proxy(this.remove_control_model, this),
+            //     $.proxy(this.add_control_model, this)
+            //);
         },
 
         remove_control_model: function (child_model) {
@@ -405,18 +410,30 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
 
         // Rendering
         render: function () {
+	    console.log("Rendering");
             this.$el.width(this.model.get('width')).height(this.model.get('height'));
-            this.model.on('displayed', this.render_leaflet, this);
+            this.on('displayed', this.render_leaflet, this);
         },
     
         render_leaflet: function () {
+	    console.log("render_leaflet");
             if (!this.rendered) {
                 var that = this;
+		console.log("create_obj");
                 this.create_obj();
+		console.log("update_layers");
+		console.log("getting layers");
+		layers = this.model.get('layers')
+		console.log("got layers, updating");
+		console.log(layers);
                 this.update_layers([], this.model.get('layers'));
+		console.log("update_controls");
                 this.update_controls([], this.model.get('controls'));
+		console.log("leafletevents");
                 this.leaflet_events();
+		console.log("model events");
                 this.model_events();
+		console.log("update bounds");
                 this.update_bounds();
                 this.rendered = true;
             }
@@ -490,7 +507,30 @@ require(["widgets/js/widget", "leaflet", "leaflet_draw"], function(WidgetManager
         },
     
     });
-    WidgetManager.register_widget_view('LeafletMapView', LeafletMapView);
+    manager.WidgetManager.register_widget_view('LeafletMapView', LeafletMapView);
 
-
+    return {
+        LeafletMapView: LeafletMapView,	
+        LeafletLayerView: LeafletLayerView,
+        LeafletUILayerView: LeafletUILayerView,
+        LeafletMarkerView: LeafletMarkerView,
+        LeafletPopupView: LeafletPopupView,
+        LeafletRasterLayerView: LeafletRasterLayerView,
+        LeafletTileLayerView: LeafletTileLayerView,
+        LeafletImageOverlayView: LeafletImageOverlayView,
+        LeafletVectorLayerView: LeafletVectorLayerView,
+        LeafletPathView: LeafletPathView,
+        LeafletPolylineView: LeafletPolylineView,
+        LeafletPolygonView: LeafletPolygonView,
+        LeafletRectangleView: LeafletRectangleView,
+        LeafletCircleView: LeafletCircleView,
+        LeafletCircleMarkerView: LeafletCircleMarkerView,
+        LeafletLayerGroupView: LeafletLayerGroupView,
+        LeafletFeatureGroupView: LeafletFeatureGroupView,
+        LeafletMultiPolylineView: LeafletMultiPolylineView,
+        LeafletGeoJSONView: LeafletGeoJSONView,
+        LeafletMultiPolygonView: LeafletMultiPolygonView,
+        LeafletControlView: LeafletControlView,
+        LeafletDrawControlView: LeafletDrawControlView,
+    }
 });

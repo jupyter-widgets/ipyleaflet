@@ -7,6 +7,3 @@ from .leaflet import (
     LayerGroup, FeatureGroup,
     DrawControl
 )
-from .notebook import initialize_notebook, get_static_path
-
-    

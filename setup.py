@@ -1,25 +1,26 @@
 # -*- coding: utf-8 -*-
-
+from __future__ import print_function
+from setuptools import setup
 try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+    from jupyterpip import cmdclass
+except:
+    import pip, importlib
+    pip.main(['install', 'jupyter-pip']); cmdclass = importlib.import_module('jupyterpip').cmdclass
 
 setup(
     name='leafletwidget',
     version='0.1',
-    description='An IPython widget for dynamic Leaflet maps',
-    author='Brian E. Granger',
-    author_email='ellisonbg@gmail.com',
-    license='MIT License',
+    description='Leafletwidget.js widget for IPython',
+    author='Brian Granger',
+    author_email='ellisonbg',
+    license='New BSD',
     url='https://github.com/ellisonbg/leafletwidget',
-    keywords='data visualization',
+    keywords='python ipython javascript widget leafletwidget',
     classifiers=['Development Status :: 4 - Beta',
-                 'Programming Language :: Python :: 2.7',
+                 'Programming Language :: Python',
                  'License :: OSI Approved :: MIT License'],
     packages=['leafletwidget'],
-    package_data={'': ['*.js',
-                       '*.css',
-                       'static/*.js',
-                       'static/*.css']}
+    include_package_data=True,
+    install_requires=["jupyter-pip"],
+    cmdclass=cmdclass('leafletwidget'),
 )

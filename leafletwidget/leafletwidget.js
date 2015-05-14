@@ -357,55 +357,34 @@ define(['jqueryui','widgets/js/manager','widgets/js/widget', "leaflet", "leaflet
             this.rendered=false;
         },
     
-        // Layer management
-        update_layers: function (old_list, new_list) {
-	    console.log('inside updating layers');
-	    console.log(old_list);
-	    console.log(new_list);
-            //_.difference(old_list,new_list).map(function(c) {this.remove_layer_model(c);});
-	    console.log('the difference');
-	    console.log(_.difference(new_list,old_list));
-	    console.log('adding new layers');
-            //_.difference(new_list,old_list).map(function(c) {$el.addClass(c);});
-	    this.add_layer_model(new_list[0]);
-        },
-    
         remove_layer_model: function (child_model) {
-	    console.log('remove');
-            var child_view = this.child_views[child_model.id];
-            this.obj.removeLayer(child_view.obj);
-            this.delete_child_view(child_model);
+            var that = this;
+            this.child_views[child_model.id].then(function(child_view) {
+                that.obj.removeLayer(child_view.obj);
+                that.delete_child_view(child_model);    
+            });
         },
     
         add_layer_model: function (child_model) {
-	    console.log('adding layer model');
-	    console.log('create_child_view');
-            var child_view = this.create_child_view(child_model, {map_view: this});
-	    console.log('obj addLayer');
-	    console.log(child_view);
-            this.obj.addLayer(child_view);
-        },
-
-        // Control Management
-        update_controls: function (old_list, new_list) {
-	    console.log('skipping controls');
-            // this.do_diff(
-            //     old_list,
-            //     new_list, 
-            //     $.proxy(this.remove_control_model, this),
-            //     $.proxy(this.add_control_model, this)
-            //);
+            var that = this;
+            this.create_child_view(child_model, {map_view: this}).then(function(child_view) {
+                that.obj.addLayer(child_view.obj);
+            });
         },
 
         remove_control_model: function (child_model) {
-            var child_view = this.child_views[child_model.id];
-            this.obj.removeControl(child_view.obj);
-            this.delete_child_view(child_model);
+            var that = this;
+            this.child_views[child_model.id].then(function(child_view) {
+                that.obj.removeControl(child_view.obj);
+                that.delete_child_view(child_model);
+            });
         },
 
         add_control_model: function (child_model) {
-            var child_view = this.create_child_view(child_model, {map_view: this});
-            this.obj.addControl(child_view.obj);
+            var that = this;
+            this.create_child_view(child_model, {map_view: this}).then(function(child_view) {
+                that.obj.addControl(child_view.obj);
+            });
         },
 
         // Rendering
@@ -421,14 +400,6 @@ define(['jqueryui','widgets/js/manager','widgets/js/widget', "leaflet", "leaflet
                 var that = this;
 		console.log("create_obj");
                 this.create_obj();
-		console.log("update_layers");
-		console.log("getting layers");
-		layers = this.model.get('layers')
-		console.log("got layers, updating");
-		console.log(layers);
-                this.update_layers([], this.model.get('layers'));
-		console.log("update_controls");
-                this.update_controls([], this.model.get('controls'));
 		console.log("leafletevents");
                 this.leaflet_events();
 		console.log("model events");
@@ -483,12 +454,19 @@ define(['jqueryui','widgets/js/manager','widgets/js/widget', "leaflet", "leaflet
         model_events: function () {
             var that = this;
             this.model.on('msg:custom', this.handle_msg, this);
-            this.model.on('change:layers', function(model, value, options) {
-                that.update_layers(model.previous('layers'), value);
-            });
-            this.model.on('change:controls', function(model, value, options) {
-                that.update_controls(model.previous('controls'), value);
-            });
+
+            this.layer_views = new widget.ViewList(this.add_layer_model, this.remove_layer_model, this);
+            this.listenTo(this.model, 'change:layers', function(model, value) {
+                this.layer_views.update(value);
+            }, this);
+            this.layer_views.update(this.model.get('layers'));
+
+            this.control_views = new widget.ViewList(this.add_control_model, this.remove_layer_model, this);
+            this.listenTo(this.model, 'change:controls', function(model, value) {
+                this.control_views.update(value);
+            }, this);
+            this.control_views.update(this.model.get('controls'));
+
             this.model.on('change:zoom', function () {
                 that.obj.setZoom(that.model.get('zoom'));
                 that.update_bounds();

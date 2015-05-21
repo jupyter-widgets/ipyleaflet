@@ -13,10 +13,14 @@ define(['jqueryui','widgets/js/manager','widgets/js/widget', "leaflet", "leaflet
     console.log("loading leafletwidget");
     
     // Load the leaflet css.
-    $('<link>')
-        .appendTo('head')
-        .attr({type: 'text/css', rel: 'stylesheet'})
-        .attr('href', '/nbextensions/leafletwidget/leaflet/0.7.3/leaflet.css');
+    var load_css = function(path) {
+        $('<link>')
+            .appendTo('head')
+            .attr({type: 'text/css', rel: 'stylesheet'})
+            .attr('href', path);
+    };    
+    load_css('/nbextensions/leafletwidget/leaflet/0.7.3/leaflet.css');
+    load_css('/nbextensions/leafletwidget/leaflet.draw/0.2.4/leaflet.draw.css');
 
     function camel_case(input) {
         // Convert from foo_bar to fooBar 
@@ -279,13 +283,22 @@ define(['jqueryui','widgets/js/manager','widgets/js/widget', "leaflet", "leaflet
         
         initialize: function (parameters) {
             LeafletDrawControlView.__super__.initialize.apply(this,[parameters]);
+            var that = this;
+            this.obj_promise = new Promise(function(resolve) {
+                that._resolve_obj = resolve;
+            });
             this.map_view = this.options.map_view;
         },
 
         render: function () {
-            this.layer_view = this.create_child_view(this.model.get('layer'), {map_view: this.map_view});
-            this.map_view.obj.addLayer(this.layer_view.obj);
-            this.create_obj();
+            var layer = this.model.get('layer');
+            var that = this;
+            this.create_child_view(layer, {map_view: this.map_view}).then(function(layer_view) {
+                that.layer_view = layer_view;
+                that.map_view.obj.addLayer(that.layer_view.obj);
+                that.create_obj();
+                that._resolve_obj(that.obj);
+            });
         },
 
         create_obj: function () {
@@ -381,15 +394,19 @@ define(['jqueryui','widgets/js/manager','widgets/js/widget', "leaflet", "leaflet
         remove_control_model: function (child_model) {
             var that = this;
             this.child_views[child_model.id].then(function(child_view) {
-                that.obj.removeControl(child_view.obj);
-                that.delete_child_view(child_model);
+                child_view.obj_promise.then(function(obj) {
+                    that.obj.removeControl(obj);
+                    that.delete_child_view(child_model);
+                });
             });
         },
 
         add_control_model: function (child_model) {
             var that = this;
             this.create_child_view(child_model, {map_view: this}).then(function(child_view) {
-                that.obj.addControl(child_view.obj);
+                child_view.obj_promise.then(function(obj) {
+                    that.obj.addControl(obj);
+                });
             });
         },
 

@@ -12,6 +12,16 @@ require.config({
 define(['jqueryui','widgets/js/manager','widgets/js/widget', "leaflet", "leaflet_draw"], function($, manager, widget, L) {
     console.log("loading leafletwidget");
     
+    // Load the leaflet css.
+    var load_css = function(path) {
+        $('<link>')
+            .appendTo('head')
+            .attr({type: 'text/css', rel: 'stylesheet'})
+            .attr('href', path);
+    };    
+    load_css('/nbextensions/leafletwidget/leaflet/0.7.3/leaflet.css');
+    load_css('/nbextensions/leafletwidget/leaflet.draw/0.2.4/leaflet.draw.css');
+
     function camel_case(input) {
         // Convert from foo_bar to fooBar 
         return input.toLowerCase().replace(/_(.)/g, function(match, group1) {
@@ -273,13 +283,22 @@ define(['jqueryui','widgets/js/manager','widgets/js/widget', "leaflet", "leaflet
         
         initialize: function (parameters) {
             LeafletDrawControlView.__super__.initialize.apply(this,[parameters]);
+            var that = this;
+            this.obj_promise = new Promise(function(resolve) {
+                that._resolve_obj = resolve;
+            });
             this.map_view = this.options.map_view;
         },
 
         render: function () {
-            this.layer_view = this.create_child_view(this.model.get('layer'), {map_view: this.map_view});
-            this.map_view.obj.addLayer(this.layer_view.obj);
-            this.create_obj();
+            var layer = this.model.get('layer');
+            var that = this;
+            this.create_child_view(layer, {map_view: this.map_view}).then(function(layer_view) {
+                that.layer_view = layer_view;
+                that.map_view.obj.addLayer(that.layer_view.obj);
+                that.create_obj();
+                that._resolve_obj(that.obj);
+            });
         },
 
         create_obj: function () {
@@ -357,33 +376,32 @@ define(['jqueryui','widgets/js/manager','widgets/js/widget', "leaflet", "leaflet
             this.rendered=false;
         },
     
-        remove_layer_model: function (child_model) {
-            var that = this;
-            this.child_views[child_model.id].then(function(child_view) {
-                that.obj.removeLayer(child_view.obj);
-                that.delete_child_view(child_model);    
-            });
+        remove_layer_view: function(view) {
+            this.obj.removeLayer(view.obj);
         },
     
-        add_layer_model: function (child_model) {
+        add_layer_model: function(child_model) {
             var that = this;
-            this.create_child_view(child_model, {map_view: this}).then(function(child_view) {
+            return this.create_child_view(child_model, {map_view: this}).then(function(child_view) {
                 that.obj.addLayer(child_view.obj);
+                return child_view;
             });
         },
 
-        remove_control_model: function (child_model) {
+        remove_control_view: function(view) {
             var that = this;
-            this.child_views[child_model.id].then(function(child_view) {
-                that.obj.removeControl(child_view.obj);
-                that.delete_child_view(child_model);
+            view.obj_promise.then(function(obj) {
+                that.obj.removeControl(obj);
             });
         },
 
-        add_control_model: function (child_model) {
+        add_control_model: function(child_model) {
             var that = this;
-            this.create_child_view(child_model, {map_view: this}).then(function(child_view) {
-                that.obj.addControl(child_view.obj);
+            return this.create_child_view(child_model, {map_view: this}).then(function(child_view) {
+                child_view.obj_promise.then(function(obj) {
+                    that.obj.addControl(obj);
+                });
+                return child_view;
             });
         },
 
@@ -455,13 +473,13 @@ define(['jqueryui','widgets/js/manager','widgets/js/widget', "leaflet", "leaflet
             var that = this;
             this.model.on('msg:custom', this.handle_msg, this);
 
-            this.layer_views = new widget.ViewList(this.add_layer_model, this.remove_layer_model, this);
+            this.layer_views = new widget.ViewList(this.add_layer_model, this.remove_layer_view, this);
             this.listenTo(this.model, 'change:layers', function(model, value) {
                 this.layer_views.update(value);
             }, this);
             this.layer_views.update(this.model.get('layers'));
 
-            this.control_views = new widget.ViewList(this.add_control_model, this.remove_layer_model, this);
+            this.control_views = new widget.ViewList(this.add_control_model, this.remove_control_view, this);
             this.listenTo(this.model, 'change:controls', function(model, value) {
                 this.control_views.update(value);
             }, this);

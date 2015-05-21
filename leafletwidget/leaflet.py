@@ -199,7 +199,7 @@ class ControlException(Exception):
     pass
 
 
-class Control:
+class Control(widgets.DOMWidget):
     _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletControlView', sync=True)
 

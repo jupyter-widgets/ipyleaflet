@@ -29,7 +29,7 @@ def install_files(url, dir, files):
 
 
 leaflet_url = 'https://cdnjs.cloudflare.com'
-leaflet_dir = 'ajax/libs/leaflet/0.7.2'
+leaflet_dir = 'ajax/libs/leaflet/0.7.3'
 leaflet_files = [
     ['leaflet.css',],
     ['leaflet.js',],
@@ -40,7 +40,7 @@ leaflet_files = [
 install_files(leaflet_url, leaflet_dir, leaflet_files)
 
 leaflet_draw_url = 'https://cdnjs.cloudflare.com/ajax/libs/'
-leaflet_draw_dir = 'leaflet.draw/0.2.3'
+leaflet_draw_dir = 'leaflet.draw/0.2.4'
 leaflet_draw_files = [
     ['leaflet.draw.css',],
     ['leaflet.draw.js',],

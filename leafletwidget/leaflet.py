@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import json
+import math
 
 from IPython.utils.traitlets import (
     Float, Unicode, Int, Tuple, List, Instance, Bool, Dict
@@ -14,7 +15,6 @@ def_loc = [0.0, 0.0]
 
 class LayerException(Exception):
     pass
-
 
 class InteractMixin(object):
 
@@ -31,7 +31,8 @@ class InteractMixin(object):
         return cont
     
 
-class Layer(widgets.Widget, InteractMixin):
+class Layer(widgets.Widget,InteractMixin):
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletLayerView', sync=True)
     bottom = Bool(False, sync=True)
 
@@ -80,14 +81,17 @@ class Marker(UILayer):
 
 
 class Popup(UILayer):
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletPopupView', sync=True)
 
 
 class RasterLayer(Layer):
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletRasterLayerView', sync=True)
 
 
 class TileLayer(RasterLayer):
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletTileLayerView', sync=True)
     bottom = Bool(True, sync=True)
     url = Unicode('http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', sync=True)
@@ -100,6 +104,7 @@ class TileLayer(RasterLayer):
 
 
 class ImageOverlay(RasterLayer):
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletImageOverlayView', sync=True)
     url = Unicode('', sync=True)
     bounds = List([def_loc, def_loc], sync=True, help="SW and NE corners of the image")
@@ -108,10 +113,12 @@ class ImageOverlay(RasterLayer):
 
 
 class VectorLayer(Layer):
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletVectorLayerView', sync=True)
 
 
 class Path(VectorLayer):
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletPathView', sync=True)
     stroke = Bool(True, sync=True, o=True)
     color = Unicode('#03F', sync=True, o=True)
@@ -129,6 +136,7 @@ class Path(VectorLayer):
 
 
 class Polyline(Path):
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletPolylineView', sync=True)
     locations = List([], sync=True)
     smooth_factor = Float(1.0, sync=True, o=True)
@@ -136,45 +144,54 @@ class Polyline(Path):
 
 
 class Polygon(Polyline):
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletPolygonView', sync=True)
 
 
 class Rectangle(Polygon):
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletRectangleView', sync=True)
     bounds = List([], sync=True, help="list of SW and NE location tuples")
 
 
 class Circle(Path):
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletCircleView', sync=True)
     location = List(def_loc, sync=True)
     radius = Int(1000, sync=True, help="radius of circle in meters")
 
 
 class CircleMarker(Circle):
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletCircleMarkerView', sync=True)
     radius = Int(10, sync=True, help="radius of circle in pixels")
 
 
 class LayerGroup(Layer):
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletLayerGroupView', sync=True)
     layers = List(Instance(Layer), sync=True)
 
 
 class FeatureGroup(Layer):
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletFeatureGroupView', sync=True)
 
 
 class GeoJSON(FeatureGroup):
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletGeoJSONView', sync=True)
     data = Dict({}, sync=True)
     style = Dict({}, sync=True)
 
 
 class MultiPolyline(FeatureGroup):
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletMultiPolylineView', sync=True)
 
 
 class MultiPolygon(FeatureGroup):
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletMultiPolygonView', sync=True)
 
 
@@ -182,7 +199,8 @@ class ControlException(Exception):
     pass
 
 
-class Control(widgets.Widget):
+class Control(widgets.DOMWidget):
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletControlView', sync=True)
 
     options = List(trait=Unicode, allow_none=False, sync=True)
@@ -210,6 +228,7 @@ class Control(widgets.Widget):
 
 
 class DrawControl(Control):
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget', sync=True)
     _view_name = Unicode('LeafletDrawControlView', sync=True)
     layer = Instance(FeatureGroup, sync=True)
     def _layer_default(self):
@@ -245,9 +264,8 @@ class DrawControl(Control):
         self._draw_callbacks.register_callback(callback, remove=remove)
 
 class Map(widgets.DOMWidget, InteractMixin):
-
+    _view_module = Unicode('nbextensions/leafletwidget/leafletwidget',sync=True)
     _view_name = Unicode('LeafletMapView', sync=True)
-
     # Map options
     center = List(def_loc, sync=True, o=True)
     width = Unicode('600px', sync=True, o=True)
@@ -410,4 +428,57 @@ class Map(widgets.DOMWidget, InteractMixin):
 
     def _handle_leaflet_event(self, _, content):
         pass
+
+    def fitBounds(self, southwest, northeast):
+        """Set the map's center and zoom such that the map's extent
+        fits the given bounds.
+
+        The `southwest` arg is a pair of (south, west) values and
+        the `northeast` arg is a pair of (north, east) values.
+        This function is necessary because the statement
+
+            map.fitBounds(*map.bounds)
+
+        is possible only after the map has been displayed.
+        """
+        def convert_latitude(lat):
+            """Convert degrees latitude ('lat' arg) to mercator projection distance.
+            """
+            sin = math.sin(lat * math.pi / 180.)
+            y = 0.5 * math.log((1. + sin) / (1. - sin))
+            return max(min(y, math.pi), -math.pi)
+
+        def zoom(map_html_pixels, map_tile_pixels, fraction):
+            """Calculate zoom level to contain map fraction.
+
+            'map_html_pixels' arg is pixel size of html DOM element
+            'map_tile_pixels' arg is pixel size of map image tiles
+            'fraction' arg is decimal fraction of map to be visible
+            """
+            return int(math.floor(math.log(map_html_pixels / map_tile_pixels / fraction) / math.log(2.)))
+
+        south, west = southwest
+        north, east = northeast
+        # must account for bounds crossing the 180th meridian
+        if west > 0 and east < 0:
+            east = east + 360.
+
+        lat_fraction = (convert_latitude(north) - convert_latitude(south)) / (2. * math.pi)
+        if self.height.isdigit():
+            height = int(self.height)
+        else:
+            assert 'px' in self.height, "Height must be in pixels"
+            height = int(''.join(c for c in self.height if c.isdigit()))
+        lat_zoom = zoom(height, self.default_tiles.tile_size, lat_fraction)
+
+        lng_fraction = (east - west) / 360.
+        if self.width.isdigit():
+            width = int(self.width)
+        else:
+            assert 'px' in self.width, "Width must be in pixels"
+            width = int(''.join(c for c in self.width if c.isdigit()))
+        lng_zoom = zoom(width, self.default_tiles.tile_size, lng_fraction)
+
+        self.zoom = max(min(lat_zoom, lng_zoom, self.max_zoom), self.min_zoom)
+        self.center = [0.5 * (north + south), 0.5 * (east + west)]
 

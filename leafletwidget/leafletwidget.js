@@ -12,6 +12,12 @@ require.config({
 define(['jqueryui','widgets/js/manager','widgets/js/widget', "leaflet", "leaflet_draw"], function($, manager, widget, L) {
     console.log("loading leafletwidget");
     
+    // Load the leaflet css.
+    $('<link>')
+        .appendTo('head')
+        .attr({type: 'text/css', rel: 'stylesheet'})
+        .attr('href', '/nbextensions/leafletwidget/leaflet/0.7.3/leaflet.css');
+
     function camel_case(input) {
         // Convert from foo_bar to fooBar 
         return input.toLowerCase().replace(/_(.)/g, function(match, group1) {

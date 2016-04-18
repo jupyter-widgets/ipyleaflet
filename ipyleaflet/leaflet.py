@@ -35,7 +35,10 @@ class InteractMixin(object):
 
 class Layer(Widget, InteractMixin):
     _view_name = Unicode('LeafletLayerView').tag(sync=True)
+    _model_name = Unicode('LeafletLayerModel').tag(sync=True)
     _view_module = Unicode('jupyter-leaflet').tag(sync=True)
+    _model_module = Unicode('jupyter-leaflet').tag(sync=True)
+
     bottom = Bool().tag(sync=True)
     options = List(trait=Unicode).tag(sync=True)
 
@@ -69,10 +72,13 @@ class Layer(Widget, InteractMixin):
 
 class UILayer(Layer):
     _view_name = Unicode('LeafletUILayerView').tag(sync=True)
+    _model_name = Unicode('LeafletUILayerModel').tag(sync=True)
 
 
 class Marker(UILayer):
     _view_name = Unicode('LeafletMarkerView').tag(sync=True)
+    _model_name = Unicode('LeafletMarkerModel').tag(sync=True)
+
     # read/write
     location = List(def_loc).tag(sync=True)
     z_index_offset = Int().tag(sync=True, o=True)
@@ -90,14 +96,18 @@ class Marker(UILayer):
 
 class Popup(UILayer):
     _view_name = Unicode('LeafletPopupView').tag(sync=True)
+    _model_name = Unicode('LeafletPopupModel').tag(sync=True)
 
 
 class RasterLayer(Layer):
     _view_name = Unicode('LeafletRasterLayerView').tag(sync=True)
+    _model_name = Unicode('LeafletRasterLayerModel').tag(sync=True)
 
 
 class TileLayer(RasterLayer):
     _view_name = Unicode('LeafletTileLayerView').tag(sync=True)
+    _model_name = Unicode('LeafletTileLayerModel').tag(sync=True)
+
     bottom = Bool(True).tag(sync=True)
     url = Unicode('http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png').tag(sync=True)
     min_zoom = Int(0).tag(sync=True, o=True)
@@ -110,6 +120,8 @@ class TileLayer(RasterLayer):
 
 class ImageOverlay(RasterLayer):
     _view_name = Unicode('LeafletImageOverlayView').tag(sync=True)
+    _model_name = Unicode('LeafletImageOverlayModel').tag(sync=True)
+
     url = Unicode().tag(sync=True)
     bounds = List([def_loc, def_loc], help="SW and NE corners of the image").tag(sync=True)
     opacity = Float(1.0).tag(sync=True, o=True)
@@ -118,11 +130,13 @@ class ImageOverlay(RasterLayer):
 
 class VectorLayer(Layer):
     _view_name = Unicode('LeafletVectorLayerView').tag(sync=True)
+    _model_name = Unicode('LeafletVectorLayerModel').tag(sync=True)
 
 
 class Path(VectorLayer):
     _view_name = Unicode('LeafletPathView').tag(sync=True)
-    _view_module = Unicode('jupyter-leaflet').tag(sync=True)
+    _model_name = Unicode('LeafletPathModel').tag(sync=True)
+
     stroke = Bool(True).tag(sync=True, o=True)
     color = Color('#0033FF').tag(sync=True, o=True)
     weight = Int(5).tag(sync=True, o=True)
@@ -140,6 +154,8 @@ class Path(VectorLayer):
 
 class Polyline(Path):
     _view_name = Unicode('LeafletPolylineView').tag(sync=True)
+    _model_name = Unicode('LeafletPolylineModel').tag(sync=True)
+
     locations = List().tag(sync=True)
     smooth_factor = Float(1.0).tag(sync=True, o=True)
     no_clip = Bool(False).tag(sync=True, o=True)
@@ -147,45 +163,59 @@ class Polyline(Path):
 
 class Polygon(Polyline):
     _view_name = Unicode('LeafletPolygonView').tag(sync=True)
+    _model_name = Unicode('LeafletPolygonModel').tag(sync=True)
 
 
 class Rectangle(Polygon):
     _view_name = Unicode('LeafletRectangleView').tag(sync=True)
+    _model_name = Unicode('LeafletRectangleModel').tag(sync=True)
+
     bounds = List(help="list of SW and NE location tuples").tag(sync=True)
 
 
 class Circle(Path):
     _view_name = Unicode('LeafletCircleView').tag(sync=True)
+    _model_name = Unicode('LeafletCircleModel').tag(sync=True)
+
     location = List(def_loc).tag(sync=True)
     radius = Int(1000, help="radius of circle in meters").tag(sync=True)
 
 
 class CircleMarker(Circle):
     _view_name = Unicode('LeafletCircleMarkerView').tag(sync=True)
+    _model_name = Unicode('LeafletCircleMarkerModel').tag(sync=True)
+
     radius = Int(10, help="radius of circle in pixels").tag(sync=True)
 
 
 class LayerGroup(Layer):
     _view_name = Unicode('LeafletLayerGroupView').tag(sync=True)
+    _view_name = Unicode('LeafletLayerGroupModel').tag(sync=True)
+
     layers = List(Instance(Layer)).tag(sync=True, **widget_serialization)
 
 
 class FeatureGroup(Layer):
     _view_name = Unicode('LeafletFeatureGroupView').tag(sync=True)
+    _model_name = Unicode('LeafletFeatureGroupModel').tag(sync=True)
 
 
 class GeoJSON(FeatureGroup):
     _view_name = Unicode('LeafletGeoJSONView').tag(sync=True)
+    _model_name = Unicode('LeafletGeoJSONModel').tag(sync=True)
+
     data = Dict().tag(sync=True)
     style = Dict().tag(sync=True)
 
 
 class MultiPolyline(FeatureGroup):
     _view_name = Unicode('LeafletMultiPolylineView').tag(sync=True)
+    _model_name = Unicode('LeafletMultiPolylineModel').tag(sync=True)
 
 
 class MultiPolygon(FeatureGroup):
     _view_name = Unicode('LeafletMultiPolygonView').tag(sync=True)
+    _model_name = Unicode('LeafletMultiPolygonModel').tag(sync=True)
 
 
 class ControlException(TraitError):
@@ -194,7 +224,9 @@ class ControlException(TraitError):
 
 class Control(Widget):
     _view_name = Unicode('LeafletControlView').tag(sync=True)
+    _model_name = Unicode('LeafletControlModel').tag(sync=True)
     _view_module = Unicode('jupyter-leaflet').tag(sync=True)
+    _model_module = Unicode('jupyter-leaflet').tag(sync=True)
 
     options = List(trait=Unicode).tag(sync=True)
 
@@ -228,6 +260,8 @@ class Control(Widget):
 
 class DrawControl(Control):
     _view_name = Unicode('LeafletDrawControlView').tag(sync=True)
+    _model__name = Unicode('LeafletDrawControlModel').tag(sync=True)
+
     layer = Instance(FeatureGroup).tag(sync=True, **widget_serialization)
 
     @default('layer')

@@ -295,55 +295,6 @@ var LeafletDrawControlView = LeafletControlView.extend({
 });
 
 
-var LeafletMapModel = widgets.DOMWidgetModel.extend({
-    defaults: _.extend({}, widgets.DOMWidgetModel.prototype.defaults, {
-        _view_name: "LeafletMapView",
-        _model_name: "LeafletMapModel",
-        _model_module: "jupyter-leaflet",
-        _view_module: "jupyter-leaflet",
-
-        center: [],
-        width: "600px",
-        height: "400px",
-        zoom_start: 12,
-        zoom: 12,
-        max_zoom: 18,
-        min_zoom: 1,
-
-        dragging: true,
-        touch_zoom: true,
-        scroll_wheel_zoom: false,
-        double_click_zoom: true,
-        box_zoom: true,
-        tap: true,
-        tap_tolerance: 15,
-        world_copy_jump: false,
-        close_popup_on_click: true,
-        bounce_at_zoom_limits: true,
-        keyboard: true,
-        keyboard_pan_offset: 80,
-        keyboard_zoom_offset: 1,
-        inertia: true,
-        inertia_deceleration: 3000,
-        inertia_max_speed: 1500,
-        // inertia_threshold: int(?)
-        zoom_control: true,
-        attribution_control: true,
-        // fade_animation: bool(?),
-        // zoom_animation: bool(?),
-        zoom_animation_threshold: 4,
-        // marker_zoom_animation: bool(?),
-        options: [],
-        layers: [],
-        controls: []
-    }),
-}, {
-    serializers: _.extend({
-        layers: { deserialize: widgets.unpack_models },
-        controls: { deserialize: widgets.unpack_models },
-    }, widgets.DOMWidgetModel.serializers),
-});
-
 var LeafletMapView = widgets.DOMWidgetView.extend({
     initialize: function (options) {
         LeafletMapView.__super__.initialize.apply(this, arguments);
@@ -458,7 +409,305 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
     },
 });
 
+var def_loc = [0.0, 0.0];
+
+
+var LeafletLayerModel = widgets.WidgetModel.extend({
+    defaults: _.extend({}, widgets.WidgetModel.prototype.defaults, {
+        _view_name : 'LeafletLayerView',
+        _model_name : 'LeafletLayerModel',
+        _view_module : 'jupyter-leaflet',
+        _model_module : 'jupyter-leaflet',
+        bottom : false,
+        options : []
+    })
+});
+
+
+var LeafletUILayerModel = LeafletLayerModel.extend({
+    defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
+        _view_name : 'LeafletUILayerView',
+        _model_name : 'LeafletUILayerModel'
+    })
+});
+
+
+var LeafletMarkerModel = LeafletUILayerModel.extend({
+    defaults: _.extend({}, LeafletUILayerModel.prototype.defaults, {
+        _view_name :'LeafletMarkerView',
+        _model_name : 'LeafletMarkerModel',
+        location : def_loc,
+        z_index_offset: 0,
+        opacity: 1.0,
+        clickable: true,
+        draggable: false,
+        keyboard: true,
+        title: '',
+        alt: '',
+        rise_on_hover: false,
+        rise_offset: 250
+    })
+});
+
+
+var LeafletPopupModel = LeafletUILayerModel.extend({
+    defaults: _.extend({}, LeafletUILayerModel.prototype.defaults, {
+         _view_name : 'LeafletPopupView',
+         _model_name : 'LeafletPopupModel'
+    })
+});
+
+
+var LeafletRasterLayerModel = LeafletLayerModel.extend({
+    defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
+        _view_name : 'LeafletRasterLayerView',
+        _model_name : 'LeafletRasterLayerModel'
+    })
+});
+
+
+var LeafletTileLayerModel = LeafletRasterLayerModel.extend({
+    defaults: _.extend({}, LeafletRasterLayerModel.prototype.defaults, {
+        _view_name : 'LeafletTileLayerView',
+        _model_name : 'LeafletTileLayerModel',
+
+        bottom : true,
+        url : 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png',
+        min_zoom : 0,
+        max_zoom : 18,
+        tile_size : 256,
+        attribution : 'Map data (c) <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+        opacity : 1.0,
+        detect_retina : false
+    })
+});
+
+
+var LeafletImageOverlayModel = LeafletRasterLayerModel.extend({
+    defaults: _.extend({}, LeafletRasterLayerModel.prototype.defaults, {
+        _view_name : 'LeafletImageOverlayView',
+        _model_name : 'LeafletImageOverlayModel',
+
+        url : '',
+        bounds : [def_loc, def_loc],
+        opacity : 1.0,
+        attribution : ''
+    })
+});
+
+
+var LeafletVectorLayerModel = LeafletLayerModel.extend({
+    defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
+        _view_name : 'LeafletVectorLayerView',
+        _model_name : 'LeafletVectorLayerModel'
+    })
+});
+
+
+var LeafletPathModel = LeafletVectorLayerModel.extend({
+    defaults: _.extend({}, LeafletVectorLayerModel.prototype.defaults, {
+        _view_name : 'LeafletPathView',
+        _model_name : 'LeafletPathModel',
+
+        stroke : true,
+        color : '#0033FF',
+        weight : 5,
+        opacity : 0.5,
+        fill : true,
+        fill_color : '#0033FF',
+        fill_opacity : 0.2,
+        dash_array : '',
+        line_cap : '',
+        line_join :  '',
+        clickable : true,
+        pointer_events : '',
+        class_name : ''
+    })
+});
+
+
+var LeafletPolylineModel = LeafletPathModel.extend({
+    defaults: _.extend({}, LeafletPathModel.prototype.defaults, {
+        _view_name : 'LeafletPolylineView',
+        _model_name : 'LeafletPolylineModel',
+
+        locations : [],
+        smooth_factor : 1.0,
+        no_clip : false
+    })
+});
+
+
+var LeafletPolygonModel = LeafletPolylineModel.extend({
+    defaults: _.extend({}, LeafletPolylineModel.prototype.defaults, {
+        _view_name : 'LeafletPolygonView',
+        _model_name : 'LeafletPolygonModel'
+    })
+});
+
+
+var LeafletRectangleModel = LeafletPolygonModel.extend({
+    defaults: _.extend({}, LeafletPolygonModel.prototype.defaults, {
+        _view_name : 'LeafletRectangleView',
+        _model_name : 'LeafletRectangleModel',
+        bounds : []
+    })
+});
+
+
+var LeafletCircleModel = LeafletPathModel.extend({
+    defaults: _.extend({}, LeafletPathModel.prototype.defaults, {
+        _view_name : 'LeafletCircleView',
+        _model_name : 'LeafletCircleModel',
+        location : def_loc,
+        radius : 10000
+    })
+});
+
+
+var LeafletCircleMarkerModel = LeafletCircleModel.extend({
+    defaults: _.extend({}, LeafletCircleModel.prototype.defaults, {
+        _view_name : 'LeafletCircleMarkerView',
+        _model_name : 'LeafletCircleMarkerModel',
+        radius : 10
+    })
+});
+
+
+var LeafletLayerGroupModel = LeafletLayerModel.extend({
+    defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
+        _view_name : 'LeafletLayerGroupView',
+        _view_name : 'LeafletLayerGroupModel',
+        layers : []
+    })
+}, {
+    serializers: _.extend({
+        layers: { deserialize: widgets.unpack_models }
+    }, widgets.DOMWidgetModel.serializers)
+});
+
+
+var LeafletFeatureGroupModel = LeafletLayerModel.extend({
+    defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
+        _view_name : 'LeafletFeatureGroupView',
+        _model_name : 'LeafletFeatureGroupModel'
+    })
+});
+
+
+var LeafletGeoJSONModel = LeafletFeatureGroupModel.extend({
+    defaults: _.extend({}, LeafletFeatureGroupModel.prototype.defaults, {
+        _view_name : 'LeafletGeoJSONView',
+        _model_name : 'LeafletGeoJSONModel',
+        data : {},
+        style : {}
+    })
+});
+
+
+var LeafletMultiPolylineModel = LeafletFeatureGroupModel.extend({
+    defaults: _.extend({}, LeafletFeatureGroupModel.prototype.defaults, {
+        _view_name : 'LeafletMultiPolylineView',
+        _model_name : 'LeafletMultiPolylineModel'
+    })
+});
+
+
+var LeafletMultiPolygonModel = LeafletFeatureGroupModel.extend({
+    defaults: _.extend({}, LeafletFeatureGroupModel.prototype.defaults, {
+        _view_name : 'LeafletMultiPolygonView',
+        _model_name : 'LeafletMultiPolygonModel'
+    })
+});
+
+
+var LeafletControlModel = widgets.WidgetModel.extend({
+    defaults: _.extend({}, widgets.WidgetModel.prototype.defaults, {
+        _view_name : 'LeafletControlView',
+        _model_name : 'LeafletControlModel',
+        _view_module : 'jupyter-leaflet',
+        _model_module : 'jupyter-leaflet',
+        options : []
+    })
+});
+
+
+var LeafletDrawControlModel = LeafletControlModel.extend({
+    defaults: _.extend({}, LeafletControlModel.prototype.defaults, {
+        _view_name : 'LeafletDrawControlView',
+        _model__name : 'LeafletDrawControlModel',
+
+        layer : undefined,
+        polyline : { shapeOptions : {} },
+        polygon : { shapeOptions : {} },
+        circle : {},
+        rectangle : {},
+        marker : {},
+        edit : true,
+        remove : true
+    })
+}, {
+    serializers: _.extend({
+        layer : { deserialize: widgets.unpack_models }
+    }, widgets.WidgetModel.serializers)
+});
+
+
+var LeafletMapModel = widgets.DOMWidgetModel.extend({
+    defaults: _.extend({}, widgets.DOMWidgetModel.prototype.defaults, {
+        _view_name : "LeafletMapView",
+        _model_name : "LeafletMapModel",
+        _model_module : "jupyter-leaflet",
+        _view_module : "jupyter-leaflet",
+
+        center : def_loc,
+        width : "600px",
+        height : "400px",
+        zoom_start : 12,
+        zoom : 12,
+        max_zoom : 18,
+        min_zoom : 1,
+
+        dragging : true,
+        touch_zoom : true,
+        scroll_wheel_zoom : false,
+        double_click_zoom : true,
+        box_zoom : true,
+        tap : true,
+        tap_tolerance : 15,
+        world_copy_jump : false,
+        close_popup_on_click : true,
+        bounce_at_zoom_limits : true,
+        keyboard : true,
+        keyboard_pan_offset : 80,
+        keyboard_zoom_offset : 1,
+        inertia : true,
+        inertia_deceleration : 3000,
+        inertia_max_speed : 1500,
+        // inertia_threshold : int(?)
+        zoom_control : true,
+        attribution_control : true,
+        // fade_animation : bool(?),
+        // zoom_animation : bool(?),
+        zoom_animation_threshold : 4,
+        // marker_zoom_animation : bool(?),
+        _south : def_loc[0],
+        _north : def_loc[0],
+        _east : def_loc[1],
+        _west : def_loc[1],
+        options : [],
+        layers : [],
+        controls : []
+    })
+}, {
+    serializers: _.extend({
+        layers : { deserialize: widgets.unpack_models },
+        controls : { deserialize: widgets.unpack_models }
+    }, widgets.DOMWidgetModel.serializers)
+});
+
 module.exports = {
+    // views
     LeafletLayerView : LeafletLayerView,
     LeafletUILayerView : LeafletUILayerView,
     LeafletMarkerView : LeafletMarkerView,
@@ -481,5 +730,28 @@ module.exports = {
     LeafletControlView : LeafletControlView,
     LeafletDrawControlView : LeafletDrawControlView,
     LeafletMapView : LeafletMapView,
+    // models
+    LeafletLayerModel : LeafletLayerModel,
+    LeafletUILayerModel : LeafletUILayerModel,
+    LeafletUILayerModel : LeafletUILayerModel,
+    LeafletMarkerModel : LeafletMarkerModel,
+    LeafletPopupModel : LeafletPopupModel,
+    LeafletRasterLayerModel : LeafletRasterLayerModel,
+    LeafletTileLayerModel : LeafletTileLayerModel,
+    LeafletImageOverlayModel : LeafletImageOverlayModel,
+    LeafletVectorLayerModel : LeafletVectorLayerModel,
+    LeafletPathModel : LeafletPathModel,
+    LeafletPolylineModel : LeafletPolylineModel,
+    LeafletPolygonModel : LeafletPolygonModel,
+    LeafletRectangleModel : LeafletRectangleModel,
+    LeafletCircleModel : LeafletCircleModel,
+    LeafletCircleMarkerModel : LeafletCircleMarkerModel,
+    LeafletLayerGroupModel : LeafletLayerGroupModel,
+    LeafletFeatureGroupModel : LeafletFeatureGroupModel,
+    LeafletGeoJSONModel : LeafletGeoJSONModel,
+    LeafletMultiPolylineModel : LeafletMultiPolylineModel,
+    LeafletMultiPolygonModel : LeafletMultiPolygonModel,
+    LeafletControlModel : LeafletControlModel,
+    LeafletDrawControlModel : LeafletDrawControlModel,
     LeafletMapModel : LeafletMapModel
 };

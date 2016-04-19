@@ -343,6 +343,11 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
         this.leaflet_events();
         this.model_events();
         this.update_bounds();
+        // TODO: hack to get all the tiles to show.
+        var that = this;
+        window.setTimeout(function () {
+            that.obj.invalidateSize();
+        }, 1000);
     },
 
     create_obj: function () {

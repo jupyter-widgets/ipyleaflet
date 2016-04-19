@@ -1,7 +1,7 @@
 ipyleaflet
 ==========
 
-A Python / Leaflet enabling interctive maps in the Jupyter notebook.
+A Jupyter / Leaflet bridge enabling interactive maps in the Jupyter notebook.
 
 Note
 ----

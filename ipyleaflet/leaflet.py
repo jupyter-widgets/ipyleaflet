@@ -260,7 +260,7 @@ class Control(Widget):
 
 class DrawControl(Control):
     _view_name = Unicode('LeafletDrawControlView').tag(sync=True)
-    _model__name = Unicode('LeafletDrawControlModel').tag(sync=True)
+    _model_name = Unicode('LeafletDrawControlModel').tag(sync=True)
 
     layer = Instance(FeatureGroup).tag(sync=True, **widget_serialization)
 
@@ -284,13 +284,16 @@ class DrawControl(Control):
     edit = Bool(True).tag(sync=True)
     remove = Bool(True).tag(sync=True)
 
+    last_draw = None
+    last_action = None
+
     _draw_callbacks = Instance(CallbackDispatcher, ())
 
     def __init__(self, **kwargs):
         super(DrawControl, self).__init__(**kwargs)
         self.on_msg(self._handle_leaflet_event)
 
-    def _handle_leaflet_event(self, _, content):
+    def _handle_leaflet_event(self, _, content, __):
         if content.get('event', '').startswith('draw'):
             event, action = content.get('event').split(':')
             self.last_draw = content.get('geo_json')

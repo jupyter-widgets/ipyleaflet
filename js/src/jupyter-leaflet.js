@@ -218,14 +218,15 @@ var LeafletDrawControlView = LeafletControlView.extend({
 
     render: function () {
         var that = this;
-        this.create_child_view(this.model.get('layer'), {
+        return this.create_child_view(this.model.get('layer'), {
             map_view: this.map_view
         }).then(function (layer_view) {
-            this.map_view.obj.addLayer(layer_view.obj);
+            that.map_view.obj.addLayer(layer_view.obj);
             // TODO: create_obj refers to the layer view instead of the layer
             // view promise. We should fix that.
-            this.layer_view = layer_view;
-            this.create_obj();
+            that.layer_view = layer_view;
+            that.create_obj();
+            return that;
         });
     },
 
@@ -311,6 +312,7 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
             map_view: this
         }).then(function (child_view) {
             that.obj.addLayer(child_view.obj);
+            return child_view;
         });
     },
 
@@ -325,14 +327,15 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
             map_view: this
         }).then(function (child_view) {
             that.obj.addControl(child_view.obj);
+            return child_view;
         });
     },
 
     render: function () {
         this.el.style['width'] = this.model.get('width');
         this.el.style['height'] = this.model.get('height');
-        this.layer_views = new widgets.ViewList(this.add_layer_model, this.remove_layer_model, this);
-        this.control_views = new widgets.ViewList(this.add_control_model, this.remove_control_model, this);
+        this.layer_views = new widgets.ViewList(this.add_layer_model, this.remove_layer_view, this);
+        this.control_views = new widgets.ViewList(this.add_control_model, this.remove_control_view, this);
         this.displayed.then(_.bind(this.render_leaflet, this));
     },
 
@@ -343,6 +346,12 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
         this.leaflet_events();
         this.model_events();
         this.update_bounds();
+        // TODO: hack to get all the tiles to show.
+        var that = this;
+        window.setTimeout(function () {
+            that.obj.invalidateSize();
+        }, 1000);
+        return that;
     },
 
     create_obj: function () {
@@ -389,8 +398,12 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
     model_events: function () {
         var that = this;
         this.listenTo(this.model, 'msg:custom', this.handle_msg, this);
-        this.listenTo(this.model, 'change:layers', this.update_layers, this);
-        this.listenTo(this.model, 'change:controls', this.update_controls, this);
+        this.listenTo(this.model, 'change:layers', function () {
+            this.layer_views.update(this.model.get('layers'));
+        }, this);
+        this.listenTo(this.model, 'change:controls', function () {
+            this.control_views.update(this.model.get('controls'));
+        }, this);
         this.listenTo(this.model, 'change:zoom', function () {
             this.obj.setZoom(this.model.get('zoom'));
             this.update_bounds();
@@ -635,7 +648,7 @@ var LeafletControlModel = widgets.WidgetModel.extend({
 var LeafletDrawControlModel = LeafletControlModel.extend({
     defaults: _.extend({}, LeafletControlModel.prototype.defaults, {
         _view_name : 'LeafletDrawControlView',
-        _model__name : 'LeafletDrawControlModel',
+        _model_name : 'LeafletDrawControlModel',
 
         layer : undefined,
         polyline : { shapeOptions : {} },
@@ -649,7 +662,7 @@ var LeafletDrawControlModel = LeafletControlModel.extend({
 }, {
     serializers: _.extend({
         layer : { deserialize: widgets.unpack_models }
-    }, widgets.WidgetModel.serializers)
+    }, LeafletControlModel.serializers)
 });
 
 

@@ -135,7 +135,7 @@ setup_args = {
     },
     'author': 'Brian E. Granger',
     'author_email': 'ellisonbg@gmail.com',
-    'url': 'https://github.com/ellisonbg/leafletwidget',
+    'url': 'https://github.com/ellisonbg/ipyleaflet',
     'keywords': ['ipython', 'jupyter', 'widgets', 'graphics', '3d'],
     'classifiers': [
         'Development Status :: 4 - Beta',

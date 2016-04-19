@@ -1,13 +1,13 @@
 {
   "name": "jupyter-leaflet",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "jupyter - leaflet bridge",
   "author": "Brian Granget",
   "license": "MIT",
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ellisonbg/leafletwidget.git"
+    "url": "https://github.com/ellisonbg/ipyleaflet.git"
   },
   "scripts": {
     "prepublish": "webpack",

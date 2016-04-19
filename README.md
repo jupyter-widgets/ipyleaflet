@@ -20,6 +20,6 @@ pip install --pre ipyleaflet
 - Install and enable notebook extension
 
 ```
-jupyter nbextension install -py ipyleaflet
+jupyter nbextension install --py ipyleaflet
 jupyter nbextension enable --py ipyleaflet
 ```

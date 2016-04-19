@@ -284,8 +284,12 @@ class DrawControl(Control):
     edit = Bool(True).tag(sync=True)
     remove = Bool(True).tag(sync=True)
 
-    last_draw = None
-    last_action = None
+    last_draw = Dict({
+        'type': 'Feature',
+        'geometry': None
+    })
+
+    last_action = Unicode()
 
     _draw_callbacks = Instance(CallbackDispatcher, ())
 
@@ -293,7 +297,7 @@ class DrawControl(Control):
         super(DrawControl, self).__init__(**kwargs)
         self.on_msg(self._handle_leaflet_event)
 
-    def _handle_leaflet_event(self, _, content, __):
+    def _handle_leaflet_event(self, _, content, buffers):
         if content.get('event', '').startswith('draw'):
             event, action = content.get('event').split(':')
             self.last_draw = content.get('geo_json')

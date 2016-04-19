@@ -293,7 +293,7 @@ class DrawControl(Control):
         super(DrawControl, self).__init__(**kwargs)
         self.on_msg(self._handle_leaflet_event)
 
-    def _handle_leaflet_event(self, _, content, _):
+    def _handle_leaflet_event(self, _, content, __):
         if content.get('event', '').startswith('draw'):
             event, action = content.get('event').split(':')
             self.last_draw = content.get('geo_json')

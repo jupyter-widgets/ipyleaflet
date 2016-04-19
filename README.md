@@ -6,7 +6,7 @@ A Jupyter / Leaflet bridge enabling interactive maps in the Jupyter notebook.
 Note
 ----
 
-This README concerns ipyleaflet version 0.2.0 beta 1.
+This README concerns ipyleaflet version 0.2.0b2.
 
 Installation
 ------------

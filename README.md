@@ -13,15 +13,23 @@ This README concerns ipyleaflet version 0.2.0b3.
 Installation
 ------------
 
-- Install the Python package
+```
+$ pip install --pre ipyleaflet
+$ jupyter nbextension enable --py ipyleaflet
+```
+
+For a development installation (requires npm),
 
 ```
-pip install --pre ipyleaflet
+$ git clone https://github.com/ellisonbg/ipyleaflet.git
+$ cd ipyleaflet
+$ pip install -e .
+$ jupyter nbextension install --py --symlink --user ipyleaflet
+$ jupyter nbextension enable --py --user ipyleaflet
 ```
 
-- Install and enable notebook extension
+Note for developers: the `--symlink` argument on Linux or OS X allows one to
+modify the JavaScript code in-place. This feature is not available
+with Windows.
 
-```
-jupyter nbextension install --py ipyleaflet
-jupyter nbextension enable --py ipyleaflet
-```
+

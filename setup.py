@@ -6,6 +6,7 @@ from setuptools.command.sdist import sdist
 from setuptools.command.build_py import build_py
 from setuptools.command.egg_info import egg_info
 from subprocess import check_call
+from glob import glob
 import os
 import sys
 import platform
@@ -124,7 +125,14 @@ setup_args = {
     'long_description': LONG_DESCRIPTION,
     'License': 'MIT License',
     'include_package_data': True,
-    'install_requires': ['ipywidgets>=5.0.0b4'],
+    'data_files': [
+        ('share/jupyter/nbextensions/jupyter-leaflet', [
+            'ipyleaflet/static/extension.js',
+            'ipyleaflet/static/index.js',
+            'ipyleaflet/static/index.js.map',
+        ] + glob('ipyleaflet/static/*.png')),
+    ],
+    'install_requires': ['ipywidgets>=5.0.0'],
     'packages': find_packages(),
     'zip_safe': False,
     'cmdclass': {

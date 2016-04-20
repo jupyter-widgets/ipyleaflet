@@ -3,10 +3,12 @@ ipyleaflet
 
 A Jupyter / Leaflet bridge enabling interactive maps in the Jupyter notebook.
 
+![Screenshot](/screenshot.png)
+
 Note
 ----
 
-This README concerns ipyleaflet version 0.2.0b2.
+This README concerns ipyleaflet version 0.2.0b3.
 
 Installation
 ------------

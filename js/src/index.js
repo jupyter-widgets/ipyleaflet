@@ -1,5 +1,5 @@
-require('../node_modules/leaflet/dist/leaflet.css');
-require('../node_modules/leaflet-draw/dist/leaflet.draw.css');
+require('leaflet/dist/leaflet.css');
+require('leaflet-draw/dist/leaflet.draw.css');
 
 var loadedModules = [
     require('./jupyter-leaflet.js')

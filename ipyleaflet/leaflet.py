@@ -339,7 +339,7 @@ class Map(DOMWidget, InteractMixin):
 
     @default('layout')
     def _default_layout(self):
-        return Layout(height='400px')
+        return Layout(height='400px', align_self='stretch')
 
     _view_name = Unicode('LeafletMapView').tag(sync=True)
     _model_name = Unicode('LeafletMapModel').tag(sync=True)

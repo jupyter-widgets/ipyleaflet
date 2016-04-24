@@ -202,6 +202,12 @@ var LeafletGeoJSONView = LeafletFeatureGroupView.extend({
             style: style,
             onEachFeature: function (feature, layer) {
                 var mouseevent = function (e) {
+                    if (e.type == 'mouseover') {
+                        e.layer.setStyle(that.model.get('hover_style'));
+                        e.layer.once('mouseout', function () {
+                            that.obj.resetStyle(layer);
+                        });
+                    }
                     that.send({
                         event: e.type,
                         properties: feature.properties,
@@ -639,7 +645,8 @@ var LeafletGeoJSONModel = LeafletFeatureGroupModel.extend({
         _view_name : 'LeafletGeoJSONView',
         _model_name : 'LeafletGeoJSONModel',
         data : {},
-        style : {}
+        style : {},
+        hover_style : {},
     })
 });
 

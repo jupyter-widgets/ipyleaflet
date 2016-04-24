@@ -130,9 +130,13 @@ var LeafletPolylineView = LeafletPathView.extend({
     },
 });
 
+
 var LeafletPolygonView = LeafletPolylineView.extend({
     create_obj: function () {
-        this.obj = L.polygon(this.model.get('locations'), this.get_options());
+        this.obj = L.polygon(
+            this.model.get('locations'),
+            this.get_options()
+        );
     },
 });
 
@@ -187,18 +191,46 @@ var LeafletMultiPolylineView = LeafletFeatureGroupView.extend({
 
 var LeafletGeoJSONView = LeafletFeatureGroupView.extend({
     create_obj: function () {
+        var that = this;
         var style = this.model.get('style');
         if (_.isEmpty(style)) {
             style = function (feature) {
                 return feature.properties.style;
             }
         }
-        this.obj = L.geoJson(this.model.get('data'), {style: style});
+        this.obj = L.geoJson(this.model.get('data'), {
+            style: style,
+            onEachFeature: function (feature, layer) {
+                var mouseevent = function (e) {
+                    if (e.type == 'mouseover') {
+                        e.layer.setStyle(that.model.get('hover_style'));
+                        e.layer.once('mouseout', function () {
+                            that.obj.resetStyle(layer);
+                        });
+                    }
+                    that.send({
+                        event: e.type,
+                        properties: feature.properties,
+                        id: feature.id
+                    });
+                };
+                layer.on({
+                    mouseover: mouseevent,
+                    click: mouseevent
+                });
+            }
+        });
     },
 });
 
 
 var LeafletMultiPolygonView = LeafletFeatureGroupView.extend({
+    create_obj: function () {
+        this.obj = L.polygon(
+            this.model.get('locations'),
+            this.get_options()
+        );
+    },
 });
 
 
@@ -613,7 +645,8 @@ var LeafletGeoJSONModel = LeafletFeatureGroupModel.extend({
         _view_name : 'LeafletGeoJSONView',
         _model_name : 'LeafletGeoJSONModel',
         data : {},
-        style : {}
+        style : {},
+        hover_style : {},
     })
 });
 
@@ -629,7 +662,8 @@ var LeafletMultiPolylineModel = LeafletFeatureGroupModel.extend({
 var LeafletMultiPolygonModel = LeafletFeatureGroupModel.extend({
     defaults: _.extend({}, LeafletFeatureGroupModel.prototype.defaults, {
         _view_name : 'LeafletMultiPolygonView',
-        _model_name : 'LeafletMultiPolygonModel'
+        _model_name : 'LeafletMultiPolygonModel',
+        locations: []
     })
 });
 

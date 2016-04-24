@@ -206,6 +206,32 @@ class GeoJSON(FeatureGroup):
 
     data = Dict().tag(sync=True)
     style = Dict().tag(sync=True)
+    hover_style = Dict().tag(sync=True)
+
+    _click_callbacks = Instance(CallbackDispatcher, ())
+    _hover_callbacks = Instance(CallbackDispatcher, ())
+
+    def __init__(self, **kwargs):
+        super(GeoJSON, self).__init__(**kwargs)
+        self.on_msg(self._handle_m_msg)
+
+    def _handle_m_msg(self, _, content, buffers):
+        if content.get('event', '') == 'click':
+            self._click_callbacks(**content)
+        if content.get('event', '') == 'mouseover':
+            self._hover_callbacks(**content)
+
+    def on_click(self, callback, remove=False):
+        """
+        The click callback takes an unpacked set of keyword arguments.
+        """
+        self._click_callbacks.register_callback(callback, remove=remove)
+
+    def on_hover(self, callback, remove=False):
+        """
+        The hover callback takes an unpacked set of keyword arguments.
+        """
+        self._hover_callbacks.register_callback(callback, remove=remove)
 
 
 class MultiPolyline(FeatureGroup):
@@ -216,6 +242,7 @@ class MultiPolyline(FeatureGroup):
 class MultiPolygon(FeatureGroup):
     _view_name = Unicode('LeafletMultiPolygonView').tag(sync=True)
     _model_name = Unicode('LeafletMultiPolygonModel').tag(sync=True)
+    locations = List().tag(sync=True)
 
 
 class ControlException(TraitError):

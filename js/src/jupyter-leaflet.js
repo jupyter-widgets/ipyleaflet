@@ -3,6 +3,10 @@ var _ = require('underscore');
 var L = require('leaflet');
 require('leaflet-draw');
 
+if (window && window.leaflet_image_folder) {
+    L.Icon.Default.imagePath = window.leaflet_image_folder;
+}
+
 
 function camel_case(input) {
     // Convert from foo_bar to fooBar
@@ -10,6 +14,7 @@ function camel_case(input) {
         return group1.toUpperCase();
     });
 }
+
 
 var LeafletLayerView = widgets.WidgetView.extend({
 

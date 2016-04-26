@@ -1,5 +1,9 @@
+// Load css
 require('leaflet/dist/leaflet.css');
 require('leaflet-draw/dist/leaflet.draw.css');
+
+// Default image folder - must run before loading jupyter-leaflet.
+window.leaflet_image_folder = '/nbextensions/jupyter-leaflet/';
 
 var loadedModules = [
     require('./jupyter-leaflet.js')
@@ -16,4 +20,9 @@ for (var i in loadedModules) {
     }
 }
 
-module.exports["version"] = require("../package.json").version;
+module.exports['version'] = require('../package.json').version;
+
+// Forcibly load the marker icon images to be in the bundle.
+require('leaflet/dist/images/marker-shadow.png');
+require('leaflet/dist/images/marker-icon.png');
+require('leaflet/dist/images/marker-icon-2x.png');

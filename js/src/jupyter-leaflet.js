@@ -3,6 +3,8 @@ var _ = require('underscore');
 var L = require('leaflet');
 require('leaflet-draw');
 
+L.Icon.Default.imagePath = __webpack_public_path__;
+
 
 function camel_case(input) {
     // Convert from foo_bar to fooBar
@@ -10,6 +12,7 @@ function camel_case(input) {
         return group1.toUpperCase();
     });
 }
+
 
 var LeafletLayerView = widgets.WidgetView.extend({
 

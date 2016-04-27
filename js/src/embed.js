@@ -1,6 +1,3 @@
-// Setup notebook base URL
-__webpack_public_path__ = document.querySelector('body').getAttribute('data-base-url') + 'nbextensions/jupyter-leaflet/';
-
 // Load css
 require('leaflet/dist/leaflet.css');
 require('leaflet-draw/dist/leaflet.draw.css');

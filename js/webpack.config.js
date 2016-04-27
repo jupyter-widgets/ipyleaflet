@@ -41,8 +41,7 @@ module.exports = [
         output: {
             filename: 'index.js',
             path: '../ipyleaflet/static',
-            libraryTarget: 'amd',
-            publicPath: '/nbextensions/jupyter-leaflet/'
+            libraryTarget: 'amd'
         },
         devtool: 'source-map',
         module: {
@@ -51,7 +50,7 @@ module.exports = [
         externals: ['jupyter-js-widgets']
     },
     {// embeddable jupyter-leaflet bundle
-        entry: './src/index.js',
+        entry: './src/embed.js',
         output: {
             filename: 'index.js',
             path: './dist/',

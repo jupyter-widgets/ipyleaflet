@@ -8,13 +8,13 @@ A Jupyter / Leaflet bridge enabling interactive maps in the Jupyter notebook.
 Note
 ----
 
-This README concerns ipyleaflet version 0.2.0b3.
+This README concerns ipyleaflet version 0.2.0.
 
 Installation
 ------------
 
 ```
-$ pip install --pre ipyleaflet
+$ pip install ipyleaflet
 $ jupyter nbextension enable --py ipyleaflet
 ```
 

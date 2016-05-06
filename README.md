@@ -13,12 +13,20 @@ This README concerns ipyleaflet version 0.2.0.
 Installation
 ------------
 
+Using pip:
+
 ```
 $ pip install ipyleaflet
 $ jupyter nbextension enable --py ipyleaflet
 ```
 
-For a development installation (requires npm),
+Using conda:
+
+```
+$ conda install -c conda-forge ipyleaflet
+```
+
+For a development installation (requires npm):
 
 ```
 $ git clone https://github.com/ellisonbg/ipyleaflet.git

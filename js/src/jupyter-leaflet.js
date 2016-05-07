@@ -206,8 +206,8 @@ var LeafletGeoJSONView = LeafletFeatureGroupView.extend({
             onEachFeature: function (feature, layer) {
                 var mouseevent = function (e) {
                     if (e.type == 'mouseover') {
-                        e.layer.setStyle(that.model.get('hover_style'));
-                        e.layer.once('mouseout', function () {
+                        layer.setStyle(that.model.get('hover_style'));
+                        layer.once('mouseout', function () {
                             that.obj.resetStyle(layer);
                         });
                     }
@@ -229,7 +229,7 @@ var LeafletGeoJSONView = LeafletFeatureGroupView.extend({
 
 var LeafletMultiPolygonView = LeafletFeatureGroupView.extend({
     create_obj: function () {
-        this.obj = L.polygon(
+        this.obj = L.multiPolygon(
             this.model.get('locations'),
             this.get_options()
         );

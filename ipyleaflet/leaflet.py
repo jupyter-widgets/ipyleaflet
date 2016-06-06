@@ -109,11 +109,11 @@ class TileLayer(RasterLayer):
     _model_name = Unicode('LeafletTileLayerModel').tag(sync=True)
 
     bottom = Bool(True).tag(sync=True)
-    url = Unicode('http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png').tag(sync=True)
+    url = Unicode('https://otile1-s.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png').tag(sync=True)
     min_zoom = Int(0).tag(sync=True, o=True)
     max_zoom = Int(18).tag(sync=True, o=True)
     tile_size = Int(256).tag(sync=True, o=True)
-    attribution = Unicode('Map data (c) <a href="http://openstreetmap.org">OpenStreetMap</a> contributors').tag(sync=True, o=True)
+    attribution = Unicode('Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors').tag(sync=True, o=True)
     opacity = Float(1.0).tag(sync=True, o=True)
     detect_retina = Bool(False).tag(sync=True, o=True)
 

@@ -10,7 +10,7 @@ Package Install
 ---------------
 
 **Prerequisites**
-- [node](http://nodejs.org/)
+- [node](https://nodejs.org/)
 
 ```bash
 npm install --save jupyter-leaflet

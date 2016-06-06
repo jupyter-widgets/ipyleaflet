@@ -520,11 +520,11 @@ var LeafletTileLayerModel = LeafletRasterLayerModel.extend({
         _model_name : 'LeafletTileLayerModel',
 
         bottom : true,
-        url : 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png',
+        url : 'https://otile1-s.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png',
         min_zoom : 0,
         max_zoom : 18,
         tile_size : 256,
-        attribution : 'Map data (c) <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+        attribution : 'Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
         opacity : 1.0,
         detect_retina : false
     })

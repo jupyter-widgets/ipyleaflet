@@ -109,7 +109,7 @@ class TileLayer(RasterLayer):
     _model_name = Unicode('LeafletTileLayerModel').tag(sync=True)
 
     bottom = Bool(True).tag(sync=True)
-    url = Unicode('https://otile1-s.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png').tag(sync=True)
+    url = Unicode('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').tag(sync=True)
     min_zoom = Int(0).tag(sync=True, o=True)
     max_zoom = Int(18).tag(sync=True, o=True)
     tile_size = Int(256).tag(sync=True, o=True)

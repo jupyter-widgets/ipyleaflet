@@ -63,6 +63,12 @@ var LeafletMarkerView = LeafletUILayerView.extend({
 
     model_events: function () {
         LeafletMarkerView.__super__.model_events.apply(this, arguments);
+        this.listenTo(this.model, 'change:location', function () {
+            this.obj.setLatLng(this.model.get('location'));
+        }, this);
+        this.listenTo(this.model, 'change:z_index_offset', function () {
+            this.obj.setZIndexOffset(this.model.get('z_index_offset'));
+        }, this);
         this.listenTo(this.model, 'change:opacity', function () {
             this.obj.setOpacity(this.model.get('opacity'));
         }, this);

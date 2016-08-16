@@ -8,7 +8,7 @@ var loaders = [
 
     // Generic file loader, Should be used for anything but leaflet's
     // marker-icon.png, marker-icon-2x.png or marker-shadow.png
-    { test: /\.(jpg|png|gif)$/, loader: 'file', exclude: leaflet_marker_selector },
+    { test: /\.(jpg|png|gif|svg)$/, loader: 'file', exclude: leaflet_marker_selector },
 
     // Files marker-icon.png, marker-icon-2x.png or marker-shadow.png
     // should be copied over to the bundle without being changed.

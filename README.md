@@ -17,7 +17,7 @@ Using pip:
 
 ```
 $ pip install ipyleaflet
-$ jupyter nbextension enable --py ipyleaflet
+$ jupyter nbextension enable --py --sys-prefix ipyleaflet
 ```
 
 Using conda:
@@ -32,8 +32,8 @@ For a development installation (requires npm):
 $ git clone https://github.com/ellisonbg/ipyleaflet.git
 $ cd ipyleaflet
 $ pip install -e .
-$ jupyter nbextension install --py --symlink --user ipyleaflet
-$ jupyter nbextension enable --py --user ipyleaflet
+$ jupyter nbextension install --py --symlink --sys-prefix ipyleaflet
+$ jupyter nbextension enable --py --sys-prefix ipyleaflet
 ```
 
 Note for developers: the `--symlink` argument on Linux or OS X allows one to

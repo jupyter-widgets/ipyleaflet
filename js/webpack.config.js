@@ -55,7 +55,7 @@ module.exports = [
             filename: 'index.js',
             path: './dist/',
             libraryTarget: 'amd',
-            publicPath: 'https://npmcdn.com/jupyter-leaflet@' + version + '/dist/'
+            publicPath: 'https://unpkg.com/jupyter-leaflet@' + version + '/dist/'
         },
         devtool: 'source-map',
         module: {

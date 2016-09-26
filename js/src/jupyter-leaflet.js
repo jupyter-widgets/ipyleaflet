@@ -461,6 +461,11 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
                 break;
         }
     },
+
+    onResize: function (msg) {
+        this.obj.invalidateSize(true);
+    }
+
 });
 
 var def_loc = [0.0, 0.0];

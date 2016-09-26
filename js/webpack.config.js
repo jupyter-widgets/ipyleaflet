@@ -27,6 +27,20 @@ var loaders = [
     { test: leaflet_marker_selector, loader: 'file?name=[name].[ext]' }
 ];
 
+var buildExtension = require('jupyterlab-extension-builder/lib/builder').buildExtension;
+
+buildExtension({
+    name: 'jupyter-leaflet',
+    entry: './src/labplugin',
+    outputDir: '../ipyleaflet/staticlab',
+    config: {
+        module: {
+            loaders:
+                { test: /\.less$/, loader: "style-loader!css-loader!less-loader" }
+        }
+    }
+});
+
 module.exports = [
     {// Notebook extension
         entry: './src/extension.js',
@@ -37,7 +51,7 @@ module.exports = [
         }
     },
     {// jupyter-leaflet bundle for the notebook
-        entry: './src/index.js',
+        entry: './src/notebook.js',
         output: {
             filename: 'index.js',
             path: '../ipyleaflet/static',

@@ -8,9 +8,6 @@ from traitlets import (
     default, validate, TraitError
 )
 
-# TODO: don't use private APIs
-from ipywidgets.widgets.interaction import _widget_from_abbrev
-
 def_loc = [0.0, 0.0]
 
 

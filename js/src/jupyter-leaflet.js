@@ -339,6 +339,17 @@ var LeafletDrawControlView = LeafletControlView.extend({
 
 });
 
+var LeafletLayerControlView = LeafletControlView.extend({
+
+    create_obj: function () {
+        this.obj =  L.control.layers(
+            this.model.get('base_layers'),
+            this.model.get('overlays'),
+            this.get_options()
+        );
+        console.log('Create control layer')
+    },
+});
 
 var LeafletMapView = widgets.DOMWidgetView.extend({
     initialize: function (options) {
@@ -712,6 +723,21 @@ var LeafletDrawControlModel = LeafletControlModel.extend({
 });
 
 
+var LeafletLayerControlModel = LeafletControlModel.extend({
+    defaults: _.extend({}, LeafletControlModel.prototype.defaults, {
+        _view_name : 'LeafletLayerControlView',
+        _model_name : 'LeafletLayerControlModel',
+
+        base_layers : undefined,
+        overlays: undefined
+    })
+}, {
+    serializers: _.extend({
+        base_layers : { deserialize: widgets.unpack_models },
+        overlays : { deserialize: widgets.unpack_models }
+    }, LeafletControlModel.serializers)
+});
+
 var LeafletMapModel = widgets.DOMWidgetModel.extend({
     defaults: _.extend({}, widgets.DOMWidgetModel.prototype.defaults, {
         _view_name : "LeafletMapView",
@@ -788,10 +814,10 @@ module.exports = {
     LeafletMultiPolygonView : LeafletMultiPolygonView,
     LeafletControlView : LeafletControlView,
     LeafletDrawControlView : LeafletDrawControlView,
+    LeafletLayerControlView : LeafletLayerControlView,
     LeafletMapView : LeafletMapView,
     // models
     LeafletLayerModel : LeafletLayerModel,
-    LeafletUILayerModel : LeafletUILayerModel,
     LeafletUILayerModel : LeafletUILayerModel,
     LeafletMarkerModel : LeafletMarkerModel,
     LeafletPopupModel : LeafletPopupModel,
@@ -812,5 +838,6 @@ module.exports = {
     LeafletMultiPolygonModel : LeafletMultiPolygonModel,
     LeafletControlModel : LeafletControlModel,
     LeafletDrawControlModel : LeafletDrawControlModel,
+    LeafletLayerControlModel : LeafletLayerControlModel,
     LeafletMapModel : LeafletMapModel
 };

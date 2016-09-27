@@ -371,7 +371,7 @@ class DrawControl(Control):
 
     def __init__(self, **kwargs):
         super(DrawControl, self).__init__(**kwargs)
-        self.on_msg(self._handle_leaflet_event)
+        self.on_msg(self._handle_leaflet_event) 
 
     def _handle_leaflet_event(self, _, content, buffers):
         if content.get('event', '').startswith('draw'):
@@ -382,6 +382,15 @@ class DrawControl(Control):
 
     def on_draw(self, callback, remove=False):
         self._draw_callbacks.register_callback(callback, remove=remove)
+
+        
+class LayerControl(Control):
+    _view_name = Unicode('LeafletLayerControlView').tag(sync=True)
+    _model_name = Unicode('LeafletLayerControlModel').tag(sync=True)
+
+    base_layers = List(Instance(Layer)).tag(sync=True, **widget_serialization)
+    overlays = List(Instance(Layer)).tag(sync=True, **widget_serialization)
+
 
 
 class Map(DOMWidget, InteractMixin):

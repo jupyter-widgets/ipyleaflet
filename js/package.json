@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "jquery": "^2.1.4",
-    "jupyter-js-widgets": "^2.0.0-dev.22",
+    "jupyter-js-widgets": "^2.0.0-dev.23",
     "jupyterlab" : "^0.3.0",
     "jupyterlab_widgets" : "^0.2.2",
     "leaflet": "^0.7.7",

@@ -3,7 +3,7 @@ var _ = require('underscore');
 var L = require('leaflet');
 require('leaflet-draw');
 
-L.Icon.Default.imagePath = __webpack_public_path__;
+L.Icon.Default.imagePath = __webpack_public_path__ + '/images/';
 
 
 function camel_case(input) {

@@ -5,10 +5,12 @@ A Jupyter / Leaflet bridge enabling interactive maps in the Jupyter notebook.
 
 ![Screenshot](/screenshot.png)
 
-Note
-----
+Getting Started
+---------------
 
-This README concerns ipyleaflet version 0.2.0.
+### Try it online with [Binder](http://mybinder.org/)
+
+[![Binder](http://mybinder.org/badge.svg)](http://mybinder.org:/repo/ellisonbg/ipyleaflet/notebooks/examples)
 
 Installation
 ------------

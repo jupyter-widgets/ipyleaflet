@@ -6,6 +6,8 @@ require('leaflet/dist/leaflet.css');
 require('leaflet-draw/dist/leaflet.draw.css');
 
 // Forcibly load the marker icon images to be in the bundle.
+require('leaflet/dist/images/layers-2x.png');
+require('leaflet/dist/images/layers.png');
 require('leaflet/dist/images/marker-shadow.png');
 require('leaflet/dist/images/marker-icon.png');
 require('leaflet/dist/images/marker-icon-2x.png');

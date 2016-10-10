@@ -52,22 +52,23 @@ class Layer(Widget, InteractMixin):
 
     @observe('visible')
     def _update_visible(self, change):
+        # TODO: Consider replacing map.layers with sets. Then can simply add or subtract.
         was_visible = change['old']
         will_visible = change['new']
         if self._map is None:
             # If Map.add_layer has never been called raise
             raise LayerException('Map.add_layer() must be called first')
         else:
-            # Map.add_layer() was called
             if (not was_visible) and will_visible:
                 # Only add if we aren't already in self._map.layers
                 if self.model_id not in self._map.layer_ids:
-                    self._map.add_layer(self)
-            # Map.remove_layer() was called
+                    self._map.layer_ids += [self.model_id]
+                    self._map.layers += tuple([self])
             elif was_visible and (not will_visible):
                 # Only remove if we are in self._map.layers
                 if self.model_id in self._map.layer_ids:
-                    self._map.remove_layer(self)
+                    self._map.layers = tuple([l for l in self._map.layers if l.model_id != self.model_id])
+                    self._map.layer_ids = [l for l in self._map.layer_ids if l != self.model_id]
 
 
 class UILayer(Layer):
@@ -190,10 +191,58 @@ class CircleMarker(Circle):
 
 class LayerGroup(Layer):
     _view_name = Unicode('LeafletLayerGroupView').tag(sync=True)
-    _view_name = Unicode('LeafletLayerGroupModel').tag(sync=True)
+    _model_name = Unicode('LeafletLayerGroupModel').tag(sync=True)
 
     layers = List(Instance(Layer)).tag(sync=True, **widget_serialization)
 
+    visible = Bool(False)
+    @observe('visible')
+    def _update_visible(self, change):
+        # TODO: Consider replacing map.layers with sets. Then can simply add or subtract.
+        was_visible = change['old']
+        will_visible = change['new']
+        if self._map is None:
+            # If Map.add_layer has never been called raise
+            raise LayerException('Map.add_layer() must be called first')
+        else:
+            if (not was_visible) and will_visible:
+                # Only add if we aren't already in self._map.layers
+                if self.model_id not in self._map.layer_ids:
+                    self._map.layer_ids += [self.model_id]
+                    self._map.layers += tuple(self.layers)
+            elif was_visible and (not will_visible):
+                # Only remove if we are in self._map.layers
+                if self.model_id in self._map.layer_ids:
+                    model_ids = [l.model_id for l in self.layers]
+                    self._map.layers = tuple(l for l in self._map.layers if l.model_id not in model_ids)
+                    self._map.layer_ids = [l for l in self._map.layer_ids if l !=  self.model_id]
+    
+    def add_layer(self, layer):
+        '''Add layer to LayerGroup and update map'''
+        
+        self.layers += [layer]
+        self._map.layer_ids += [layer.model_id]
+        self._map.layers += tuple([layer])
+        
+        layer._map = self # The map for this layer is the layer group.
+#         layer.visible = True
+
+    def remove_layer(self, layer):
+        '''Remove layer from LayerGroup and update map'''
+        
+        self.layers = [l for l in self.layers if l.model_id != layer.model_id]
+        self._map.layers = tuple(l for l in self._map.layers if l.model_id != layer.model_id)
+        self._map.layer_ids = [l for l in self._map.layer_ids]
+        layer._map = None
+
+    def clear_layers(self):
+        '''Clear all layers from LayerGroup and update map'''
+        
+        model_ids = [l.model_id for l in self.layers]
+        self._map.layers = (l for l in self._map.layers if l.model_id not in model_ids)
+        self._map.layer_ids = [l for l in self._map.layer_ids if l !=  self.model_id]
+        self.layers = ()
+        
 
 class FeatureGroup(Layer):
     _view_name = Unicode('LeafletFeatureGroupView').tag(sync=True)
@@ -322,7 +371,7 @@ class DrawControl(Control):
 
     def __init__(self, **kwargs):
         super(DrawControl, self).__init__(**kwargs)
-        self.on_msg(self._handle_leaflet_event)
+        self.on_msg(self._handle_leaflet_event) 
 
     def _handle_leaflet_event(self, _, content, buffers):
         if content.get('event', '').startswith('draw'):
@@ -333,6 +382,15 @@ class DrawControl(Control):
 
     def on_draw(self, callback, remove=False):
         self._draw_callbacks.register_callback(callback, remove=remove)
+
+        
+class LayerControl(Control):
+    _view_name = Unicode('LeafletLayerControlView').tag(sync=True)
+    _model_name = Unicode('LeafletLayerControlModel').tag(sync=True)
+
+    base_layers = List(Instance(Layer)).tag(sync=True, **widget_serialization)
+    overlays = List(Instance(Layer)).tag(sync=True, **widget_serialization)
+
 
 
 class Map(DOMWidget, InteractMixin):
@@ -438,30 +496,16 @@ class Map(DOMWidget, InteractMixin):
     layers = Tuple(trait=Instance(Layer)).tag(sync=True, **widget_serialization)
     layer_ids = List()
 
-    @validate('layers')
-    def _validate_layers(self, proposal):
-        """Validate layers list.
-
-        Makes sure only one instance of any given layer can exist in the
-        layers list.
-        """
-        self.layer_ids = [l.model_id for l in proposal['value']]
-        if len(set(self.layer_ids)) != len(self.layer_ids):
-            raise LayerException('duplicate layer detected, only use each layer once')
-        return proposal['value']
-
+    
     def add_layer(self, layer):
-        if layer.model_id in self.layer_ids:
-            raise LayerException('layer already on map: %r' % layer)
+ 
         layer._map = self
-        self.layers = tuple([l for l in self.layers] + [layer])
         layer.visible = True
 
     def remove_layer(self, layer):
-        if layer.model_id not in self.layer_ids:
-            raise LayerException('layer not on map: %r' % layer)
-        self.layers = tuple([l for l in self.layers if l.model_id != layer.model_id])
+       
         layer.visible = False
+        layer._map = None
 
     def clear_layers(self):
         self.layers = ()

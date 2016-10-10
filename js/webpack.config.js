@@ -1,6 +1,6 @@
 var version = require('./package.json').version;
 
-var leaflet_marker_selector = /leaflet\/dist\/images\/marker-.*\.png/;
+var leaflet_marker_selector = /leaflet\/dist\/images\/.*\.png/;
 
 var loaders = [
     { test: /\.json$/, loader: 'json-loader' },
@@ -24,7 +24,7 @@ var loaders = [
     //
     //  return path + '/marker-' + name + '.png';
     //
-    { test: leaflet_marker_selector, loader: 'file?name=[name].[ext]' }
+    { test: leaflet_marker_selector, loader: 'file?name=./images/[name].[ext]' }
 ];
 
 module.exports = [

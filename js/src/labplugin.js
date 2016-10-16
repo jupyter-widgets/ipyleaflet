@@ -1,6 +1,6 @@
 var jupyter_leaflet = require('./index');
 
-var jupyterlab_widgets = require('jupyterlab_widgets/lib/plugin');
+var jupyterlab_widgets = require('@jupyterlab/nbwidgets/lib/plugin');
 
 module.exports = {
   id: 'jupyter.extensions.jupyter-leaflet',

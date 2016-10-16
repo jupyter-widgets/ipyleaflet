@@ -27,7 +27,7 @@ var loaders = [
     { test: leaflet_marker_selector, loader: 'file?name=[name].[ext]' }
 ];
 
-var buildExtension = require('jupyterlab-extension-builder/lib/builder').buildExtension;
+var buildExtension = require('@jupyterlab/extension-builder/lib/builder').buildExtension;
 
 buildExtension({
     name: 'jupyter-leaflet',

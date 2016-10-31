@@ -7,6 +7,7 @@ node_modules/
 
 # Compiled javascript
 ipyleaflet/static/
+ipyleaflet/staticlab/
 
 # OS X
 .DS_Store

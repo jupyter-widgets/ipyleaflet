@@ -1,1 +1,2 @@
 recursive-include ipyleaflet/static *.*
+recursive-include ipyleaflet/staticlab *.*

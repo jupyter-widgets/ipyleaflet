@@ -33,10 +33,10 @@ buildExtension({
     name: 'jupyter-leaflet',
     entry: './src/labplugin',
     outputDir: '../ipyleaflet/staticlab',
+    useDefaultLoaders: false,
     config: {
         module: {
-            loaders:
-                { test: /\.less$/, loader: "style-loader!css-loader!less-loader" }
+            loaders: loaders
         }
     }
 });

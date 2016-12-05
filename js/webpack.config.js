@@ -34,6 +34,7 @@ buildExtension({
     entry: './src/labplugin',
     outputDir: '../ipyleaflet/staticlab',
     useDefaultLoaders: false,
+    extractCSS: false,
     config: {
         module: {
             loaders: loaders

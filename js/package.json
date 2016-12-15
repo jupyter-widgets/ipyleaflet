@@ -17,14 +17,14 @@
     "css-loader": "^0.23.1",
     "file-loader": "^0.8.5",
     "json-loader": "^0.5.4",
-    "@jupyterlab/extension-builder": "^0.8.1",
+    "@jupyterlab/extension-builder": "^0.10.0",
     "rimraf": "^2.4.1",
     "style-loader": "^0.13.1",
     "webpack": "^1.12.14"
   },
   "dependencies": {
     "jupyter-js-widgets": "^2.0.12",
-    "@jupyterlab/nbwidgets": "^0.6.0",
+    "@jupyterlab/nbwidgets": "^0.6.4",
     "leaflet": "^0.7.7",
     "leaflet-draw": "^0.3.0",
     "underscore": "^1.8.3"

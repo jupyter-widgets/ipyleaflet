@@ -1,6 +1,6 @@
 from ipywidgets import (
     Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
-    Layout
+    Layout, register
 )
 
 from traitlets import (
@@ -94,6 +94,8 @@ class Marker(UILayer):
 class Popup(UILayer):
     _view_name = Unicode('LeafletPopupView').tag(sync=True)
     _model_name = Unicode('LeafletPopupModel').tag(sync=True)
+    location = List(def_loc).tag(sync=True)
+    child = Instance(DOMWidget, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
 
 
 class RasterLayer(Layer):
@@ -332,6 +334,7 @@ class DrawControl(Control):
         self._draw_callbacks.register_callback(callback, remove=remove)
 
 
+@register('leaflet.Map')
 class Map(DOMWidget, InteractMixin):
 
     @default('layout')

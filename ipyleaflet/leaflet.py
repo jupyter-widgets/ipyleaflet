@@ -1,6 +1,5 @@
 from ipywidgets import (
-    Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
-    Layout
+    Layout, Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization, interactive
 )
 
 from traitlets import (
@@ -21,7 +20,7 @@ class InteractMixin(object):
         c = []
         for name, abbrev in kwargs.items():
             default = getattr(self, name)
-            widget = _widget_from_abbrev(abbrev, default)
+            widget = interactive.widget_from_abbrev(abbrev, default)
             if not widget.description:
                 widget.description = name
             widget.link = link((widget, 'value'), (self, name))

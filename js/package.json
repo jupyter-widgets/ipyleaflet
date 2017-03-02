@@ -1,6 +1,6 @@
 {
   "name": "jupyter-leaflet",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "jupyter - leaflet bridge",
   "author": "Brian Granger",
   "license": "MIT",
@@ -23,8 +23,8 @@
     "webpack": "^1.12.14"
   },
   "dependencies": {
-    "jupyter-js-widgets": "^2.0.23",
-    "@jupyterlab/nbwidgets": "^0.6.6",
+    "jupyter-js-widgets": "^2.1.4",
+    "@jupyterlab/nbwidgets": "^0.6.15",
     "leaflet": "^0.7.7",
     "leaflet-draw": "^0.3.0",
     "underscore": "^1.8.3"

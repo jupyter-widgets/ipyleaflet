@@ -123,21 +123,20 @@ setup_args = {
     'version': version_ns['__version__'],
     'description': 'A Jupyter widget for dynamic Leaflet maps',
     'long_description': LONG_DESCRIPTION,
-    'License': 'MIT License',
+    'license': 'MIT License',
     'include_package_data': True,
     'data_files': [
         ('share/jupyter/nbextensions/jupyter-leaflet', [
             'ipyleaflet/static/extension.js',
             'ipyleaflet/static/index.js',
-            'ipyleaflet/static/index.js.map',
-        ] + glob('ipyleaflet/static/*.png')),
+            'ipyleaflet/static/index.js.map'
+        ] + glob('ipyleaflet/static/*.png') + glob('ipyleaflet/static/*.svg')),
         ('share/jupyter/labextensions/jupyter-leaflet', [
             'ipyleaflet/staticlab/jupyter-leaflet.bundle.js',
-            'ipyleaflet/staticlab/jupyter-leaflet.bundle.js.manifest',
-            'ipyleaflet/staticlab/jupyter-leaflet.css',
-        ] + glob('ipyleaflet/staticlab/*.png')),
+            'ipyleaflet/staticlab/jupyter-leaflet.bundle.js.manifest'
+        ] + glob('ipyleaflet/staticlab/*.png') + glob('ipyleaflet/staticlab/*.svg'))
     ],
-    'install_requires': ['ipywidgets>=5.1.5'],
+    'install_requires': ['ipywidgets>=6.0.0'],
     'packages': find_packages(),
     'zip_safe': False,
     'cmdclass': {

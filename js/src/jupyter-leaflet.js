@@ -104,7 +104,20 @@ var LeafletImageOverlayView = LeafletRasterLayerView.extend({
             this.model.get('bounds'),
             this.get_options()
         );
+        this._forward_changes('url')
+        this._forward_changes('opacity')
     },
+    _forward_changes: function(key) {
+        // listen to a changes in 'some_property' and on change call this.obj.setSomeProperty(value)
+        // where obj is the leaflet object
+        this.listenTo(this.model, 'change:' + key, function () {
+            var setterName = camel_case('set_' + key);
+            var setter = this.obj[setterName];
+            if(setter) {
+                setter.apply(this.obj, [this.model.get(key)])
+            }
+        }, this);
+    }
 });
 
 

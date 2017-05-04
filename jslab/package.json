@@ -1,0 +1,22 @@
+{
+  "name": "jupyterlab-leaflet",
+  "version": "0.1.0",
+  "description": "jupyter - leaflet bridge",
+  "author": "jupyterlab-leaflet developers",
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ellisonbg/ipyleaflet.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@jupyterlab/nbwidgets": "^0.18.0",
+    "jupyter-leaflet": "^0.4.0-alpha.0"
+  },
+  "jupyterlab": {
+    "extension": true
+  }
+}

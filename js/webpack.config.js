@@ -27,21 +27,6 @@ var loaders = [
     { test: leaflet_marker_selector, loader: 'file?name=[name].[ext]' }
 ];
 
-var buildExtension = require('@jupyterlab/extension-builder/lib/builder').buildExtension;
-
-buildExtension({
-    name: 'jupyter-leaflet',
-    entry: './src/labplugin',
-    outputDir: '../ipyleaflet/staticlab',
-    useDefaultLoaders: false,
-    extractCSS: false,
-    config: {
-        module: {
-            loaders: loaders
-        }
-    }
-});
-
 module.exports = [
     {// Notebook extension
         entry: './src/extension.js',

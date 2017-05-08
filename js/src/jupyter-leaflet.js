@@ -1,6 +1,7 @@
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 var L = require('leaflet');
+require('leaflet-side-by-side');
 require('leaflet-draw');
 require('leaflet.markercluster');
 
@@ -435,6 +436,33 @@ var LeafletControlView = widgets.WidgetView.extend({
     },
 });
 
+var LeafletSideBySideControlView = LeafletControlView.extend({
+    initialize: function (parameters) {
+        LeafletSideBySideControlView.__super__.initialize.apply(this, arguments);
+        this.map_view = this.options.map_view;
+    },
+
+    render: function () {
+        var that = this;
+        var leftLayer = this.model.get('leftLayer');
+        var rightLayer = this.model.get('rightLayer');
+
+        return this.create_child_view(this.model.get('leftLayer'), {
+            map_view: this.map_view
+        }).then(function (layer_view) {
+            that.create_obj();
+            return that;
+        });
+    },
+
+    create_obj: function () {
+        var leftChild = this.model.get('leftLayer').attributes;
+        var rightChild = this.model.get('rightLayer').attributes;
+        var leftLayer = L.tileLayer(leftChild.url, leftChild.options).addTo(this.map_view.obj);
+        var rightLayer = L.tileLayer(rightChild.url, rightChild.options).addTo(this.map_view.obj);
+        this.obj = L.control.sideBySide(leftLayer, rightLayer);
+    }
+});
 
 var LeafletLayersControlView = LeafletControlView.extend({
     initialize: function (parameters) {
@@ -503,7 +531,7 @@ var LeafletDrawControlView = LeafletControlView.extend({
         if (_.isEmpty(rectangle)) { rectangle = false; }
         var marker = this.model.get('marker');
         if (_.isEmpty(marker)) { marker = false; }
-        var edit = this.model.get('edit')
+        var edit = this.model.get('edit');
         var remove = this.model.get('remove');
         this.obj = new L.Control.Draw({
             edit: {
@@ -1021,6 +1049,20 @@ var LeafletDrawControlModel = LeafletControlModel.extend({
     }, LeafletControlModel.serializers)
 });
 
+var LeafletSideBySideControlModel = LeafletControlModel.extend({
+    default: _.extend({}, LeafletControlModel.prototype.defaults, {
+        _view_name: 'LeafletSideBySideControlView',
+        _model_name: 'LeafletSideBySideControlModel',
+
+        leftLayer: undefined,
+        rightLayer: undefined
+    })
+}, {
+    serializers: _.extend({
+        leftLayer: {deserialize: widgets.unpack_models},
+        rightLayer: {deserialize: widgets.unpack_models}
+    })
+});
 
 var LeafletMapModel = widgets.DOMWidgetModel.extend({
     defaults: _.extend({}, widgets.DOMWidgetModel.prototype.defaults, {
@@ -1130,6 +1172,7 @@ module.exports = {
     LeafletControlView : LeafletControlView,
     LeafletLayersControlView : LeafletLayersControlView,
     LeafletDrawControlView : LeafletDrawControlView,
+    LeafletSideBySideControlView : LeafletSideBySideControlView,
     LeafletMapView : LeafletMapView,
     // models
     LeafletLayerModel : LeafletLayerModel,
@@ -1158,5 +1201,6 @@ module.exports = {
     LeafletControlModel : LeafletControlModel,
     LeafletLayersControlModel : LeafletLayersControlModel,
     LeafletDrawControlModel : LeafletDrawControlModel,
+    LeafletSideBySideControlModel : LeafletSideBySideControlModel,
     LeafletMapModel : LeafletMapModel
 };

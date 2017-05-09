@@ -4,6 +4,7 @@ dist/
 build/
 *.py[cod]
 node_modules/
+venv/*
 
 # Compiled javascript
 ipyleaflet/static/

@@ -42,4 +42,6 @@ Note for developers: the `--symlink` argument on Linux or OS X allows one to
 modify the JavaScript code in-place. This feature is not available
 with Windows.
 
-
+`./scripts/update` will handle creating (and updating) a virtualenv for you,
+installing dependencies, installing ipyleaflet, and enabling all relevant
+notebook extensions.

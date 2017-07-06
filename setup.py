@@ -130,13 +130,9 @@ setup_args = {
             'ipyleaflet/static/extension.js',
             'ipyleaflet/static/index.js',
             'ipyleaflet/static/index.js.map'
-        ] + glob('ipyleaflet/static/*.png') + glob('ipyleaflet/static/*.svg')),
-        ('share/jupyter/labextensions/jupyter-leaflet', [
-            'ipyleaflet/staticlab/jupyter-leaflet.bundle.js',
-            'ipyleaflet/staticlab/jupyter-leaflet.bundle.js.manifest'
-        ] + glob('ipyleaflet/staticlab/*.png') + glob('ipyleaflet/staticlab/*.svg'))
+        ] + glob('ipyleaflet/static/*.png') + glob('ipyleaflet/static/*.svg'))
     ],
-    'install_requires': ['ipywidgets>=6.0.0'],
+    'install_requires': ['ipywidgets~=7.0.0a9'],
     'packages': find_packages(),
     'zip_safe': False,
     'cmdclass': {

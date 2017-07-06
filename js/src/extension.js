@@ -4,7 +4,6 @@ if (window.require) {
         map: {
             "*" : {
                 "jupyter-leaflet": "nbextensions/jupyter-leaflet/index",
-                "jupyter-js-widgets": "nbextensions/jupyter-js-widgets/extension"
             }
         }
     });

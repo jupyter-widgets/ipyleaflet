@@ -9,11 +9,3 @@ def _jupyter_nbextension_paths():
         'dest': 'jupyter-leaflet',
         'require': 'jupyter-leaflet/extension'
     }]
-
-
-def _jupyter_labextension_paths():
-    return [{
-        'name': 'jupyter-leaflet',
-        'src': 'staticlab'
-    }]
-

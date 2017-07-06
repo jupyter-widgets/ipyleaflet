@@ -1,4 +1,4 @@
-var widgets = require('jupyter-js-widgets');
+var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 var L = require('leaflet');
 require('leaflet-draw');

@@ -13,8 +13,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@jupyterlab/nbwidgets": "^0.18.0",
-    "jupyter-leaflet": "^0.4.0-alpha.0"
+    "@jupyter-widgets/jupyterlab-manager": "^0.23.2",
+    "jupyter-leaflet": "^0.4.0-alpha.1"
   },
   "jupyterlab": {
     "extension": true

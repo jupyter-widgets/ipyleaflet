@@ -287,6 +287,32 @@ class Control(Widget):
                     self._map.remove_control(self)
 
 
+class SideBySideControl(Control):
+    _view_name = Unicode('LeafletSideBySideControlView').tag(sync=True)
+    _model_name = Unicode('LeafletSideBySideControlModel').tag(sync=True)
+    _draw_callbacks = Instance(CallbackDispatcher, ())
+
+    leftLayer = Instance(TileLayer).tag(sync=True, **widget_serialization)
+    rightLayer = Instance(TileLayer).tag(sync=True, **widget_serialization)
+
+    @default('leftLayer')
+    def _default_leftLayer(self):
+        return TileLayer()
+
+    @default('rightLayer')
+    def _default_rightLayer(self):
+        return TileLayer()
+
+    def __init__(self, **kwargs):
+        super(SideBySideControl, self).__init__(**kwargs)
+        self.on_msg(self._handle_leaflet_event)
+
+    def _handle_leaflet_event(self, _, content, buffers):
+        if content.get('event', '') == 'dividermove':
+            event = content.get('event')
+            self.x = event.x
+
+
 class DrawControl(Control):
     _view_name = Unicode('LeafletDrawControlView').tag(sync=True)
     _model_name = Unicode('LeafletDrawControlModel').tag(sync=True)

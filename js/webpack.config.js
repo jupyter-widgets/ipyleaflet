@@ -60,7 +60,6 @@ module.exports = [
         devtool: 'source-map',
         module: {
             loaders: loaders
-        },
-        externals: ['@jupyter-widgets/base']
+        }
     }
 ];

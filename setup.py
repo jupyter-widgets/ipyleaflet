@@ -132,7 +132,7 @@ setup_args = {
             'ipyleaflet/static/index.js.map'
         ] + glob('ipyleaflet/static/*.png') + glob('ipyleaflet/static/*.svg'))
     ],
-    'install_requires': ['ipywidgets~=7.0.0a9'],
+    'install_requires': ['ipywidgets~=7.0.0'],
     'packages': find_packages(),
     'zip_safe': False,
     'cmdclass': {

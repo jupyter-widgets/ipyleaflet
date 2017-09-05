@@ -1,30 +1,30 @@
+var path = require('path');
 var version = require('./package.json').version;
 
 var leaflet_marker_selector = /leaflet\/dist\/images\/marker-.*\.png/;
 
-var loaders = [
-    { test: /\.json$/, loader: 'json-loader' },
-    { test: /\.css$/, loader: 'style-loader!css-loader' },
+var rules = [
+    {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+    },
 
-    // Generic file loader, Should be used for anything but leaflet's
-    // marker-icon.png, marker-icon-2x.png or marker-shadow.png
-    { test: /\.(jpg|png|gif|svg)$/, loader: 'file', exclude: leaflet_marker_selector },
-
-    // Files marker-icon.png, marker-icon-2x.png or marker-shadow.png
-    // should be copied over to the bundle without being changed.
-    //
-    // The way it is loaded in leafletjs is:
-    //
-    // var path = L.Icon.Default.imagePath;
-    //
-    //  if (!path) {
-    //      throw new Error('Couldn\'t autodetect
-    //      L.Icon.Default.imagePath, set it manually.');
-    //  }
-    //
-    //  return path + '/marker-' + name + '.png';
-    //
-    { test: leaflet_marker_selector, loader: 'file?name=[name].[ext]' }
+    // We exclude the default marker files, since their names are hardcoded in
+    // the leaflet source.
+    {
+        test: /\.(jpg|png|gif|svg)$/,
+        exclude: leaflet_marker_selector,
+        use: ['file-loader']
+    },
+    {
+        test: leaflet_marker_selector,
+        use: [{
+            loader: 'file-loader',
+            options: {
+                name: '[name].[ext]'
+            }
+        }]
+    }
 ];
 
 module.exports = [
@@ -32,7 +32,7 @@ module.exports = [
         entry: './src/extension.js',
         output: {
             filename: 'extension.js',
-            path: '../ipyleaflet/static',
+            path: path.resolve(__dirname, '..', 'ipyleaflet', 'static'),
             libraryTarget: 'amd'
         }
     },
@@ -40,12 +40,12 @@ module.exports = [
         entry: './src/notebook.js',
         output: {
             filename: 'index.js',
-            path: '../ipyleaflet/static',
+            path: path.resolve(__dirname, '..', 'ipyleaflet', 'static'),
             libraryTarget: 'amd'
         },
         devtool: 'source-map',
         module: {
-            loaders: loaders
+            rules: rules
         },
         externals: ['@jupyter-widgets/base']
     },
@@ -53,13 +53,13 @@ module.exports = [
         entry: './src/embed.js',
         output: {
             filename: 'index.js',
-            path: './dist/',
+            path: path.resolve(__dirname, 'dist'),
             libraryTarget: 'amd',
             publicPath: 'https://unpkg.com/jupyter-leaflet@' + version + '/dist/'
         },
         devtool: 'source-map',
         module: {
-            loaders: loaders
+            rules: rules
         },
         externals: ['@jupyter-widgets/base']
     }

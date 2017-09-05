@@ -10,16 +10,17 @@
     "url": "https://github.com/ellisonbg/ipyleaflet.git"
   },
   "scripts": {
-    "prepublish": "webpack",
+    "clean": "rimraf dist/ && rimraf ../ipyleaflet/static",
+    "build": "webpack",
+    "prepublish": "npm run clean && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "css-loader": "^0.23.1",
-    "file-loader": "^0.8.5",
-    "json-loader": "^0.5.4",
-    "rimraf": "^2.4.1",
-    "style-loader": "^0.13.1",
-    "webpack": "^1.12.14"
+    "css-loader": "^0.28.7",
+    "file-loader": "^0.11.2",
+    "rimraf": "^2.6.1",
+    "style-loader": "^0.18.1",
+    "webpack": "^3.5.5"
   },
   "dependencies": {
     "@jupyter-widgets/base": "^1.0",

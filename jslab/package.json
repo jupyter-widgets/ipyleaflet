@@ -1,6 +1,6 @@
 {
   "name": "jupyterlab-leaflet",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "jupyter - leaflet bridge",
   "author": "jupyterlab-leaflet developers",
   "license": "MIT",
@@ -13,8 +13,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@jupyter-widgets/jupyterlab-manager": "^0.23.2",
-    "jupyter-leaflet": "^0.4.0-alpha.1"
+    "@jupyter-widgets/jupyterlab-manager": "^0.27.0",
+    "jupyter-leaflet": "^0.4.0"
   },
   "jupyterlab": {
     "extension": true

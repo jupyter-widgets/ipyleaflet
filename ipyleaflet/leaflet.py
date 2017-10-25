@@ -109,11 +109,11 @@ class TileLayer(RasterLayer):
     _model_name = Unicode('LeafletTileLayerModel').tag(sync=True)
 
     bottom = Bool(True).tag(sync=True)
-    url = Unicode('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').tag(sync=True)
+    url = Unicode('').tag(sync=True)
     min_zoom = Int(0).tag(sync=True, o=True)
     max_zoom = Int(18).tag(sync=True, o=True)
     tile_size = Int(256).tag(sync=True, o=True)
-    attribution = Unicode('Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors').tag(sync=True, o=True)
+    attribution = Unicode('').tag(sync=True, o=True)
     opacity = Float(1.0).tag(sync=True, o=True)
     detect_retina = Bool(False).tag(sync=True, o=True)
 
@@ -396,7 +396,10 @@ class Map(DOMWidget, InteractMixin):
 
     @default('default_tiles')
     def _default_tiles(self):
-        return TileLayer()
+        return TileLayer(
+            url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            attribution = 'Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+        )
 
     @property
     def north(self):

@@ -124,6 +124,7 @@ class WmsLayer(TileLayer):
     service = Unicode('WMS').tag(sync=True)
     request = Unicode('GetMap').tag(sync=True)
     layers = Unicode('').tag(sync=True, o=True)
+    styles = Unicode('').tag(sync=True, o=True)
     format = Unicode('image/png').tag(sync=True, o=True)
     transparent = Bool(False).tag(sync=True, o=True)
     version = Unicode('1.1.1').tag(sync=True)

@@ -1,10 +1,10 @@
-var jupyter_leaflet = require('jupyter-leaflet');
+var jupyter_leaflet = require('./index');
 
-var jupyterlab_widgets = require('@jupyter-widgets/jupyterlab-manager');
+var base = require('@jupyter-widgets/base');
 
 module.exports = {
   id: 'jupyter.extensions.jupyter-leaflet',
-  requires: [jupyterlab_widgets.INBWidgetExtension],
+  requires: [base.IJupyterWidgetRegistry],
   activate: function(app, widgets) {
       widgets.registerWidget({
           name: 'jupyter-leaflet',

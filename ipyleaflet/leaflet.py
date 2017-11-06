@@ -8,6 +8,7 @@ from traitlets import (
 )
 
 from ._version import EXTENSION_VERSION
+from datetime import date, timedelta
 
 def_loc = [0.0, 0.0]
 
@@ -85,7 +86,7 @@ class Marker(UILayer):
     opacity = Float(1.0).tag(sync=True, o=True)
     # write
     clickable = Bool(True).tag(sync=True, o=True)
-    draggable = Bool(False).tag(sync=True, o=True)
+    draggable = Bool(True).tag(sync=True, o=True)
     keyboard = Bool(True).tag(sync=True, o=True)
     title = Unicode().tag(sync=True, o=True)
     alt = Unicode().tag(sync=True, o=True)
@@ -93,6 +94,18 @@ class Marker(UILayer):
 
     rise_offset = Int(250).tag(sync=True, o=True)
 
+    _move_callbacks = Instance(CallbackDispatcher, ())
+
+    def __init__(self, **kwargs):
+        super(Marker, self).__init__(**kwargs)
+        self.on_msg(self._handle_leaflet_event)
+
+    def _handle_leaflet_event(self, _, content, buffers):
+        if content.get('event', '') == 'move':
+            self._move_callbacks(**content)
+
+    def on_move(self, callback, remove=False):
+        self._move_callbacks.register_callback(callback, remove=remove) 
 
 class Popup(UILayer):
     _view_name = Unicode('LeafletPopupView').tag(sync=True)
@@ -109,11 +122,11 @@ class TileLayer(RasterLayer):
     _model_name = Unicode('LeafletTileLayerModel').tag(sync=True)
 
     bottom = Bool(True).tag(sync=True)
-    url = Unicode('').tag(sync=True)
+    url = Unicode('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').tag(sync=True)
     min_zoom = Int(0).tag(sync=True, o=True)
     max_zoom = Int(18).tag(sync=True, o=True)
     tile_size = Int(256).tag(sync=True, o=True)
-    attribution = Unicode('').tag(sync=True, o=True)
+    attribution = Unicode('Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors').tag(sync=True, o=True)
     opacity = Float(1.0).tag(sync=True, o=True)
     detect_retina = Bool(False).tag(sync=True, o=True)
 
@@ -254,8 +267,6 @@ class Control(Widget):
     _model_name = Unicode('LeafletControlModel').tag(sync=True)
     _view_module = Unicode('jupyter-leaflet').tag(sync=True)
     _model_module = Unicode('jupyter-leaflet').tag(sync=True)
-    _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
-    _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
 
     options = List(trait=Unicode).tag(sync=True)
 
@@ -347,8 +358,6 @@ class Map(DOMWidget, InteractMixin):
     _model_name = Unicode('LeafletMapModel').tag(sync=True)
     _view_module = Unicode('jupyter-leaflet').tag(sync=True)
     _model_module = Unicode('jupyter-leaflet').tag(sync=True)
-    _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
-    _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
 
     # Map options
     center = List(def_loc).tag(sync=True, o=True)
@@ -356,6 +365,11 @@ class Map(DOMWidget, InteractMixin):
     zoom = Int(12).tag(sync=True, o=True)
     max_zoom = Int(18).tag(sync=True, o=True)
     min_zoom = Int(1).tag(sync=True, o=True)
+
+    # Added by Davide
+    basemap = Int(1).tag(sync=True, o=True)
+    modisdate = Unicode('yesterday').tag(sync=True)
+
     # Interaction options
     dragging = Bool(True).tag(sync=True, o=True)
     touch_zoom = Bool(True).tag(sync=True, o=True)
@@ -396,10 +410,160 @@ class Map(DOMWidget, InteractMixin):
 
     @default('default_tiles')
     def _default_tiles(self):
-        return TileLayer(
-            url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            attribution = 'Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
-        )
+        tile = TileLayer()
+        #OpenStreetMap.Mapnik
+        if self.basemap == 1:
+            tile.url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+            tile.max_zoom = 19
+            tile.attribution = 'Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+        #OpenStreetMap.BlackAndWhite
+        elif self.basemap == 2:
+            tile.url = 'http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
+            tile.max_zoom = 18
+            tile.attribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        #OpenStreetMap.DE
+        elif self.basemap == 3:
+            tile.url = 'http://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png'
+            tile.max_zoom = 18
+            tile.attribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        #OpenStreetMap.France
+        elif self.basemap == 4:
+            tile.url = 'http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png'
+            tile.max_zoom = 20
+            tile.attribution = '&copy; Openstreetmap France | &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        #OpenStreetMap.HOT
+        elif self.basemap == 5:
+            tile.url = 'http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png'
+            tile.max_zoom = 19
+            tile.attribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
+        #OpenTopoMap
+        elif self.basemap == 6:
+            tile.url = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png'
+            tile.max_zoom = 17
+            tile.attribution = 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+        #OpenMapSurfer.Roads
+        elif self.basemap == 7:
+            tile.url = 'http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}'
+            tile.max_zoom = 20
+            tile.attribution = 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        #OpenMapSurfer.Grayscale
+        elif self.basemap == 8:
+            tile.url = 'http://korona.geog.uni-heidelberg.de/tiles/roadsg/x={x}&y={y}&z={z}'
+            tile.max_zoom = 19
+            tile.attribution = 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        #Hydda.Full
+        elif self.basemap == 9:
+            tile.url = 'http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png'
+            tile.max_zoom = 18
+            tile.attribution = 'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        #Hydda.Base
+        elif self.basemap == 10:
+            tile.url = 'http://{s}.tile.openstreetmap.se/hydda/base/{z}/{x}/{y}.png'
+            tile.max_zoom = 18
+            tile.attribution = 'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        #Esri.WorldStreetMap
+        elif self.basemap == 11:
+            tile.url = 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}'
+            tile.max_zoom = 20
+            tile.attribution = 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
+        #Esri.DeLorme
+        elif self.basemap == 12:
+            tile.url = 'http://server.arcgisonline.com/ArcGIS/rest/services/Specialty/DeLorme_World_Base_Map/MapServer/tile/{z}/{y}/{x}'
+            tile.min_zoom = 1
+            tile.max_zoom = 11
+            tile.attribution = 'Tiles &copy; Esri &mdash; Copyright: &copy;2012 DeLorme'
+        #Esri.WorldTopoMap
+        elif self.basemap == 13:
+            tile.url = 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'
+            tile.max_zoom = 20
+            tile.attribution = 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+        #Esri.WorldImagery
+        elif self.basemap == 14:
+            tile.url = 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+            tile.max_zoom = 20
+            tile.attribution = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        #Esri.NatGeoWorldMap
+        elif self.basemap == 15:
+            tile.url = 'http://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}'
+            tile.max_zoom = 16
+            tile.attribution = 'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC'
+        #HikeBike.HikeBike
+        elif self.basemap == 16:
+            tile.url = 'http://{s}.tiles.wmflabs.org/hikebike/{z}/{x}/{y}.png'
+            tile.max_zoom = 19
+            tile.attribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        #Stamen.Terrain
+        elif self.basemap == 17:
+            tile.url = 'http://stamen-tiles-a.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png'
+            tile.max_zoom = 18
+            tile.attribution = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        #MtbMap
+        elif self.basemap == 18:
+            tile.url = 'http://tile.mtbmap.cz/mtbmap_tiles/{z}/{x}/{y}.png'
+            tile.max_zoom = 20
+            tile.attribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &amp; USGS'
+        #CartoDB.Positron
+        elif self.basemap == 19:
+            tile.url = 'http://b.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
+            tile.max_zoom = 19
+            tile.attribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+        #CartoDB.DarkMatter
+        elif self.basemap == 20:
+            tile.url = 'http://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
+            tile.max_zoom = 19
+            tile.attribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+        #NASAGIBS.ModisTerraTrueColorCR
+        elif self.basemap == 21:
+            day = self.modisdate
+            if day == 'yesterday':
+                yesterday = date.today() - timedelta(1)
+                day = yesterday.strftime("%Y-%m-%d")
+            tile.url = 'https://map1.vis.earthdata.nasa.gov/wmts-webmerc/MODIS_Terra_CorrectedReflectance_TrueColor/default/' + day + '/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg'
+            tile.max_zoom = 9
+            tile.attribution = 'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.'
+        #NASAGIBS.ModisTerraBands367CR
+        elif self.basemap == 22:
+            day = self.modisdate
+            if day == 'yesterday':
+                yesterday = date.today() - timedelta(1)
+                day = yesterday.strftime("%Y-%m-%d")
+            tile.url = 'https://map1.vis.earthdata.nasa.gov/wmts-webmerc/MODIS_Terra_CorrectedReflectance_Bands367/default/' + day + '/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg'
+            tile.max_zoom = 9
+            tile.attribution = 'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.'
+        #NASAGIBS.ModisTerraBands721CR
+        elif self.basemap == 23:
+            day = self.modisdate
+            if day == 'yesterday':
+                yesterday = date.today() - timedelta(1)
+                day = yesterday.strftime("%Y-%m-%d")
+            tile.url = 'https://map1.vis.earthdata.nasa.gov/wmts-webmerc/MODIS_Terra_CorrectedReflectance_Bands721/default/' + day + '/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg'
+            tile.max_zoom = 9
+            tile.attribution = 'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.'
+        #NASAGIBS.ModisAquaTrueColorCR
+        elif self.basemap == 24:
+            day = self.modisdate
+            if day == 'yesterday':
+                yesterday = date.today() - timedelta(1)
+                day = yesterday.strftime("%Y-%m-%d")
+            tile.url = 'https://map1.vis.earthdata.nasa.gov/wmts-webmerc/MODIS_Aqua_CorrectedReflectance_TrueColor/default/' + day + '/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg'
+            tile.max_zoom = 9
+            tile.attribution = 'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.'
+        #NASAGIBS.ModisAquaBands721CR
+        elif self.basemap == 25:
+            day = self.modisdate
+            if day == 'yesterday':
+                yesterday = date.today() - timedelta(1)
+                day = yesterday.strftime("%Y-%m-%d")
+            tile.url = 'https://map1.vis.earthdata.nasa.gov/wmts-webmerc/MODIS_Aqua_CorrectedReflectance_Bands721/default/' + day + '/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg'
+            tile.max_zoom = 9
+            tile.attribution = 'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.'
+        #NASAGIBS.ViirsEarthAtNight2012
+        elif self.basemap == 26:
+            tile.url = 'http://map1.vis.earthdata.nasa.gov/wmts-webmerc/VIIRS_CityLights_2012/default/2012-08-01/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpg'
+            tile.max_zoom = 8
+            tile.attribution = 'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.'
+
+        return tile
 
     @property
     def north(self):
@@ -452,6 +616,9 @@ class Map(DOMWidget, InteractMixin):
         Makes sure only one instance of any given layer can exist in the
         layers list.
         """
+        #print "_validate_layers: " + str(proposal)
+        #import traceback
+        #traceback.print_stack()
         self.layer_ids = [l.model_id for l in proposal['value']]
         if len(set(self.layer_ids)) != len(self.layer_ids):
             raise LayerException('duplicate layer detected, only use each layer once')
@@ -525,6 +692,19 @@ class Map(DOMWidget, InteractMixin):
             self.add_control(item)
         return self
 
-    def _handle_leaflet_event(self, _, content):
-        pass
+
+    # Added by Davide
+    _moveend_callbacks = Instance(CallbackDispatcher, ())
+
+
+    def _handle_leaflet_event(self, _, content, buffers):
+        if content.get('event', '') == 'moveend':
+            self._moveend_callbacks(**content)
+
+    def on_moveend(self, callback, remove=False):
+        self._moveend_callbacks.register_callback(callback, remove=remove)
+
+
+    #def _handle_leaflet_event(self, _, content):
+    #    pass
 

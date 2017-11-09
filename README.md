@@ -28,6 +28,12 @@ Using conda:
 $ conda install -c conda-forge ipyleaflet
 ```
 
+If you have JupyterLab, you will also need to install the JupyterLab extension:
+
+```
+$ jupyter labextension install jupyter-leaflet
+```
+
 For a development installation (requires npm):
 
 ```

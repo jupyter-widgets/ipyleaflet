@@ -531,7 +531,7 @@ var LeafletMarkerModel = LeafletUILayerModel.extend({
         z_index_offset: 0,
         opacity: 1.0,
         clickable: true,
-        draggable: false,
+        draggable: true,
         keyboard: true,
         title: '',
         alt: '',
@@ -760,8 +760,11 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         zoom : 12,
         max_zoom : 18,
         min_zoom : 1,
-        basemap : 1,
-
+        basemap : {
+            'url' : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            'max_zoom' : 19,
+            'attribution': '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+        },
         dragging : true,
         touch_zoom : true,
         scroll_wheel_zoom : false,

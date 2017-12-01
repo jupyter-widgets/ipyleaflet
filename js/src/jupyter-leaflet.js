@@ -277,6 +277,41 @@ var LeafletControlView = widgets.WidgetView.extend({
 });
 
 
+var LeafletLayersControlView = LeafletControlView.extend({
+    initialize: function (parameters) {
+        LeafletLayersControlView.__super__.initialize.apply(this, arguments);
+        this.map_view = this.options.map_view;
+    },
+
+    render: function () {
+        return this.create_obj();
+    },
+
+    create_obj: function () {
+        var that = this;
+        return Promise.all(this.map_view.layer_views.views).then(function(views) {
+            var tilelayers = views.reduce(function (ov, view) {
+                if (view.model instanceof LeafletTileLayerModel)
+                {
+                    ov[view.model.get("name")] = view.obj;
+                }
+                return ov;
+            }, {});
+            var overlays = views.reduce(function (ov, view) {
+                if (!(view.model instanceof LeafletTileLayerModel))
+                {
+                    ov[view.model.get("name")] = view.obj;
+                }
+                return ov;
+            }, {});
+            // && view.model !== that.map_view.model.get('default_tiles')
+            that.obj = L.control.layers(tilelayers, overlays);
+        }).then(function() {
+            that.obj.addTo(that.map_view.obj);
+        });
+    },
+});
+
 var LeafletDrawControlView = LeafletControlView.extend({
     initialize: function (parameters) {
         LeafletDrawControlView.__super__.initialize.apply(this, arguments);
@@ -359,7 +394,6 @@ var LeafletDrawControlView = LeafletControlView.extend({
             });
         });
     },
-
 });
 
 
@@ -510,7 +544,8 @@ var LeafletLayerModel = widgets.WidgetModel.extend({
         _view_module : 'jupyter-leaflet',
         _model_module : 'jupyter-leaflet',
         bottom : false,
-        options : []
+        options : [],
+        name: ''
     })
 });
 
@@ -724,6 +759,19 @@ var LeafletControlModel = widgets.WidgetModel.extend({
     })
 });
 
+var LeafletLayersControlModel = LeafletControlModel.extend({
+    defaults: _.extend({}, LeafletControlModel.prototype.defaults, {
+        _view_name: 'LeafletLayersControlView',
+        _model_name: 'LeafletLayersControlModel',
+        base_layers: {},
+        overlays: {}
+    })
+}, {
+    serializers: _.extend({
+        base_layers : { deserialize: widgets.unpack_models },
+        overlays : { deserialize: widgets.unpack_models },
+    }, LeafletControlModel.serializers)
+});
 
 var LeafletDrawControlModel = LeafletControlModel.extend({
     defaults: _.extend({}, LeafletControlModel.prototype.defaults, {
@@ -763,7 +811,8 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         basemap : {
             'url' : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             'max_zoom' : 19,
-            'attribution': '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+            'attribution': '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+            'name' : 'OpenStreetMap.Mapnik'
         },
         dragging : true,
         touch_zoom : true,
@@ -799,7 +848,8 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
 }, {
     serializers: _.extend({
         layers : { deserialize: widgets.unpack_models },
-        controls : { deserialize: widgets.unpack_models }
+        controls : { deserialize: widgets.unpack_models },
+        default_tiles: { deserialize: widgets.unpack_models }
     }, widgets.DOMWidgetModel.serializers)
 });
 
@@ -825,6 +875,7 @@ module.exports = {
     LeafletGeoJSONView : LeafletGeoJSONView,
     LeafletMultiPolygonView : LeafletMultiPolygonView,
     LeafletControlView : LeafletControlView,
+    LeafletLayersControlView : LeafletLayersControlView,
     LeafletDrawControlView : LeafletDrawControlView,
     LeafletMapView : LeafletMapView,
     // models
@@ -849,6 +900,7 @@ module.exports = {
     LeafletMultiPolylineModel : LeafletMultiPolylineModel,
     LeafletMultiPolygonModel : LeafletMultiPolygonModel,
     LeafletControlModel : LeafletControlModel,
+    LeafletLayersControlModel : LeafletLayersControlModel,
     LeafletDrawControlModel : LeafletDrawControlModel,
     LeafletMapModel : LeafletMapModel
 };

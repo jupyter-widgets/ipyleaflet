@@ -55,16 +55,28 @@ var LeafletUILayerView = LeafletLayerView.extend({
 var LeafletMarkerView = LeafletUILayerView.extend({
 
     create_obj: function () {
+        var that = this;
         this.obj = L.marker(
             this.model.get('location'),
             this.get_options()
         );
+
+        this.obj.on('dragend', function(event) {
+            var marker = event.target;
+            var position = marker.getLatLng();
+            that.model.set('location', [position.lat, position.lng]);
+            that.touch();
+        });
     },
 
     model_events: function () {
         LeafletMarkerView.__super__.model_events.apply(this, arguments);
         this.listenTo(this.model, 'change:location', function () {
             this.obj.setLatLng(this.model.get('location'));
+            this.send({
+                event: 'move',
+                location: this.model.get('location')
+            });
         }, this);
         this.listenTo(this.model, 'change:z_index_offset', function () {
             this.obj.setZIndexOffset(this.model.get('z_index_offset'));
@@ -104,6 +116,20 @@ var LeafletImageOverlayView = LeafletRasterLayerView.extend({
             this.model.get('bounds'),
             this.get_options()
         );
+    },
+
+    model_events: function () {
+        this.listenTo(this.model, 'change:url', function () {
+        }, this);
+
+        this.listenTo(this.model, 'change:bounds', function () {
+            url = this.model.get('url');
+            bounds = this.model.get('bounds');
+            options = this.get_options();
+            this.map_view.obj.removeLayer(this.obj);
+            this.obj = L.imageOverlay(url, bounds, options);
+            this.map_view.obj.addLayer(this.obj);  // Gives a warning but works!!! Error setting state: Cannot read property 'obj' of undefined
+        }, this);
     },
 });
 
@@ -418,6 +444,12 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
             that.model.set('center', [c.lat, c.lng]);
             that.touch();
             that.update_bounds();
+            var z = e.target.getZoom();
+            var b = e.target.getBounds();
+            that.send({
+                'event': 'moveend',
+                 properties: { z, b }
+            });
         });
         this.obj.on('zoomend', function (e) {
             var z = e.target.getZoom();
@@ -499,7 +531,7 @@ var LeafletMarkerModel = LeafletUILayerModel.extend({
         z_index_offset: 0,
         opacity: 1.0,
         clickable: true,
-        draggable: false,
+        draggable: true,
         keyboard: true,
         title: '',
         alt: '',
@@ -728,7 +760,11 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         zoom : 12,
         max_zoom : 18,
         min_zoom : 1,
-
+        basemap : {
+            'url' : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            'max_zoom' : 19,
+            'attribution': '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+        },
         dragging : true,
         touch_zoom : true,
         scroll_wheel_zoom : false,

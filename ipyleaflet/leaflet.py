@@ -687,11 +687,20 @@ class Map(DOMWidget, InteractMixin):
         self.layers = tuple([l for l in self.layers if l.model_id != layer.model_id])
         layer.visible = False
 
+    @observe('layers')
+    def _update_layers(self, change):
+        # Update layer controls
+        self.controls = [c if not isinstance(c, LayersControl) else LayersControl() for c in self.controls]
+
     def clear_layers(self):
         self.layers = ()
 
     controls = Tuple(trait=Instance(Control)).tag(sync=True, **widget_serialization)
     control_ids = List()
+
+    @default('controls')
+    def _default_controls(self):
+        return (LayersControl(),)
 
     @validate('controls')
     def _validate_controls(self, proposal):

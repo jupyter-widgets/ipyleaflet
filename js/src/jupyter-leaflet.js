@@ -752,7 +752,7 @@ var LeafletMarkerClusterModel = LeafletLayerModel.extend({
 var LeafletLayerGroupModel = LeafletLayerModel.extend({
     defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
         _view_name : 'LeafletLayerGroupView',
-        _view_name : 'LeafletLayerGroupModel',
+        _model_name : 'LeafletLayerGroupModel',
         layers : []
     })
 }, {

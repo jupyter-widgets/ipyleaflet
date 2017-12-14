@@ -26,6 +26,7 @@
     "@jupyter-widgets/base": "^1.1",
     "leaflet": "^1.2.0",
     "leaflet-draw": "^0.4.10",
+    "leaflet.markercluster": "^1.2.0",
     "underscore": "^1.8.3"
   },
   "jupyterlab": {

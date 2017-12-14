@@ -2,6 +2,7 @@ var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 var L = require('leaflet');
 require('leaflet-draw');
+require('leaflet.markercluster');
 
 L.Icon.Default.imagePath = __webpack_public_path__;
 
@@ -202,6 +203,41 @@ var LeafletCircleMarkerView = LeafletCircleView.extend({
             this.model.get('location'), this.model.get('radius'),
             this.get_options()
         );
+    },
+});
+
+
+var LeafletMarkerClusterView = LeafletLayerView.extend({
+
+    render: function() {
+        LeafletMarkerClusterView.__super__.render.apply(this, arguments);
+        this.marker_views = new widgets.ViewList(this.add_layer_model, this.remove_layer_view, this);
+        this.marker_views.update(this.model.get('markers'));
+    },
+
+    remove_layer_view: function (child_view) {
+        this.obj.removeLayer(child_view.obj);
+        child_view.remove();
+    },
+
+    add_layer_model: function (child_model) {
+        var that = this;
+        return this.create_child_view(child_model, {
+            map_view: that.map_view
+        }).then(function (child_view) {
+            that.obj.addLayer(child_view.obj);
+            return child_view;
+        });
+    },
+
+    model_events: function() {
+        this.listenTo(this.model, 'change:markers', function () {
+            this.marker_views.update(this.model.get('markers'));
+        }, this);
+    },
+
+    create_obj: function () {
+        this.obj = L.markerClusterGroup();
     },
 });
 
@@ -700,6 +736,19 @@ var LeafletCircleMarkerModel = LeafletCircleModel.extend({
 });
 
 
+var LeafletMarkerClusterModel = LeafletLayerModel.extend({
+    defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
+        _view_name : 'LeafletMarkerClusterView',
+        _model_name : 'LeafletMarkerClusterModel',
+        markers : []
+    })
+}, {
+    serializers: _.extend({
+        markers: { deserialize: widgets.unpack_models }
+    }, widgets.DOMWidgetModel.serializers)
+});
+
+
 var LeafletLayerGroupModel = LeafletLayerModel.extend({
     defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
         _view_name : 'LeafletLayerGroupView',
@@ -869,6 +918,7 @@ module.exports = {
     LeafletRectangleView : LeafletRectangleView,
     LeafletCircleView : LeafletCircleView,
     LeafletCircleMarkerView : LeafletCircleMarkerView,
+    LeafletMarkerClusterView : LeafletMarkerClusterView,
     LeafletLayerGroupView : LeafletLayerGroupView,
     LeafletFeatureGroupView : LeafletFeatureGroupView,
     LeafletMultiPolylineView : LeafletMultiPolylineView,
@@ -894,6 +944,7 @@ module.exports = {
     LeafletRectangleModel : LeafletRectangleModel,
     LeafletCircleModel : LeafletCircleModel,
     LeafletCircleMarkerModel : LeafletCircleMarkerModel,
+    LeafletMarkerClusterModel : LeafletMarkerClusterModel,
     LeafletLayerGroupModel : LeafletLayerGroupModel,
     LeafletFeatureGroupModel : LeafletFeatureGroupModel,
     LeafletGeoJSONModel : LeafletGeoJSONModel,

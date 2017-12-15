@@ -211,28 +211,35 @@ var LeafletMarkerClusterView = LeafletLayerView.extend({
 
     render: function() {
         LeafletMarkerClusterView.__super__.render.apply(this, arguments);
-        this.marker_views = new widgets.ViewList(this.add_layer_model, this.remove_layer_view, this);
-        this.marker_views.update(this.model.get('markers'));
+        this.update_markers(this.model.get('markers'), []);
     },
 
-    remove_layer_view: function (child_view) {
-        this.obj.removeLayer(child_view.obj);
-        child_view.remove();
-    },
-
-    add_layer_model: function (child_model) {
+    update_markers: function(newMarkers, oldMarkers) {
+        // Shortcut the case of appending markers
         var that = this;
-        return this.create_child_view(child_model, {
-            map_view: that.map_view
-        }).then(function (child_view) {
-            that.obj.addLayer(child_view.obj);
-            return child_view;
+        var appendOnly = ((oldMarkers.length <= newMarkers.length)
+            && (oldMarkers === newMarkers.slice(0, oldMarkers.length)));
+        var markers;
+        if (appendOnly) {
+            markers = newMarkers.slice(oldMarkers.length);
+        } else {
+            this.obj.clearLayers();
+            markers = newMarkers;
+        }
+        var markerViews = markers.map(function (m) {
+            return that.create_child_view(m, {map_view: that.map_view});
+        })
+        return Promise.all(markerViews).then(function(mViews) {
+            var leafletMarkers = mViews.map(function (mv) {
+                return mv.obj;
+            });
+            that.obj.addLayers(leafletMarkers);
         });
     },
 
     model_events: function() {
-        this.listenTo(this.model, 'change:markers', function () {
-            this.marker_views.update(this.model.get('markers'));
+        this.listenTo(this.model, 'change:markers', function (model, value) {
+            this.update_markers(model.get('markers'), model.previous('markers'));
         }, this);
     },
 

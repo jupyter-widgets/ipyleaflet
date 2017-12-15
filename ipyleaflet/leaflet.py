@@ -397,9 +397,16 @@ class CircleMarker(Circle):
     radius = Int(10, help="radius of circle in pixels").tag(sync=True)
 
 
+class MarkerCluster(Layer):
+    _view_name = Unicode('LeafletMarkerClusterView').tag(sync=True)
+    _model_name = Unicode('LeafletMarkerClusterModel').tag(sync=True)
+
+    markers = Tuple(trait=Instance(Marker)).tag(sync=True, **widget_serialization)
+
+
 class LayerGroup(Layer):
     _view_name = Unicode('LeafletLayerGroupView').tag(sync=True)
-    _view_name = Unicode('LeafletLayerGroupModel').tag(sync=True)
+    _model_name = Unicode('LeafletLayerGroupModel').tag(sync=True)
 
     layers = List(Instance(Layer)).tag(sync=True, **widget_serialization)
 

@@ -118,8 +118,8 @@ class TileLayer(RasterLayer):
     detect_retina = Bool(False).tag(sync=True, o=True)
 
 class WMSLayer(TileLayer):
-    _view_name = Unicode('LeafletWmsLayerView').tag(sync=True)
-    _model_name = Unicode('LeafletWmsLayerModel').tag(sync=True)
+    _view_name = Unicode('LeafletWMSLayerView').tag(sync=True)
+    _model_name = Unicode('LeafletWMSLayerModel').tag(sync=True)
 
     service = Unicode('WMS').tag(sync=True)
     request = Unicode('GetMap').tag(sync=True)

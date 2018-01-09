@@ -95,7 +95,7 @@ var LeafletTileLayerView = LeafletRasterLayerView.extend({
     },
 });
 
-var LeafletWmsLayerView = LeafletTileLayerView.extend({
+var LeafletWMSLayerView = LeafletTileLayerView.extend({
 
     create_obj: function () {
         this.obj = L.tileLayer.wms(
@@ -550,10 +550,10 @@ var LeafletTileLayerModel = LeafletRasterLayerModel.extend({
     })
 });
 
-var LeafletWmsLayerModel = LeafletTileLayerModel.extend({
+var LeafletWMSLayerModel = LeafletTileLayerModel.extend({
     defaults: _.extend({}, LeafletTileLayerModel.prototype.defaults, {
-        _view_name : 'LeafletWmsLayerView',
-        _model_name : 'LeafletWmsLayerModel',
+        _view_name : 'LeafletWMSLayerView',
+        _model_name : 'LeafletWMSLayerModel',
 
         service: 'WMS',
         request: 'GetMap',
@@ -802,7 +802,7 @@ module.exports = {
     LeafletPopupView : LeafletPopupView,
     LeafletRasterLayerView : LeafletRasterLayerView,
     LeafletTileLayerView : LeafletTileLayerView,
-    LeafletWmsLayerView : LeafletWmsLayerView,
+    LeafletWMSLayerView : LeafletWMSLayerView,
     LeafletImageOverlayView : LeafletImageOverlayView,
     LeafletVectorLayerView : LeafletVectorLayerView,
     LeafletPathView : LeafletPathView,
@@ -827,7 +827,7 @@ module.exports = {
     LeafletPopupModel : LeafletPopupModel,
     LeafletRasterLayerModel : LeafletRasterLayerModel,
     LeafletTileLayerModel : LeafletTileLayerModel,
-    LeafletWmsLayerModel : LeafletWmsLayerModel,
+    LeafletWMSLayerModel : LeafletWMSLayerModel,
     LeafletImageOverlayModel : LeafletImageOverlayModel,
     LeafletVectorLayerModel : LeafletVectorLayerModel,
     LeafletPathModel : LeafletPathModel,

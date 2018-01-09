@@ -560,8 +560,8 @@ var LeafletWmsLayerModel = LeafletTileLayerModel.extend({
         layers: '',
         styles: '',
         format: 'image/jpeg',
-		transparent: false,
-		version: '1.1.1',
+        transparent: false,
+        version: '1.1.1',
 
         crs : null,
         uppercase : false

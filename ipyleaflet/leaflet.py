@@ -470,6 +470,8 @@ class Control(Widget):
     _model_name = Unicode('LeafletControlModel').tag(sync=True)
     _view_module = Unicode('jupyter-leaflet').tag(sync=True)
     _model_module = Unicode('jupyter-leaflet').tag(sync=True)
+    _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
+    _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
 
     options = List(trait=Unicode).tag(sync=True)
 
@@ -567,6 +569,8 @@ class Map(DOMWidget, InteractMixin):
     _model_name = Unicode('LeafletMapModel').tag(sync=True)
     _view_module = Unicode('jupyter-leaflet').tag(sync=True)
     _model_module = Unicode('jupyter-leaflet').tag(sync=True)
+    _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
+    _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
 
     # Map options
     center = List(def_loc).tag(sync=True, o=True)

@@ -326,6 +326,20 @@ class TileLayer(RasterLayer):
     opacity = Float(1.0).tag(sync=True, o=True)
     detect_retina = Bool(False).tag(sync=True, o=True)
 
+class WMSLayer(TileLayer):
+    _view_name = Unicode('LeafletWMSLayerView').tag(sync=True)
+    _model_name = Unicode('LeafletWMSLayerModel').tag(sync=True)
+
+    service = Unicode('WMS').tag(sync=True)
+    request = Unicode('GetMap').tag(sync=True)
+    layers = Unicode().tag(sync=True, o=True)
+    styles = Unicode().tag(sync=True, o=True)
+    format = Unicode('image/jpeg').tag(sync=True, o=True)
+    transparent = Bool().tag(sync=True, o=True)
+    version = Unicode('1.1.1').tag(sync=True)
+
+    crs = Unicode().tag(sync=True, o=True)
+    uppercase = Bool().tag(sync=True, o=True)
 
 class ImageOverlay(RasterLayer):
     _view_name = Unicode('LeafletImageOverlayView').tag(sync=True)

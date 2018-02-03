@@ -19,7 +19,8 @@ Using pip:
 
 ```
 $ pip install ipyleaflet
-$ jupyter nbextension enable --py --sys-prefix ipyleaflet
+$ jupyter nbextension enable --py --sys-prefix ipyleaflet  # can be skipped for
+notebook 5.3 and above
 ```
 
 Using conda:

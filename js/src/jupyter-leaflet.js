@@ -580,9 +580,10 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
             switch (msg.type) {
                 case 'resize':
                     this.obj.invalidateSize(true);
+                    break;
                 case 'after-show':
                     this.obj.invalidateSize(true);
-                break;
+                    break;
         }
     },
 });

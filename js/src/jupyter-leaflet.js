@@ -140,6 +140,9 @@ var LeafletImageOverlayView = LeafletRasterLayerView.extend({
             this.obj = L.imageOverlay(url, bounds, options);
             this.map_view.obj.addLayer(this.obj);  // Gives a warning but works!!! Error setting state: Cannot read property 'obj' of undefined
         }, this);
+        this.listenTo(this.model, 'change:opacity', function () {
+            this.obj.setOpacity(this.model.get('opacity'));
+        }, this);
     },
 });
 

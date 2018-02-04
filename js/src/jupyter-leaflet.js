@@ -32,6 +32,9 @@ var LeafletLayerView = widgets.WidgetView.extend({
     },
 
     model_events: function () {
+        this.listenTo(this.model, 'change:opacity', function () {
+            this.obj.setOpacity(this.model.get('opacity'));
+        }, this);
     },
 
     get_options: function () {
@@ -81,9 +84,6 @@ var LeafletMarkerView = LeafletUILayerView.extend({
         }, this);
         this.listenTo(this.model, 'change:z_index_offset', function () {
             this.obj.setZIndexOffset(this.model.get('z_index_offset'));
-        }, this);
-        this.listenTo(this.model, 'change:opacity', function () {
-            this.obj.setOpacity(this.model.get('opacity'));
         }, this);
     },
 });
@@ -139,9 +139,6 @@ var LeafletImageOverlayView = LeafletRasterLayerView.extend({
             this.map_view.obj.removeLayer(this.obj);
             this.obj = L.imageOverlay(url, bounds, options);
             this.map_view.obj.addLayer(this.obj);  // Gives a warning but works!!! Error setting state: Cannot read property 'obj' of undefined
-        }, this);
-        this.listenTo(this.model, 'change:opacity', function () {
-            this.obj.setOpacity(this.model.get('opacity'));
         }, this);
     },
 });

@@ -502,12 +502,7 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
         this.leaflet_events();
         this.model_events();
         this.update_bounds();
-        // TODO: hack to get all the tiles to show.
-        var that = this;
-        window.setTimeout(function () {
-            that.obj.invalidateSize();
-        }, 1000);
-        return that;
+        return this;
     },
 
     create_obj: function () {
@@ -583,10 +578,16 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
         }
     },
 
-    onResize: function (msg) {
-        this.obj.invalidateSize(true);
-    }
-
+    processPhosphorMessage: function(msg) {
+        LeafletMapView.__super__.processPhosphorMessage.apply(this, arguments);
+            switch (msg.type) {
+                case 'resize':
+                    this.obj.invalidateSize(true);
+                case 'after-show':
+                    this.obj.invalidateSize(true);
+                break;
+        }
+    },
 });
 
 var def_loc = [0.0, 0.0];

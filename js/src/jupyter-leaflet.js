@@ -129,6 +129,7 @@ var LeafletImageOverlayView = LeafletRasterLayerView.extend({
     },
 
     model_events: function () {
+        LeafletImageOverlayView.__super__.model_events.apply(this, arguments);
         this.listenTo(this.model, 'change:url', function () {
         }, this);
 
@@ -298,6 +299,7 @@ var LeafletMarkerClusterView = LeafletLayerView.extend({
     },
 
     model_events: function() {
+        LeafletMarkerClusterView.__super__.model_events.apply(this, arguments);
         this.listenTo(this.model, 'change:markers', function (model, value) {
             this.update_markers(model.get('markers'), model.previous('markers'));
         }, this);
@@ -549,7 +551,6 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
         this.control_views.update(this.model.get('controls'));
         this.leaflet_events();
         this.model_events();
-        this.update_bounds();
         return this;
     },
 
@@ -575,29 +576,12 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
             var c = e.target.getCenter();
             that.model.set('center', [c.lat, c.lng]);
             that.touch();
-            that.update_bounds();
-            var z = e.target.getZoom();
-            var b = e.target.getBounds();
-            that.send({
-                'event': 'moveend',
-                 properties: { z, b }
-            });
         });
         this.obj.on('zoomend', function (e) {
             var z = e.target.getZoom();
             that.model.set('zoom', z);
             that.touch();
-            that.update_bounds();
         });
-    },
-
-    update_bounds: function () {
-        var b = this.obj.getBounds();
-        this.model.set('_north', b.getNorth());
-        this.model.set('_south', b.getSouth());
-        this.model.set('_east', b.getEast());
-        this.model.set('_west', b.getWest());
-        this.touch();
     },
 
     model_events: function () {
@@ -611,11 +595,9 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
         }, this);
         this.listenTo(this.model, 'change:zoom', function () {
             this.obj.setZoom(this.model.get('zoom'));
-            this.update_bounds();
         }, this);
         this.listenTo(this.model, 'change:center', function () {
             this.obj.panTo(this.model.get('center'));
-            this.update_bounds();
         }, this);
     },
 
@@ -648,6 +630,7 @@ var LeafletLayerModel = widgets.WidgetModel.extend({
         _model_name : 'LeafletLayerModel',
         _view_module : 'jupyter-leaflet',
         _model_module : 'jupyter-leaflet',
+        opacity : 1.0,
         bottom : false,
         options : [],
         name: ''
@@ -669,7 +652,6 @@ var LeafletMarkerModel = LeafletUILayerModel.extend({
         _model_name : 'LeafletMarkerModel',
         location : def_loc,
         z_index_offset: 0,
-        opacity: 1.0,
         clickable: true,
         draggable: true,
         keyboard: true,
@@ -708,7 +690,6 @@ var LeafletTileLayerModel = LeafletRasterLayerModel.extend({
         max_zoom : 18,
         tile_size : 256,
         attribution : 'Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
-        opacity : 1.0,
         detect_retina : false
     })
 });
@@ -739,7 +720,6 @@ var LeafletImageOverlayModel = LeafletRasterLayerModel.extend({
 
         url : '',
         bounds : [def_loc, def_loc],
-        opacity : 1.0,
         attribution : ''
     })
 });
@@ -773,7 +753,6 @@ var LeafletPathModel = LeafletVectorLayerModel.extend({
         stroke : true,
         color : '#0033FF',
         weight : 5,
-        opacity : 0.5,
         fill : true,
         fill_color : '#0033FF',
         fill_opacity : 0.2,
@@ -985,10 +964,6 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         // zoom_animation : bool(?),
         zoom_animation_threshold : 4,
         // marker_zoom_animation : bool(?),
-        _south : def_loc[0],
-        _north : def_loc[0],
-        _east : def_loc[1],
-        _west : def_loc[1],
         options : [],
         layers : [],
         controls : []

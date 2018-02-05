@@ -238,6 +238,7 @@ class Layer(Widget, InteractMixin):
 
     bottom = Bool().tag(sync=True)
     options = List(trait=Unicode).tag(sync=True)
+    opacity = Float(min=0.0, max=1.0).tag(sync=True)
 
     @default('options')
     def _default_options(self):
@@ -279,7 +280,6 @@ class Marker(UILayer):
     # read/write
     location = List(def_loc).tag(sync=True)
     z_index_offset = Int().tag(sync=True, o=True)
-    opacity = Float(1.0).tag(sync=True, o=True)
     # write
     clickable = Bool(True).tag(sync=True, o=True)
     draggable = Bool(True).tag(sync=True, o=True)
@@ -323,7 +323,6 @@ class TileLayer(RasterLayer):
     max_zoom = Int(18).tag(sync=True, o=True)
     tile_size = Int(256).tag(sync=True, o=True)
     attribution = Unicode('Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors').tag(sync=True, o=True)
-    opacity = Float(1.0).tag(sync=True, o=True)
     detect_retina = Bool(False).tag(sync=True, o=True)
 
 class WMSLayer(TileLayer):
@@ -347,7 +346,6 @@ class ImageOverlay(RasterLayer):
 
     url = Unicode().tag(sync=True)
     bounds = List([def_loc, def_loc], help="SW and NE corners of the image").tag(sync=True)
-    opacity = Float(1.0).tag(sync=True, o=True)
     attribution = Unicode().tag(sync=True, o=True)
 
 class VideoOverlay(RasterLayer):
@@ -372,7 +370,6 @@ class Path(VectorLayer):
     stroke = Bool(True).tag(sync=True, o=True)
     color = Color('#0033FF').tag(sync=True, o=True)
     weight = Int(5).tag(sync=True, o=True)
-    opacity = Float(0.5).tag(sync=True, o=True)
     fill = Bool(True).tag(sync=True, o=True)
     fill_color = Color('#0033FF').tag(sync=True, o=True)
     fill_opacity = Float(0.2).tag(sync=True, o=True)
@@ -641,44 +638,11 @@ class Map(DOMWidget, InteractMixin):
     def _default_options(self):
         return [name for name in self.traits(o=True)]
 
-    _south = Float(def_loc[0]).tag(sync=True)
-    _north = Float(def_loc[0]).tag(sync=True)
-    _east = Float(def_loc[1]).tag(sync=True)
-    _west = Float(def_loc[1]).tag(sync=True)
-
     default_tiles = Instance(TileLayer, allow_none=True).tag(sync=True, **widget_serialization)
 
     @default('default_tiles')
     def _default_tiles(self):
         return basemap_to_tiles(self.basemap, self.modisdate)
-
-    @property
-    def north(self):
-        return self._north
-
-    @property
-    def south(self):
-        return self._south
-
-    @property
-    def east(self):
-        return self._east
-
-    @property
-    def west(self):
-        return self._west
-
-    @property
-    def bounds_polygon(self):
-        return [(self.north, self.west),
-                (self.north, self.east),
-                (self.south, self.east),
-                (self.south, self.west)]
-
-    @property
-    def bounds(self):
-        return [(self.south, self.west),
-                (self.north, self.east)]
 
     def __init__(self, **kwargs):
         super(Map, self).__init__(**kwargs)

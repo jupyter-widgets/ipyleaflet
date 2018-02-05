@@ -350,6 +350,15 @@ class ImageOverlay(RasterLayer):
     opacity = Float(1.0).tag(sync=True, o=True)
     attribution = Unicode().tag(sync=True, o=True)
 
+class VideoOverlay(RasterLayer):
+    _view_name = Unicode('LeafletVideoOverlayView').tag(sync=True)
+    _model_name = Unicode('LeafletVideoOverlayModel').tag(sync=True)
+
+    url = Unicode().tag(sync=True)
+    bounds = List([def_loc, def_loc], help="SW and NE corners of the image").tag(sync=True)
+    opacity = Float(1.0).tag(sync=True, o=True)
+    attribution = Unicode().tag(sync=True, o=True)
+
 
 class VectorLayer(Layer):
     _view_name = Unicode('LeafletVectorLayerView').tag(sync=True)

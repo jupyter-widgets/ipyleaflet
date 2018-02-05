@@ -143,6 +143,57 @@ var LeafletImageOverlayView = LeafletRasterLayerView.extend({
     },
 });
 
+var LeafletVideoOverlayView = LeafletRasterLayerView.extend({
+
+    create_obj: function () {
+        this.obj = L.videoOverlay(
+            this.model.get('url'),
+            this.model.get('bounds'),
+            this.get_options()
+        );
+        var that = this;
+        this.obj.on('load', function () {
+            var MyPauseControl = L.Control.extend({
+                onAdd: function() {
+                    var button = L.DomUtil.create('button');
+                    button.innerHTML = '&#10074&#10074';
+                    L.DomEvent.on(button, 'click', function () {
+                        that.obj.getElement().pause();
+                    });
+                    return button;
+                }
+            });
+            var MyPlayControl = L.Control.extend({
+                onAdd: function() {
+                    var button = L.DomUtil.create('button');
+                    button.innerHTML = '&#9658';
+                    L.DomEvent.on(button, 'click', function () {
+                        that.obj.getElement().play();
+                    });
+                    return button;
+                }
+            });
+
+            var pauseControl = (new MyPauseControl()).addTo(that.map_view.obj);
+            var playControl = (new MyPlayControl()).addTo(that.map_view.obj);
+        });
+    },
+
+    model_events: function () {
+        this.listenTo(this.model, 'change:url', function () {
+        }, this);
+
+        this.listenTo(this.model, 'change:bounds', function () {
+            url = this.model.get('url');
+            bounds = this.model.get('bounds');
+            options = this.get_options();
+            this.map_view.obj.removeLayer(this.obj);
+            this.obj = L.videoOverlay(url, bounds, options);
+            this.map_view.obj.addLayer(this.obj);
+        }, this);
+    },
+});
+
 
 // VectorLayer
 var LeafletVectorLayerView = LeafletLayerView.extend({
@@ -693,6 +744,18 @@ var LeafletImageOverlayModel = LeafletRasterLayerModel.extend({
     })
 });
 
+var LeafletVideoOverlayModel = LeafletRasterLayerModel.extend({
+    defaults: _.extend({}, LeafletRasterLayerModel.prototype.defaults, {
+        _view_name : 'LeafletVideoOverlayView',
+        _model_name : 'LeafletVideoOverlayModel',
+
+        url : '',
+        bounds : [def_loc, def_loc],
+        opacity : 1.0,
+        attribution : ''
+    })
+});
+
 
 var LeafletVectorLayerModel = LeafletLayerModel.extend({
     defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
@@ -948,6 +1011,7 @@ module.exports = {
     LeafletTileLayerView : LeafletTileLayerView,
     LeafletWMSLayerView : LeafletWMSLayerView,
     LeafletImageOverlayView : LeafletImageOverlayView,
+    LeafletVideoOverlayView : LeafletVideoOverlayView,
     LeafletVectorLayerView : LeafletVectorLayerView,
     LeafletPathView : LeafletPathView,
     LeafletPolylineView : LeafletPolylineView,
@@ -975,6 +1039,7 @@ module.exports = {
     LeafletTileLayerModel : LeafletTileLayerModel,
     LeafletWMSLayerModel : LeafletWMSLayerModel,
     LeafletImageOverlayModel : LeafletImageOverlayModel,
+    LeafletVideoOverlayModel : LeafletVideoOverlayModel,
     LeafletVectorLayerModel : LeafletVectorLayerModel,
     LeafletPathModel : LeafletPathModel,
     LeafletPolylineModel : LeafletPolylineModel,

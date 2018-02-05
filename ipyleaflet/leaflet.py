@@ -238,6 +238,7 @@ class Layer(Widget, InteractMixin):
 
     bottom = Bool().tag(sync=True)
     options = List(trait=Unicode).tag(sync=True)
+    opacity = Float(min=0.0, max=1.0).tag(sync=True)
 
     @default('options')
     def _default_options(self):
@@ -279,7 +280,6 @@ class Marker(UILayer):
     # read/write
     location = List(def_loc).tag(sync=True)
     z_index_offset = Int().tag(sync=True, o=True)
-    opacity = Float(1.0).tag(sync=True, o=True)
     # write
     clickable = Bool(True).tag(sync=True, o=True)
     draggable = Bool(True).tag(sync=True, o=True)
@@ -323,7 +323,6 @@ class TileLayer(RasterLayer):
     max_zoom = Int(18).tag(sync=True, o=True)
     tile_size = Int(256).tag(sync=True, o=True)
     attribution = Unicode('Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors').tag(sync=True, o=True)
-    opacity = Float(1.0).tag(sync=True, o=True)
     detect_retina = Bool(False).tag(sync=True, o=True)
 
 class WMSLayer(TileLayer):
@@ -347,7 +346,6 @@ class ImageOverlay(RasterLayer):
 
     url = Unicode().tag(sync=True)
     bounds = List([def_loc, def_loc], help="SW and NE corners of the image").tag(sync=True)
-    opacity = Float(1.0).tag(sync=True, o=True)
     attribution = Unicode().tag(sync=True, o=True)
 
 
@@ -363,7 +361,6 @@ class Path(VectorLayer):
     stroke = Bool(True).tag(sync=True, o=True)
     color = Color('#0033FF').tag(sync=True, o=True)
     weight = Int(5).tag(sync=True, o=True)
-    opacity = Float(0.5).tag(sync=True, o=True)
     fill = Bool(True).tag(sync=True, o=True)
     fill_color = Color('#0033FF').tag(sync=True, o=True)
     fill_opacity = Float(0.2).tag(sync=True, o=True)

@@ -129,6 +129,7 @@ var LeafletImageOverlayView = LeafletRasterLayerView.extend({
     },
 
     model_events: function () {
+        LeafletImageOverlayView.__super__.model_events.apply(this, arguments);
         this.listenTo(this.model, 'change:url', function () {
         }, this);
 
@@ -247,6 +248,7 @@ var LeafletMarkerClusterView = LeafletLayerView.extend({
     },
 
     model_events: function() {
+        LeafletMarkerClusterView.__super__.model_events.apply(this, arguments);
         this.listenTo(this.model, 'change:markers', function (model, value) {
             this.update_markers(model.get('markers'), model.previous('markers'));
         }, this);
@@ -577,6 +579,7 @@ var LeafletLayerModel = widgets.WidgetModel.extend({
         _model_name : 'LeafletLayerModel',
         _view_module : 'jupyter-leaflet',
         _model_module : 'jupyter-leaflet',
+        opacity : 1.0,
         bottom : false,
         options : [],
         name: ''
@@ -598,7 +601,6 @@ var LeafletMarkerModel = LeafletUILayerModel.extend({
         _model_name : 'LeafletMarkerModel',
         location : def_loc,
         z_index_offset: 0,
-        opacity: 1.0,
         clickable: true,
         draggable: true,
         keyboard: true,
@@ -637,7 +639,6 @@ var LeafletTileLayerModel = LeafletRasterLayerModel.extend({
         max_zoom : 18,
         tile_size : 256,
         attribution : 'Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
-        opacity : 1.0,
         detect_retina : false
     })
 });
@@ -668,7 +669,6 @@ var LeafletImageOverlayModel = LeafletRasterLayerModel.extend({
 
         url : '',
         bounds : [def_loc, def_loc],
-        opacity : 1.0,
         attribution : ''
     })
 });
@@ -690,7 +690,6 @@ var LeafletPathModel = LeafletVectorLayerModel.extend({
         stroke : true,
         color : '#0033FF',
         weight : 5,
-        opacity : 0.5,
         fill : true,
         fill_color : '#0033FF',
         fill_opacity : 0.2,

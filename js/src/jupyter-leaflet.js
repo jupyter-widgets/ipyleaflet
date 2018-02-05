@@ -498,7 +498,6 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
         this.control_views.update(this.model.get('controls'));
         this.leaflet_events();
         this.model_events();
-        this.update_bounds();
         return this;
     },
 
@@ -524,29 +523,12 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
             var c = e.target.getCenter();
             that.model.set('center', [c.lat, c.lng]);
             that.touch();
-            that.update_bounds();
-            var z = e.target.getZoom();
-            var b = e.target.getBounds();
-            that.send({
-                'event': 'moveend',
-                 properties: { z, b }
-            });
         });
         this.obj.on('zoomend', function (e) {
             var z = e.target.getZoom();
             that.model.set('zoom', z);
             that.touch();
-            that.update_bounds();
         });
-    },
-
-    update_bounds: function () {
-        var b = this.obj.getBounds();
-        this.model.set('_north', b.getNorth());
-        this.model.set('_south', b.getSouth());
-        this.model.set('_east', b.getEast());
-        this.model.set('_west', b.getWest());
-        this.touch();
     },
 
     model_events: function () {
@@ -560,11 +542,9 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
         }, this);
         this.listenTo(this.model, 'change:zoom', function () {
             this.obj.setZoom(this.model.get('zoom'));
-            this.update_bounds();
         }, this);
         this.listenTo(this.model, 'change:center', function () {
             this.obj.panTo(this.model.get('center'));
-            this.update_bounds();
         }, this);
     },
 
@@ -922,10 +902,6 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         // zoom_animation : bool(?),
         zoom_animation_threshold : 4,
         // marker_zoom_animation : bool(?),
-        _south : def_loc[0],
-        _north : def_loc[0],
-        _east : def_loc[1],
-        _west : def_loc[1],
         options : [],
         layers : [],
         controls : []

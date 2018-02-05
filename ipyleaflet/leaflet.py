@@ -632,44 +632,11 @@ class Map(DOMWidget, InteractMixin):
     def _default_options(self):
         return [name for name in self.traits(o=True)]
 
-    _south = Float(def_loc[0]).tag(sync=True)
-    _north = Float(def_loc[0]).tag(sync=True)
-    _east = Float(def_loc[1]).tag(sync=True)
-    _west = Float(def_loc[1]).tag(sync=True)
-
     default_tiles = Instance(TileLayer, allow_none=True).tag(sync=True, **widget_serialization)
 
     @default('default_tiles')
     def _default_tiles(self):
         return basemap_to_tiles(self.basemap, self.modisdate)
-
-    @property
-    def north(self):
-        return self._north
-
-    @property
-    def south(self):
-        return self._south
-
-    @property
-    def east(self):
-        return self._east
-
-    @property
-    def west(self):
-        return self._west
-
-    @property
-    def bounds_polygon(self):
-        return [(self.north, self.west),
-                (self.north, self.east),
-                (self.south, self.east),
-                (self.south, self.west)]
-
-    @property
-    def bounds(self):
-        return [(self.south, self.west),
-                (self.north, self.east)]
 
     def __init__(self, **kwargs):
         super(Map, self).__init__(**kwargs)

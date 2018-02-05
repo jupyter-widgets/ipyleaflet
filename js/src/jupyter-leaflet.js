@@ -262,7 +262,10 @@ var LeafletMarkerClusterView = LeafletLayerView.extend({
 
 var LeafletLayerGroupView = LeafletLayerView.extend({
     create_obj: function () {
-        this.obj = L.layerGroup();
+        this.obj = L.layerGroup(
+            this.model.get('layers'),
+            this.get_options()
+        );
     },
 });
 

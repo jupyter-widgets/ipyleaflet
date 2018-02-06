@@ -181,6 +181,7 @@ var LeafletVideoOverlayView = LeafletRasterLayerView.extend({
     },
 
     model_events: function () {
+        LeafletImageOverlayView.__super__.model_events.apply(this, arguments);
         this.listenTo(this.model, 'change:url', function () {
         }, this);
 
@@ -731,7 +732,6 @@ var LeafletVideoOverlayModel = LeafletRasterLayerModel.extend({
 
         url : '',
         bounds : [def_loc, def_loc],
-        opacity : 1.0,
         attribution : ''
     })
 });

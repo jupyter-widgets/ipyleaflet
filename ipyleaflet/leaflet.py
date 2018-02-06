@@ -354,7 +354,6 @@ class VideoOverlay(RasterLayer):
 
     url = Unicode().tag(sync=True)
     bounds = List([def_loc, def_loc], help="SW and NE corners of the image").tag(sync=True)
-    opacity = Float(1.0).tag(sync=True, o=True)
     attribution = Unicode().tag(sync=True, o=True)
 
 

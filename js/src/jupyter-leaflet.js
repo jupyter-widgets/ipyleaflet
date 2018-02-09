@@ -487,7 +487,10 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
     },
 
     render: function () {
-        this.el.style['width'] = this.model.get('width');
+        // Width should not be set by default since it is automatically
+        // stretched in default layout of the map:
+        // return Layout(height='400px', align_self='stretch')
+        //this.el.style['width'] = this.model.get('width');
         this.el.style['height'] = this.model.get('height');
         this.layer_views = new widgets.ViewList(this.add_layer_model, this.remove_layer_view, this);
         this.control_views = new widgets.ViewList(this.add_control_model, this.remove_control_view, this);

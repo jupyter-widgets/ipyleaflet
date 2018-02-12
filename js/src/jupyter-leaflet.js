@@ -344,22 +344,21 @@ var LeafletLayersControlView = LeafletControlView.extend({
     create_obj: function () {
         var that = this;
         return Promise.all(this.map_view.layer_views.views).then(function(views) {
-            var tilelayers = views.reduce(function (ov, view) {
-                if (view.model instanceof LeafletTileLayerModel)
+            var baselayers = views.reduce(function (ov, view) {
+                if (view.model.get("base"))
                 {
                     ov[view.model.get("name")] = view.obj;
                 }
                 return ov;
             }, {});
             var overlays = views.reduce(function (ov, view) {
-                if (!(view.model instanceof LeafletTileLayerModel))
+                if (!(view.model.get("base")))
                 {
                     ov[view.model.get("name")] = view.obj;
                 }
                 return ov;
             }, {});
-            // && view.model !== that.map_view.model.get('default_tiles')
-            that.obj = L.control.layers(tilelayers, overlays);
+            that.obj = L.control.layers(baselayers, overlays);
         }).then(function() {
             that.obj.addTo(that.map_view.obj);
         });
@@ -586,7 +585,8 @@ var LeafletLayerModel = widgets.WidgetModel.extend({
         opacity : 1.0,
         bottom : false,
         options : [],
-        name: ''
+        name: '',
+        base: false
     })
 });
 
@@ -830,15 +830,8 @@ var LeafletControlModel = widgets.WidgetModel.extend({
 var LeafletLayersControlModel = LeafletControlModel.extend({
     defaults: _.extend({}, LeafletControlModel.prototype.defaults, {
         _view_name: 'LeafletLayersControlView',
-        _model_name: 'LeafletLayersControlModel',
-        base_layers: {},
-        overlays: {}
+        _model_name: 'LeafletLayersControlModel'
     })
-}, {
-    serializers: _.extend({
-        base_layers : { deserialize: widgets.unpack_models },
-        overlays : { deserialize: widgets.unpack_models },
-    }, LeafletControlModel.serializers)
 });
 
 var LeafletDrawControlModel = LeafletControlModel.extend({
@@ -910,8 +903,7 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
 }, {
     serializers: _.extend({
         layers : { deserialize: widgets.unpack_models },
-        controls : { deserialize: widgets.unpack_models },
-        default_tiles: { deserialize: widgets.unpack_models }
+        controls : { deserialize: widgets.unpack_models }
     }, widgets.DOMWidgetModel.serializers)
 });
 

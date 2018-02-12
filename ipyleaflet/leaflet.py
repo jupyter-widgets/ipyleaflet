@@ -190,7 +190,7 @@ basemaps = Bunch(
     )
 )
 
-def basemap_to_tiles(bm, day='yesterday'):
+def basemap_to_tiles(bm, day='yesterday', **kwargs):
     # Format the URL with modisdate
     from datetime import date, timedelta
     if day == 'yesterday':
@@ -204,7 +204,8 @@ def basemap_to_tiles(bm, day='yesterday'):
         max_zoom=bm.get('max_zoom', 19),
         min_zoom=bm.get('min_zoom', 1),
         attribution=bm.get('attribution', ''),
-        name=bm.get('name', '')
+        name=bm.get('name', ''),
+        **kwargs
     )
 
 class LayerException(TraitError):
@@ -235,10 +236,11 @@ class Layer(Widget, InteractMixin):
     _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     name = Unicode().tag(sync=True)
+    base = Bool().tag(sync=True)
 
     bottom = Bool().tag(sync=True)
     options = List(trait=Unicode).tag(sync=True)
-    opacity = Float(min=0.0, max=1.0).tag(sync=True)
+    opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True)
 
     @default('options')
     def _default_options(self):
@@ -517,8 +519,6 @@ class LayersControl(Control):
     _view_name = Unicode('LeafletLayersControlView').tag(sync=True)
     _model_name = Unicode('LeafletLayersControlModel').tag(sync=True)
 
-    overlays = Dict().tag(sync=True, **widget_serialization)
-    base_layers = Dict().tag(sync=True, **widget_serialization)
 
 class DrawControl(Control):
     _view_name = Unicode('LeafletDrawControlView').tag(sync=True)
@@ -633,7 +633,7 @@ class Map(DOMWidget, InteractMixin):
 
     @default('default_tiles')
     def _default_tiles(self):
-        return basemap_to_tiles(self.basemap, self.modisdate)
+        return basemap_to_tiles(self.basemap, self.modisdate, base=True)
 
     def __init__(self, **kwargs):
         super(Map, self).__init__(**kwargs)

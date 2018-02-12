@@ -499,6 +499,7 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
             that.control_views.update(that.model.get('controls'));
             that.leaflet_events();
             that.model_events();
+            that.model.update_bounds();
             return that;
         });
     },
@@ -528,11 +529,13 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
             var c = e.target.getCenter();
             that.model.set('center', [c.lat, c.lng]);
             that.touch();
+            that.model.update_bounds();
         });
         this.obj.on('zoomend', function (e) {
             var z = e.target.getZoom();
             that.model.set('zoom', z);
             that.touch();
+            that.model.update_bounds();
         });
     },
 
@@ -547,9 +550,11 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
         }, this);
         this.listenTo(this.model, 'change:zoom', function () {
             this.obj.setZoom(this.model.get('zoom'));
+            that.model.update_bounds();
         }, this);
         this.listenTo(this.model, 'change:center', function () {
             this.obj.panTo(this.model.get('center'));
+            that.model.update_bounds();
         }, this);
     },
 
@@ -896,10 +901,39 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         // zoom_animation : bool(?),
         zoom_animation_threshold : 4,
         // marker_zoom_animation : bool(?),
+        _south : def_loc[0],
+        _north : def_loc[0],
+        _east : def_loc[1],
+        _west : def_loc[1],
         options : [],
         layers : [],
         controls : []
-    })
+    }),
+
+    update_bounds: function() {
+        var that = this;
+        widgets.resolvePromisesDict(this.views).then(function(views) {
+            var bounds = {
+                north: -90,
+                south: 90,
+                east: -180,
+                west: 180
+            };
+            Object.keys(views).reduce(function (bnds, key) {
+                var view_bounds = views[key].obj.getBounds();
+                bnds.north = Math.max(bnds.north, view_bounds.getNorth());
+                bnds.south = Math.min(bnds.south, view_bounds.getSouth());
+                bnds.east = Math.max(bnds.east, view_bounds.getEast());
+                bnds.west = Math.min(bnds.south, view_bounds.getWest());
+                return bnds;
+            }, bounds);
+            that.set('_north', bounds.north);
+            that.set('_south', bounds.south);
+            that.set('_east', bounds.east);
+            that.set('_west', bounds.west);
+            that.save_changes();
+        });
+    }
 }, {
     serializers: _.extend({
         layers : { deserialize: widgets.unpack_models },

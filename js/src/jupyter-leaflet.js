@@ -487,24 +487,28 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
     },
 
     render: function () {
-        this.el.style['width'] = this.model.get('width');
-        this.el.style['height'] = this.model.get('height');
+        LeafletMapView.__super__.render.apply(this);
         this.layer_views = new widgets.ViewList(this.add_layer_model, this.remove_layer_view, this);
         this.control_views = new widgets.ViewList(this.add_control_model, this.remove_control_view, this);
         this.displayed.then(_.bind(this.render_leaflet, this));
     },
 
     render_leaflet: function () {
-        this.create_obj();
-        this.layer_views.update(this.model.get('layers'));
-        this.control_views.update(this.model.get('controls'));
-        this.leaflet_events();
-        this.model_events();
-        return this;
+        var that = this;
+        this.create_obj().then(function() {
+            that.layer_views.update(that.model.get('layers'));
+            that.control_views.update(that.model.get('controls'));
+            that.leaflet_events();
+            that.model_events();
+            return that;
+        });
     },
 
     create_obj: function () {
-        this.obj = L.map(this.el, this.get_options());
+        var that = this;
+        return this.layoutPromise.then(function(views) {
+            that.obj = L.map(that.el, that.get_options());
+        });
     },
 
     get_options: function () {
@@ -866,8 +870,6 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         _view_module : "jupyter-leaflet",
 
         center : def_loc,
-        width : "600px",
-        height : "400px",
         zoom_start : 12,
         zoom : 12,
         max_zoom : 18,

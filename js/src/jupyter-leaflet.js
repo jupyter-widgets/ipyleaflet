@@ -569,10 +569,16 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
         LeafletMapView.__super__.processPhosphorMessage.apply(this, arguments);
             switch (msg.type) {
                 case 'resize':
-                    this.obj.invalidateSize(true);
+                    this.obj.invalidateSize({
+                        animate: false,
+                        pan: false
+                    });
                     break;
                 case 'after-show':
-                    this.obj.invalidateSize(true);
+                    this.obj.invalidateSize({
+                        animate: false,
+                        pan: false
+                    });
                     break;
         }
     },

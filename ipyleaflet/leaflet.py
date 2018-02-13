@@ -744,7 +744,7 @@ class Map(DOMWidget, InteractMixin):
     def substitute_layer(self, old, new):
         if old.model_id not in self.layer_ids:
             raise LayerException('layer not on map: %r' % layer)
-        self.layers = tuple([new if l.model_id == old.model_id else old for l in self.layers])
+        self.layers = tuple([new if l.model_id == old.model_id else l for l in self.layers])
         old.visible = False
         new._map = self
         new.visible = True

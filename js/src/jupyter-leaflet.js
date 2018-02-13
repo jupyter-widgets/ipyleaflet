@@ -42,9 +42,6 @@ var LeafletLayerView = widgets.WidgetView.extend({
     },
 
     model_events: function () {
-        this.listenTo(this.model, 'change:opacity', function () {
-            this.obj.setOpacity(this.model.get('opacity'));
-        }, this);
     },
 
     get_options: function () {
@@ -95,6 +92,26 @@ var LeafletMarkerView = LeafletUILayerView.extend({
         this.listenTo(this.model, 'change:z_index_offset', function () {
             this.obj.setZIndexOffset(this.model.get('z_index_offset'));
         }, this);
+        this.listenTo(this.model, 'change:opacity', function () {
+            if (this.model.get('visible')) {
+                this.obj.setOpacity(this.model.get('opacity'));
+            }
+        }, this);
+        this.listenTo(this.model, 'change:visible', function () {
+            if (this.model.get('visible')) {
+                this.obj.setOpacity(this.model.get('opacity'));
+            } else {
+                this.obj.setOpacity(0);
+            }
+        }, this);
+
+        this.obj.setLatLng(this.model.get('location'));
+        this.obj.setZIndexOffset(this.model.get('z_index_offset'));
+        if (this.model.get('visible')) {
+            this.obj.setOpacity(this.model.get('opacity'));
+        } else {
+            this.obj.setOpacity(0);
+        }
     },
 });
 
@@ -105,6 +122,27 @@ var LeafletPopupView = LeafletUILayerView.extend({
 
 // RasterLayer
 var LeafletRasterLayerView = LeafletLayerView.extend({
+    model_events: function () {
+        LeafletRasterLayerView.__super__.model_events.apply(this, arguments);
+        this.listenTo(this.model, 'change:opacity', function () {
+            if (this.model.get('visible')) {
+                this.obj.setOpacity(this.model.get('opacity'));
+            }
+        }, this);
+        this.listenTo(this.model, 'change:visible', function () {
+            if (this.model.get('visible')) {
+                this.obj.setOpacity(this.model.get('opacity'));
+            } else {
+                this.obj.setOpacity(0);
+            }
+        }, this);
+
+        if (this.model.get('visible')) {
+            this.obj.setOpacity(this.model.get('opacity'));
+        } else {
+            this.obj.setOpacity(0);
+        }
+    }
 });
 
 
@@ -171,6 +209,11 @@ var LeafletPathView = LeafletVectorLayerView.extend({
             this.listenTo(this.model, 'change:' + key, function () {
                 this.obj.setStyle(this.get_options());
             }, this);
+        }
+
+        for (var i=0; i<o.length; i++) {
+            key = o[i];
+            this.obj.setStyle(this.get_options());
         }
     },
 
@@ -606,8 +649,8 @@ var LeafletLayerModel = widgets.WidgetModel.extend({
         opacity : 1.0,
         bottom : false,
         options : [],
-        name: '',
-        base: false
+        name : '',
+        base : false
     })
 });
 
@@ -632,7 +675,8 @@ var LeafletMarkerModel = LeafletUILayerModel.extend({
         title: '',
         alt: '',
         rise_on_hover: false,
-        rise_offset: 250
+        rise_offset: 250,
+        visible : true
     })
 });
 
@@ -648,7 +692,8 @@ var LeafletPopupModel = LeafletUILayerModel.extend({
 var LeafletRasterLayerModel = LeafletLayerModel.extend({
     defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
         _view_name : 'LeafletRasterLayerView',
-        _model_name : 'LeafletRasterLayerModel'
+        _model_name : 'LeafletRasterLayerModel',
+        visible : true
     })
 });
 

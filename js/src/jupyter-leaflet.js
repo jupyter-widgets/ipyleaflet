@@ -412,6 +412,7 @@ var LeafletLayersControlView = LeafletControlView.extend({
                 return ov;
             }, {});
             that.obj = L.control.layers(baselayers, overlays);
+            return that;
         }).then(function() {
             that.obj.addTo(that.map_view.obj);
         });
@@ -506,6 +507,9 @@ var LeafletDrawControlView = LeafletControlView.extend({
 var LeafletMapView = widgets.DOMWidgetView.extend({
     initialize: function (options) {
         LeafletMapView.__super__.initialize.apply(this, arguments);
+        // The dirty flag is used to prevent sub-pixel center changes
+        // computed by leaflet to be applied to the model.
+        this.dirty = false;
     },
 
     remove_layer_view: function (child_view) {
@@ -579,15 +583,19 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
     leaflet_events: function () {
         var that = this;
         this.obj.on('moveend', function (e) {
-            var c = e.target.getCenter();
-            that.model.set('center', [c.lat, c.lng]);
-            that.touch();
+            if (!self.dirty) {
+                var c = e.target.getCenter();
+                that.model.set('center', [c.lat, c.lng]);
+                that.touch();
+            }
             that.model.update_bounds();
         });
         this.obj.on('zoomend', function (e) {
-            var z = e.target.getZoom();
-            that.model.set('zoom', z);
-            that.touch();
+            if (!self.dirty) {
+                var z = e.target.getZoom();
+                that.model.set('zoom', z);
+                that.touch();
+            }
             that.model.update_bounds();
         });
     },
@@ -602,11 +610,18 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
             this.control_views.update(this.model.get('controls'));
         }, this);
         this.listenTo(this.model, 'change:zoom', function () {
-            this.obj.setZoom(this.model.get('zoom'));
+            this.dirty = true;
+            // Using flyTo instead of setZoom to adjust for potential
+            // sub-pixel error in leaflet object's center.
+            this.obj.flyTo(this.model.get('center'),
+                           this.model.get('zoom'));
+            this.dirty = false;
             that.model.update_bounds();
         }, this);
         this.listenTo(this.model, 'change:center', function () {
+            this.dirty = true;
             this.obj.panTo(this.model.get('center'));
+            this.dirty = false;
             that.model.update_bounds();
         }, this);
     },
@@ -620,19 +635,23 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
 
     processPhosphorMessage: function(msg) {
         LeafletMapView.__super__.processPhosphorMessage.apply(this, arguments);
-            switch (msg.type) {
-                case 'resize':
-                    this.obj.invalidateSize({
-                        animate: false,
-                        pan: false
-                    });
-                    break;
-                case 'after-show':
-                    this.obj.invalidateSize({
-                        animate: false,
-                        pan: false
-                    });
-                    break;
+        switch (msg.type) {
+            case 'resize':
+                self.dirty = true
+                this.obj.invalidateSize({
+                    animate: false,
+                    pan: true
+                });
+                self.dirty = false
+                break;
+            case 'after-show':
+                self.dirty = true
+                this.obj.invalidateSize({
+                    animate: false,
+                    pan: true
+                });
+                self.dirty = false
+                break;
         }
     },
 });

@@ -1,0 +1,9 @@
+.jupyter-widgets.leaflet-container {
+    height: 400px;
+    overflow: hidden;
+}
+
+.jp-LinkedOutputView .jupyter-widgets.leaflet-container {
+    min-height: 360px;  /* Min-height required for mirred output in jlab < 0.31.6 */
+    height: 100%;
+}

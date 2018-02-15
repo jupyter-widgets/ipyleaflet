@@ -544,6 +544,7 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
 
     render: function () {
         LeafletMapView.__super__.render.apply(this);
+        this.el.classList.add('jupyter-widgets');
         this.layer_views = new widgets.ViewList(this.add_layer_model, this.remove_layer_view, this);
         this.control_views = new widgets.ViewList(this.add_control_model, this.remove_control_view, this);
         this.displayed.then(_.bind(this.render_leaflet, this));
@@ -583,7 +584,7 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
     leaflet_events: function () {
         var that = this;
         this.obj.on('moveend', function (e) {
-            if (!self.dirty) {
+            if (!that.dirty) {
                 var c = e.target.getCenter();
                 that.model.set('center', [c.lat, c.lng]);
                 that.touch();
@@ -591,7 +592,7 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
             that.model.update_bounds();
         });
         this.obj.on('zoomend', function (e) {
-            if (!self.dirty) {
+            if (!that.dirty) {
                 var z = e.target.getZoom();
                 that.model.set('zoom', z);
                 that.touch();
@@ -610,18 +611,29 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
             this.control_views.update(this.model.get('controls'));
         }, this);
         this.listenTo(this.model, 'change:zoom', function () {
-            this.dirty = true;
-            // Using flyTo instead of setZoom to adjust for potential
-            // sub-pixel error in leaflet object's center.
-            this.obj.flyTo(this.model.get('center'),
-                           this.model.get('zoom'));
-            this.dirty = false;
+            if (!this.dirty) {
+                this.dirty = true;
+                // Using flyTo instead of setZoom to adjust for potential
+                // sub-pixel error in leaflet object's center.
+                //
+                // Disabling animation on updates from the model because
+                // animation triggers a `moveend` event in an animationFrame,
+                // which causes the center to bounce despite of the dirty flag
+                // which is set back to false synchronously.
+                this.obj.flyTo(this.model.get('center'),
+                               this.model.get('zoom'), {
+                                   animate: false
+                               });
+                this.dirty = false;
+            }
             that.model.update_bounds();
         }, this);
         this.listenTo(this.model, 'change:center', function () {
-            this.dirty = true;
-            this.obj.panTo(this.model.get('center'));
-            this.dirty = false;
+            if (!this.dirty) {
+                this.dirty = true;
+                this.obj.panTo(this.model.get('center'));
+                this.dirty = false;
+            }
             that.model.update_bounds();
         }, this);
     },
@@ -637,20 +649,27 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
         LeafletMapView.__super__.processPhosphorMessage.apply(this, arguments);
         switch (msg.type) {
             case 'resize':
-                self.dirty = true
+                // We set the dirty flag to true to prevent the sub-pixel error
+                // on the new center to be reflected on the model.
+                this.dirty = true
+                // On the pan option:
+                // `pan=true`  causes the center to be unchanged upon resize (up
+                // to sub-pixel differences)
+                // `pan=false` corresponds to having to top-left corner
+                // unchanged.
                 this.obj.invalidateSize({
                     animate: false,
                     pan: true
                 });
-                self.dirty = false
+                this.dirty = false
                 break;
             case 'after-show':
-                self.dirty = true
+                this.dirty = true
                 this.obj.invalidateSize({
                     animate: false,
                     pan: true
                 });
-                self.dirty = false
+                this.dirty = false
                 break;
         }
     },

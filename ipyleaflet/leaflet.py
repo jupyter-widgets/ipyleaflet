@@ -1,5 +1,5 @@
 from ipywidgets import (
-    Layout, Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization, interactive
+    Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization, interactive
 )
 
 from traitlets import (
@@ -563,10 +563,6 @@ class DrawControl(Control):
 
 
 class Map(DOMWidget, InteractMixin):
-
-    @default('layout')
-    def _default_layout(self):
-        return Layout(height='400px', align_self='stretch')
 
     _view_name = Unicode('LeafletMapView').tag(sync=True)
     _model_name = Unicode('LeafletMapModel').tag(sync=True)

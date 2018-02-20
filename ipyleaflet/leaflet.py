@@ -386,6 +386,7 @@ class Path(VectorLayer):
     clickable = Bool(True).tag(sync=True, o=True)
     pointer_events = Unicode().tag(sync=True, o=True)
     class_name = Unicode().tag(sync=True, o=True)
+    opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True, o=True)
 
 
 class Polyline(Path):

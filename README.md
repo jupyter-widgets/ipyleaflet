@@ -10,7 +10,7 @@ Getting Started
 
 ### Try it online with [Binder](http://mybinder.org/)
 
-[![Binder](https://img.shields.io/badge/launch-binder-brightgreen.svg)](https://mybinder.org/v2/gh/ellisonbg/ipyleaflet/0.6.7-binder?filepath=examples/Index.ipynb)
+[![Binder](https://img.shields.io/badge/launch-binder-brightgreen.svg)](https://mybinder.org/v2/gh/ellisonbg/ipyleaflet/0.6.8-binder?filepath=examples/Index.ipynb)
 
 Installation
 ------------

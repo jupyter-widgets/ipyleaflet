@@ -1023,7 +1023,7 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
                 bnds.north = Math.max(bnds.north, view_bounds.getNorth());
                 bnds.south = Math.min(bnds.south, view_bounds.getSouth());
                 bnds.east = Math.max(bnds.east, view_bounds.getEast());
-                bnds.west = Math.min(bnds.south, view_bounds.getWest());
+                bnds.west = Math.min(bnds.west, view_bounds.getWest());
                 return bnds;
             }, bounds);
             that.set('_north', bounds.north);

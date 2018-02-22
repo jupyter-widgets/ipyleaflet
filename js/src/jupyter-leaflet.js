@@ -1000,10 +1000,10 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         // zoom_animation : bool(?),
         zoom_animation_threshold : 4,
         // marker_zoom_animation : bool(?),
-        _south : def_loc[0],
-        _north : def_loc[0],
-        _east : def_loc[1],
-        _west : def_loc[1],
+        south : def_loc[0],
+        north : def_loc[0],
+        east : def_loc[1],
+        west : def_loc[1],
         options : [],
         layers : [],
         controls : []
@@ -1026,10 +1026,10 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
                 bnds.west = Math.min(bnds.west, view_bounds.getWest());
                 return bnds;
             }, bounds);
-            that.set('_north', bounds.north);
-            that.set('_south', bounds.south);
-            that.set('_east', bounds.east);
-            that.set('_west', bounds.west);
+            that.set('north', bounds.north);
+            that.set('south', bounds.south);
+            that.set('east', bounds.east);
+            that.set('west', bounds.west);
             that.save_changes();
         });
     }

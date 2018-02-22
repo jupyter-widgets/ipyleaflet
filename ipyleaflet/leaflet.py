@@ -637,17 +637,17 @@ class Map(DOMWidget, InteractMixin):
     def _default_layers(self):
         return (basemap_to_tiles(self.basemap, self.modisdate, base=True),)
 
-    @property
-    def bounds_polygon(self):
-        return [(self.north, self.west),
-                (self.north, self.east),
-                (self.south, self.east),
-                (self.south, self.west)]
+    bounds = Tuple(read_only=True);
+    bounds_polygon = Tuple(read_only=True);
 
-    @property
-    def bounds(self):
-        return [(self.south, self.west),
-                (self.north, self.east)]
+    @observe('south', 'north', 'east', 'west')
+    def _observe_bounds(self, change):
+        self.set_trait('bounds', ((self.south, self.west),
+                                  (self.north, self.east)))
+        self.set_trait('bounds_polygon', ((self.north, self.west),
+                                          (self.north, self.east),
+                                          (self.south, self.east),
+                                          (self.south, self.west)))
 
     def __init__(self, **kwargs):
         super(Map, self).__init__(**kwargs)

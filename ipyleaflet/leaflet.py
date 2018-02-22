@@ -618,32 +618,16 @@ class Map(DOMWidget, InteractMixin):
     def _default_options(self):
         return [name for name in self.traits(o=True)]
 
-    _south = Float(def_loc[0]).tag(sync=True)
-    _north = Float(def_loc[0]).tag(sync=True)
-    _east = Float(def_loc[1]).tag(sync=True)
-    _west = Float(def_loc[1]).tag(sync=True)
+    south = Float(def_loc[0], read_only=True).tag(sync=True)
+    north = Float(def_loc[0], read_only=True).tag(sync=True)
+    east = Float(def_loc[1], read_only=True).tag(sync=True)
+    west = Float(def_loc[1], read_only=True).tag(sync=True)
 
-    default_tiles = Instance(TileLayer, allow_none=True).tag(sync=True, **widget_serialization)
+    layers = Tuple(trait=Instance(Layer)).tag(sync=True, **widget_serialization)
 
-    @default('default_tiles')
-    def _default_tiles(self):
-        return basemap_to_tiles(self.basemap, self.modisdate, base=True)
-
-    @property
-    def north(self):
-        return self._north
-
-    @property
-    def south(self):
-        return self._south
-
-    @property
-    def east(self):
-        return self._east
-
-    @property
-    def west(self):
-        return self._west
+    @default('layers')
+    def _default_layers(self):
+        return (basemap_to_tiles(self.basemap, self.modisdate, base=True),)
 
     @property
     def bounds_polygon(self):
@@ -651,8 +635,8 @@ class Map(DOMWidget, InteractMixin):
                 (self.north, self.east),
                 (self.south, self.east),
                 (self.south, self.west)]
-      
-    @property     
+
+    @property
     def bounds(self):
         return [(self.south, self.west),
                 (self.north, self.east)]
@@ -660,8 +644,6 @@ class Map(DOMWidget, InteractMixin):
     def __init__(self, **kwargs):
         super(Map, self).__init__(**kwargs)
         self.on_displayed(self._fire_children_displayed)
-        if self.default_tiles is not None:
-            self.layers = (self.default_tiles,)
         self.on_msg(self._handle_leaflet_event)
 
     def _fire_children_displayed(self, widget, **kwargs):
@@ -670,7 +652,6 @@ class Map(DOMWidget, InteractMixin):
         for control in self.controls:
             control._handle_displayed(**kwargs)
 
-    layers = Tuple(trait=Instance(Layer)).tag(sync=True, **widget_serialization)
     layer_ids = List()
 
     @validate('layers')
@@ -680,12 +661,14 @@ class Map(DOMWidget, InteractMixin):
         Makes sure only one instance of any given layer can exist in the
         layers list.
         """
-        self.layer_ids = [l.model_id for l in proposal['value']]
+        self.layer_ids = [l.model_id for l in proposal.value]
         if len(set(self.layer_ids)) != len(self.layer_ids):
             raise LayerException('duplicate layer detected, only use each layer once')
-        return proposal['value']
+        return proposal.value
 
     def add_layer(self, layer):
+        if isinstance(layer, dict):
+            layer = basemap_to_tiles(layer)
         if layer.model_id in self.layer_ids:
             raise LayerException('layer already on map: %r' % layer)
         self.layers = tuple([l for l in self.layers] + [layer])
@@ -696,6 +679,8 @@ class Map(DOMWidget, InteractMixin):
         self.layers = tuple([l for l in self.layers if l.model_id != layer.model_id])
 
     def substitute_layer(self, old, new):
+        if isinstance(new, dict):
+            new = basemap_to_tiles(new)
         if old.model_id not in self.layer_ids:
             raise LayerException('layer not on map: %r' % layer)
         self.layers = tuple([new if l.model_id == old.model_id else l for l in self.layers])
@@ -713,10 +698,10 @@ class Map(DOMWidget, InteractMixin):
         Makes sure only one instance of any given layer can exist in the
         controls list.
         """
-        self.control_ids = [c.model_id for c in proposal['value']]
+        self.control_ids = [c.model_id for c in proposal.value]
         if len(set(self.control_ids)) != len(self.control_ids):
             raise ControlException('duplicate control detected, only use each control once')
-        return proposal['value']
+        return proposal.value
 
     def add_control(self, control):
         if control.model_id in self.control_ids:

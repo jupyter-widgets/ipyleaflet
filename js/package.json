@@ -27,7 +27,7 @@
     "leaflet": "^1.2.0",
     "leaflet-draw": "^0.4.10",
     "leaflet.markercluster": "^1.2.0",
-    "leaflet-side-by-side": "^2.0.0",
+    "leaflet-splitmap": "^1.0.0",
     "underscore": "^1.8.3"
   },
   "jupyterlab": {

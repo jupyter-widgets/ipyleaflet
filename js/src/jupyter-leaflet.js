@@ -1,7 +1,7 @@
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 var L = require('leaflet');
-require('leaflet-side-by-side');
+require('leaflet-splitmap');
 require('leaflet-draw');
 require('leaflet.markercluster');
 
@@ -436,9 +436,9 @@ var LeafletControlView = widgets.WidgetView.extend({
     },
 });
 
-var LeafletSideBySideControlView = LeafletControlView.extend({
+var LeafletSplitMapControlView = LeafletControlView.extend({
     initialize: function (parameters) {
-        LeafletSideBySideControlView.__super__.initialize.apply(this, arguments);
+        LeafletSplitMapControlView.__super__.initialize.apply(this, arguments);
         this.map_view = this.options.map_view;
     },
 
@@ -460,7 +460,7 @@ var LeafletSideBySideControlView = LeafletControlView.extend({
         var rightChild = this.model.get('rightLayer').attributes;
         var leftLayer = L.tileLayer(leftChild.url, leftChild.options).addTo(this.map_view.obj);
         var rightLayer = L.tileLayer(rightChild.url, rightChild.options).addTo(this.map_view.obj);
-        this.obj = L.control.sideBySide(leftLayer, rightLayer);
+        this.obj = L.control.splitMap(leftLayer, rightLayer);
     }
 });
 
@@ -1049,10 +1049,10 @@ var LeafletDrawControlModel = LeafletControlModel.extend({
     }, LeafletControlModel.serializers)
 });
 
-var LeafletSideBySideControlModel = LeafletControlModel.extend({
+var LeafletSplitMapControlModel = LeafletControlModel.extend({
     default: _.extend({}, LeafletControlModel.prototype.defaults, {
-        _view_name: 'LeafletSideBySideControlView',
-        _model_name: 'LeafletSideBySideControlModel',
+        _view_name: 'LeafletSplitMapControlView',
+        _model_name: 'LeafletSplitMapControlModel',
 
         leftLayer: undefined,
         rightLayer: undefined
@@ -1172,7 +1172,7 @@ module.exports = {
     LeafletControlView : LeafletControlView,
     LeafletLayersControlView : LeafletLayersControlView,
     LeafletDrawControlView : LeafletDrawControlView,
-    LeafletSideBySideControlView : LeafletSideBySideControlView,
+    LeafletSplitMapControlView : LeafletSplitMapControlView,
     LeafletMapView : LeafletMapView,
     // models
     LeafletLayerModel : LeafletLayerModel,
@@ -1201,6 +1201,6 @@ module.exports = {
     LeafletControlModel : LeafletControlModel,
     LeafletLayersControlModel : LeafletLayersControlModel,
     LeafletDrawControlModel : LeafletDrawControlModel,
-    LeafletSideBySideControlModel : LeafletSideBySideControlModel,
+    LeafletSplitMapControlModel : LeafletSplitMapControlModel,
     LeafletMapModel : LeafletMapModel
 };

@@ -521,9 +521,9 @@ class LayersControl(Control):
     _model_name = Unicode('LeafletLayersControlModel').tag(sync=True)
 
 
-class SideBySideControl(Control):
-    _view_name = Unicode('LeafletSideBySideControlView').tag(sync=True)
-    _model_name = Unicode('LeafletSideBySideControlModel').tag(sync=True)
+class SplitMapControl(Control):
+    _view_name = Unicode('LeafletSplitMapControlView').tag(sync=True)
+    _model_name = Unicode('LeafletSplitMapControlModel').tag(sync=True)
     _draw_callbacks = Instance(CallbackDispatcher, ())
 
     leftLayer = Instance(TileLayer).tag(sync=True, **widget_serialization)
@@ -538,7 +538,7 @@ class SideBySideControl(Control):
         return TileLayer()
 
     def __init__(self, **kwargs):
-        super(SideBySideControl, self).__init__(**kwargs)
+        super(SplitMapControl, self).__init__(**kwargs)
         self.on_msg(self._handle_leaflet_event)
 
     def _handle_leaflet_event(self, _, content, buffers):

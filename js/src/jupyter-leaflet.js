@@ -609,7 +609,7 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
             that.control_views.update(that.model.get('controls'));
             that.leaflet_events();
             that.model_events();
-            that.model.update_bounds();
+            that.model.update_bounds(that.callbacks());
             return that;
         });
     },
@@ -641,7 +641,7 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
                 that.model.set('center', [c.lat, c.lng]);
                 that.touch();
             }
-            that.model.update_bounds();
+            that.model.update_bounds(that.callbacks());
         });
         this.obj.on('zoomend', function (e) {
             if (!that.dirty) {
@@ -649,7 +649,7 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
                 that.model.set('zoom', z);
                 that.touch();
             }
-            that.model.update_bounds();
+            that.model.update_bounds(that.callbacks());
         });
     },
 
@@ -678,7 +678,7 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
                                });
                 this.dirty = false;
             }
-            that.model.update_bounds();
+            this.model.update_bounds(this.callbacks());
         }, this);
         this.listenTo(this.model, 'change:center', function () {
             if (!this.dirty) {
@@ -686,7 +686,7 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
                 this.obj.panTo(this.model.get('center'));
                 this.dirty = false;
             }
-            that.model.update_bounds();
+            this.model.update_bounds(this.callbacks());
         }, this);
     },
 
@@ -1072,7 +1072,7 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         controls : []
     }),
 
-    update_bounds: function() {
+    update_bounds: function(callbacks) {
         var that = this;
         widgets.resolvePromisesDict(this.views).then(function(views) {
             var bounds = {
@@ -1093,7 +1093,7 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
             that.set('south', bounds.south);
             that.set('east', bounds.east);
             that.set('west', bounds.west);
-            that.save_changes();
+            that.save_changes(callbacks);
         });
     }
 }, {

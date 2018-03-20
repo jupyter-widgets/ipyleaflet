@@ -719,11 +719,20 @@ class Map(DOMWidget, InteractMixin):
             raise LayerException('layer not on map: %r' % layer)
         self.layers = tuple([new if l.model_id == old.model_id else l for l in self.layers])
 
+    @observe('layers')
+    def _update_layers(self, change):
+        # Update layer controls
+        self.controls = [c if not isinstance(c, LayersControl) else LayersControl() for c in self.controls]
+
     def clear_layers(self):
         self.layers = ()
 
     controls = Tuple(trait=Instance(Control)).tag(sync=True, **widget_serialization)
     control_ids = List()
+
+    @default('controls')
+    def _default_controls(self):
+        return (LayersControl(),)
 
     @validate('controls')
     def _validate_controls(self, proposal):

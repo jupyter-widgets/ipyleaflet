@@ -665,17 +665,19 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
         var that = this;
         this.obj.on('moveend', function (e) {
             if (!that.dirty) {
+                that.dirty = true;
                 var c = e.target.getCenter();
                 that.model.set('center', [c.lat, c.lng]);
-                that.touch();
+                that.dirty = false;
             }
             that.model.update_bounds(that.callbacks());
         });
         this.obj.on('zoomend', function (e) {
             if (!that.dirty) {
+                that.dirty = true;
                 var z = e.target.getZoom();
                 that.model.set('zoom', z);
-                that.touch();
+                that.dirty = false;
             }
             that.model.update_bounds(that.callbacks());
         });

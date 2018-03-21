@@ -687,6 +687,14 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
             }
             that.model.update_bounds(that.callbacks());
         });
+        this.obj.on('click dblclick mousedown mouseup mouseover mouseout mousemove contextmenu preclick', function(event) {
+            that.send({
+                event: 'interaction',
+                type: event.type,
+                coordinates: [event.latlng.lat, event.latlng.lng],
+                location: that.model.get('location')
+            });
+        });
     },
 
     model_events: function () {

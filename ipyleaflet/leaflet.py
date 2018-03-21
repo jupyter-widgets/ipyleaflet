@@ -787,11 +787,16 @@ class Map(DOMWidget, InteractMixin):
 
     # Event handling
     _moveend_callbacks = Instance(CallbackDispatcher, ())
+    _interaction_callbacks = Instance(CallbackDispatcher, ())
 
     def _handle_leaflet_event(self, _, content, buffers):
         if content.get('event', '') == 'moveend':
             self._moveend_callbacks(**content)
+        if content.get('event', '') == 'interaction':
+            self._interaction_callbacks(**content)
 
     def on_moveend(self, callback, remove=False):
         self._moveend_callbacks.register_callback(callback, remove=remove)
 
+    def on_interaction(self, callback, remove=False):
+        self._interaction_callbacks.register_callback(callback, remove=remove)

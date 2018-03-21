@@ -154,6 +154,12 @@ var LeafletTileLayerView = LeafletRasterLayerView.extend({
             this.model.get('url'),
             this.get_options()
         );
+        var that = this;
+        this.obj.on('load', function() {
+            that.send({
+                event: 'load'
+            });
+        });
     },
 });
 

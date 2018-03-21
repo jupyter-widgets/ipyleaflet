@@ -341,6 +341,20 @@ class TileLayer(RasterLayer):
     attribution = Unicode('Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors').tag(sync=True, o=True)
     detect_retina = Bool(False).tag(sync=True, o=True)
 
+    _load_callbacks = Instance(CallbackDispatcher, ())
+
+    def __init__(self, **kwargs):
+        super(TileLayer, self).__init__(**kwargs)
+        self.on_msg(self._handle_leaflet_event)
+
+    def _handle_leaflet_event(self, _, content, buffers):
+        if content.get('event', '') == 'load':
+            self._load_callbacks(**content)
+
+    def on_load(self, callback, remove=False):
+        self._load_callbacks.register_callback(callback, remove=remove)
+
+
 class WMSLayer(TileLayer):
     _view_name = Unicode('LeafletWMSLayerView').tag(sync=True)
     _model_name = Unicode('LeafletWMSLayerModel').tag(sync=True)
@@ -770,7 +784,6 @@ class Map(DOMWidget, InteractMixin):
         elif isinstance(item, Control):
             self.add_control(item)
         return self
-
 
     # Event handling
     _moveend_callbacks = Instance(CallbackDispatcher, ())

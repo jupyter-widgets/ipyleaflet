@@ -471,13 +471,33 @@ var LeafletSplitMapControlView = LeafletControlView.extend({
 });
 
 var LeafletLayersControlView = LeafletControlView.extend({
+    /**
+     *
+     * Core leaflet layers control maintains it own list of layers internally
+     * causing issues when the layers of the underlying map changes
+     * exogeneously, for example from a model change.
+     *
+     * For this reason, upon change of the underlying list of layers, we
+     * destroy the layers control object and create a new one.
+     */
+
     initialize: function (parameters) {
         LeafletLayersControlView.__super__.initialize.apply(this, arguments);
         this.map_view = this.options.map_view;
     },
 
     render: function () {
+        var that = this;
+        this.listenTo(this.map_view.model, 'change:layers', function() {
+            that.toggle_obj();
+        });
         return this.create_obj();
+    },
+
+    toggle_obj: function () {
+        this.obj.remove();
+        delete this.obj;
+        this.create_obj();
     },
 
     create_obj: function () {
@@ -502,7 +522,7 @@ var LeafletLayersControlView = LeafletControlView.extend({
         }).then(function() {
             that.obj.addTo(that.map_view.obj);
         });
-    },
+    }
 });
 
 var LeafletDrawControlView = LeafletControlView.extend({

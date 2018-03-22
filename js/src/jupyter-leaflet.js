@@ -643,7 +643,9 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
             that.control_views.update(that.model.get('controls'));
             that.leaflet_events();
             that.model_events();
-            that.model.update_bounds(that.callbacks());
+            that.model.update_bounds().then(function() {
+                that.touch();
+            });
             return that;
         });
     },
@@ -676,7 +678,9 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
                 that.model.set('center', [c.lat, c.lng]);
                 that.dirty = false;
             }
-            that.model.update_bounds(that.callbacks());
+            that.model.update_bounds().then(function() {
+                that.touch();
+            });
         });
         this.obj.on('zoomend', function (e) {
             if (!that.dirty) {
@@ -685,7 +689,9 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
                 that.model.set('zoom', z);
                 that.dirty = false;
             }
-            that.model.update_bounds(that.callbacks());
+            that.model.update_bounds().then(function() {
+                that.touch();
+            });
         });
         this.obj.on('click dblclick mousedown mouseup mouseover mouseout mousemove contextmenu preclick', function(event) {
             that.send({
@@ -722,7 +728,10 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
                                });
                 this.dirty = false;
             }
-            this.model.update_bounds(this.callbacks());
+            var that = this;
+            this.model.update_bounds().then(function() {
+                that.touch();
+            });
         }, this);
         this.listenTo(this.model, 'change:center', function () {
             if (!this.dirty) {
@@ -730,7 +739,10 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
                 this.obj.panTo(this.model.get('center'));
                 this.dirty = false;
             }
-            this.model.update_bounds(this.callbacks());
+            var that = this;
+            this.model.update_bounds().then(function() {
+                that.touch();
+            });
         }, this);
     },
 
@@ -1130,9 +1142,9 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         controls : []
     }),
 
-    update_bounds: function(callbacks) {
+    update_bounds: function() {
         var that = this;
-        widgets.resolvePromisesDict(this.views).then(function(views) {
+        return widgets.resolvePromisesDict(this.views).then(function(views) {
             var bounds = {
                 north: -90,
                 south: 90,
@@ -1151,7 +1163,6 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
             that.set('south', bounds.south);
             that.set('east', bounds.east);
             that.set('west', bounds.west);
-            that.save_changes(callbacks);
         });
     }
 }, {

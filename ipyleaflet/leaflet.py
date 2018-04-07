@@ -432,19 +432,19 @@ class Rectangle(Polygon):
     bounds = List(help="list of SW and NE location tuples").tag(sync=True)
 
 
-class Circle(Path):
-    _view_name = Unicode('LeafletCircleView').tag(sync=True)
-    _model_name = Unicode('LeafletCircleModel').tag(sync=True)
-
-    location = List(def_loc).tag(sync=True)
-    radius = Int(1000, help="radius of circle in meters").tag(sync=True)
-
-
-class CircleMarker(Circle):
+class CircleMarker(Path):
     _view_name = Unicode('LeafletCircleMarkerView').tag(sync=True)
     _model_name = Unicode('LeafletCircleMarkerModel').tag(sync=True)
 
+    location = List(def_loc).tag(sync=True)
     radius = Int(10, help="radius of circle in pixels").tag(sync=True)
+
+
+class Circle(CircleMarker):
+    _view_name = Unicode('LeafletCircleView').tag(sync=True)
+    _model_name = Unicode('LeafletCircleModel').tag(sync=True)
+
+    radius = Int(1000, help="radius of circle in meters").tag(sync=True)
 
 
 class MarkerCluster(Layer):

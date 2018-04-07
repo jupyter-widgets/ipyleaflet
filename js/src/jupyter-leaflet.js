@@ -309,9 +309,9 @@ var LeafletRectangleView = LeafletPolygonView.extend({
 });
 
 
-var LeafletCircleView = LeafletPathView.extend({
+var LeafletCircleMarkerView = LeafletPathView.extend({
     create_obj: function () {
-        this.obj = L.circle(
+        this.obj = L.circleMarker(
             this.model.get('location'), this.model.get('radius'),
             this.get_options()
         );
@@ -319,9 +319,9 @@ var LeafletCircleView = LeafletPathView.extend({
 });
 
 
-var LeafletCircleMarkerView = LeafletCircleView.extend({
+var LeafletCircleView = LeafletCircleMarkerView.extend({
     create_obj: function () {
-        this.obj = L.circleMarker(
+        this.obj = L.circle(
             this.model.get('location'), this.model.get('radius'),
             this.get_options()
         );
@@ -979,21 +979,21 @@ var LeafletRectangleModel = LeafletPolygonModel.extend({
 });
 
 
-var LeafletCircleModel = LeafletPathModel.extend({
+var LeafletCircleMarkerModel = LeafletPathModel.extend({
     defaults: _.extend({}, LeafletPathModel.prototype.defaults, {
-        _view_name : 'LeafletCircleView',
-        _model_name : 'LeafletCircleModel',
+        _view_name : 'LeafletCircleMarkerView',
+        _model_name : 'LeafletCircleMarkerModel',
         location : def_loc,
-        radius : 10000
+        radius : 10
     })
 });
 
 
-var LeafletCircleMarkerModel = LeafletCircleModel.extend({
-    defaults: _.extend({}, LeafletCircleModel.prototype.defaults, {
-        _view_name : 'LeafletCircleMarkerView',
-        _model_name : 'LeafletCircleMarkerModel',
-        radius : 10
+var LeafletCircleModel = LeafletCircleMarkerModel.extend({
+    defaults: _.extend({}, LeafletCircleMarkerModel.prototype.defaults, {
+        _view_name : 'LeafletCircleView',
+        _model_name : 'LeafletCircleModel',
+        radius : 10000
     })
 });
 

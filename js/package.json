@@ -2,12 +2,12 @@
   "name": "jupyter-leaflet",
   "version": "0.7.3",
   "description": "jupyter - leaflet bridge",
-  "author": "Brian Granger",
+  "author": "Project Jupyter",
   "license": "MIT",
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ellisonbg/ipyleaflet.git"
+    "url": "https://github.com/jupyter-widgets/ipyleaflet.git"
   },
   "scripts": {
     "clean": "rimraf dist/ && rimraf ../ipyleaflet/static",

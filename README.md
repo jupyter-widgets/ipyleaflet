@@ -10,7 +10,7 @@ Getting Started
 
 ### Try it online with [Binder](http://mybinder.org/)
 
-[![Binder](https://img.shields.io/badge/launch-binder-brightgreen.svg)](https://mybinder.org/v2/gh/ellisonbg/ipyleaflet/0.6.8-binder?filepath=examples)
+[![Binder](https://img.shields.io/badge/launch-binder-brightgreen.svg)](https://mybinder.org/v2/gh/jupyter-widgets/ipyleaflet/0.6.8-binder?filepath=examples)
 
 Installation
 ------------
@@ -38,7 +38,7 @@ $ jupyter labextension install jupyter-leaflet
 For a development installation (requires npm):
 
 ```
-$ git clone https://github.com/ellisonbg/ipyleaflet.git
+$ git clone https://github.com/jupyter-widgets/ipyleaflet.git
 $ cd ipyleaflet
 $ pip install -e .
 $ jupyter nbextension install --py --symlink --sys-prefix ipyleaflet

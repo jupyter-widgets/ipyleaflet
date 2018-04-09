@@ -316,6 +316,13 @@ var LeafletCircleMarkerView = LeafletPathView.extend({
             this.get_options()
         );
     },
+
+    model_events: function () {
+        LeafletPathView.__super__.model_events.apply(this, arguments);
+        this.listenTo(this.model, 'change:location', function () {
+            this.obj.setLatLng(this.model.get('location'));
+        }, this);
+    },
 });
 
 

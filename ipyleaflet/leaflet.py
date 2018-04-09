@@ -759,7 +759,7 @@ class Map(DOMWidget, InteractMixin):
         if isinstance(new, dict):
             new = basemap_to_tiles(new)
         if old.model_id not in self.layer_ids:
-            raise LayerException('layer not on map: %r' % layer)
+            raise LayerException('Could not substitute layer: layer not on map.')
         self.layers = tuple([new if l.model_id == old.model_id else l for l in self.layers])
 
     def clear_layers(self):

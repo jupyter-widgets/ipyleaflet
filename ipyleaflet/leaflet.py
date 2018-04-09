@@ -437,14 +437,14 @@ class CircleMarker(Path):
     _model_name = Unicode('LeafletCircleMarkerModel').tag(sync=True)
 
     location = List(def_loc).tag(sync=True)
-    radius = Int(10, help="radius of circle in pixels").tag(sync=True)
+    radius = Int(10, help="radius of circle in pixels").tag(sync=True, o=True)
 
 
 class Circle(CircleMarker):
     _view_name = Unicode('LeafletCircleView').tag(sync=True)
     _model_name = Unicode('LeafletCircleModel').tag(sync=True)
 
-    radius = Int(1000, help="radius of circle in meters").tag(sync=True)
+    radius = Int(1000, help="radius of circle in meters").tag(sync=True, o=True)
 
 
 class MarkerCluster(Layer):

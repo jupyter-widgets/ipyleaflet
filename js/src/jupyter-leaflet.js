@@ -312,8 +312,7 @@ var LeafletRectangleView = LeafletPolygonView.extend({
 var LeafletCircleMarkerView = LeafletPathView.extend({
     create_obj: function () {
         this.obj = L.circleMarker(
-            this.model.get('location'), this.model.get('radius'),
-            this.get_options()
+            this.model.get('location'), this.get_options()
         );
     },
 
@@ -329,8 +328,7 @@ var LeafletCircleMarkerView = LeafletPathView.extend({
 var LeafletCircleView = LeafletCircleMarkerView.extend({
     create_obj: function () {
         this.obj = L.circle(
-            this.model.get('location'), this.model.get('radius'),
-            this.get_options()
+            this.model.get('location'), this.get_options()
         );
     },
 });
@@ -990,8 +988,7 @@ var LeafletCircleMarkerModel = LeafletPathModel.extend({
     defaults: _.extend({}, LeafletPathModel.prototype.defaults, {
         _view_name : 'LeafletCircleMarkerView',
         _model_name : 'LeafletCircleMarkerModel',
-        location : def_loc,
-        radius : 10
+        location : def_loc
     })
 });
 
@@ -999,8 +996,7 @@ var LeafletCircleMarkerModel = LeafletPathModel.extend({
 var LeafletCircleModel = LeafletCircleMarkerModel.extend({
     defaults: _.extend({}, LeafletCircleMarkerModel.prototype.defaults, {
         _view_name : 'LeafletCircleView',
-        _model_name : 'LeafletCircleModel',
-        radius : 10000
+        _model_name : 'LeafletCircleModel'
     })
 });
 

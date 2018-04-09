@@ -331,6 +331,15 @@ var LeafletCircleView = LeafletCircleMarkerView.extend({
             this.model.get('location'), this.get_options()
         );
     },
+
+    model_events: function () {
+        LeafletCircleView.__super__.model_events.apply(this, arguments);
+
+        // Workaround for https://github.com/Leaflet/Leaflet/pull/6128
+        this.listenTo(this.model, 'change:radius', function () {
+            this.obj.setRadius(this.get_options().radius);
+        }, this);
+    },
 });
 
 

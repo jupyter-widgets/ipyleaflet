@@ -458,7 +458,36 @@ class LayerGroup(Layer):
     _view_name = Unicode('LeafletLayerGroupView').tag(sync=True)
     _model_name = Unicode('LeafletLayerGroupModel').tag(sync=True)
 
-    layers = List(Instance(Layer)).tag(sync=True, **widget_serialization)
+    layers = Tuple(trait=Instance(Layer)).tag(sync=True, **widget_serialization)
+
+    layer_ids = List()
+
+    @validate('layers')
+    def _validate_layers(self, proposal):
+        """Validate layers list.
+
+        Makes sure only one instance of any given layer can exist in the
+        layers list.
+        """
+        self.layer_ids = [l.model_id for l in proposal.value]
+        if len(set(self.layer_ids)) != len(self.layer_ids):
+            raise LayerException('duplicate layer detected, only use each layer once')
+        return proposal.value
+
+    def add_layer(self, layer):
+        if isinstance(layer, dict):
+            layer = basemap_to_tiles(layer)
+        if layer.model_id in self.layer_ids:
+            raise LayerException('layer already in layergroup: %r' % layer)
+        self.layers = tuple([l for l in self.layers] + [layer])
+
+    def remove_layer(self, layer):
+        if layer.model_id not in self.layer_ids:
+            raise LayerException('layer not on in layergroup: %r' % layer)
+        self.layers = tuple([l for l in self.layers if l.model_id != layer.model_id])
+
+    def clear_layers(self):
+        self.layers = ()
 
 
 class FeatureGroup(Layer):

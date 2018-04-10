@@ -118,6 +118,59 @@ var LeafletMarkerView = LeafletUILayerView.extend({
 
 
 var LeafletPopupView = LeafletUILayerView.extend({
+    create_obj: function () {
+        this.obj = L.popup(this.get_options())
+            .setLatLng(this.model.get('location'));
+    },
+
+    initialize: function() {
+        // Public constructor
+        LeafletPopupView.__super__.initialize.apply(this, arguments);
+        this.child_promise = Promise.resolve();
+    },
+
+    render: function() {
+        LeafletPopupView.__super__.render.apply(this, arguments);
+        var that = this;
+        var child_view = this.set_child(this.model.get('child'));
+        this.listenTo(this.model, 'change:child', function(model, value) {
+            this.set_child(value);
+        });
+        return child_view;
+    },
+
+    remove: function() {
+        LeafletPopupView.__super__.remove.apply(this, arguments);
+        var that = this;
+        this.child_promise.then(function() {
+            if (that.child) {
+                that.child.remove();
+            }
+        });
+    },
+
+    set_child: function(value) {
+        if (this.child) {
+            this.child.remove();
+        }
+        if (value) {
+            var that = this;
+            this.child_promise = this.child_promise.then(function() {
+                return that.create_child_view(value).then(function(view) {
+                    that.obj.setContent(view.el);
+
+                    // Trigger the displayed event of the child view.
+                    that.displayed.then(function() {
+                        view.trigger('displayed', that);
+                    });
+
+                    that.child = view;
+                    that.trigger('child:created');
+                });
+            });
+        }
+        return this.child_promise;
+    },
 });
 
 
@@ -664,9 +717,15 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
         var that = this;
         return this.create_child_view(child_model, {
             map_view: this
-        }).then(function (child_view) {
-            that.obj.addLayer(child_view.obj);
-            return child_view;
+        }).then(function (view) {
+            that.obj.addLayer(view.obj);
+
+            // Trigger the displayed event of the child view.
+            that.displayed.then(function() {
+                view.trigger('displayed', that);
+            });
+
+            return view;
         });
     },
 
@@ -679,9 +738,15 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
         var that = this;
         return this.create_child_view(child_model, {
             map_view: this
-        }).then(function (child_view) {
-            that.obj.addControl(child_view.obj);
-            return child_view;
+        }).then(function (view) {
+            that.obj.addControl(view.obj);
+
+            // Trigger the displayed event of the child view.
+            that.displayed.then(function() {
+                view.trigger('displayed', that);
+            });
+
+            return view;
         });
     },
 
@@ -887,8 +952,14 @@ var LeafletMarkerModel = LeafletUILayerModel.extend({
 var LeafletPopupModel = LeafletUILayerModel.extend({
     defaults: _.extend({}, LeafletUILayerModel.prototype.defaults, {
          _view_name : 'LeafletPopupView',
-         _model_name : 'LeafletPopupModel'
+         _model_name : 'LeafletPopupModel',
+        location: def_loc,
+        child: null
     })
+}, {
+    serializers: _.extend({
+        child: { deserialize: widgets.unpack_models }
+    }, LeafletUILayerModel.serializers)
 });
 
 

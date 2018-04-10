@@ -316,9 +316,34 @@ class Marker(UILayer):
     def on_move(self, callback, remove=False):
         self._move_callbacks.register_callback(callback, remove=remove)
 
+
 class Popup(UILayer):
     _view_name = Unicode('LeafletPopupView').tag(sync=True)
     _model_name = Unicode('LeafletPopupModel').tag(sync=True)
+
+    location = List(def_loc).tag(sync=True)
+    child = Instance(
+        DOMWidget, allow_none=True, default_value=None
+    ).tag(sync=True, **widget_serialization)
+
+    max_width = Int(300).tag(sync=True, o=True)
+    min_width = Int(50).tag(sync=True, o=True)
+    max_height = Int(allow_none=True, default_value=None).tag(sync=True, o=True)
+    auto_pan = Bool(True).tag(sync=True, o=True)
+    auto_pan_padding_top_left = List(allow_none=True, default_value=None).tag(sync=True, o=True)
+    auto_pan_padding_bottom_right = List(allow_none=True, default_value=None).tag(sync=True, o=True)
+    auto_pan_padding = List([5, 5]).tag(sync=True, o=True)
+    keep_in_view = Bool(False).tag(sync=True, o=True)
+    close_button = Bool(True).tag(sync=True, o=True)
+    auto_close = Bool(True).tag(sync=True, o=True)
+    close_on_escape_key = Bool(True).tag(sync=True, o=True)
+    class_name = Unicode('').tag(sync=True, o=True)
+
+    options = List(trait=Unicode).tag(sync=True)
+
+    @default('options')
+    def _default_options(self):
+        return [name for name in self.traits(o=True)]
 
 
 class RasterLayer(Layer):

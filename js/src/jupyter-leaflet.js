@@ -540,10 +540,10 @@ var LeafletSplitMapControlView = LeafletControlView.extend({
 
     render: function () {
         var that = this;
-        var leftLayer = this.model.get('leftLayer');
-        var rightLayer = this.model.get('rightLayer');
+        var left_layer = this.model.get('left_layer');
+        var right_layer = this.model.get('right_layer');
 
-        return this.create_child_view(this.model.get('leftLayer'), {
+        return this.create_child_view(this.model.get('left_layer'), {
             map_view: this.map_view
         }).then(function (layer_view) {
             that.create_obj();
@@ -552,11 +552,11 @@ var LeafletSplitMapControlView = LeafletControlView.extend({
     },
 
     create_obj: function () {
-        var leftChild = this.model.get('leftLayer').attributes;
-        var rightChild = this.model.get('rightLayer').attributes;
-        var leftLayer = L.tileLayer(leftChild.url, leftChild.options).addTo(this.map_view.obj);
-        var rightLayer = L.tileLayer(rightChild.url, rightChild.options).addTo(this.map_view.obj);
-        this.obj = L.control.splitMap(leftLayer, rightLayer);
+        var leftChild = this.model.get('left_layer').attributes;
+        var rightChild = this.model.get('right_layer').attributes;
+        var left_layer = L.tileLayer(leftChild.url, leftChild.options).addTo(this.map_view.obj);
+        var right_layer = L.tileLayer(rightChild.url, rightChild.options).addTo(this.map_view.obj);
+        this.obj = L.control.splitMap(left_layer, right_layer);
     }
 });
 
@@ -1208,13 +1208,13 @@ var LeafletSplitMapControlModel = LeafletControlModel.extend({
         _view_name: 'LeafletSplitMapControlView',
         _model_name: 'LeafletSplitMapControlModel',
 
-        leftLayer: undefined,
-        rightLayer: undefined
+        left_layer: undefined,
+        right_layer: undefined
     })
 }, {
     serializers: _.extend({
-        leftLayer: {deserialize: widgets.unpack_models},
-        rightLayer: {deserialize: widgets.unpack_models}
+        left_layer: {deserialize: widgets.unpack_models},
+        right_layer: {deserialize: widgets.unpack_models}
     })
 });
 

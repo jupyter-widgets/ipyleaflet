@@ -384,7 +384,6 @@ class LayersControl(Control):
 class SplitMapControl(Control):
     _view_name = Unicode('LeafletSplitMapControlView').tag(sync=True)
     _model_name = Unicode('LeafletSplitMapControlModel').tag(sync=True)
-    _draw_callbacks = Instance(CallbackDispatcher, ())
 
     left_layer = Instance(TileLayer).tag(sync=True, **widget_serialization)
     right_layer = Instance(TileLayer).tag(sync=True, **widget_serialization)

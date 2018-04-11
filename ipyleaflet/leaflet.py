@@ -65,6 +65,8 @@ class Layer(Widget, InteractMixin):
     bottom = Bool().tag(sync=True)
     options = List(trait=Unicode).tag(sync=True)
 
+    popup = Instance(Widget, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
+
     @default('options')
     def _default_options(self):
         return [name for name in self.traits(o=True)]

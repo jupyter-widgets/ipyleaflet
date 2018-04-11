@@ -31,12 +31,18 @@ var LeafletLayerView = widgets.WidgetView.extend({
     initialize: function (parameters) {
         LeafletLayerView.__super__.initialize.apply(this, arguments);
         this.map_view = this.options.map_view;
+        this.popup_content_promise = Promise.resolve();
     },
 
     render: function () {
         this.create_obj();
         this.leaflet_events();
         this.model_events();
+
+        this.bind_popup(this.model.get('popup'));
+        this.listenTo(this.model, 'change:popup', function(model, value) {
+            this.bind_popup(value);
+        });
     },
 
     leaflet_events: function () {
@@ -55,6 +61,40 @@ var LeafletLayerView = widgets.WidgetView.extend({
             options[camel_case(key)] = this.model.get(key);
         }
         return options;
+    },
+
+    remove: function() {
+        LeafletLayerView.__super__.remove.apply(this, arguments);
+        var that = this;
+        this.popup_content_promise.then(function() {
+            if (that.popup_content) {
+                that.popup_content.remove();
+            }
+        });
+    },
+
+    bind_popup: function (value) {
+        if (this.popup_content) {
+            this.obj.unbindPopup();
+            this.popup_content.remove();
+        }
+        if (value) {
+            var that = this;
+            this.popup_content_promise = this.popup_content_promise.then(function() {
+                return that.create_child_view(value).then(function(view) {
+                    that.obj.bindPopup(view.el);
+
+                    // Trigger the displayed event of the child view.
+                    that.displayed.then(function() {
+                        view.trigger('displayed', that);
+                    });
+
+                    that.popup_content = view;
+                    that.trigger('popup_content:created');
+                });
+            });
+        }
+        return this.popup_content_promise;
     },
 });
 
@@ -918,8 +958,13 @@ var LeafletLayerModel = widgets.WidgetModel.extend({
         bottom : false,
         options : [],
         name : '',
-        base : false
+        base : false,
+        popup: null
     })
+}, {
+    serializers: _.extend({
+        popup: { deserialize: widgets.unpack_models }
+    }, widgets.WidgetModel.serializers)
 });
 
 

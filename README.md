@@ -10,7 +10,7 @@ Getting Started
 
 ### Try it online with [Binder](http://mybinder.org/)
 
-[![Binder](https://img.shields.io/badge/launch-binder-brightgreen.svg)](https://mybinder.org/v2/gh/jupyter-widgets/ipyleaflet/0.6.8-binder?filepath=examples)
+[![Binder](https://img.shields.io/badge/launch-binder-brightgreen.svg)](https://mybinder.org/v2/gh/jupyter-widgets/ipyleaflet/0.8.1?filepath=examples)
 
 Installation
 ------------

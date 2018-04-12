@@ -843,6 +843,10 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
             that.model.update_bounds().then(function() {
                 that.touch();
             });
+            that.send({
+                event: 'moveend',
+                center: [c.lat, c.lng]
+            });
         });
         this.obj.on('zoomend', function (e) {
             if (!that.dirty) {

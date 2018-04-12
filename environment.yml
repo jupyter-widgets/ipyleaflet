@@ -2,7 +2,7 @@ name: ipyleaflet
 channels:
   - conda-forge
 dependencies:
-  - ipyleaflet
+  - ipyleaflet =0.8.1
   - scipy
   - rasterio
   - tqdm

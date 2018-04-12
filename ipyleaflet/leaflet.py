@@ -348,11 +348,6 @@ class GeoJSON(FeatureGroup):
         self._hover_callbacks.register_callback(callback, remove=remove)
 
 
-class MultiPolyline(FeatureGroup):
-    _view_name = Unicode('LeafletMultiPolylineView').tag(sync=True)
-    _model_name = Unicode('LeafletMultiPolylineModel').tag(sync=True)
-
-
 class MultiPolygon(FeatureGroup):
     _view_name = Unicode('LeafletMultiPolygonView').tag(sync=True)
     _model_name = Unicode('LeafletMultiPolygonModel').tag(sync=True)

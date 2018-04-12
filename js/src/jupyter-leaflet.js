@@ -329,7 +329,7 @@ var LeafletVideoOverlayView = LeafletRasterLayerView.extend({
     },
 
     model_events: function () {
-        LeafletImageOverlayView.__super__.model_events.apply(this, arguments);
+        LeafletVideoOverlayView.__super__.model_events.apply(this, arguments);
         this.listenTo(this.model, 'change:url', function () {
         }, this);
 
@@ -513,10 +513,6 @@ var LeafletFeatureGroupView = LeafletLayerGroupView.extend({
     create_obj: function () {
         this.obj = L.featureGroup();
     },
-});
-
-
-var LeafletMultiPolylineView = LeafletFeatureGroupView.extend({
 });
 
 
@@ -1194,14 +1190,6 @@ var LeafletGeoJSONModel = LeafletFeatureGroupModel.extend({
 });
 
 
-var LeafletMultiPolylineModel = LeafletFeatureGroupModel.extend({
-    defaults: _.extend({}, LeafletFeatureGroupModel.prototype.defaults, {
-        _view_name : 'LeafletMultiPolylineView',
-        _model_name : 'LeafletMultiPolylineModel'
-    })
-});
-
-
 var LeafletMultiPolygonModel = LeafletFeatureGroupModel.extend({
     defaults: _.extend({}, LeafletFeatureGroupModel.prototype.defaults, {
         _view_name : 'LeafletMultiPolygonView',
@@ -1364,7 +1352,6 @@ module.exports = {
     LeafletMarkerClusterView : LeafletMarkerClusterView,
     LeafletLayerGroupView : LeafletLayerGroupView,
     LeafletFeatureGroupView : LeafletFeatureGroupView,
-    LeafletMultiPolylineView : LeafletMultiPolylineView,
     LeafletGeoJSONView : LeafletGeoJSONView,
     LeafletMultiPolygonView : LeafletMultiPolygonView,
     LeafletControlView : LeafletControlView,
@@ -1394,7 +1381,6 @@ module.exports = {
     LeafletLayerGroupModel : LeafletLayerGroupModel,
     LeafletFeatureGroupModel : LeafletFeatureGroupModel,
     LeafletGeoJSONModel : LeafletGeoJSONModel,
-    LeafletMultiPolylineModel : LeafletMultiPolylineModel,
     LeafletMultiPolygonModel : LeafletMultiPolygonModel,
     LeafletControlModel : LeafletControlModel,
     LeafletLayersControlModel : LeafletLayersControlModel,

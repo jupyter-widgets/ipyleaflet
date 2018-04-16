@@ -85,7 +85,6 @@ class Marker(UILayer):
     location = List(def_loc).tag(sync=True)
     z_index_offset = Int().tag(sync=True, o=True)
     # write
-    clickable = Bool(True).tag(sync=True, o=True)
     draggable = Bool(True).tag(sync=True, o=True)
     keyboard = Bool(True).tag(sync=True, o=True)
     title = Unicode().tag(sync=True, o=True)

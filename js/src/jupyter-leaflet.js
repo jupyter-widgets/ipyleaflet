@@ -978,7 +978,6 @@ var LeafletMarkerModel = LeafletUILayerModel.extend({
         _model_name : 'LeafletMarkerModel',
         location : def_loc,
         z_index_offset: 0,
-        clickable: true,
         draggable: true,
         keyboard: true,
         title: '',
@@ -1092,7 +1091,6 @@ var LeafletPathModel = LeafletVectorLayerModel.extend({
         dash_array : '',
         line_cap : '',
         line_join :  '',
-        clickable : true,
         pointer_events : '',
         class_name : ''
     })

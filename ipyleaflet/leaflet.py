@@ -223,7 +223,6 @@ class Path(VectorLayer):
     dash_array = Unicode().tag(sync=True, o=True)
     line_cap = Unicode().tag(sync=True, o=True)
     line_join = Unicode().tag(sync=True, o=True)
-    clickable = Bool(True).tag(sync=True, o=True)
     pointer_events = Unicode().tag(sync=True, o=True)
     class_name = Unicode().tag(sync=True, o=True)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True, o=True)

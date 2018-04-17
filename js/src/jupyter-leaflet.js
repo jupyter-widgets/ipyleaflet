@@ -1091,7 +1091,6 @@ var LeafletPathModel = LeafletVectorLayerModel.extend({
         dash_array : '',
         line_cap : '',
         line_join :  '',
-        clickable : true,
         pointer_events : '',
         class_name : ''
     })

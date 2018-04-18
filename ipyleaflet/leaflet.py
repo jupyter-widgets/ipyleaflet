@@ -20,7 +20,7 @@ def basemap_to_tiles(bm, day='yesterday', **kwargs):
     from datetime import date, timedelta
     if day == 'yesterday':
         yesterday = date.today() - timedelta(1)
-        day = yesterday.strftime("%Y-%m-%d")
+        day = yesterday.strftime('%Y-%m-%d')
     url = bm.get('url', '')
     if url.count('%'):
         url = url % day
@@ -61,13 +61,13 @@ class Layer(Widget, InteractMixin):
 
     _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
-    name = Unicode().tag(sync=True)
-    base = Bool().tag(sync=True)
 
-    bottom = Bool().tag(sync=True)
-    options = List(trait=Unicode).tag(sync=True)
-
+    name = Unicode('').tag(sync=True)
+    base = Bool(False).tag(sync=True)
+    bottom = Bool(False).tag(sync=True)
     popup = Instance(Widget, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
+
+    options = List(trait=Unicode).tag(sync=True)
 
     @default('options')
     def _default_options(self):
@@ -83,19 +83,17 @@ class Marker(UILayer):
     _view_name = Unicode('LeafletMarkerView').tag(sync=True)
     _model_name = Unicode('LeafletMarkerModel').tag(sync=True)
 
-    # read/write
     location = List(def_loc).tag(sync=True)
-    z_index_offset = Int().tag(sync=True, o=True)
-    # write
-    draggable = Bool(True).tag(sync=True, o=True)
-    keyboard = Bool(True).tag(sync=True, o=True)
-    title = Unicode().tag(sync=True, o=True)
-    alt = Unicode().tag(sync=True, o=True)
-    rise_on_hover = Bool(False).tag(sync=True, o=True)
-
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True)
     visible = Bool(True).tag(sync=True)
 
+    # Options
+    z_index_offset = Int(0).tag(sync=True, o=True)
+    draggable = Bool(True).tag(sync=True, o=True)
+    keyboard = Bool(True).tag(sync=True, o=True)
+    title = Unicode('').tag(sync=True, o=True)
+    alt = Unicode('').tag(sync=True, o=True)
+    rise_on_hover = Bool(False).tag(sync=True, o=True)
     rise_offset = Int(250).tag(sync=True, o=True)
 
     _move_callbacks = Instance(CallbackDispatcher, ())
@@ -121,6 +119,7 @@ class Popup(UILayer):
         DOMWidget, allow_none=True, default_value=None
     ).tag(sync=True, **widget_serialization)
 
+    # Options
     max_width = Int(300).tag(sync=True, o=True)
     min_width = Int(50).tag(sync=True, o=True)
     max_height = Int(allow_none=True, default_value=None).tag(sync=True, o=True)
@@ -133,12 +132,6 @@ class Popup(UILayer):
     auto_close = Bool(True).tag(sync=True, o=True)
     close_on_escape_key = Bool(True).tag(sync=True, o=True)
     class_name = Unicode('').tag(sync=True, o=True)
-
-    options = List(trait=Unicode).tag(sync=True)
-
-    @default('options')
-    def _default_options(self):
-        return [name for name in self.traits(o=True)]
 
 
 class RasterLayer(Layer):
@@ -181,14 +174,15 @@ class WMSLayer(TileLayer):
 
     service = Unicode('WMS').tag(sync=True)
     request = Unicode('GetMap').tag(sync=True)
+    version = Unicode('1.1.1').tag(sync=True)
+
+    # Options
     layers = Unicode().tag(sync=True, o=True)
     styles = Unicode().tag(sync=True, o=True)
     format = Unicode('image/jpeg').tag(sync=True, o=True)
-    transparent = Bool().tag(sync=True, o=True)
-    version = Unicode('1.1.1').tag(sync=True)
-
-    crs = Unicode().tag(sync=True, o=True)
-    uppercase = Bool().tag(sync=True, o=True)
+    transparent = Bool(False).tag(sync=True, o=True)
+    crs = Unicode(allow_none=True, default_value=None).tag(sync=True, o=True)
+    uppercase = Bool(False).tag(sync=True, o=True)
 
 
 class ImageOverlay(RasterLayer):
@@ -196,7 +190,9 @@ class ImageOverlay(RasterLayer):
     _model_name = Unicode('LeafletImageOverlayModel').tag(sync=True)
 
     url = Unicode().tag(sync=True)
-    bounds = List([def_loc, def_loc], help="SW and NE corners of the image").tag(sync=True)
+    bounds = List([def_loc, def_loc], help='SW and NE corners of the image').tag(sync=True)
+
+    # Options
     attribution = Unicode().tag(sync=True, o=True)
 
 
@@ -205,7 +201,9 @@ class VideoOverlay(RasterLayer):
     _model_name = Unicode('LeafletVideoOverlayModel').tag(sync=True)
 
     url = Unicode().tag(sync=True)
-    bounds = List([def_loc, def_loc], help="SW and NE corners of the image").tag(sync=True)
+    bounds = List([def_loc, def_loc], help='SW and NE corners of the image').tag(sync=True)
+
+    # Options
     attribution = Unicode().tag(sync=True, o=True)
 
 
@@ -218,17 +216,18 @@ class Path(VectorLayer):
     _view_name = Unicode('LeafletPathView').tag(sync=True)
     _model_name = Unicode('LeafletPathModel').tag(sync=True)
 
+    # Options
     stroke = Bool(True).tag(sync=True, o=True)
     color = Color('#0033FF').tag(sync=True, o=True)
     weight = Int(5).tag(sync=True, o=True)
     fill = Bool(True).tag(sync=True, o=True)
     fill_color = Color('#0033FF').tag(sync=True, o=True)
     fill_opacity = Float(0.2).tag(sync=True, o=True)
-    dash_array = Unicode().tag(sync=True, o=True)
-    line_cap = Unicode().tag(sync=True, o=True)
-    line_join = Unicode().tag(sync=True, o=True)
-    pointer_events = Unicode().tag(sync=True, o=True)
-    class_name = Unicode().tag(sync=True, o=True)
+    dash_array = Unicode(allow_none=True, default_value=None).tag(sync=True, o=True)
+    line_cap = Unicode('round').tag(sync=True, o=True)
+    line_join = Unicode('round').tag(sync=True, o=True)
+    pointer_events = Unicode('').tag(sync=True, o=True)
+    class_name = Unicode('').tag(sync=True, o=True)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True, o=True)
 
 
@@ -237,6 +236,8 @@ class Polyline(Path):
     _model_name = Unicode('LeafletPolylineModel').tag(sync=True)
 
     locations = List().tag(sync=True)
+
+    # Options
     smooth_factor = Float(1.0).tag(sync=True, o=True)
     no_clip = Bool(False).tag(sync=True, o=True)
 
@@ -250,7 +251,7 @@ class Rectangle(Polygon):
     _view_name = Unicode('LeafletRectangleView').tag(sync=True)
     _model_name = Unicode('LeafletRectangleModel').tag(sync=True)
 
-    bounds = List(help="list of SW and NE location tuples").tag(sync=True)
+    bounds = List(help='list of SW and NE location tuples').tag(sync=True)
 
 
 class CircleMarker(Path):
@@ -258,14 +259,17 @@ class CircleMarker(Path):
     _model_name = Unicode('LeafletCircleMarkerModel').tag(sync=True)
 
     location = List(def_loc).tag(sync=True)
-    radius = Int(10, help="radius of circle in pixels").tag(sync=True, o=True)
+
+    # Options
+    radius = Int(10, help='radius of circle in pixels').tag(sync=True, o=True)
 
 
 class Circle(CircleMarker):
     _view_name = Unicode('LeafletCircleView').tag(sync=True)
     _model_name = Unicode('LeafletCircleModel').tag(sync=True)
 
-    radius = Int(1000, help="radius of circle in meters").tag(sync=True, o=True)
+    # Options
+    radius = Int(1000, help='radius of circle in meters').tag(sync=True, o=True)
 
 
 class MarkerCluster(Layer):
@@ -281,29 +285,29 @@ class LayerGroup(Layer):
 
     layers = Tuple(trait=Instance(Layer)).tag(sync=True, **widget_serialization)
 
-    layer_ids = List()
+    _layer_ids = List()
 
     @validate('layers')
     def _validate_layers(self, proposal):
-        """Validate layers list.
+        '''Validate layers list.
 
         Makes sure only one instance of any given layer can exist in the
         layers list.
-        """
-        self.layer_ids = [l.model_id for l in proposal.value]
-        if len(set(self.layer_ids)) != len(self.layer_ids):
+        '''
+        self._layer_ids = [l.model_id for l in proposal.value]
+        if len(set(self._layer_ids)) != len(self._layer_ids):
             raise LayerException('duplicate layer detected, only use each layer once')
         return proposal.value
 
     def add_layer(self, layer):
         if isinstance(layer, dict):
             layer = basemap_to_tiles(layer)
-        if layer.model_id in self.layer_ids:
+        if layer.model_id in self._layer_ids:
             raise LayerException('layer already in layergroup: %r' % layer)
         self.layers = tuple([l for l in self.layers] + [layer])
 
     def remove_layer(self, layer):
-        if layer.model_id not in self.layer_ids:
+        if layer.model_id not in self._layer_ids:
             raise LayerException('layer not on in layergroup: %r' % layer)
         self.layers = tuple([l for l in self.layers if l.model_id != layer.model_id])
 
@@ -338,21 +342,22 @@ class GeoJSON(FeatureGroup):
             self._hover_callbacks(**content)
 
     def on_click(self, callback, remove=False):
-        """
+        '''
         The click callback takes an unpacked set of keyword arguments.
-        """
+        '''
         self._click_callbacks.register_callback(callback, remove=remove)
 
     def on_hover(self, callback, remove=False):
-        """
+        '''
         The hover callback takes an unpacked set of keyword arguments.
-        """
+        '''
         self._hover_callbacks.register_callback(callback, remove=remove)
 
 
 class MultiPolygon(FeatureGroup):
     _view_name = Unicode('LeafletMultiPolygonView').tag(sync=True)
     _model_name = Unicode('LeafletMultiPolygonModel').tag(sync=True)
+
     locations = List().tag(sync=True)
 
 
@@ -365,6 +370,7 @@ class Control(Widget):
     _model_name = Unicode('LeafletControlModel').tag(sync=True)
     _view_module = Unicode('jupyter-leaflet').tag(sync=True)
     _model_module = Unicode('jupyter-leaflet').tag(sync=True)
+
     _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
 
@@ -414,19 +420,21 @@ class DrawControl(Control):
     @default('layer')
     def _default_layer(self):
         return FeatureGroup()
+
     # Enable each of the following drawing by giving them a non empty dict of options
     # You can add Leaflet style options in the shapeOptions sub-dict
     # See https://github.com/Leaflet/Leaflet.draw#polylineoptions
-
     # TODO: mutable default value!
     polyline = Dict({'shapeOptions': {}}).tag(sync=True)
     # See https://github.com/Leaflet/Leaflet.draw#polygonoptions
     # TODO: mutable default value!
     polygon = Dict({'shapeOptions': {}}).tag(sync=True)
+
     # Leave empty to disable these
     circle = Dict().tag(sync=True)
     rectangle = Dict().tag(sync=True)
     marker = Dict().tag(sync=True)
+
     # Edit tools
     edit = Bool(True).tag(sync=True)
     remove = Bool(True).tag(sync=True)
@@ -435,7 +443,6 @@ class DrawControl(Control):
         'type': 'Feature',
         'geometry': None
     })
-
     last_action = Unicode()
 
     _draw_callbacks = Instance(CallbackDispatcher, ())
@@ -456,11 +463,11 @@ class DrawControl(Control):
 
 
 class Map(DOMWidget, InteractMixin):
-
     _view_name = Unicode('LeafletMapView').tag(sync=True)
     _model_name = Unicode('LeafletMapModel').tag(sync=True)
     _view_module = Unicode('jupyter-leaflet').tag(sync=True)
     _model_module = Unicode('jupyter-leaflet').tag(sync=True)
+
     _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
 
@@ -544,36 +551,36 @@ class Map(DOMWidget, InteractMixin):
         for control in self.controls:
             control._handle_displayed(**kwargs)
 
-    layer_ids = List()
+    _layer_ids = List()
 
     @validate('layers')
     def _validate_layers(self, proposal):
-        """Validate layers list.
+        '''Validate layers list.
 
         Makes sure only one instance of any given layer can exist in the
         layers list.
-        """
-        self.layer_ids = [l.model_id for l in proposal.value]
-        if len(set(self.layer_ids)) != len(self.layer_ids):
+        '''
+        self._layer_ids = [l.model_id for l in proposal.value]
+        if len(set(self._layer_ids)) != len(self._layer_ids):
             raise LayerException('duplicate layer detected, only use each layer once')
         return proposal.value
 
     def add_layer(self, layer):
         if isinstance(layer, dict):
             layer = basemap_to_tiles(layer)
-        if layer.model_id in self.layer_ids:
+        if layer.model_id in self._layer_ids:
             raise LayerException('layer already on map: %r' % layer)
         self.layers = tuple([l for l in self.layers] + [layer])
 
     def remove_layer(self, layer):
-        if layer.model_id not in self.layer_ids:
+        if layer.model_id not in self._layer_ids:
             raise LayerException('layer not on map: %r' % layer)
         self.layers = tuple([l for l in self.layers if l.model_id != layer.model_id])
 
     def substitute_layer(self, old, new):
         if isinstance(new, dict):
             new = basemap_to_tiles(new)
-        if old.model_id not in self.layer_ids:
+        if old.model_id not in self._layer_ids:
             raise LayerException('Could not substitute layer: layer not on map.')
         self.layers = tuple([new if l.model_id == old.model_id else l for l in self.layers])
 
@@ -581,27 +588,27 @@ class Map(DOMWidget, InteractMixin):
         self.layers = ()
 
     controls = Tuple(trait=Instance(Control)).tag(sync=True, **widget_serialization)
-    control_ids = List()
+    _control_ids = List()
 
     @validate('controls')
     def _validate_controls(self, proposal):
-        """Validate controls list.
+        '''Validate controls list.
 
         Makes sure only one instance of any given layer can exist in the
         controls list.
-        """
-        self.control_ids = [c.model_id for c in proposal.value]
-        if len(set(self.control_ids)) != len(self.control_ids):
+        '''
+        self._control_ids = [c.model_id for c in proposal.value]
+        if len(set(self._control_ids)) != len(self._control_ids):
             raise ControlException('duplicate control detected, only use each control once')
         return proposal.value
 
     def add_control(self, control):
-        if control.model_id in self.control_ids:
+        if control.model_id in self._control_ids:
             raise ControlException('control already on map: %r' % control)
         self.controls = tuple([c for c in self.controls] + [control])
 
     def remove_control(self, control):
-        if control.model_id not in self.control_ids:
+        if control.model_id not in self._control_ids:
             raise ControlException('control not on map: %r' % control)
         self.controls = tuple([c for c in self.controls if c.model_id != control.model_id])
 

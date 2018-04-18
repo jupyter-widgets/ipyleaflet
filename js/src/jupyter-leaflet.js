@@ -976,15 +976,16 @@ var LeafletMarkerModel = LeafletUILayerModel.extend({
     defaults: _.extend({}, LeafletUILayerModel.prototype.defaults, {
         _view_name :'LeafletMarkerView',
         _model_name : 'LeafletMarkerModel',
-        location : def_loc,
+        location: def_loc,
+        opacity: 1.0,
+        visible : true,
         z_index_offset: 0,
         draggable: true,
         keyboard: true,
         title: '',
         alt: '',
         rise_on_hover: false,
-        rise_offset: 250,
-        visible : true
+        rise_offset: 250
     })
 });
 
@@ -1088,9 +1089,9 @@ var LeafletPathModel = LeafletVectorLayerModel.extend({
         fill : true,
         fill_color : '#0033FF',
         fill_opacity : 0.2,
-        dash_array : '',
-        line_cap : '',
-        line_join :  '',
+        dash_array : null,
+        line_cap : 'round',
+        line_join :  'round',
         pointer_events : '',
         class_name : ''
     })

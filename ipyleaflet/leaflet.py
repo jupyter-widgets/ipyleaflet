@@ -1,5 +1,6 @@
 from ipywidgets import (
-    Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization, interactive
+    Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
+    interactive
 )
 
 from traitlets import (
@@ -13,6 +14,7 @@ from ._version import EXTENSION_VERSION
 
 def_loc = [0.0, 0.0]
 
+
 def basemap_to_tiles(bm, day='yesterday', **kwargs):
     # Format the URL with modisdate
     from datetime import date, timedelta
@@ -23,7 +25,7 @@ def basemap_to_tiles(bm, day='yesterday', **kwargs):
     if url.count('%'):
         url = url % day
     return TileLayer(
-        url = url,
+        url=url,
         max_zoom=bm.get('max_zoom', 19),
         min_zoom=bm.get('min_zoom', 1),
         attribution=bm.get('attribution', ''),
@@ -188,6 +190,7 @@ class WMSLayer(TileLayer):
     crs = Unicode().tag(sync=True, o=True)
     uppercase = Bool().tag(sync=True, o=True)
 
+
 class ImageOverlay(RasterLayer):
     _view_name = Unicode('LeafletImageOverlayView').tag(sync=True)
     _model_name = Unicode('LeafletImageOverlayModel').tag(sync=True)
@@ -195,6 +198,7 @@ class ImageOverlay(RasterLayer):
     url = Unicode().tag(sync=True)
     bounds = List([def_loc, def_loc], help="SW and NE corners of the image").tag(sync=True)
     attribution = Unicode().tag(sync=True, o=True)
+
 
 class VideoOverlay(RasterLayer):
     _view_name = Unicode('LeafletVideoOverlayView').tag(sync=True)
@@ -415,10 +419,10 @@ class DrawControl(Control):
     # See https://github.com/Leaflet/Leaflet.draw#polylineoptions
 
     # TODO: mutable default value!
-    polyline = Dict({'shapeOptions':{}}).tag(sync=True)
+    polyline = Dict({'shapeOptions': {}}).tag(sync=True)
     # See https://github.com/Leaflet/Leaflet.draw#polygonoptions
     # TODO: mutable default value!
-    polygon = Dict({'shapeOptions':{}}).tag(sync=True)
+    polygon = Dict({'shapeOptions': {}}).tag(sync=True)
     # Leave empty to disable these
     circle = Dict().tag(sync=True)
     rectangle = Dict().tag(sync=True)
@@ -469,9 +473,9 @@ class Map(DOMWidget, InteractMixin):
 
     # Specification of the basemap
     basemap = Dict(default_value=dict(
-            url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            max_zoom = 19,
-            attribution = 'Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+            url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            max_zoom=19,
+            attribution='Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
         )).tag(sync=True, o=True)
     modisdate = Unicode('yesterday').tag(sync=True)
 
@@ -517,8 +521,8 @@ class Map(DOMWidget, InteractMixin):
     def _default_layers(self):
         return (basemap_to_tiles(self.basemap, self.modisdate, base=True),)
 
-    bounds = Tuple(read_only=True);
-    bounds_polygon = Tuple(read_only=True);
+    bounds = Tuple(read_only=True)
+    bounds_polygon = Tuple(read_only=True)
 
     @observe('south', 'north', 'east', 'west')
     def _observe_bounds(self, change):

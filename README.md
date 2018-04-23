@@ -8,7 +8,7 @@ A Jupyter / Leaflet bridge enabling interactive maps in the Jupyter notebook.
 
 ## Usage
 
-![Screenshot](/screenshot.png)
+![Screencast](/ipyleaflet.gif)
 
 ## Installation
 

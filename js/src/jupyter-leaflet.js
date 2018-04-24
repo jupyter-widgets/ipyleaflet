@@ -4,6 +4,11 @@ var L = require('leaflet');
 require('leaflet-splitmap');
 require('leaflet-draw');
 require('leaflet.markercluster');
+Heat = require('./leaflet-heat.js');
+L.HeatLayer = (L.Layer ? L.Layer : L.Class).extend(Heat);
+L.heatLayer = function (latlngs, options) {
+    return new L.HeatLayer(latlngs, options);
+};
 
 // https://github.com/Leaflet/Leaflet/issues/4968
 // Marker file names are hard-coded in the leaflet source causing
@@ -344,6 +349,45 @@ var LeafletVideoOverlayView = LeafletRasterLayerView.extend({
     },
 });
 
+var LeafletHeatmapView = LeafletLayerView.extend({
+
+    create_obj: function () {
+        this.obj = L.heatLayer(
+            this.model.get('latlngs'),
+            {
+                minOpacity: this.model.get('minOpacity'),
+                maxZoom: this.model.get('maxZoom'),
+                maxIntensity: this.model.get('maxIntensity'),
+                radius: this.model.get('radius'),
+                blur: this.model.get('blur'),
+                gradient: this.model.get('gradient')
+            },
+            this.get_options()
+        );
+    },
+
+    model_events: function () {
+        LeafletHeatmapView.__super__.model_events.apply(this, arguments);
+        this.listenTo(this.model, 'change:latlngs', function () {
+        }, this);
+
+        this.listenTo(this.model, 'change:options', function () {
+            latlngs = this.model.get('latlngs');
+            heat_options = {
+                minOpacity: this.model.get('minOpacity'),
+                maxZoom: this.model.get('maxZoom'),
+                max: this.model.get('maxIntensity'),
+                radius: this.model.get('radius'),
+                blur: this.model.get('blur'),
+                gradient: this.model.get('gradient')
+            }
+            options = this.get_options();
+            this.map_view.obj.removeLayer(this.obj);
+            this.obj = L.heatLayer(latlngs, heat_options, options);
+            this.map_view.obj.addLayer(this.obj);
+        }, this);
+    },
+});
 
 // VectorLayer
 var LeafletVectorLayerView = LeafletLayerView.extend({
@@ -1069,6 +1113,16 @@ var LeafletVideoOverlayModel = LeafletRasterLayerModel.extend({
     })
 });
 
+var LeafletHeatmapModel = LeafletRasterLayerModel.extend({
+    defaults: _.extend({}, LeafletRasterLayerModel.prototype.defaults, {
+        _view_name : 'LeafletHeatmapView',
+        _model_name : 'LeafletHeatmapModel',
+
+        latlngs : [],
+        attribution : ''
+    })
+});
+
 
 var LeafletVectorLayerModel = LeafletLayerModel.extend({
     defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
@@ -1341,6 +1395,7 @@ module.exports = {
     LeafletWMSLayerView : LeafletWMSLayerView,
     LeafletImageOverlayView : LeafletImageOverlayView,
     LeafletVideoOverlayView : LeafletVideoOverlayView,
+    LeafletHeatmapView : LeafletHeatmapView,
     LeafletVectorLayerView : LeafletVectorLayerView,
     LeafletPathView : LeafletPathView,
     LeafletPolylineView : LeafletPolylineView,
@@ -1369,6 +1424,7 @@ module.exports = {
     LeafletWMSLayerModel : LeafletWMSLayerModel,
     LeafletImageOverlayModel : LeafletImageOverlayModel,
     LeafletVideoOverlayModel : LeafletVideoOverlayModel,
+    LeafletHeatmapModel : LeafletHeatmapModel,
     LeafletVectorLayerModel : LeafletVectorLayerModel,
     LeafletPathModel : LeafletPathModel,
     LeafletPolylineModel : LeafletPolylineModel,

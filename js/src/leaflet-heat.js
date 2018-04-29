@@ -166,7 +166,7 @@ simpleheat.prototype = {
     }
 };
 
-let Heat = {
+L.HeatLayer = (L.Layer ? L.Layer : L.Class).extend({
 
     // options: {
     //     minOpacity: 0.05,
@@ -372,6 +372,8 @@ let Heat = {
             this._canvas.style[L.DomUtil.TRANSFORM] = L.DomUtil.getTranslateString(offset) + ' scale(' + scale + ')';
         }
     }
-};
+});
 
-module.exports = Heat;
+L.heatLayer = function (latlngs, options) {
+    return new L.HeatLayer(latlngs, options);
+};

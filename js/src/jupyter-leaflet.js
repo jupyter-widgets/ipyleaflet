@@ -4,11 +4,7 @@ var L = require('leaflet');
 require('leaflet-splitmap');
 require('leaflet-draw');
 require('leaflet.markercluster');
-Heat = require('./leaflet-heat.js');
-L.HeatLayer = (L.Layer ? L.Layer : L.Class).extend(Heat);
-L.heatLayer = function (latlngs, options) {
-    return new L.HeatLayer(latlngs, options);
-};
+require('./leaflet-heat.js');
 
 // https://github.com/Leaflet/Leaflet/issues/4968
 // Marker file names are hard-coded in the leaflet source causing

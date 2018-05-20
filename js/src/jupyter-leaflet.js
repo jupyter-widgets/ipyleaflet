@@ -789,7 +789,7 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
     render: function () {
         LeafletMapView.__super__.render.apply(this);
         this.el.classList.add('jupyter-widgets');
-        if (this.get_options().interpolation == 'nearest-neighbor') {
+        if (this.get_options().interpolation == 'nearest') {
             this.el.classList.add('crisp-image');
         }
         this.layer_views = new widgets.ViewList(this.add_layer_model, this.remove_layer_view, this);

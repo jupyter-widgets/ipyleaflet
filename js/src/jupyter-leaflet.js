@@ -599,7 +599,7 @@ var LeafletSplitMapControlView = LeafletControlView.extend({
 var LeafletLayersControlView = LeafletControlView.extend({
     /**
      *
-     * Core leaflet layers control maintains it own list of layers internally
+     * Core leaflet layers control maintains its own list of layers internally
      * causing issues when the layers of the underlying map changes
      * exogeneously, for example from a model change.
      *
@@ -789,6 +789,9 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
     render: function () {
         LeafletMapView.__super__.render.apply(this);
         this.el.classList.add('jupyter-widgets');
+        if (this.get_options().interpolation == 'nearest') {
+            this.el.classList.add('crisp-image');
+        }
         this.layer_views = new widgets.ViewList(this.add_layer_model, this.remove_layer_view, this);
         this.control_views = new widgets.ViewList(this.add_control_model, this.remove_control_view, this);
         this.displayed.then(_.bind(this.render_leaflet, this));

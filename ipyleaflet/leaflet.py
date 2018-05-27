@@ -477,6 +477,7 @@ class Map(DOMWidget, InteractMixin):
     zoom = Int(12).tag(sync=True, o=True)
     max_zoom = Int(18).tag(sync=True, o=True)
     min_zoom = Int(1).tag(sync=True, o=True)
+    interpolation = Unicode('bilinear').tag(sync=True, o=True)
 
     # Specification of the basemap
     basemap = Dict(default_value=dict(

@@ -364,8 +364,6 @@ var LeafletHeatmapView = LeafletLayerView.extend({
 
     model_events: function () {
         LeafletHeatmapView.__super__.model_events.apply(this, arguments);
-        this.listenTo(this.model, 'change:latlngs', function () {
-        }, this);
 
         this.listenTo(this.model, 'change:options', function () {
             latlngs = this.model.get('latlngs');
@@ -377,10 +375,7 @@ var LeafletHeatmapView = LeafletLayerView.extend({
                 blur: this.model.get('blur'),
                 gradient: this.model.get('gradient')
             }
-            options = this.get_options();
-            this.map_view.obj.removeLayer(this.obj);
-            this.obj = L.heatLayer(latlngs, heat_options, options);
-            this.map_view.obj.addLayer(this.obj);
+            this.obj.setOptions(this.get_options());
         }, this);
     },
 });
@@ -1115,7 +1110,13 @@ var LeafletHeatmapModel = LeafletRasterLayerModel.extend({
         _model_name : 'LeafletHeatmapModel',
 
         latlngs : [],
-        attribution : ''
+        attribution : '',
+        minOpacity: 0.05,
+        maxZoom: 18,
+        maxIntensity: 1.0,
+        radius: 25.0,
+        blur: 15.0,
+        gradient: {0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}
     })
 });
 

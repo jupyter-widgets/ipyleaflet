@@ -350,14 +350,6 @@ var LeafletHeatmapView = LeafletLayerView.extend({
     create_obj: function () {
         this.obj = L.heatLayer(
             this.model.get('latlngs'),
-            {
-                minOpacity: this.model.get('minOpacity'),
-                maxZoom: this.model.get('maxZoom'),
-                maxIntensity: this.model.get('maxIntensity'),
-                radius: this.model.get('radius'),
-                blur: this.model.get('blur'),
-                gradient: this.model.get('gradient')
-            },
             this.get_options()
         );
     },
@@ -365,18 +357,17 @@ var LeafletHeatmapView = LeafletLayerView.extend({
     model_events: function () {
         LeafletHeatmapView.__super__.model_events.apply(this, arguments);
 
-        this.listenTo(this.model, 'change:options', function () {
-            latlngs = this.model.get('latlngs');
-            heat_options = {
-                minOpacity: this.model.get('minOpacity'),
-                maxZoom: this.model.get('maxZoom'),
-                max: this.model.get('maxIntensity'),
-                radius: this.model.get('radius'),
-                blur: this.model.get('blur'),
-                gradient: this.model.get('gradient')
-            }
-            this.obj.setOptions(this.get_options());
+        this.listenTo(this.model, 'change:latlngs', function () {
+            this.obj.setLatLngs(this.model.get('latlngs'));
         }, this);
+        var key;
+        var o = this.model.get('options');
+        for (var i=0; i<o.length; i++) {
+            key = o[i];
+            this.listenTo(this.model, 'change:' + key, function () {
+                this.obj.setOptions(this.get_options());
+            }, this);
+        }
     },
 });
 
@@ -1110,10 +1101,9 @@ var LeafletHeatmapModel = LeafletRasterLayerModel.extend({
         _model_name : 'LeafletHeatmapModel',
 
         latlngs : [],
-        attribution : '',
         minOpacity: 0.05,
         maxZoom: 18,
-        maxIntensity: 1.0,
+        max: 1.0,
         radius: 25.0,
         blur: 15.0,
         gradient: {0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}

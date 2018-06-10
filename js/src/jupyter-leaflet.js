@@ -4,6 +4,7 @@ var L = require('leaflet');
 require('leaflet-splitmap');
 require('leaflet-draw');
 require('leaflet.markercluster');
+require('leaflet-velocity');
 
 // https://github.com/Leaflet/Leaflet/issues/4968
 // Marker file names are hard-coded in the leaflet source causing
@@ -344,6 +345,41 @@ var LeafletVideoOverlayView = LeafletRasterLayerView.extend({
     },
 });
 
+var LeafletVelocityView = LeafletLayerView.extend({
+    create_obj: function () {
+        var options = this.get_options();
+        var data = this.model.get('data');
+        options.data = JSON.parse(data);
+        this.obj = L.velocityLayer(
+            options
+        );
+    },
+
+    model_events: function () {
+        LeafletVelocityView.__super__.model_events.apply(this, arguments);
+        this.listenTo(this.model, 'change:data', function () {
+            options = this.get_options();
+            data = this.model.get('data');
+            options.data = JSON.parse(data);
+            this.map_view.obj.removeLayer(this.obj);
+            this.obj = L.velocityLayer(options);
+            this.map_view.obj.addLayer(this.obj);
+        }, this);
+        var key;
+        var o = this.model.get('options');
+        for (var i=0; i<o.length; i++) {
+            key = o[i];
+            this.listenTo(this.model, 'change:' + key, function () {
+                options = this.get_options();
+                data = this.model.get('data');
+                options.data = JSON.parse(data);
+                this.map_view.obj.removeLayer(this.obj);
+                this.obj = L.velocityLayer(options);
+                this.map_view.obj.addLayer(this.obj);
+            }, this);
+        }
+    },
+});
 
 // VectorLayer
 var LeafletVectorLayerView = LeafletLayerView.extend({
@@ -1072,6 +1108,28 @@ var LeafletVideoOverlayModel = LeafletRasterLayerModel.extend({
     })
 });
 
+var LeafletVelocityModel = LeafletLayerModel.extend({
+    defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
+        _view_name : 'LeafletVelocityView',
+        _model_name : 'LeafletVelocityModel',
+
+        displayValues: true,
+        displayOptions: {
+            velocityType: 'Global Wind',
+            position: 'bottomleft',
+            emptyString: 'No velocity data',
+            angleConvention: 'bearingCW',
+            displayPosition: 'bottomleft',
+            displayEmptyString: 'No velocity data',
+            speedUnit: 'kt'
+        },
+        data: [],
+        minVelocity: 0,
+        maxVelocity: 10,
+        velocityScale: 0.005,
+        colorScale: []
+    })
+});
 
 var LeafletVectorLayerModel = LeafletLayerModel.extend({
     defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
@@ -1344,6 +1402,7 @@ module.exports = {
     LeafletWMSLayerView : LeafletWMSLayerView,
     LeafletImageOverlayView : LeafletImageOverlayView,
     LeafletVideoOverlayView : LeafletVideoOverlayView,
+    LeafletVelocityView : LeafletVelocityView,
     LeafletVectorLayerView : LeafletVectorLayerView,
     LeafletPathView : LeafletPathView,
     LeafletPolylineView : LeafletPolylineView,
@@ -1372,6 +1431,7 @@ module.exports = {
     LeafletWMSLayerModel : LeafletWMSLayerModel,
     LeafletImageOverlayModel : LeafletImageOverlayModel,
     LeafletVideoOverlayModel : LeafletVideoOverlayModel,
+    LeafletVelocityModel : LeafletVelocityModel,
     LeafletVectorLayerModel : LeafletVectorLayerModel,
     LeafletPathModel : LeafletPathModel,
     LeafletPolylineModel : LeafletPolylineModel,

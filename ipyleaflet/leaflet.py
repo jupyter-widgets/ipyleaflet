@@ -214,8 +214,8 @@ class Heatmap(RasterLayer):
     latlngs = List().tag(sync=True)
 
     # Options
-    minOpacity = Float(0.05).tag(sync=True, o=True)
-    maxZoom = Int(18).tag(sync=True, o=True)
+    min_opacity = Float(0.05).tag(sync=True, o=True)
+    max_zoom = Int(18).tag(sync=True, o=True)
     max = Float(1.0).tag(sync=True, o=True)
     radius = Float(25.0).tag(sync=True, o=True)
     blur = Float(15.0).tag(sync=True, o=True)

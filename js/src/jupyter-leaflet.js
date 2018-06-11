@@ -358,12 +358,8 @@ var LeafletVelocityView = LeafletLayerView.extend({
     model_events: function () {
         LeafletVelocityView.__super__.model_events.apply(this, arguments);
         this.listenTo(this.model, 'change:data', function () {
-            options = this.get_options();
-            data = this.model.get('data');
-            options.data = JSON.parse(data);
-            this.map_view.obj.removeLayer(this.obj);
-            this.obj = L.velocityLayer(options);
-            this.map_view.obj.addLayer(this.obj);
+            data = JSON.parse(this.model.get('data'));
+            this.obj.setData(data);
         }, this);
         var key;
         var o = this.model.get('options');
@@ -371,11 +367,7 @@ var LeafletVelocityView = LeafletLayerView.extend({
             key = o[i];
             this.listenTo(this.model, 'change:' + key, function () {
                 options = this.get_options();
-                data = this.model.get('data');
-                options.data = JSON.parse(data);
-                this.map_view.obj.removeLayer(this.obj);
-                this.obj = L.velocityLayer(options);
-                this.map_view.obj.addLayer(this.obj);
+                L.setOptions(this.obj, options);
             }, this);
         }
     },

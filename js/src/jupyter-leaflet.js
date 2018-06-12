@@ -279,6 +279,12 @@ var LeafletImageOverlayView = LeafletRasterLayerView.extend({
     model_events: function () {
         LeafletImageOverlayView.__super__.model_events.apply(this, arguments);
         this.listenTo(this.model, 'change:url', function () {
+            url = this.model.get('url');
+            bounds = this.model.get('bounds');
+            options = this.get_options();
+            this.map_view.obj.removeLayer(this.obj);
+            this.obj = L.imageOverlay(url, bounds, options);
+            this.map_view.obj.addLayer(this.obj);  // Gives a warning but works!!! Error setting state: Cannot read property 'obj' of undefined
         }, this);
 
         this.listenTo(this.model, 'change:bounds', function () {
@@ -331,6 +337,12 @@ var LeafletVideoOverlayView = LeafletRasterLayerView.extend({
     model_events: function () {
         LeafletVideoOverlayView.__super__.model_events.apply(this, arguments);
         this.listenTo(this.model, 'change:url', function () {
+            url = this.model.get('url');
+            bounds = this.model.get('bounds');
+            options = this.get_options();
+            this.map_view.obj.removeLayer(this.obj);
+            this.obj = L.videoOverlay(url, bounds, options);
+            this.map_view.obj.addLayer(this.obj);
         }, this);
 
         this.listenTo(this.model, 'change:bounds', function () {

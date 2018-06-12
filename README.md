@@ -6,6 +6,10 @@
 
 A Jupyter / Leaflet bridge enabling interactive maps in the Jupyter notebook.
 
+## Docs
+
+See [ipyleaflet.readthedocs.io](https://ipyleaflet.readthedocs.io/en/latest/?badge=latest)
+
 ## Usage
 
 ![Screencast](/ipyleaflet.gif)

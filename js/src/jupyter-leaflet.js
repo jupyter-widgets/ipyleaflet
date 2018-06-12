@@ -4,6 +4,7 @@ var L = require('leaflet');
 require('leaflet-splitmap');
 require('leaflet-draw');
 require('leaflet.markercluster');
+require('./leaflet-heat.js');
 
 // https://github.com/Leaflet/Leaflet/issues/4968
 // Marker file names are hard-coded in the leaflet source causing
@@ -344,6 +345,31 @@ var LeafletVideoOverlayView = LeafletRasterLayerView.extend({
     },
 });
 
+var LeafletHeatmapView = LeafletLayerView.extend({
+
+    create_obj: function () {
+        this.obj = L.heatLayer(
+            this.model.get('latlngs'),
+            this.get_options()
+        );
+    },
+
+    model_events: function () {
+        LeafletHeatmapView.__super__.model_events.apply(this, arguments);
+
+        this.listenTo(this.model, 'change:latlngs', function () {
+            this.obj.setLatLngs(this.model.get('latlngs'));
+        }, this);
+        var key;
+        var o = this.model.get('options');
+        for (var i=0; i<o.length; i++) {
+            key = o[i];
+            this.listenTo(this.model, 'change:' + key, function () {
+                this.obj.setOptions(this.get_options());
+            }, this);
+        }
+    },
+});
 
 // VectorLayer
 var LeafletVectorLayerView = LeafletLayerView.extend({
@@ -1072,6 +1098,21 @@ var LeafletVideoOverlayModel = LeafletRasterLayerModel.extend({
     })
 });
 
+var LeafletHeatmapModel = LeafletRasterLayerModel.extend({
+    defaults: _.extend({}, LeafletRasterLayerModel.prototype.defaults, {
+        _view_name : 'LeafletHeatmapView',
+        _model_name : 'LeafletHeatmapModel',
+
+        latlngs : [],
+        minOpacity: 0.05,
+        maxZoom: 18,
+        max: 1.0,
+        radius: 25.0,
+        blur: 15.0,
+        gradient: {0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}
+    })
+});
+
 
 var LeafletVectorLayerModel = LeafletLayerModel.extend({
     defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
@@ -1344,6 +1385,7 @@ module.exports = {
     LeafletWMSLayerView : LeafletWMSLayerView,
     LeafletImageOverlayView : LeafletImageOverlayView,
     LeafletVideoOverlayView : LeafletVideoOverlayView,
+    LeafletHeatmapView : LeafletHeatmapView,
     LeafletVectorLayerView : LeafletVectorLayerView,
     LeafletPathView : LeafletPathView,
     LeafletPolylineView : LeafletPolylineView,
@@ -1372,6 +1414,7 @@ module.exports = {
     LeafletWMSLayerModel : LeafletWMSLayerModel,
     LeafletImageOverlayModel : LeafletImageOverlayModel,
     LeafletVideoOverlayModel : LeafletVideoOverlayModel,
+    LeafletHeatmapModel : LeafletHeatmapModel,
     LeafletVectorLayerModel : LeafletVectorLayerModel,
     LeafletPathModel : LeafletPathModel,
     LeafletPolylineModel : LeafletPolylineModel,

@@ -207,6 +207,21 @@ class VideoOverlay(RasterLayer):
     attribution = Unicode().tag(sync=True, o=True)
 
 
+class Heatmap(RasterLayer):
+    _view_name = Unicode('LeafletHeatmapView').tag(sync=True)
+    _model_name = Unicode('LeafletHeatmapModel').tag(sync=True)
+
+    latlngs = List().tag(sync=True)
+
+    # Options
+    min_opacity = Float(0.05).tag(sync=True, o=True)
+    max_zoom = Int(18).tag(sync=True, o=True)
+    max = Float(1.0).tag(sync=True, o=True)
+    radius = Float(25.0).tag(sync=True, o=True)
+    blur = Float(15.0).tag(sync=True, o=True)
+    gradient = Dict({0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}).tag(sync=True, o=True)
+
+
 class VectorLayer(Layer):
     _view_name = Unicode('LeafletVectorLayerView').tag(sync=True)
     _model_name = Unicode('LeafletVectorLayerModel').tag(sync=True)

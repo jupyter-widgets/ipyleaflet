@@ -349,8 +349,7 @@ var LeafletVideoOverlayView = LeafletRasterLayerView.extend({
 var LeafletVelocityView = LeafletLayerView.extend({
     create_obj: function () {
         var options = this.get_options();
-        var data = this.model.get('data');
-        options.data = JSON.parse(data);
+        options.data = this.model.get('data');
         this.obj = L.velocityLayer(
             options
         );
@@ -359,7 +358,7 @@ var LeafletVelocityView = LeafletLayerView.extend({
     model_events: function () {
         LeafletVelocityView.__super__.model_events.apply(this, arguments);
         this.listenTo(this.model, 'change:data', function () {
-            data = JSON.parse(this.model.get('data'));
+            data = this.model.get('data');
             this.obj.setData(data);
         }, this);
         var key;

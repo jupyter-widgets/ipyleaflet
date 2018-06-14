@@ -1,6 +1,3 @@
-import numpy as np
-import json
-
 def ds_x_to_json(ds, widget):
     return ds2json(
             ds,
@@ -32,6 +29,7 @@ def ds2json(ds, u_var, v_var, lat_dim='latitude', lon_dim='longitude', units=Non
         Velocity units (default: try getting units from the
         'units' attributes of `u_var` and `v_var`).
     """
+    import numpy as np
     ds = ds.copy()
     for var_name in (u_var, v_var):
         var_dims = ds[var_name].dims
@@ -105,4 +103,4 @@ def ds2json(ds, u_var, v_var, lat_dim='latitude', lon_dim='longitude', units=Non
             "data": ds[var_name].values.flatten().tolist()
         })
 
-    return json.dumps(velocity_data)
+    return velocity_data

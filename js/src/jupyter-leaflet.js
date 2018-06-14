@@ -349,7 +349,7 @@ var LeafletHeatmapView = LeafletLayerView.extend({
 
     create_obj: function () {
         this.obj = L.heatLayer(
-            this.model.get('latlngs'),
+            this.model.get('locations'),
             this.get_options()
         );
     },
@@ -358,7 +358,7 @@ var LeafletHeatmapView = LeafletLayerView.extend({
         LeafletHeatmapView.__super__.model_events.apply(this, arguments);
 
         this.listenTo(this.model, 'change:latlngs', function () {
-            this.obj.setLatLngs(this.model.get('latlngs'));
+            this.obj.setLatLngs(this.model.get('locations'));
         }, this);
         var key;
         var o = this.model.get('options');
@@ -1103,7 +1103,7 @@ var LeafletHeatmapModel = LeafletRasterLayerModel.extend({
         _view_name : 'LeafletHeatmapView',
         _model_name : 'LeafletHeatmapModel',
 
-        latlngs : [],
+        locations : [],
         minOpacity: 0.05,
         maxZoom: 18,
         max: 1.0,

@@ -8,9 +8,17 @@ from traitlets import (
     default, validate, TraitError
 )
 
+from .xarray_ds import ds2json
+
 from .basemaps import basemaps
 
 from ._version import EXTENSION_VERSION
+
+try:
+    from xarray import Dataset
+except:
+    class Dataset:
+        pass
 
 def_loc = [0.0, 0.0]
 
@@ -211,7 +219,18 @@ class Velocity(Layer):
     _view_name = Unicode('LeafletVelocityView').tag(sync=True)
     _model_name = Unicode('LeafletVelocityModel').tag(sync=True)
 
+    u_var = Unicode('')
+    v_var = Unicode('')
+    lat_dim = Unicode('latitude')
+    lon_dim = Unicode('longitude')
+    units = Unicode(None, allow_none=True)
+
+    dataset = Instance(Dataset)
     data = Unicode().tag(sync=True)
+
+    def __init__(self, **kwargs):
+        super(Velocity, self).__init__(**kwargs)
+        self.set_trait('data', ds2json(self.dataset, self.u_var, self.v_var, self.lat_dim, self.lon_dim))
 
     # Options
     display_values = Bool(True).tag(sync=True, o=True)

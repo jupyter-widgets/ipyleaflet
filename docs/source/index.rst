@@ -22,6 +22,7 @@ ipyleaflet: Interactive maps in the Jupyter notebook
     api_reference/circle
     api_reference/circle_marker
     api_reference/marker_cluster
+    api_reference/heatmap
     api_reference/layer_group
     api_reference/geo_json
     api_reference/layers_control

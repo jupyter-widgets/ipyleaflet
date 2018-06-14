@@ -211,7 +211,7 @@ class Heatmap(RasterLayer):
     _view_name = Unicode('LeafletHeatmapView').tag(sync=True)
     _model_name = Unicode('LeafletHeatmapModel').tag(sync=True)
 
-    latlngs = List().tag(sync=True)
+    locations = List().tag(sync=True)
 
     # Options
     min_opacity = Float(0.05).tag(sync=True, o=True)

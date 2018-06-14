@@ -8,7 +8,7 @@ from traitlets import (
     default, validate, TraitError
 )
 
-from .xarray_ds import ds2json
+from .xarray_ds import ds_x_to_json
 
 from .basemaps import basemaps
 
@@ -225,12 +225,7 @@ class Velocity(Layer):
     lon_dim = Unicode('longitude')
     units = Unicode(None, allow_none=True)
 
-    dataset = Instance(Dataset)
-    data = Unicode().tag(sync=True)
-
-    def __init__(self, **kwargs):
-        super(Velocity, self).__init__(**kwargs)
-        self.set_trait('data', ds2json(self.dataset, self.u_var, self.v_var, self.lat_dim, self.lon_dim))
+    data = Instance(Dataset).tag(sync=True, to_json=ds_x_to_json)
 
     # Options
     display_values = Bool(True).tag(sync=True, o=True)

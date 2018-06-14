@@ -1,6 +1,16 @@
 import numpy as np
 import json
 
+def ds_x_to_json(ds, widget):
+    return ds2json(
+            ds,
+            widget.u_var,
+            widget.v_var,
+            widget.lat_dim,
+            widget.lon_dim,
+            widget.units
+            )
+
 def ds2json(ds, u_var, v_var, lat_dim='latitude', lon_dim='longitude', units=None):
     """
     Assumes that the velocity components are given on a regular grid

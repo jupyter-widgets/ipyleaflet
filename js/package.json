@@ -28,6 +28,7 @@
     "leaflet-draw": "^0.4.10",
     "leaflet.markercluster": "^1.2.0",
     "leaflet-splitmap": "^1.0.0",
+    "leaflet-velocity": "^1.2.4",
     "underscore": "^1.8.3"
   },
   "jupyterlab": {

@@ -133,7 +133,10 @@ setup_args = {
         ] + glob('ipyleaflet/static/*.png') + glob('ipyleaflet/static/*.svg')),
         ('etc/jupyter/nbconfig/notebook.d' , ['jupyter-leaflet.json'])
     ],
-    'install_requires': ['ipywidgets>=7.0.0,<8'],
+    'install_requires': [
+        'ipywidgets>=7.0.0,<8',
+        'traittypes>=0.2.1',
+        ],
     'packages': find_packages(),
     'zip_safe': False,
     'cmdclass': {

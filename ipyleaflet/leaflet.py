@@ -8,17 +8,13 @@ from traitlets import (
     default, validate, TraitError
 )
 
+from traittypes import Dataset
+
 from .xarray_ds import ds_x_to_json
 
 from .basemaps import basemaps
 
 from ._version import EXTENSION_VERSION
-
-try:
-    from xarray import Dataset
-except:
-    class Dataset:
-        pass
 
 def_loc = [0.0, 0.0]
 
@@ -225,7 +221,7 @@ class Velocity(Layer):
     lon_dim = Unicode('longitude')
     units = Unicode(None, allow_none=True)
 
-    data = Instance(Dataset).tag(sync=True, to_json=ds_x_to_json)
+    data = Dataset().tag(sync=True, to_json=ds_x_to_json)
 
     # Options
     display_values = Bool(True).tag(sync=True, o=True)

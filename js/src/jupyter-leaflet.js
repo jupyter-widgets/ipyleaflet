@@ -5,6 +5,7 @@ require('leaflet-splitmap');
 require('leaflet-draw');
 require('leaflet.markercluster');
 require('leaflet-velocity');
+require('leaflet-measure');
 require('./leaflet-heat.js');
 
 // https://github.com/Leaflet/Leaflet/issues/4968
@@ -724,6 +725,51 @@ var LeafletLayersControlView = LeafletControlView.extend({
     }
 });
 
+var LeafletMeasureControlView = LeafletControlView.extend({
+    initialize: function (parameters) {
+        LeafletMeasureControlView.__super__.initialize.apply(this, arguments);
+        this.map_view = this.options.map_view;
+    },
+
+    render: function () {
+        this.create_obj();
+        this.model_events();
+    },
+
+    create_obj: function () {
+        this.obj = L.control.measure(this.get_options());
+        this.obj.addTo(this.map_view.obj);
+        this.default_units = L.extend({}, this.obj.options.units);
+    },
+
+    get_options: function () {
+        var o = this.model.get('options');
+        var options = {};
+        var key;
+        for (var i=0; i<o.length; i++) {
+            key = o[i];
+            // Convert from foo_bar to fooBar that Leaflet.js uses
+            options[camel_case(key)] = this.model.get(key);
+        }
+        options['units'] = L.extend({}, this.default_units, this.model.get('_custom_units'));
+        return options;
+    },
+
+    model_events: function () {
+        var key;
+        var o = this.model.get('options');
+        for (var i=0; i<o.length; i++) {
+            key = o[i];
+            this.listenTo(this.model, 'change:' + key, function () {
+                // Workaround for https://github.com/ljagis/leaflet-measure/issues/112
+                // and https://github.com/ljagis/leaflet-measure/issues/113
+                // Once fixed, the next line should be replaced by: L.setOptions(this.obj, this.get_options());
+                this.obj.initialize(this.get_options());
+            }, this);
+        }
+    },
+});
+
 var LeafletDrawControlView = LeafletControlView.extend({
     initialize: function (parameters) {
         LeafletDrawControlView.__super__.initialize.apply(this, arguments);
@@ -1328,6 +1374,27 @@ var LeafletLayersControlModel = LeafletControlModel.extend({
     })
 });
 
+var LeafletMeasureControlModel = LeafletControlModel.extend({
+    defaults: _.extend({}, LeafletControlModel.prototype.defaults, {
+        _view_name: 'LeafletMeasureControlView',
+        _model_name: 'LeafletMeasureControlModel',
+
+        position: 'topright',
+        primary_length_unit: 'feet',
+        secondary_length_unit: undefined,
+        primary_area_unit: 'acres',
+        secondar_area_unit: undefined,
+        active_color: '#ABE67E',
+        completed_color: '#C8F2BE',
+        popup_options: {
+          className: 'leaflet-measure-resultpopup',
+          autoPanPadding: [10, 10]
+        },
+        capture_z_index: 10000,
+        _custom_units: {},
+    })
+});
+
 var LeafletDrawControlModel = LeafletControlModel.extend({
     defaults: _.extend({}, LeafletControlModel.prototype.defaults, {
         _view_name : 'LeafletDrawControlView',
@@ -1470,6 +1537,7 @@ module.exports = {
     LeafletMultiPolygonView : LeafletMultiPolygonView,
     LeafletControlView : LeafletControlView,
     LeafletLayersControlView : LeafletLayersControlView,
+    LeafletMeasureControlView : LeafletMeasureControlView,
     LeafletDrawControlView : LeafletDrawControlView,
     LeafletSplitMapControlView : LeafletSplitMapControlView,
     LeafletMapView : LeafletMapView,
@@ -1500,6 +1568,7 @@ module.exports = {
     LeafletMultiPolygonModel : LeafletMultiPolygonModel,
     LeafletControlModel : LeafletControlModel,
     LeafletLayersControlModel : LeafletLayersControlModel,
+    LeafletMeasureControlModel : LeafletMeasureControlModel,
     LeafletDrawControlModel : LeafletDrawControlModel,
     LeafletSplitMapControlModel : LeafletSplitMapControlModel,
     LeafletMapModel : LeafletMapModel

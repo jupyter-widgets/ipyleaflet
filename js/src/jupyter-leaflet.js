@@ -284,7 +284,7 @@ var LeafletImageOverlayView = LeafletRasterLayerView.extend({
             options = this.get_options();
             this.map_view.obj.removeLayer(this.obj);
             this.obj = L.imageOverlay(url, bounds, options);
-            this.map_view.obj.addLayer(this.obj);  // Gives a warning but works!!! Error setting state: Cannot read property 'obj' of undefined
+            this.map_view.obj.addLayer(this.obj);
         }, this);
 
         this.listenTo(this.model, 'change:bounds', function () {
@@ -293,7 +293,7 @@ var LeafletImageOverlayView = LeafletRasterLayerView.extend({
             options = this.get_options();
             this.map_view.obj.removeLayer(this.obj);
             this.obj = L.imageOverlay(url, bounds, options);
-            this.map_view.obj.addLayer(this.obj);  // Gives a warning but works!!! Error setting state: Cannot read property 'obj' of undefined
+            this.map_view.obj.addLayer(this.obj);
         }, this);
     },
 });

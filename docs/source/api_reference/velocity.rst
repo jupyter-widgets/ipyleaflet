@@ -38,14 +38,14 @@ Attributes
 ===============    ===================================================================    ====
 Attribute          Default Value                                                          Doc
 ===============    ===================================================================    ====
-u_var              ''                                                                     variable name in underlying dataset for `u`
-v_var              ''                                                                     variable name in underlying dataset for `v`
-lat_dim            'latitude'                                                             coordinate name for the lattitude
-lon_dim            'longitude'                                                            coordinate name for the longitude
-units              None                                                                   units
-data               Default xarray dataset                                                 underlying dataset
-display_values     True
-display_options    {}                                                                     display options
+u_var              ''                                                                     Variable name in underlying dataset for `u`
+v_var              ''                                                                     Variable name in underlying dataset for `v`
+lat_dim            'latitude'                                                             Coordinate name for the lattitude
+lon_dim            'longitude'                                                            Coordinate name for the longitude
+units              None                                                                   Units
+data               Empty dataset                                                          Underlying dataset
+display_values     True                                                                   Display velocity data on mouse hover
+display_options    {}                                                                     Display options
 min_velocity       0.0                                                                    Used to align color scale
 max_velocity       10.0                                                                   Used to align color scale
 velocity_scale     0.005                                                                  Modifier for particle animations

@@ -8,6 +8,14 @@
     height: 100%;
 }
 
+.leaflet-control-velocity.leaflet-control {
+    background: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    padding: 0 5px;
+    color: #333;
+    font-size: 11px;
+}
+
 /* Leaflet crispness override */
 .crisp-image {
     /* Preserve crisp pixels with scaled up images */

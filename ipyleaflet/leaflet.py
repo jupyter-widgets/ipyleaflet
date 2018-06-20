@@ -233,7 +233,7 @@ class Velocity(Layer):
         'displayPosition': 'bottomleft',
         'displayEmptyString': 'No velocity data',
         'speedUnit': 'kt'
-        }).tag(sync=True, o=True)
+        }).tag(sync=True)
     min_velocity = Float(0).tag(sync=True,o=True)
     max_velocity = Float(10).tag(sync=True, o=True)
     velocity_scale = Float(0.005).tag(sync=True, o=True)

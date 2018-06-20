@@ -378,10 +378,17 @@ var LeafletVelocityView = LeafletLayerView.extend({
         for (var i=0; i<o.length; i++) {
             key = o[i];
             this.listenTo(this.model, 'change:' + key, function () {
-                options = this.get_options();
+                var options = this.get_options();
                 L.setOptions(this.obj, options);
             }, this);
         }
+        // Separate display_options from the options to perform a shallow copy.
+        key = 'display_options';
+        this.listenTo(this.model, 'change:' + key, function () {
+            var options = {};
+            options[camel_case(key)] = _.extend({}, this.model.get(key));
+            L.setOptions(this.obj, options);
+        }, this);
     },
 });
 

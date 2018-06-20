@@ -382,6 +382,12 @@ var LeafletVelocityView = LeafletLayerView.extend({
                 L.setOptions(this.obj, options);
             }, this);
         }
+        // COPY
+        this.listenTo(this.model, 'change:display_options', function () {
+            L.setOptions(this.obj, {
+                'displayOptions': _.extend({}, this.model.get('display_options'))
+            });
+        }, this);
     },
 });
 

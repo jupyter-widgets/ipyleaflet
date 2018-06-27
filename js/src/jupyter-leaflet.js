@@ -28,8 +28,24 @@ function camel_case(input) {
     });
 }
 
+var leaflet_views_common_methods = {
+    get_options: function () {
+        var o = this.model.get('options');
+        var options = {};
+        var key;
+        for (var i=0; i<o.length; i++) {
+            key = o[i];
+            // Convert from foo_bar to fooBar that Leaflet.js uses
+            options[camel_case(key)] = this.model.get(key);
+        }
+        return options;
+    }
+}
 
-var LeafletLayerView = widgets.WidgetView.extend({
+var LeafletWidgetView = widgets.WidgetView.extend(leaflet_views_common_methods);
+var LeafletDOMWidgetView = widgets.DOMWidgetView.extend(leaflet_views_common_methods);
+
+var LeafletLayerView = LeafletWidgetView.extend({
 
     initialize: function (parameters) {
         LeafletLayerView.__super__.initialize.apply(this, arguments);
@@ -52,18 +68,6 @@ var LeafletLayerView = widgets.WidgetView.extend({
     },
 
     model_events: function () {
-    },
-
-    get_options: function () {
-        var o = this.model.get('options');
-        var options = {};
-        var key;
-        for (var i=0; i<o.length; i++) {
-            key = o[i];
-            // Convert from foo_bar to fooBar that Leaflet.js uses
-            options[camel_case(key)] = this.model.get(key);
-        }
-        return options;
     },
 
     remove: function() {
@@ -635,7 +639,7 @@ var LeafletMultiPolygonView = LeafletFeatureGroupView.extend({
 });
 
 
-var LeafletControlView = widgets.WidgetView.extend({
+var LeafletControlView = LeafletWidgetView.extend({
     initialize: function (parameters) {
         LeafletControlView.__super__.initialize.apply(this, arguments);
         this.map_view = this.options.map_view;
@@ -743,14 +747,7 @@ var LeafletMeasureControlView = LeafletControlView.extend({
     },
 
     get_options: function () {
-        var o = this.model.get('options');
-        var options = {};
-        var key;
-        for (var i=0; i<o.length; i++) {
-            key = o[i];
-            // Convert from foo_bar to fooBar that Leaflet.js uses
-            options[camel_case(key)] = this.model.get(key);
-        }
+        var options = LeafletMeasureControlView.__super__.get_options.apply(this, arguments);
         options['units'] = L.extend({}, this.default_units, this.model.get('_custom_units'));
         return options;
     },
@@ -855,7 +852,7 @@ var LeafletDrawControlView = LeafletControlView.extend({
 });
 
 
-var LeafletMapView = widgets.DOMWidgetView.extend({
+var LeafletMapView = LeafletDOMWidgetView.extend({
     initialize: function (options) {
         LeafletMapView.__super__.initialize.apply(this, arguments);
         // The dirty flag is used to prevent sub-pixel center changes
@@ -935,18 +932,6 @@ var LeafletMapView = widgets.DOMWidgetView.extend({
         return this.layoutPromise.then(function(views) {
             that.obj = L.map(that.el, that.get_options());
         });
-    },
-
-    get_options: function () {
-        var o = this.model.get('options');
-        var options = {};
-        var key;
-        for (var i=0; i<o.length; i++) {
-            key = o[i];
-            // Convert from foo_bar to fooBar that Leaflet.js uses
-            options[camel_case(key)] = this.model.get(key);
-        }
-        return options;
     },
 
     leaflet_events: function () {

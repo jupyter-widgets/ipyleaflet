@@ -379,7 +379,7 @@ class LayerGroup(Layer):
         self.layers = ()
 
 
-class FeatureGroup(Layer):
+class FeatureGroup(LayerGroup):
     _view_name = Unicode('LeafletFeatureGroupView').tag(sync=True)
     _model_name = Unicode('LeafletFeatureGroupModel').tag(sync=True)
 

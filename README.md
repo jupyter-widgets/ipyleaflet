@@ -58,7 +58,7 @@ Some users have found that the ``jupyterlab-manager`` is also required
 in jupyterlab if the map does not display.
 
 ```
-jupyter labextension install @jupyter-widgets/jupyterlab-manager
+$ jupyter labextension install @jupyter-widgets/jupyterlab-manager
 ```
 
 ## Installation from sources

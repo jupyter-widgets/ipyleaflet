@@ -731,17 +731,9 @@ var LeafletDrawControlView = LeafletControlView.extend({
     },
 
     render: function () {
-        var that = this;
-        return this.create_child_view(this.model.get('layer'), {
-            map_view: this.map_view
-        }).then(function (layer_view) {
-            that.map_view.obj.addLayer(layer_view.obj);
-            // TODO: create_obj refers to the layer view instead of the layer
-            // view promise. We should fix that.
-            that.layer_view = layer_view;
-            that.create_obj();
-            return that;
-        });
+        this.feature_group = L.featureGroup();
+        this.map_view.obj.addLayer(this.feature_group);
+        this.create_obj();
     },
 
     create_obj: function () {
@@ -752,22 +744,23 @@ var LeafletDrawControlView = LeafletControlView.extend({
         if (_.isEmpty(polygon)) { polygon = false; }
         var circle = this.model.get('circle');
         if (_.isEmpty(circle)) { circle = false; }
+        var circlemarker = this.model.get('circlemarker');
+        if (_.isEmpty(circlemarker)) { circlemarker = false; }
         var rectangle = this.model.get('rectangle');
         if (_.isEmpty(rectangle)) { rectangle = false; }
         var marker = this.model.get('marker');
         if (_.isEmpty(marker)) { marker = false; }
-        var edit = this.model.get('edit');
-        var remove = this.model.get('remove');
         this.obj = new L.Control.Draw({
             edit: {
-                featureGroup: this.layer_view.obj,
-                edit: edit,
-                remove: remove
+                featureGroup: this.feature_group,
+                edit: this.model.get('edit'),
+                remove: this.model.get('remove')
             },
             draw: {
                 polyline: polyline,
                 polygon: polygon,
                 circle: circle,
+                circlemarker: circlemarker,
                 rectangle: rectangle,
                 marker: marker
             }
@@ -781,7 +774,7 @@ var LeafletDrawControlView = LeafletControlView.extend({
                 'event': 'draw:created',
                 'geo_json': geo_json
             });
-            that.layer_view.obj.addLayer(layer);
+            that.feature_group.addLayer(layer);
         });
         this.map_view.obj.on('draw:edited', function (e) {
             var layers = e.layers;
@@ -805,7 +798,52 @@ var LeafletDrawControlView = LeafletControlView.extend({
                 });
             });
         });
+        this.model.on('msg:custom', _.bind(this.handle_message, this));
     },
+
+    handle_message: function(content) {
+        if (content.msg == 'clear') {
+            this.feature_group.eachLayer((layer) => {
+                this.feature_group.removeLayer(layer);
+            });
+        } else if (content.msg == 'clear_polylines') {
+            this.feature_group.eachLayer((layer) => {
+                if (layer instanceof L.Polyline && !(layer instanceof L.Polygon)) {
+                    this.feature_group.removeLayer(layer);
+                }
+            });
+        } else if (content.msg == 'clear_polygons') {
+            this.feature_group.eachLayer((layer) => {
+                if (layer instanceof L.Polygon && !(layer instanceof L.Rectangle)) {
+                    this.feature_group.removeLayer(layer);
+                }
+            });
+        } else if (content.msg == 'clear_circles') {
+            this.feature_group.eachLayer((layer) => {
+                if (layer instanceof L.CircleMarker) {
+                    this.feature_group.removeLayer(layer);
+                }
+            });
+        } else if (content.msg == 'clear_circle_markers') {
+            this.feature_group.eachLayer((layer) => {
+                if (layer instanceof L.CircleMarker && !(layer instanceof L.Circle)) {
+                    this.feature_group.removeLayer(layer);
+                }
+            });
+        } else if (content.msg == 'clear_rectangles') {
+            this.feature_group.eachLayer((layer) => {
+                if (layer instanceof L.Rectangle) {
+                    this.feature_group.removeLayer(layer);
+                }
+            });
+        } else if (content.msg == 'clear_markers') {
+            this.feature_group.eachLayer((layer) => {
+                if (layer instanceof L.Marker) {
+                    this.feature_group.removeLayer(layer);
+                }
+            });
+        }
+    }
 });
 
 
@@ -1333,10 +1371,10 @@ var LeafletDrawControlModel = LeafletControlModel.extend({
         _view_name : 'LeafletDrawControlView',
         _model_name : 'LeafletDrawControlModel',
 
-        layer : undefined,
         polyline : { shapeOptions : {} },
         polygon : { shapeOptions : {} },
         circle : {},
+        circlemarker : {},
         rectangle : {},
         marker : {},
         edit : true,

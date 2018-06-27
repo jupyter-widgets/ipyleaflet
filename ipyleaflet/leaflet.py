@@ -479,12 +479,6 @@ class DrawControl(Control):
     _view_name = Unicode('LeafletDrawControlView').tag(sync=True)
     _model_name = Unicode('LeafletDrawControlModel').tag(sync=True)
 
-    layer = Instance(FeatureGroup).tag(sync=True, **widget_serialization)
-
-    @default('layer')
-    def _default_layer(self):
-        return FeatureGroup()
-
     # Enable each of the following drawing by giving them a non empty dict of options
     # You can add Leaflet style options in the shapeOptions sub-dict
     # See https://github.com/Leaflet/Leaflet.draw#polylineoptions
@@ -493,6 +487,7 @@ class DrawControl(Control):
     # See https://github.com/Leaflet/Leaflet.draw#polygonoptions
     # TODO: mutable default value!
     polygon = Dict({'shapeOptions': {}}).tag(sync=True)
+    circlemarker = Dict({'shapeOptions': {}}).tag(sync=True)
 
     # Leave empty to disable these
     circle = Dict().tag(sync=True)
@@ -524,6 +519,27 @@ class DrawControl(Control):
 
     def on_draw(self, callback, remove=False):
         self._draw_callbacks.register_callback(callback, remove=remove)
+
+    def clear(self):
+        self.send({'msg': 'clear'})
+
+    def clear_polylines(self):
+        self.send({'msg': 'clear_polylines'})
+
+    def clear_polygons(self):
+        self.send({'msg': 'clear_polygons'})
+
+    def clear_circles(self):
+        self.send({'msg': 'clear_circles'})
+
+    def clear_circle_markers(self):
+        self.send({'msg': 'clear_circle_markers'})
+
+    def clear_rectangles(self):
+        self.send({'msg': 'clear_rectangles'})
+
+    def clear_markers(self):
+        self.send({'msg': 'clear_markers'})
 
 
 class Map(DOMWidget, InteractMixin):

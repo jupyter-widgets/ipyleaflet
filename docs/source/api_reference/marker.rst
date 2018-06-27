@@ -54,5 +54,5 @@ Methods
 ==========    =====================================     ===
 Method        Arguments                                 Doc
 ==========    =====================================     ===
-on_move       ``std::function<void(xeus::xjson)>``      Adds a callback on move event
+on_move       Callable object                           Adds a callback on move event
 ==========    =====================================     ===

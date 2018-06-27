@@ -54,6 +54,13 @@ If you have JupyterLab, you will also need to install the JupyterLab extension:
 $ jupyter labextension install jupyter-leaflet
 ```
 
+Some users have found that the ``jupyterlab-manager`` is also required
+in jupyterlab if the map does not display.
+
+```
+jupyter labextension install @jupyter-widgets/jupyterlab-manager
+```
+
 ## Installation from sources
 
 For a development installation (requires npm):

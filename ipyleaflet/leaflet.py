@@ -4,8 +4,8 @@ from ipywidgets import (
 )
 
 from traitlets import (
-    Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, link, observe,
-    default, validate, TraitError
+    Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
+    link, observe, default, validate, TraitError
 )
 
 from traittypes import Dataset
@@ -448,6 +448,79 @@ class Control(Widget):
 class LayersControl(Control):
     _view_name = Unicode('LeafletLayersControlView').tag(sync=True)
     _model_name = Unicode('LeafletLayersControlModel').tag(sync=True)
+
+
+class MeasureControl(Control):
+    _view_name = Unicode('LeafletMeasureControlView').tag(sync=True)
+    _model_name = Unicode('LeafletMeasureControlModel').tag(sync=True)
+
+    _length_units = ['feet', 'meters', 'miles', 'kilometers']
+    _area_units = ['acres', 'hectares', 'sqfeet', 'sqmeters', 'sqmiles']
+    _custom_units_dict = {}
+    _custom_units = Dict().tag(sync=True)
+
+    position = Enum(
+        ['topright', 'topleft', 'bottomright', 'bottomleft'],
+        default_value='topright',
+        help="""Possible values are topleft, topright, bottomleft
+                or bottomright"""
+    ).tag(sync=True, o=True)
+
+    primary_length_unit = Enum(
+        values=_length_units,
+        default_value='feet',
+        help="""Possible values are feet, meters, miles, kilometers or any user
+                defined unit"""
+    ).tag(sync=True, o=True)
+
+    secondary_length_unit = Enum(
+        values=_length_units,
+        default_value=None,
+        allow_none=True,
+        help="""Possible values are feet, meters, miles, kilometers or any user
+                defined unit"""
+    ).tag(sync=True, o=True)
+
+    primary_area_unit = Enum(
+        values=_area_units,
+        default_value='acres',
+        help="""Possible values are acres, hectares, sqfeet, sqmeters, sqmiles
+                or any user defined unit"""
+    ).tag(sync=True, o=True)
+
+    secondary_area_unit = Enum(
+        values=_area_units,
+        default_value=None,
+        allow_none=True,
+        help="""Possible values are acres, hectares, sqfeet, sqmeters, sqmiles
+                or any user defined unit"""
+    ).tag(sync=True, o=True)
+
+    active_color = Color('#ABE67E').tag(sync=True, o=True)
+    completed_color = Color('#C8F2BE').tag(sync=True, o=True)
+
+    popup_options = Dict({
+      'className': 'leaflet-measure-resultpopup',
+      'autoPanPadding': [10, 10]
+    }).tag(sync=True, o=True)
+
+    capture_z_index = Int(10000).tag(sync=True, o=True)
+
+    def add_length_unit(self, name, factor, decimals=0):
+        self._length_units.append(name)
+        self._add_unit(name, factor, decimals)
+
+    def add_area_unit(self, name, factor, decimals=0):
+        self._area_units.append(name)
+        self._add_unit(name, factor, decimals)
+
+    def _add_unit(self, name, factor, decimals):
+        self._custom_units_dict[name] = {
+            'factor': factor,
+            'display': name,
+            'decimals': decimals
+        }
+        self._custom_units = dict(**self._custom_units_dict)
 
 
 class SplitMapControl(Control):

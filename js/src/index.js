@@ -3,6 +3,7 @@ require('leaflet/dist/leaflet.css');
 require('leaflet-draw/dist/leaflet.draw.css');
 require('leaflet.markercluster/dist/MarkerCluster.css');
 require('leaflet.markercluster/dist/MarkerCluster.Default.css');
+require('leaflet-measure/dist/leaflet-measure.css');
 require('./jupyter-leaflet.css')
 
 // Forcibly load the marker icon images to be in the bundle.

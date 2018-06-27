@@ -24,6 +24,17 @@ If you have JupyterLab, you will also need to install the JupyterLab extension:
 
     jupyter labextension install jupyter-leaflet
 
+Some users have found that the ``jupyterlab-manager`` is also required
+if the map does not display. See `issue 173
+<https://github.com/jupyter-widgets/ipyleaflet/issues/173>`_ and
+`issue 168
+<https://github.com/jupyter-widgets/ipyleaflet/issues/168>`_ for
+details.
+
+.. code:: bash
+
+   jupyter labextension install @jupyter-widgets/jupyterlab-manager
+
 Development installation
 ========================
 

@@ -6,10 +6,6 @@
 
 A Jupyter / Leaflet bridge enabling interactive maps in the Jupyter notebook.
 
-## Docs
-
-See [ipyleaflet.readthedocs.io](https://ipyleaflet.readthedocs.io/en/latest/?badge=latest)
-
 ## Usage
 
 Selecting a basemap for a leaflet map:
@@ -76,6 +72,12 @@ $ jupyter nbextension enable --py --sys-prefix ipyleaflet
 Note for developers: the `--symlink` argument on Linux or OS X allows one to
 modify the JavaScript code in-place. This feature is not available
 with Windows.
+
+## Documentation
+
+To get started with using `ipyleaflet`, check out the full documentation
+
+https://ipyleaflet.readthedocs.io/
 
 ## License
 

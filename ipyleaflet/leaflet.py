@@ -215,10 +215,10 @@ class Velocity(Layer):
     _view_name = Unicode('LeafletVelocityView').tag(sync=True)
     _model_name = Unicode('LeafletVelocityModel').tag(sync=True)
 
-    u_var = Unicode('')
-    v_var = Unicode('')
-    lat_dim = Unicode('latitude')
-    lon_dim = Unicode('longitude')
+    zonal_speed = Unicode('', help='Name of the zonal speed in the dataset')
+    meridional_speed = Unicode('', help='Name of the meridional speed in the dataset')
+    latitude_dimension = Unicode('latitude', help='Name of the latitude dimension in the dataset')
+    longitude_dimension = Unicode('longitude', help='Name of the longitude dimension in the dataset')
     units = Unicode(None, allow_none=True)
 
     data = Dataset().tag(sync=True, to_json=ds_x_to_json)

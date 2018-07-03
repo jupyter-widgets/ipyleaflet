@@ -23,10 +23,10 @@ Example
         'displayEmptyString': 'No wind data'
     }
     wind = Velocity(data=ds,
-                    u_var='u_wind',
-                    v_var='v_wind',
-                    lat_dim='lat',
-                    lon_dim='lon',
+                    zonal_speed='u_wind',
+                    meridional_speed='v_wind',
+                    latitude_dimension='lat',
+                    longitude_dimension='lon',
                     velocity_scale=0.01,
                     max_velocity=20,
                     display_options=display_options)
@@ -48,20 +48,19 @@ Attributes
 ----------
 
 
-===============    ===================================================================    ====
-Attribute          Default Value                                                          Doc
-===============    ===================================================================    ====
-u_var              ''                                                                     Variable name in underlying dataset for `u`
-v_var              ''                                                                     Variable name in underlying dataset for `v`
-lat_dim            'latitude'                                                             Coordinate name for the lattitude
-lon_dim            'longitude'                                                            Coordinate name for the longitude
-units              None                                                                   Units
-data               Empty dataset                                                          Underlying dataset
-display_values     True                                                                   Display velocity data on mouse hover
-display_options    {}                                                                     Display options
-min_velocity       0.0                                                                    Used to align color scale
-max_velocity       10.0                                                                   Used to align color scale
-velocity_scale     0.005                                                                  Modifier for particle animations
-color_scale        []                                                                     Array of hex/rgb colors for user-specified color scale.
-===============    ===================================================================    ====
-
+======================    ===================================================================    ====
+Attribute                 Default Value                                                          Doc
+======================    ===================================================================    ====
+data                      Empty dataset                                                          Underlying dataset
+zonal_speed               ''                                                                     Variable name in underlying dataset for the zonal speed
+meridional_speed          ''                                                                     Variable name in underlying dataset for the meridional speed
+latitude_dimension        'latitude'                                                             Name of the latitude dimension in underlying dataset
+longitude_dimension       'longitude'                                                            Name of the longitude dimension in underlying dataset
+units                     None                                                                   Units
+display_values            True                                                                   Display velocity data on mouse hover
+display_options           {}                                                                     Display options
+min_velocity              0.0                                                                    Used to align color scale
+max_velocity              10.0                                                                   Used to align color scale
+velocity_scale            0.005                                                                  Modifier for particle animations
+color_scale               []                                                                     Array of hex/rgb colors for user-specified color scale.
+======================    ===================================================================    ====

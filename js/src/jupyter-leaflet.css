@@ -1,6 +1,7 @@
 .jupyter-widgets.leaflet-container {
     height: 400px;
     overflow: hidden;
+    flex: 1;
 }
 
 .jp-LinkedOutputView .jupyter-widgets.leaflet-container {

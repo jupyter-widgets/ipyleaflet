@@ -99,6 +99,8 @@ class Marker(UILayer):
     alt = Unicode('').tag(sync=True, o=True)
     rise_on_hover = Bool(False).tag(sync=True, o=True)
     rise_offset = Int(250).tag(sync=True, o=True)
+    rotation_angle = Float(0).tag(sync=True, o=True)
+    rotation_origin = Unicode('').tag(sync=True, o=True)
 
     _move_callbacks = Instance(CallbackDispatcher, ())
 

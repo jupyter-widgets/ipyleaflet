@@ -7,6 +7,7 @@ require('leaflet.markercluster');
 require('leaflet-velocity');
 require('leaflet-measure');
 require('./leaflet-heat.js');
+require('leaflet-rotatedmarker');
 
 // https://github.com/Leaflet/Leaflet/issues/4968
 // Marker file names are hard-coded in the leaflet source causing
@@ -152,6 +153,12 @@ var LeafletMarkerView = LeafletUILayerView.extend({
                 this.obj.setOpacity(0);
             }
         }, this);
+        this.listenTo(this.model, 'change:rotation_angle', function () {
+            this.obj.setRotationAngle(this.model.get('rotation_angle'));
+        }, this);
+        this.listenTo(this.model, 'change:rotation_origin', function () {
+            this.obj.setRotationOrigin(this.model.get('rotation_origin'));
+        }, this);
 
         this.obj.setLatLng(this.model.get('location'));
         this.obj.setZIndexOffset(this.model.get('z_index_offset'));
@@ -160,6 +167,8 @@ var LeafletMarkerView = LeafletUILayerView.extend({
         } else {
             this.obj.setOpacity(0);
         }
+        this.obj.setRotationAngle(this.model.get('rotation_angle'));
+        this.obj.setRotationOrigin(this.model.get('rotation_origin'));
     },
 });
 
@@ -1130,7 +1139,9 @@ var LeafletMarkerModel = LeafletUILayerModel.extend({
         title: '',
         alt: '',
         rise_on_hover: false,
-        rise_offset: 250
+        rise_offset: 250,
+        rotation_angle: 0,
+        rotation_origin: ""
     })
 });
 

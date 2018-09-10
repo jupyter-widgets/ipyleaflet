@@ -14,6 +14,7 @@ ipyleaflet: Interactive maps in the Jupyter notebook
     api_reference/map
     api_reference/tile_layer
     api_reference/marker
+    api_reference/icon
     api_reference/popup
     api_reference/wms_layer
     api_reference/image_video_overlay

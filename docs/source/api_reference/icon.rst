@@ -1,5 +1,5 @@
 .. raw:: html
-    :file: embed_widgets/icon.html
+    :file: embed_widgets/marker_icon.html
 
 Icon
 ======

@@ -9,7 +9,7 @@ Example
 
 .. code::
 
-    from ipyleaflet import Marker, Icon
+    from ipyleaflet import Marker, Icon, Map
 
     center = (52.204793, 360.121558)
 

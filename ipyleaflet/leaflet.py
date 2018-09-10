@@ -83,6 +83,19 @@ class UILayer(Layer):
     _model_name = Unicode('LeafletUILayerModel').tag(sync=True)
 
 
+class Icon(UILayer):
+    _view_name = Unicode('LeafletIconView').tag(sync=True)
+    _model_name = Unicode('LeafletIconModel').tag(sync=True)
+
+    icon_url = Unicode('').tag(sync=True, o=True)
+    shadow_url = Unicode(None, allow_none=True).tag(sync=True, o=True)
+    icon_size = Tuple((10, 10), allow_none=True).tag(sync=True, o=True)
+    shadow_size = Tuple((10, 10), allow_none=True).tag(sync=True, o=True)
+    icon_anchor = Tuple((0, 0), allow_none=True).tag(sync=True, o=True)
+    shadow_anchor = Tuple((0, 0), allow_none=True).tag(sync=True, o=True)
+    popup_anchor = Tuple((0, 0), allow_none=True).tag(sync=True, o=True)
+
+
 class Marker(UILayer):
     _view_name = Unicode('LeafletMarkerView').tag(sync=True)
     _model_name = Unicode('LeafletMarkerModel').tag(sync=True)
@@ -101,6 +114,7 @@ class Marker(UILayer):
     rise_offset = Int(250).tag(sync=True, o=True)
     rotation_angle = Float(0).tag(sync=True, o=True)
     rotation_origin = Unicode('').tag(sync=True, o=True)
+    icon = Instance(Icon, allow_none=True, default_value=None).tag(sync=True, o=True, **widget_serialization)
 
     _move_callbacks = Instance(CallbackDispatcher, ())
 
@@ -235,8 +249,8 @@ class Velocity(Layer):
         'displayPosition': 'bottomleft',
         'displayEmptyString': 'No velocity data',
         'speedUnit': 'kt'
-        }).tag(sync=True)
-    min_velocity = Float(0).tag(sync=True,o=True)
+    }).tag(sync=True)
+    min_velocity = Float(0).tag(sync=True, o=True)
     max_velocity = Float(10).tag(sync=True, o=True)
     velocity_scale = Float(0.005).tag(sync=True, o=True)
     color_scale = List([
@@ -255,7 +269,7 @@ class Velocity(Layer):
         "rgb(237,45,28)",
         "rgb(220,24,32)",
         "rgb(180,0,35)"
-        ]).tag(sync=True, o=True)
+    ]).tag(sync=True, o=True)
 
 
 class Heatmap(RasterLayer):
@@ -502,8 +516,8 @@ class MeasureControl(Control):
     completed_color = Color('#C8F2BE').tag(sync=True, o=True)
 
     popup_options = Dict({
-      'className': 'leaflet-measure-resultpopup',
-      'autoPanPadding': [10, 10]
+        'className': 'leaflet-measure-resultpopup',
+        'autoPanPadding': [10, 10]
     }).tag(sync=True, o=True)
 
     capture_z_index = Int(10000).tag(sync=True, o=True)
@@ -636,10 +650,10 @@ class Map(DOMWidget, InteractMixin):
 
     # Specification of the basemap
     basemap = Dict(default_value=dict(
-            url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            max_zoom=19,
-            attribution='Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
-        )).tag(sync=True, o=True)
+        url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        max_zoom=19,
+        attribution='Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+    )).tag(sync=True, o=True)
     modisdate = Unicode('yesterday').tag(sync=True)
 
     # Interaction options

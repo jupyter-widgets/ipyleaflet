@@ -114,11 +114,20 @@ var LeafletUILayerView = LeafletLayerView.extend({
 
 var LeafletMarkerView = LeafletUILayerView.extend({
 
+    initialize: function() {
+        // Public constructor
+        LeafletMarkerView.__super__.initialize.apply(this, arguments);
+        this.icon_promise = Promise.resolve();
+    },
+
+
     create_obj: function () {
         var that = this;
+        var options = this.get_options();
+        delete options['icon'];
         this.obj = L.marker(
             this.model.get('location'),
-            this.get_options()
+            options
         );
 
         this.obj.on('dragend', function(event) {
@@ -127,6 +136,32 @@ var LeafletMarkerView = LeafletUILayerView.extend({
             that.model.set('location', [position.lat, position.lng]);
             that.touch();
         });
+    },
+
+    remove: function() {
+        LeafletMarkerView.__super__.remove.apply(this, arguments);
+        var that = this;
+        this.icon_promise.then(function() {
+            if (that.icon) {
+                that.icon.remove();
+            }
+        });
+    },
+
+    set_icon: function(value) {
+        if (this.icon) {
+            this.icon.remove();
+        }
+        if (value) {
+            var that = this;
+            this.icon_promise = this.icon_promise.then(function() {
+                return that.create_child_view(value).then(function(view) {
+                    that.obj.setIcon(view.obj);
+                    that.icon = view;
+                    that.trigger('icon:created');
+                });
+            });
+        }
     },
 
     model_events: function () {
@@ -169,7 +204,22 @@ var LeafletMarkerView = LeafletUILayerView.extend({
         }
         this.obj.setRotationAngle(this.model.get('rotation_angle'));
         this.obj.setRotationOrigin(this.model.get('rotation_origin'));
+        this.listenTo(this.model, 'change:icon', function () {
+            this.set_icon(this.model.get('icon'));
+        }, this);        
+        this.set_icon(this.model.get('icon'));
     },
+});
+
+
+var LeafletIconView = LeafletUILayerView.extend({
+
+    create_obj: function () {
+        var that = this;
+
+        this.obj = L.icon(this.get_options());
+    },
+
 });
 
 
@@ -1126,6 +1176,21 @@ var LeafletUILayerModel = LeafletLayerModel.extend({
 });
 
 
+var LeafletIconModel = LeafletUILayerModel.extend({
+    defaults: _.extend({}, LeafletUILayerModel.prototype.defaults, {
+        _view_name :'LeafletIconView',
+        _model_name : 'LeafletIconModel',
+        icon_url: "",
+        shadow_url: "",
+        icon_size :  [10, 10],
+        shadow_size :  [10, 10],
+        icon_anchor: [0, 0],
+        shadow_anchor: [0, 0],
+        popup_anchor: [0, 0]
+    })
+});
+
+
 var LeafletMarkerModel = LeafletUILayerModel.extend({
     defaults: _.extend({}, LeafletUILayerModel.prototype.defaults, {
         _view_name :'LeafletMarkerView',
@@ -1141,8 +1206,13 @@ var LeafletMarkerModel = LeafletUILayerModel.extend({
         rise_on_hover: false,
         rise_offset: 250,
         rotation_angle: 0,
-        rotation_origin: ""
+        rotation_origin: "",
+        icon: null
     })
+}, {
+    serializers: _.extend({
+        icon: { deserialize: widgets.unpack_models }
+    }, LeafletUILayerModel.serializers)
 });
 
 
@@ -1548,6 +1618,7 @@ module.exports = {
     // views
     LeafletLayerView : LeafletLayerView,
     LeafletUILayerView : LeafletUILayerView,
+    LeafletIconView : LeafletIconView,
     LeafletMarkerView : LeafletMarkerView,
     LeafletPopupView : LeafletPopupView,
     LeafletRasterLayerView : LeafletRasterLayerView,
@@ -1579,6 +1650,7 @@ module.exports = {
     LeafletLayerModel : LeafletLayerModel,
     LeafletUILayerModel : LeafletUILayerModel,
     LeafletUILayerModel : LeafletUILayerModel,
+    LeafletIconModel : LeafletIconModel,
     LeafletMarkerModel : LeafletMarkerModel,
     LeafletPopupModel : LeafletPopupModel,
     LeafletRasterLayerModel : LeafletRasterLayerModel,

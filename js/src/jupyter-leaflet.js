@@ -468,7 +468,7 @@ var LeafletHeatmapView = LeafletLayerView.extend({
     model_events: function () {
         LeafletHeatmapView.__super__.model_events.apply(this, arguments);
 
-        this.listenTo(this.model, 'change:latlngs', function () {
+        this.listenTo(this.model, 'change:locations', function () {
             this.obj.setLatLngs(this.model.get('locations'));
         }, this);
         var key;

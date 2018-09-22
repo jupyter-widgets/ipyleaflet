@@ -123,11 +123,9 @@ var LeafletMarkerView = LeafletUILayerView.extend({
 
     create_obj: function () {
         var that = this;
-        var options = this.get_options();
-        delete options['icon'];
         this.obj = L.marker(
             this.model.get('location'),
-            options
+            this.get_options()
         );
 
         this.obj.on('dragend', function(event) {
@@ -158,7 +156,6 @@ var LeafletMarkerView = LeafletUILayerView.extend({
                 return that.create_child_view(value).then(function(view) {
                     that.obj.setIcon(view.obj);
                     that.icon = view;
-                    that.trigger('icon:created');
                 });
             });
         }

@@ -103,6 +103,7 @@ class Marker(UILayer):
     location = List(def_loc).tag(sync=True)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True)
     visible = Bool(True).tag(sync=True)
+    icon = Instance(Icon, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
 
     # Options
     z_index_offset = Int(0).tag(sync=True, o=True)
@@ -114,7 +115,6 @@ class Marker(UILayer):
     rise_offset = Int(250).tag(sync=True, o=True)
     rotation_angle = Float(0).tag(sync=True, o=True)
     rotation_origin = Unicode('').tag(sync=True, o=True)
-    icon = Instance(Icon, allow_none=True, default_value=None).tag(sync=True, o=True, **widget_serialization)
 
     _move_callbacks = Instance(CallbackDispatcher, ())
 

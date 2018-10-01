@@ -83,6 +83,19 @@ class UILayer(Layer):
     _model_name = Unicode('LeafletUILayerModel').tag(sync=True)
 
 
+class Icon(UILayer):
+    _view_name = Unicode('LeafletIconView').tag(sync=True)
+    _model_name = Unicode('LeafletIconModel').tag(sync=True)
+
+    icon_url = Unicode('').tag(sync=True, o=True)
+    shadow_url = Unicode(None, allow_none=True).tag(sync=True, o=True)
+    icon_size = Tuple((10, 10), allow_none=True).tag(sync=True, o=True)
+    shadow_size = Tuple((10, 10), allow_none=True).tag(sync=True, o=True)
+    icon_anchor = Tuple((0, 0), allow_none=True).tag(sync=True, o=True)
+    shadow_anchor = Tuple((0, 0), allow_none=True).tag(sync=True, o=True)
+    popup_anchor = Tuple((0, 0), allow_none=True).tag(sync=True, o=True)
+
+
 class Marker(UILayer):
     _view_name = Unicode('LeafletMarkerView').tag(sync=True)
     _model_name = Unicode('LeafletMarkerModel').tag(sync=True)
@@ -90,6 +103,7 @@ class Marker(UILayer):
     location = List(def_loc).tag(sync=True)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True)
     visible = Bool(True).tag(sync=True)
+    icon = Instance(Icon, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
 
     # Options
     z_index_offset = Int(0).tag(sync=True, o=True)
@@ -99,6 +113,8 @@ class Marker(UILayer):
     alt = Unicode('').tag(sync=True, o=True)
     rise_on_hover = Bool(False).tag(sync=True, o=True)
     rise_offset = Int(250).tag(sync=True, o=True)
+    rotation_angle = Float(0).tag(sync=True, o=True)
+    rotation_origin = Unicode('').tag(sync=True, o=True)
 
     _move_callbacks = Instance(CallbackDispatcher, ())
 

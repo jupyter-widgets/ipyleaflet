@@ -46,6 +46,9 @@ rise_on_hover            False                   The z-index offset used for the
 opacity                  1.0
 visible                  True
 rise_offset              250                     The z-index offset used for the `rise_on_hover` feature
+rotation_angle           0                       The rotation angle of the marker in degrees
+rotation_origin          'bottom center'         The rotation origin of the marker
+icon                     None                    The icon for the marker
 =====================    =====================   ===
 
 Methods

@@ -136,7 +136,7 @@ setup_args = {
     'install_requires': [
         'ipywidgets>=7.0.0,<8',
         'traittypes>=0.2.1,<3',
-        'xarray>=0.10,<0.11',
+        'xarray>=0.10,<0.10.8',
         ],
     'packages': find_packages(),
     'zip_safe': False,

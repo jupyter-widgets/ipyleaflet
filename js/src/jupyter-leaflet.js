@@ -203,7 +203,7 @@ var LeafletMarkerView = LeafletUILayerView.extend({
         this.obj.setRotationOrigin(this.model.get('rotation_origin'));
         this.listenTo(this.model, 'change:icon', function () {
             this.set_icon(this.model.get('icon'));
-        }, this);        
+        }, this);
         this.set_icon(this.model.get('icon'));
     },
 });
@@ -681,6 +681,12 @@ var LeafletGeoJSONView = LeafletFeatureGroupView.extend({
                 });
             }
         });
+    },
+
+    model_events: function () {
+        this.listenTo(this.model, 'change:style', function () {
+            this.obj.setStyle(this.model.get('style'));
+        }, this);
     },
 });
 

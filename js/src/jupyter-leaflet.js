@@ -691,14 +691,6 @@ var LeafletGeoJSONView = LeafletFeatureGroupView.extend({
 });
 
 
-var LeafletMultiPolygonView = LeafletFeatureGroupView.extend({
-    create_obj: function () {
-        this.obj = L.multiPolygon(
-            this.model.get('locations'),
-            this.get_options()
-        );
-    },
-});
 
 
 var LeafletControlView = LeafletWidgetView.extend({
@@ -1455,13 +1447,6 @@ var LeafletGeoJSONModel = LeafletFeatureGroupModel.extend({
 });
 
 
-var LeafletMultiPolygonModel = LeafletFeatureGroupModel.extend({
-    defaults: _.extend({}, LeafletFeatureGroupModel.prototype.defaults, {
-        _view_name : 'LeafletMultiPolygonView',
-        _model_name : 'LeafletMultiPolygonModel',
-        locations: []
-    })
-});
 
 
 var LeafletControlModel = widgets.WidgetModel.extend({
@@ -1642,7 +1627,6 @@ module.exports = {
     LeafletLayerGroupView : LeafletLayerGroupView,
     LeafletFeatureGroupView : LeafletFeatureGroupView,
     LeafletGeoJSONView : LeafletGeoJSONView,
-    LeafletMultiPolygonView : LeafletMultiPolygonView,
     LeafletControlView : LeafletControlView,
     LeafletLayersControlView : LeafletLayersControlView,
     LeafletMeasureControlView : LeafletMeasureControlView,
@@ -1674,7 +1658,6 @@ module.exports = {
     LeafletLayerGroupModel : LeafletLayerGroupModel,
     LeafletFeatureGroupModel : LeafletFeatureGroupModel,
     LeafletGeoJSONModel : LeafletGeoJSONModel,
-    LeafletMultiPolygonModel : LeafletMultiPolygonModel,
     LeafletControlModel : LeafletControlModel,
     LeafletLayersControlModel : LeafletLayersControlModel,
     LeafletMeasureControlModel : LeafletMeasureControlModel,

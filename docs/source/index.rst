@@ -18,6 +18,7 @@ ipyleaflet: Interactive maps in the Jupyter notebook
     api_reference/popup
     api_reference/wms_layer
     api_reference/image_video_overlay
+    api_reference/polyline
     api_reference/polygon
     api_reference/rectangle
     api_reference/circle

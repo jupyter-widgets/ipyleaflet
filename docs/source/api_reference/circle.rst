@@ -28,12 +28,12 @@ Attributes
 ==============    ================   ===
 Attribute         Default Value      Doc
 ==============    ================   ===
-location          (0.0, 0.0)         Location of the circle
-radius            10                 Radius of the circle, in pixels
+location          (0.0, 0.0)         Circle location
+radius            10                 Circle radius in pixels
 stroke            True               Set it to `false` to disable borders
-color             "#0033FF"          Color of the stroke
-opacity           1.0                Opacity of the stroke
-weight            5                  Width of the stroke in pixels
+color             "#0033FF"          Stroke color
+opacity           1.0                Stroke opacity
+weight            5                  Stroke width in pixels
 fill              True               Whether to fill the circle or not
 fill_color        "#0033FF"
 fill_opacity      0.2

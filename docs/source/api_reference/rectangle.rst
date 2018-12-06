@@ -1,3 +1,7 @@
+.. raw:: html
+    :file: embed_widgets/rectangle.html
+
+
 Rectangle
 =========
 
@@ -17,6 +21,20 @@ Example
     m.add_layer(rectangle)
 
     m
+
+.. raw:: html
+
+    <script type="application/vnd.jupyter.widget-view+json">
+    {
+    "version_major": 2,
+    "version_minor": 0,
+    "model_id": "0c255695e6294b2e92bc1a8af7688179"
+    }
+    </script>
+    <div style ="height:30px;"> </div>
+
+
+
 
 Attributes
 ----------

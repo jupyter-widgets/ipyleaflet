@@ -1,3 +1,7 @@
+.. raw:: html
+    :file: embed_widgets/layer_group.html
+
+
 Layer Group
 ===========
 
@@ -30,6 +34,20 @@ Example
     layer_group.remove_layer(circle)
 
     m
+
+
+.. raw:: html
+
+
+   <script type="application/vnd.jupyter.widget-view+json">
+   {
+   "version_major": 2,
+   "version_minor": 0,
+   "model_id": "c869763820724761a6049c2eacb0c7e8"
+   }
+   </script>
+   <div style ="height:30px;"> </div>
+
 
 Attributes
 ----------

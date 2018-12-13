@@ -1,3 +1,7 @@
+.. raw:: html
+    :file: embed_widgets/marker_cluster.html
+
+
 Marker Cluster
 ==============
 
@@ -21,6 +25,21 @@ Example
     m.add_layer(marker_cluster);
 
     m
+
+.. raw:: html
+
+
+    <script type="application/vnd.jupyter.widget-view+json">
+    {
+    "model_id": "28d4976eec044342ab3cbb2fbec5cc82",
+    "version_major": 2,
+    "version_minor": 0
+    }
+    </script>
+    <div style ="height:30px;"> </div>
+
+
+
 
 Attributes
 ----------

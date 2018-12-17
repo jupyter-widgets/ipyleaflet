@@ -129,14 +129,14 @@ basemaps = Bunch(
     ),
     CartoDB = Bunch(
         Positron = dict(
-            url = 'http://tile.mtbmap.cz/mtbmap_tiles/{z}/{x}/{y}.png',
+            url = 'http://c.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
             max_zoom = 20,
-            attribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &amp; USGS',
+            attribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
             name = 'CartoDB.Positron'
         ),
         DarkMatter = dict(
             url = 'http://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-            max_zoom = 19,
+            max_zoom = 20,
             attribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
             name = 'CartoDB.DarkMatter'
         )

@@ -687,6 +687,11 @@ var LeafletGeoJSONView = LeafletFeatureGroupView.extend({
         this.listenTo(this.model, 'change:style', function () {
             this.obj.setStyle(this.model.get('style'));
         }, this);
+        this.listenTo(this.model, 'change:data', function () {
+            this.map_view.obj.removeLayer(this.obj);
+            this.create_obj();
+            this.map_view.obj.addLayer(this.obj);
+        }, this);
     },
 });
 

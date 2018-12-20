@@ -63,6 +63,13 @@ var LeafletLayerView = LeafletWidgetView.extend({
         this.listenTo(this.model, 'change:popup', function(model, value) {
             this.bind_popup(value);
         });
+        this.obj.on('click dblclick mousedown mouseup mouseover mouseout', (event) => {
+            this.send({
+                event: 'interaction',
+                type: event.type,
+                coordinates: [event.latlng.lat, event.latlng.lng]
+            });
+        });
     },
 
     leaflet_events: function () {

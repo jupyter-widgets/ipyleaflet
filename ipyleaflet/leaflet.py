@@ -73,9 +73,54 @@ class Layer(Widget, InteractMixin):
 
     options = List(trait=Unicode).tag(sync=True)
 
+    def __init__(self, **kwargs):
+        super(Layer, self).__init__(**kwargs)
+        self.on_msg(self._handle_mouse_events)
+
     @default('options')
     def _default_options(self):
         return [name for name in self.traits(o=True)]
+
+    # Event handling
+    _click_callbacks = Instance(CallbackDispatcher, ())
+    _dblclick_callbacks = Instance(CallbackDispatcher, ())
+    _mousedown_callbacks = Instance(CallbackDispatcher, ())
+    _mouseup_callbacks = Instance(CallbackDispatcher, ())
+    _mouseover_callbacks = Instance(CallbackDispatcher, ())
+    _mouseout_callbacks = Instance(CallbackDispatcher, ())
+
+    def _handle_mouse_events(self, _, content, buffers):
+        event_type = content.get('type', '')
+        if event_type == 'click':
+            self._click_callbacks(**content)
+        if event_type == 'dblclick':
+            self._dblclick_callbacks(**content)
+        if event_type == 'mousedown':
+            self._mousedown_callbacks(**content)
+        if event_type == 'mouseup':
+            self._mouseup_callbacks(**content)
+        if event_type == 'mouseover':
+            self._mouseover_callbacks(**content)
+        if event_type == 'mouseout':
+            self._mouseout_callbacks(**content)
+
+    def on_click(self, callback, remove=False):
+        self._click_callbacks.register_callback(callback, remove=remove)
+
+    def on_dblclick(self, callback, remove=False):
+        self._dblclick_callbacks.register_callback(callback, remove=remove)
+
+    def on_mousedown(self, callback, remove=False):
+        self._mousedown_callbacks.register_callback(callback, remove=remove)
+
+    def on_mouseup(self, callback, remove=False):
+        self._mouseup_callbacks.register_callback(callback, remove=remove)
+
+    def on_mouseover(self, callback, remove=False):
+        self._mouseover_callbacks.register_callback(callback, remove=remove)
+
+    def on_mouseout(self, callback, remove=False):
+        self._mouseout_callbacks.register_callback(callback, remove=remove)
 
 
 class UILayer(Layer):

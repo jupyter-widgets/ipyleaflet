@@ -10,3 +10,4 @@ dependencies:
   - pillow
   - matplotlib
   - branca
+  - geopandas

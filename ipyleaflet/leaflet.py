@@ -492,6 +492,11 @@ class Choropleth(GeoJSON):
     colormap = Instance(ColorMap)
     border_color = Color('black')
 
+    @observe('choro_data')
+    def _update_bounds(self, change):
+        self.value_min = min(self.choro_data.items(), key=lambda x: x[1])[1]
+        self.value_max = max(self.choro_data.items(), key=lambda x: x[1])[1]
+
     @observe('value_min', 'value_max', 'geo_data', 'choro_data', 'colormap', 'border_color')
     def _update_data(self, change):
         self.data = self._get_data()
@@ -505,15 +510,11 @@ class Choropleth(GeoJSON):
             return {}
 
         if self.value_min is None:
-            value_min = min(self.choro_data.items(), key=lambda x: x[1])[1]
-        else:
-            value_min = self.value_min
+            self.value_min = min(self.choro_data.items(), key=lambda x: x[1])[1]
         if self.value_max is None:
-            value_max = max(self.choro_data.items(), key=lambda x: x[1])[1]
-        else:
-            value_max = self.value_max
+            self.value_max = max(self.choro_data.items(), key=lambda x: x[1])[1]
 
-        colormap = self.colormap.scale(value_min, value_max)
+        colormap = self.colormap.scale(self.value_min, self.value_max)
         color_dict = {key: colormap(self.choro_data[key]) for key in self.choro_data.keys()}
 
         data = copy.deepcopy(self.geo_data)

@@ -660,11 +660,9 @@ var LeafletFeatureGroupView = LeafletLayerGroupView.extend({
 var LeafletGeoJSONView = LeafletFeatureGroupView.extend({
     create_obj: function () {
         var that = this;
-        var style = this.model.get('style');
-        if (_.isEmpty(style)) {
-            style = function (feature) {
-                return feature.properties.style;
-            }
+        var model_style = this.model.get('style');
+        style = function (feature) {
+            return _.extend(feature.properties.style, model_style);
         }
         this.obj = L.geoJson(this.model.get('data'), {
             style: style,

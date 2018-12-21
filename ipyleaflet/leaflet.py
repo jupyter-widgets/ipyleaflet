@@ -1,3 +1,5 @@
+import copy
+
 from ipywidgets import (
     Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
     interactive
@@ -7,6 +9,8 @@ from traitlets import (
     Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
     link, observe, default, validate, TraitError
 )
+
+from branca.colormap import linear, ColorMap
 
 from traittypes import Dataset
 
@@ -479,6 +483,49 @@ class GeoJSON(FeatureGroup):
         self._hover_callbacks.register_callback(callback, remove=remove)
 
 
+class Choropleth(GeoJSON):
+
+    geo_data = Dict()
+    choro_data = Dict()
+    value_min = Float(None, allow_none=True)
+    value_max = Float(None, allow_none=True)
+    colormap = Instance(ColorMap)
+    border_color = Color('black')
+
+    @observe('value_min', 'value_max', 'geo_data', 'choro_data', 'colormap', 'border_color')
+    def _update_data(self, change):
+        self.data = self._get_data()
+
+    @default('colormap')
+    def _default_colormap(self):
+        return linear.OrRd_06
+
+    def _get_data(self):
+        if not self.geo_data:
+            return {}
+
+        if self.value_min is None:
+            value_min = min(self.choro_data.items(), key=lambda x: x[1])[1]
+        else:
+            value_min = self.value_min
+        if self.value_max is None:
+            value_max = max(self.choro_data.items(), key=lambda x: x[1])[1]
+        else:
+            value_max = self.value_max
+
+        colormap = self.colormap.scale(value_min, value_max)
+        color_dict = {key: colormap(self.choro_data[key]) for key in self.choro_data.keys()}
+
+        data = copy.deepcopy(self.geo_data)
+        for feature in data['features']:
+            feature['properties']['style'] = dict(fillColor=color_dict[feature['id']],
+                                                  color=self.border_color,
+                                                  weight=0.9)
+        return data
+
+    def __init__(self, **kwargs):
+        super(Choropleth, self).__init__(**kwargs)
+        self.data = self._get_data()
 
 
 class ControlException(TraitError):

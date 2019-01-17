@@ -252,6 +252,7 @@ class WMSLayer(TileLayer):
     transparent = Bool(False).tag(sync=True, o=True)
     crs = Unicode(allow_none=True, default_value=None).tag(sync=True, o=True)
     uppercase = Bool(False).tag(sync=True, o=True)
+    cql_filter = Unicode(allow_none=True, default_value=None).tag(sync=True, o=True)
 
 
 class ImageOverlay(RasterLayer):

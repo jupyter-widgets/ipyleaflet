@@ -1273,6 +1273,7 @@ var LeafletWMSLayerModel = LeafletTileLayerModel.extend({
         version: '1.1.1',
 
         crs : null,
+        cql_filter : null,
         uppercase : false
     })
 });

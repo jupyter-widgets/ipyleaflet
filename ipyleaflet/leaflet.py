@@ -368,7 +368,7 @@ class Polyline(Path):
 
     # Options
     smooth_factor = Float(1.0).tag(sync=True, o=True)
-    no_clip = Bool(False).tag(sync=True, o=True)
+    no_clip = Bool(True).tag(sync=True, o=True)
 
 
 class Polygon(Polyline):

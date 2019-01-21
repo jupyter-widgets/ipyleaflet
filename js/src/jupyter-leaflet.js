@@ -1373,7 +1373,7 @@ var LeafletPolylineModel = LeafletPathModel.extend({
 
         locations : [],
         smooth_factor : 1.0,
-        no_clip : false
+        no_clip : true
     })
 });
 

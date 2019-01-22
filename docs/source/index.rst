@@ -28,6 +28,7 @@ ipyleaflet: Interactive maps in the Jupyter notebook
     api_reference/velocity
     api_reference/layer_group
     api_reference/geo_json
+    api_reference/choropleth
     api_reference/layers_control
     api_reference/measure_control
     api_reference/split_map_control

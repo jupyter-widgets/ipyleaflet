@@ -324,6 +324,13 @@ var LeafletTileLayerView = LeafletRasterLayerView.extend({
             });
         });
     },
+
+    model_events: function () {
+        LeafletTileLayerView.__super__.model_events.apply(this, arguments);
+        this.listenTo(this.model, 'change:url', function () {
+            this.obj.setUrl(this.model.get('url'));
+        }, this);
+    },
 });
 
 var LeafletWMSLayerView = LeafletTileLayerView.extend({

@@ -237,6 +237,13 @@ class TileLayer(RasterLayer):
         self._load_callbacks.register_callback(callback, remove=remove)
 
 
+class LocalTileLayer(TileLayer):
+    _view_name = Unicode('LeafletLocalTileLayerView').tag(sync=True)
+    _model_name = Unicode('LeafletLocalTileLayerModel').tag(sync=True)
+
+    path = Unicode('').tag(sync=True)
+
+
 class WMSLayer(TileLayer):
     _view_name = Unicode('LeafletWMSLayerView').tag(sync=True)
     _model_name = Unicode('LeafletWMSLayerModel').tag(sync=True)

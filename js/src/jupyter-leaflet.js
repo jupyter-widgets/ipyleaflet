@@ -70,12 +70,18 @@ var LeafletLayerView = LeafletWidgetView.extend({
                 coordinates: [event.latlng.lat, event.latlng.lng]
             });
         });
+        this.obj.on('popupopen', (event) => {
+            // This is a workaround for making maps rendered correctly in popups
+            window.dispatchEvent(new Event('resize'));
+        });
     },
 
     leaflet_events: function () {
     },
 
     model_events: function () {
+        this.listenTo(this.model, 'change:popup_min_width', this.update_popup, this);
+        this.listenTo(this.model, 'change:popup_max_height', this.update_popup, this);
     },
 
     remove: function() {
@@ -97,7 +103,7 @@ var LeafletLayerView = LeafletWidgetView.extend({
             var that = this;
             this.popup_content_promise = this.popup_content_promise.then(function() {
                 return that.create_child_view(value).then(function(view) {
-                    that.obj.bindPopup(view.el);
+                    that.obj.bindPopup(view.el, that.popup_options());
 
                     // Trigger the displayed event of the child view.
                     that.displayed.then(function() {
@@ -111,6 +117,21 @@ var LeafletLayerView = LeafletWidgetView.extend({
         }
         return this.popup_content_promise;
     },
+
+    popup_options: function () {
+        return {
+            minWidth: this.model.get('popup_min_width'),
+            maxHeight: this.model.get('popup_max_height')
+        };
+    },
+
+    update_popup: function () {
+        L.setOptions(this.obj.getPopup(), this.popup_options());
+
+        // Those TWO lines will enforce the options update
+        this.obj.togglePopup();
+        this.obj.togglePopup();
+    }
 });
 
 
@@ -246,6 +267,8 @@ var LeafletPopupView = LeafletUILayerView.extend({
         this.listenTo(this.model, 'change:child', function(model, value) {
             this.set_child(value);
         });
+        this.listenTo(this.model, 'change:min_width', this.update_popup, this);
+        this.listenTo(this.model, 'change:max_height', this.update_popup, this);
         return child_view;
     },
 
@@ -281,6 +304,28 @@ var LeafletPopupView = LeafletUILayerView.extend({
         }
         return this.child_promise;
     },
+
+    model_events: function () {
+        LeafletPopupView.__super__.model_events.apply(this, arguments);
+        this.obj.on('add', (event) => {
+            // This is a workaround for making maps rendered correctly in popups
+            window.dispatchEvent(new Event('resize'));
+        });
+    },
+
+    update_popup: function () {
+        L.setOptions(this.obj, this.get_options());
+
+        // Enforce the options update
+        if (this.map_view.obj.hasLayer(this.obj)) {
+            this.map_view.obj.closePopup(this.obj);
+            this.map_view.obj.openPopup(this.obj);
+        }
+        else {
+            this.map_view.obj.openPopup(this.obj);
+            this.map_view.obj.closePopup(this.obj);
+        }
+    }
 });
 
 
@@ -1171,7 +1216,9 @@ var LeafletLayerModel = widgets.WidgetModel.extend({
         options : [],
         name : '',
         base : false,
-        popup: null
+        popup: null,
+        popup_min_width: 400,
+        popup_max_height: 400,
     })
 }, {
     serializers: _.extend({

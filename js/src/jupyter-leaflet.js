@@ -8,11 +8,13 @@ require('leaflet-velocity');
 require('leaflet-measure');
 require('./leaflet-heat.js');
 require('leaflet-rotatedmarker');
+var layer = require('./layers/Layer.js')
 
 // https://github.com/Leaflet/Leaflet/issues/4968
 // Marker file names are hard-coded in the leaflet source causing
 // issues with webpack.
 // This workaround allows webpack to inline all marker URLs.
+
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -46,105 +48,9 @@ var leaflet_views_common_methods = {
 var LeafletWidgetView = widgets.WidgetView.extend(leaflet_views_common_methods);
 var LeafletDOMWidgetView = widgets.DOMWidgetView.extend(leaflet_views_common_methods);
 
-var LeafletLayerView = LeafletWidgetView.extend({
-
-    initialize: function (parameters) {
-        LeafletLayerView.__super__.initialize.apply(this, arguments);
-        this.map_view = this.options.map_view;
-        this.popup_content_promise = Promise.resolve();
-    },
-
-    render: function () {
-        this.create_obj();
-        this.leaflet_events();
-        this.model_events();
-
-        this.bind_popup(this.model.get('popup'));
-        this.listenTo(this.model, 'change:popup', function(model, value) {
-            this.bind_popup(value);
-        });
-
-        // If the layer is interactive
-        if (this.obj.on) {
-            this.obj.on('click dblclick mousedown mouseup mouseover mouseout', (event) => {
-                this.send({
-                    event: 'interaction',
-                    type: event.type,
-                    coordinates: [event.latlng.lat, event.latlng.lng]
-                });
-            });
-            this.obj.on('popupopen', (event) => {
-                // This is a workaround for making maps rendered correctly in popups
-                window.dispatchEvent(new Event('resize'));
-            });
-        }
-    },
-
-    leaflet_events: function () {
-    },
-
-    model_events: function () {
-        this.listenTo(this.model, 'change:popup_min_width', this.update_popup, this);
-        this.listenTo(this.model, 'change:popup_max_height', this.update_popup, this);
-    },
-
-    remove: function() {
-        LeafletLayerView.__super__.remove.apply(this, arguments);
-        var that = this;
-        this.popup_content_promise.then(function() {
-            if (that.popup_content) {
-                that.popup_content.remove();
-            }
-        });
-    },
-
-    bind_popup: function (value) {
-        if (this.popup_content) {
-            this.obj.unbindPopup();
-            this.popup_content.remove();
-        }
-        if (value) {
-            var that = this;
-            this.popup_content_promise = this.popup_content_promise.then(function() {
-                return that.create_child_view(value).then(function(view) {
-                    that.obj.bindPopup(view.el, that.popup_options());
-
-                    // Trigger the displayed event of the child view.
-                    that.displayed.then(function() {
-                        view.trigger('displayed', that);
-                    });
-
-                    that.popup_content = view;
-                    that.trigger('popup_content:created');
-                });
-            });
-        }
-        return this.popup_content_promise;
-    },
-
-    popup_options: function () {
-        return {
-            minWidth: this.model.get('popup_min_width'),
-            maxHeight: this.model.get('popup_max_height')
-        };
-    },
-
-    update_popup: function () {
-        L.setOptions(this.obj.getPopup(), this.popup_options());
-
-        // Those TWO lines will enforce the options update
-        this.obj.togglePopup();
-        this.obj.togglePopup();
-    }
-});
 
 
-// UILayer
-var LeafletUILayerView = LeafletLayerView.extend({
-});
-
-
-var LeafletMarkerView = LeafletUILayerView.extend({
+var LeafletMarkerView = layer.LeafletUILayerView.extend({
 
     initialize: function() {
         // Public constructor
@@ -241,7 +147,7 @@ var LeafletMarkerView = LeafletUILayerView.extend({
 });
 
 
-var LeafletIconView = LeafletUILayerView.extend({
+var LeafletIconView = layer.LeafletUILayerView.extend({
 
     create_obj: function () {
         this.obj = L.icon(this.get_options());
@@ -250,7 +156,7 @@ var LeafletIconView = LeafletUILayerView.extend({
 });
 
 
-var LeafletPopupView = LeafletUILayerView.extend({
+var LeafletPopupView = layer.LeafletUILayerView.extend({
     create_obj: function () {
         this.obj = L.popup(this.get_options())
             .setLatLng(this.model.get('location'));
@@ -332,7 +238,7 @@ var LeafletPopupView = LeafletUILayerView.extend({
 
 
 // RasterLayer
-var LeafletRasterLayerView = LeafletLayerView.extend({
+var LeafletRasterLayerView = layer.LeafletLayerView.extend({
     model_events: function () {
         LeafletRasterLayerView.__super__.model_events.apply(this, arguments);
         this.listenTo(this.model, 'change:opacity', function () {
@@ -489,7 +395,7 @@ var LeafletVideoOverlayView = LeafletRasterLayerView.extend({
     },
 });
 
-var LeafletVelocityView = LeafletLayerView.extend({
+var LeafletVelocityView = layer.LeafletLayerView.extend({
     create_obj: function () {
         var options = this.get_options();
         options.data = this.model.get('data');
@@ -523,7 +429,7 @@ var LeafletVelocityView = LeafletLayerView.extend({
     },
 });
 
-var LeafletHeatmapView = LeafletLayerView.extend({
+var LeafletHeatmapView = layer.LeafletLayerView.extend({
 
     create_obj: function () {
         this.obj = L.heatLayer(
@@ -550,7 +456,7 @@ var LeafletHeatmapView = LeafletLayerView.extend({
 });
 
 // VectorLayer
-var LeafletVectorLayerView = LeafletLayerView.extend({
+var LeafletVectorLayerView = layer.LeafletLayerView.extend({
 });
 
 
@@ -640,7 +546,7 @@ var LeafletCircleView = LeafletCircleMarkerView.extend({
 });
 
 
-var LeafletMarkerClusterView = LeafletLayerView.extend({
+var LeafletMarkerClusterView = layer.LeafletLayerView.extend({
 
     render: function() {
         LeafletMarkerClusterView.__super__.render.apply(this, arguments);
@@ -683,7 +589,7 @@ var LeafletMarkerClusterView = LeafletLayerView.extend({
 });
 
 
-var LeafletLayerGroupView = LeafletLayerView.extend({
+var LeafletLayerGroupView = layer.LeafletLayerView.extend({
     create_obj: function () {
         this.obj = L.layerGroup();
 
@@ -1216,38 +1122,9 @@ var LeafletMapView = LeafletDOMWidgetView.extend({
 var def_loc = [0.0, 0.0];
 
 
-var LeafletLayerModel = widgets.WidgetModel.extend({
-    defaults: _.extend({}, widgets.WidgetModel.prototype.defaults, {
-        _view_name : 'LeafletLayerView',
-        _model_name : 'LeafletLayerModel',
-        _view_module : 'jupyter-leaflet',
-        _model_module : 'jupyter-leaflet',
-        opacity : 1.0,
-        bottom : false,
-        options : [],
-        name : '',
-        base : false,
-        popup: null,
-        popup_min_width: 400,
-        popup_max_height: 400,
-    })
-}, {
-    serializers: _.extend({
-        popup: { deserialize: widgets.unpack_models }
-    }, widgets.WidgetModel.serializers)
-});
 
-
-var LeafletUILayerModel = LeafletLayerModel.extend({
-    defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
-        _view_name : 'LeafletUILayerView',
-        _model_name : 'LeafletUILayerModel'
-    })
-});
-
-
-var LeafletIconModel = LeafletUILayerModel.extend({
-    defaults: _.extend({}, LeafletUILayerModel.prototype.defaults, {
+var LeafletIconModel = layer.LeafletUILayerModel.extend({
+    defaults: _.extend({}, layer.LeafletUILayerModel.prototype.defaults, {
         _view_name :'LeafletIconView',
         _model_name : 'LeafletIconModel',
         icon_url: "",
@@ -1261,8 +1138,8 @@ var LeafletIconModel = LeafletUILayerModel.extend({
 });
 
 
-var LeafletMarkerModel = LeafletUILayerModel.extend({
-    defaults: _.extend({}, LeafletUILayerModel.prototype.defaults, {
+var LeafletMarkerModel = layer.LeafletUILayerModel.extend({
+    defaults: _.extend({}, layer.LeafletUILayerModel.prototype.defaults, {
         _view_name :'LeafletMarkerView',
         _model_name : 'LeafletMarkerModel',
         location: def_loc,
@@ -1282,12 +1159,12 @@ var LeafletMarkerModel = LeafletUILayerModel.extend({
 }, {
     serializers: _.extend({
         icon: { deserialize: widgets.unpack_models }
-    }, LeafletUILayerModel.serializers)
+    }, layer.LeafletUILayerModel.serializers)
 });
 
 
-var LeafletPopupModel = LeafletUILayerModel.extend({
-    defaults: _.extend({}, LeafletUILayerModel.prototype.defaults, {
+var LeafletPopupModel = layer.LeafletUILayerModel.extend({
+    defaults: _.extend({}, layer.LeafletUILayerModel.prototype.defaults, {
          _view_name : 'LeafletPopupView',
          _model_name : 'LeafletPopupModel',
         location: def_loc,
@@ -1296,12 +1173,12 @@ var LeafletPopupModel = LeafletUILayerModel.extend({
 }, {
     serializers: _.extend({
         child: { deserialize: widgets.unpack_models }
-    }, LeafletUILayerModel.serializers)
+    }, layer.LeafletUILayerModel.serializers)
 });
 
 
-var LeafletRasterLayerModel = LeafletLayerModel.extend({
-    defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
+var LeafletRasterLayerModel = layer.LeafletLayerModel.extend({
+    defaults: _.extend({}, layer.LeafletLayerModel.prototype.defaults, {
         _view_name : 'LeafletRasterLayerView',
         _model_name : 'LeafletRasterLayerModel',
         visible : true
@@ -1376,8 +1253,8 @@ var LeafletVideoOverlayModel = LeafletRasterLayerModel.extend({
     })
 });
 
-var LeafletVelocityModel = LeafletLayerModel.extend({
-    defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
+var LeafletVelocityModel = layer.LeafletLayerModel.extend({
+    defaults: _.extend({}, layer.LeafletLayerModel.prototype.defaults, {
         _view_name : 'LeafletVelocityView',
         _model_name : 'LeafletVelocityModel',
 
@@ -1414,8 +1291,8 @@ var LeafletHeatmapModel = LeafletRasterLayerModel.extend({
     })
 });
 
-var LeafletVectorLayerModel = LeafletLayerModel.extend({
-    defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
+var LeafletVectorLayerModel = layer.LeafletLayerModel.extend({
+    defaults: _.extend({}, layer.LeafletLayerModel.prototype.defaults, {
         _view_name : 'LeafletVectorLayerView',
         _model_name : 'LeafletVectorLayerModel'
     })
@@ -1488,8 +1365,8 @@ var LeafletCircleModel = LeafletCircleMarkerModel.extend({
 });
 
 
-var LeafletMarkerClusterModel = LeafletLayerModel.extend({
-    defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
+var LeafletMarkerClusterModel = layer.LeafletLayerModel.extend({
+    defaults: _.extend({}, layer.LeafletLayerModel.prototype.defaults, {
         _view_name : 'LeafletMarkerClusterView',
         _model_name : 'LeafletMarkerClusterModel',
         markers : []
@@ -1501,8 +1378,8 @@ var LeafletMarkerClusterModel = LeafletLayerModel.extend({
 });
 
 
-var LeafletLayerGroupModel = LeafletLayerModel.extend({
-    defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
+var LeafletLayerGroupModel = layer.LeafletLayerModel.extend({
+    defaults: _.extend({}, layer.LeafletLayerModel.prototype.defaults, {
         _view_name : 'LeafletLayerGroupView',
         _model_name : 'LeafletLayerGroupModel',
         layers : []
@@ -1690,8 +1567,7 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
 
 module.exports = {
     // views
-    LeafletLayerView : LeafletLayerView,
-    LeafletUILayerView : LeafletUILayerView,
+
     LeafletIconView : LeafletIconView,
     LeafletMarkerView : LeafletMarkerView,
     LeafletPopupView : LeafletPopupView,
@@ -1721,9 +1597,7 @@ module.exports = {
     LeafletSplitMapControlView : LeafletSplitMapControlView,
     LeafletMapView : LeafletMapView,
     // models
-    LeafletLayerModel : LeafletLayerModel,
-    LeafletUILayerModel : LeafletUILayerModel,
-    LeafletUILayerModel : LeafletUILayerModel,
+
     LeafletIconModel : LeafletIconModel,
     LeafletMarkerModel : LeafletMarkerModel,
     LeafletPopupModel : LeafletPopupModel,

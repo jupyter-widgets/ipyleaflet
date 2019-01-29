@@ -1,5 +1,5 @@
 .jupyter-widgets.leaflet-container {
-    height: 400px;
+    min-height: 400px;
     overflow: hidden;
     flex: 1;
 }

@@ -378,6 +378,15 @@ var LeafletTileLayerView = LeafletRasterLayerView.extend({
     },
 });
 
+var LeafletLocalTileLayerView = LeafletTileLayerView.extend({
+
+    create_obj: function () {
+        this.model.set('url', window.location.href.replace(/[^/]*$/, '') + this.model.get('path'));
+        LeafletLocalTileLayerView.__super__.create_obj.apply(this, arguments);
+    }
+
+});
+
 var LeafletWMSLayerView = LeafletTileLayerView.extend({
 
     create_obj: function () {
@@ -1313,6 +1322,17 @@ var LeafletTileLayerModel = LeafletRasterLayerModel.extend({
     })
 });
 
+
+var LeafletLocalTileLayerModel = LeafletTileLayerModel.extend({
+    defaults: _.extend({}, LeafletTileLayerModel.prototype.defaults, {
+        _view_name : 'LeafletLocalTileLayerView',
+        _model_name : 'LeafletLocalTileLayerModel',
+
+        path : ''
+    })
+});
+
+
 var LeafletWMSLayerModel = LeafletTileLayerModel.extend({
     defaults: _.extend({}, LeafletTileLayerModel.prototype.defaults, {
         _view_name : 'LeafletWMSLayerView',
@@ -1675,6 +1695,7 @@ module.exports = {
     LeafletPopupView : LeafletPopupView,
     LeafletRasterLayerView : LeafletRasterLayerView,
     LeafletTileLayerView : LeafletTileLayerView,
+    LeafletLocalTileLayerView : LeafletLocalTileLayerView,
     LeafletWMSLayerView : LeafletWMSLayerView,
     LeafletImageOverlayView : LeafletImageOverlayView,
     LeafletVideoOverlayView : LeafletVideoOverlayView,
@@ -1706,6 +1727,7 @@ module.exports = {
     LeafletPopupModel : LeafletPopupModel,
     LeafletRasterLayerModel : LeafletRasterLayerModel,
     LeafletTileLayerModel : LeafletTileLayerModel,
+    LeafletLocalTileLayerModel : LeafletLocalTileLayerModel,
     LeafletWMSLayerModel : LeafletWMSLayerModel,
     LeafletImageOverlayModel : LeafletImageOverlayModel,
     LeafletVideoOverlayModel : LeafletVideoOverlayModel,

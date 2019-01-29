@@ -63,17 +63,21 @@ var LeafletLayerView = LeafletWidgetView.extend({
         this.listenTo(this.model, 'change:popup', function(model, value) {
             this.bind_popup(value);
         });
-        this.obj.on('click dblclick mousedown mouseup mouseover mouseout', (event) => {
-            this.send({
-                event: 'interaction',
-                type: event.type,
-                coordinates: [event.latlng.lat, event.latlng.lng]
+
+        // If the layer is interactive
+        if (this.obj.on) {
+            this.obj.on('click dblclick mousedown mouseup mouseover mouseout', (event) => {
+                this.send({
+                    event: 'interaction',
+                    type: event.type,
+                    coordinates: [event.latlng.lat, event.latlng.lng]
+                });
             });
-        });
-        this.obj.on('popupopen', (event) => {
-            // This is a workaround for making maps rendered correctly in popups
-            window.dispatchEvent(new Event('resize'));
-        });
+            this.obj.on('popupopen', (event) => {
+                // This is a workaround for making maps rendered correctly in popups
+                window.dispatchEvent(new Event('resize'));
+            });
+        }
     },
 
     leaflet_events: function () {
@@ -240,8 +244,6 @@ var LeafletMarkerView = LeafletUILayerView.extend({
 var LeafletIconView = LeafletUILayerView.extend({
 
     create_obj: function () {
-        var that = this;
-
         this.obj = L.icon(this.get_options());
     },
 

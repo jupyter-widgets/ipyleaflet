@@ -1,53 +1,21 @@
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
-var L = require('leaflet');
-require('leaflet-splitmap');
-require('leaflet-draw');
-require('leaflet.markercluster');
-require('leaflet-velocity');
-require('leaflet-measure');
-require('./leaflet-heat.js');
-require('leaflet-rotatedmarker');
+
+var L_leaflet = require('./L_leaflet.js')
+var L = L_leaflet.L
+var utils = require('./utils.js')
+
+//var LeafletWidgetView = utils.LeafletWidgetView
+//var LeafletDOMWidgetView = utils.LeafletDOMWidgetView
+
+
+
 var layer = require('./layers/Layer.js')
+//var LeafletLayerView = layer.LeafletLayerView
+//var LeafletUILayerView = layer.LeafletUILayerView
 
-// https://github.com/Leaflet/Leaflet/issues/4968
-// Marker file names are hard-coded in the leaflet source causing
-// issues with webpack.
-// This workaround allows webpack to inline all marker URLs.
-
-
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-    iconUrl: require('leaflet/dist/images/marker-icon.png'),
-    shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
-});
-
-
-function camel_case(input) {
-    // Convert from foo_bar to fooBar
-    return input.toLowerCase().replace(/_(.)/g, function(match, group1) {
-        return group1.toUpperCase();
-    });
-}
-
-var leaflet_views_common_methods = {
-    get_options: function () {
-        var o = this.model.get('options');
-        var options = {};
-        var key;
-        for (var i=0; i<o.length; i++) {
-            key = o[i];
-            // Convert from foo_bar to fooBar that Leaflet.js uses
-            options[camel_case(key)] = this.model.get(key);
-        }
-        return options;
-    }
-}
-
-var LeafletWidgetView = widgets.WidgetView.extend(leaflet_views_common_methods);
-var LeafletDOMWidgetView = widgets.DOMWidgetView.extend(leaflet_views_common_methods);
-
+//var LeafletLayerModel = layer.LeafletLayerModel
+//var LeafletUILayerModel = layer.LeafletLayerModel
 
 
 var LeafletMarkerView = layer.LeafletUILayerView.extend({
@@ -672,7 +640,7 @@ var LeafletGeoJSONView = LeafletFeatureGroupView.extend({
 
 
 
-var LeafletControlView = LeafletWidgetView.extend({
+var LeafletControlView = utils.LeafletWidgetView.extend({
     initialize: function (parameters) {
         LeafletControlView.__super__.initialize.apply(this, arguments);
         this.map_view = this.options.map_view;
@@ -923,7 +891,7 @@ var LeafletDrawControlView = LeafletControlView.extend({
 });
 
 
-var LeafletMapView = LeafletDOMWidgetView.extend({
+var LeafletMapView = utils.LeafletDOMWidgetView.extend({
     initialize: function (options) {
         LeafletMapView.__super__.initialize.apply(this, arguments);
         // The dirty flag is used to prevent sub-pixel center changes

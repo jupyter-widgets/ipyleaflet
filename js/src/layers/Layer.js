@@ -1,36 +1,8 @@
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 var L = require('leaflet');
-
-
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-    iconUrl: require('leaflet/dist/images/marker-icon.png'),
-    shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
-});
-
-
-function camel_case(input) {
-    // Convert from foo_bar to fooBar
-    return input.toLowerCase().replace(/_(.)/g, function(match, group1) {
-        return group1.toUpperCase();
-    });
-}
-
-var leaflet_views_common_methods = {
-    get_options: function () {
-        var o = this.model.get('options');
-        var options = {};
-        var key;
-        for (var i=0; i<o.length; i++) {
-            key = o[i];
-            // Convert from foo_bar to fooBar that Leaflet.js uses
-            options[camel_case(key)] = this.model.get(key);
-        }
-        return options;
-    }
-}
+var utils = require('../utils.js')
+//var utils.LeafletWidgetView = utils.utils.LeafletWidgetView
 
 //Model
 
@@ -69,10 +41,8 @@ var LeafletUILayerModel = LeafletLayerModel.extend({
 
 // View
 
-var LeafletWidgetView = widgets.WidgetView.extend(leaflet_views_common_methods);
-var LeafletDOMWidgetView = widgets.DOMWidgetView.extend(leaflet_views_common_methods);
 
-var LeafletLayerView = LeafletWidgetView.extend({
+var LeafletLayerView = utils.LeafletWidgetView.extend({
 
     initialize: function (parameters) {
         LeafletLayerView.__super__.initialize.apply(this, arguments);

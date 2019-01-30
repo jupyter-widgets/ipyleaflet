@@ -22,6 +22,4 @@ L.Icon.Default.mergeOptions({
 });
 
 
-module.exports = {
-  L : L,
-};
+module.exports = L;

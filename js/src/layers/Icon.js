@@ -1,13 +1,13 @@
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
-var L = require('leaflet');
-require('Layer.js')
+var L = require('../leaflet.js');
+var layer = require('./Layer.js');
 
 
 // Model
 
-var LeafletIconModel = LeafletUILayerModel.extend({
-    defaults: _.extend({}, LeafletUILayerModel.prototype.defaults, {
+var LeafletIconModel = layer.LeafletUILayerModel.extend({
+    defaults: _.extend({}, layer.LeafletUILayerModel.prototype.defaults, {
         _view_name :'LeafletIconView',
         _model_name : 'LeafletIconModel',
         icon_url: "",
@@ -22,7 +22,7 @@ var LeafletIconModel = LeafletUILayerModel.extend({
 
 // View
 
-var LeafletIconView = LeafletUILayerView.extend({
+var LeafletIconView = layer.LeafletUILayerView.extend({
 
     create_obj: function () {
         this.obj = L.icon(this.get_options());

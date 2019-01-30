@@ -1,277 +1,51 @@
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
+var L = require('./leaflet.js');
 
-var L_leaflet = require('./L_leaflet.js')
-var L = L_leaflet.L
-var utils = require('./utils.js')
+var utils = require('./utils.js');
+var LeafletWidgetView = utils.LeafletWidgetView;
+var LeafletDOMWidgetView = utils.LeafletDOMWidgetView;
 
-//var LeafletWidgetView = utils.LeafletWidgetView
-//var LeafletDOMWidgetView = utils.LeafletDOMWidgetView
+var layer = require('./layers/Layer.js');
+//var LeafletLayerView = layer.LeafletLayerView;
+//var LeafletLayerModel = layer.LeafletLayerModel;
 
+//var LeafletUILayerView = layer.LeafletUILayerView;
+//var LeafletUILayerModel = layer.LeafletUILayerModel;
 
+var marker = require('./layers/Marker.js');
+//var LeafletMarkerView = marker.LeafletMarkerView;
+//var LeafletMarkerModel = marker.LeafletMarkerModel;
 
-var layer = require('./layers/Layer.js')
-//var LeafletLayerView = layer.LeafletLayerView
-//var LeafletUILayerView = layer.LeafletUILayerView
-
-//var LeafletLayerModel = layer.LeafletLayerModel
-//var LeafletUILayerModel = layer.LeafletLayerModel
-
-
-var LeafletMarkerView = layer.LeafletUILayerView.extend({
-
-    initialize: function() {
-        // Public constructor
-        LeafletMarkerView.__super__.initialize.apply(this, arguments);
-        this.icon_promise = Promise.resolve();
-    },
+var icon = require('./layers/Icon.js');
+//var LeafletIconView = icon.LeafletIconView;
+//var LeafletIconModel = icon.LeafletIconModel;
 
 
-    create_obj: function () {
-        var that = this;
-        this.obj = L.marker(
-            this.model.get('location'),
-            this.get_options()
-        );
-
-        this.obj.on('dragend', function(event) {
-            var marker = event.target;
-            var position = marker.getLatLng();
-            that.model.set('location', [position.lat, position.lng]);
-            that.touch();
-        });
-    },
-
-    remove: function() {
-        LeafletMarkerView.__super__.remove.apply(this, arguments);
-        var that = this;
-        this.icon_promise.then(function() {
-            if (that.icon) {
-                that.icon.remove();
-            }
-        });
-    },
-
-    set_icon: function(value) {
-        if (this.icon) {
-            this.icon.remove();
-        }
-        if (value) {
-            var that = this;
-            this.icon_promise = this.icon_promise.then(function() {
-                return that.create_child_view(value).then(function(view) {
-                    that.obj.setIcon(view.obj);
-                    that.icon = view;
-                });
-            });
-        }
-    },
-
-    model_events: function () {
-        LeafletMarkerView.__super__.model_events.apply(this, arguments);
-        this.listenTo(this.model, 'change:location', function () {
-            this.obj.setLatLng(this.model.get('location'));
-            this.send({
-                event: 'move',
-                location: this.model.get('location')
-            });
-        }, this);
-        this.listenTo(this.model, 'change:z_index_offset', function () {
-            this.obj.setZIndexOffset(this.model.get('z_index_offset'));
-        }, this);
-        this.listenTo(this.model, 'change:opacity', function () {
-            if (this.model.get('visible')) {
-                this.obj.setOpacity(this.model.get('opacity'));
-            }
-        }, this);
-        this.listenTo(this.model, 'change:visible', function () {
-            if (this.model.get('visible')) {
-                this.obj.setOpacity(this.model.get('opacity'));
-            } else {
-                this.obj.setOpacity(0);
-            }
-        }, this);
-        this.listenTo(this.model, 'change:rotation_angle', function () {
-            this.obj.setRotationAngle(this.model.get('rotation_angle'));
-        }, this);
-        this.listenTo(this.model, 'change:rotation_origin', function () {
-            this.obj.setRotationOrigin(this.model.get('rotation_origin'));
-        }, this);
-
-        this.obj.setLatLng(this.model.get('location'));
-        this.obj.setZIndexOffset(this.model.get('z_index_offset'));
-        if (this.model.get('visible')) {
-            this.obj.setOpacity(this.model.get('opacity'));
-        } else {
-            this.obj.setOpacity(0);
-        }
-        this.obj.setRotationAngle(this.model.get('rotation_angle'));
-        this.obj.setRotationOrigin(this.model.get('rotation_origin'));
-        this.listenTo(this.model, 'change:icon', function () {
-            this.set_icon(this.model.get('icon'));
-        }, this);
-        this.set_icon(this.model.get('icon'));
-    },
-});
+var popup = require('./layers/Popup.js');
+//var LeafletPopupView = popup.LeafletPopupView;
+//var LeafletPopupModel = popup.LeafletPopupModel;
 
 
-var LeafletIconView = layer.LeafletUILayerView.extend({
 
-    create_obj: function () {
-        this.obj = L.icon(this.get_options());
-    },
-
-});
+var rasterlayer = require('./layers/RasterLayer.js');
+var LeafletRasterLayerView = rasterlayer.LeafletRasterLayerView;
+var LeafletRasterLayerModel = rasterlayer.LeafletRasterLayerModel;
 
 
-var LeafletPopupView = layer.LeafletUILayerView.extend({
-    create_obj: function () {
-        this.obj = L.popup(this.get_options())
-            .setLatLng(this.model.get('location'));
-    },
-
-    initialize: function() {
-        // Public constructor
-        LeafletPopupView.__super__.initialize.apply(this, arguments);
-        this.child_promise = Promise.resolve();
-    },
-
-    render: function() {
-        LeafletPopupView.__super__.render.apply(this, arguments);
-        var that = this;
-        var child_view = this.set_child(this.model.get('child'));
-        this.listenTo(this.model, 'change:child', function(model, value) {
-            this.set_child(value);
-        });
-        this.listenTo(this.model, 'change:min_width', this.update_popup, this);
-        this.listenTo(this.model, 'change:max_height', this.update_popup, this);
-        return child_view;
-    },
-
-    remove: function() {
-        LeafletPopupView.__super__.remove.apply(this, arguments);
-        var that = this;
-        this.child_promise.then(function() {
-            if (that.child) {
-                that.child.remove();
-            }
-        });
-    },
-
-    set_child: function(value) {
-        if (this.child) {
-            this.child.remove();
-        }
-        if (value) {
-            var that = this;
-            this.child_promise = this.child_promise.then(function() {
-                return that.create_child_view(value).then(function(view) {
-                    that.obj.setContent(view.el);
-
-                    // Trigger the displayed event of the child view.
-                    that.displayed.then(function() {
-                        view.trigger('displayed', that);
-                    });
-
-                    that.child = view;
-                    that.trigger('child:created');
-                });
-            });
-        }
-        return this.child_promise;
-    },
-
-    model_events: function () {
-        LeafletPopupView.__super__.model_events.apply(this, arguments);
-        this.obj.on('add', (event) => {
-            // This is a workaround for making maps rendered correctly in popups
-            window.dispatchEvent(new Event('resize'));
-        });
-    },
-
-    update_popup: function () {
-        L.setOptions(this.obj, this.get_options());
-
-        // Enforce the options update
-        if (this.map_view.obj.hasLayer(this.obj)) {
-            this.map_view.obj.closePopup(this.obj);
-            this.map_view.obj.openPopup(this.obj);
-        }
-        else {
-            this.map_view.obj.openPopup(this.obj);
-            this.map_view.obj.closePopup(this.obj);
-        }
-    }
-});
+var tilelayer = require('./layers/TileLayer.js');
+var LeafletTileLayerView = tilelayer.LeafletTileLayerView;
+var LeafletTileLayerModel = tilelayer.LeafletTileLayerModel;
 
 
-// RasterLayer
-var LeafletRasterLayerView = layer.LeafletLayerView.extend({
-    model_events: function () {
-        LeafletRasterLayerView.__super__.model_events.apply(this, arguments);
-        this.listenTo(this.model, 'change:opacity', function () {
-            if (this.model.get('visible')) {
-                this.obj.setOpacity(this.model.get('opacity'));
-            }
-        }, this);
-        this.listenTo(this.model, 'change:visible', function () {
-            if (this.model.get('visible')) {
-                this.obj.setOpacity(this.model.get('opacity'));
-            } else {
-                this.obj.setOpacity(0);
-            }
-        }, this);
+var localtilelayer = require('./layers/LocalTileLayer.js')
+var LeafletLocalTileLayerView = tilelayer.LeafletLocalTileLayerView;
+var LeafletLocalTileLayerModel = tilelayer.LeafletLocalTileLayerModel;
 
-        if (this.model.get('visible')) {
-            this.obj.setOpacity(this.model.get('opacity'));
-        } else {
-            this.obj.setOpacity(0);
-        }
-    }
-});
+var wmslayer = require('./layers/WMSLayer.js')
+var LeafletWMSLayerView = wmslayer.LeafletWMSLayerView;
+var LeafletWidgetModel = wmslayer.LeafletWMSLayerModel;
 
-
-var LeafletTileLayerView = LeafletRasterLayerView.extend({
-
-    create_obj: function () {
-        this.obj = L.tileLayer(
-            this.model.get('url'),
-            this.get_options()
-        );
-        var that = this;
-        this.obj.on('load', function() {
-            that.send({
-                event: 'load'
-            });
-        });
-    },
-
-    model_events: function () {
-        LeafletTileLayerView.__super__.model_events.apply(this, arguments);
-        this.listenTo(this.model, 'change:url', function () {
-            this.obj.setUrl(this.model.get('url'));
-        }, this);
-    },
-});
-
-var LeafletLocalTileLayerView = LeafletTileLayerView.extend({
-
-    create_obj: function () {
-        this.model.set('url', window.location.href.replace(/[^/]*$/, '') + this.model.get('path'));
-        LeafletLocalTileLayerView.__super__.create_obj.apply(this, arguments);
-    }
-
-});
-
-var LeafletWMSLayerView = LeafletTileLayerView.extend({
-
-    create_obj: function () {
-        this.obj = L.tileLayer.wms(
-            this.model.get('url'),
-            this.get_options()
-        );
-    },
-});
 
 var LeafletImageOverlayView = LeafletRasterLayerView.extend({
 
@@ -1087,116 +861,10 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
     },
 });
 
+
+//Model
+
 var def_loc = [0.0, 0.0];
-
-
-
-var LeafletIconModel = layer.LeafletUILayerModel.extend({
-    defaults: _.extend({}, layer.LeafletUILayerModel.prototype.defaults, {
-        _view_name :'LeafletIconView',
-        _model_name : 'LeafletIconModel',
-        icon_url: "",
-        shadow_url: "",
-        icon_size :  [10, 10],
-        shadow_size :  [10, 10],
-        icon_anchor: [0, 0],
-        shadow_anchor: [0, 0],
-        popup_anchor: [0, 0]
-    })
-});
-
-
-var LeafletMarkerModel = layer.LeafletUILayerModel.extend({
-    defaults: _.extend({}, layer.LeafletUILayerModel.prototype.defaults, {
-        _view_name :'LeafletMarkerView',
-        _model_name : 'LeafletMarkerModel',
-        location: def_loc,
-        opacity: 1.0,
-        visible : true,
-        z_index_offset: 0,
-        draggable: true,
-        keyboard: true,
-        title: '',
-        alt: '',
-        rise_on_hover: false,
-        rise_offset: 250,
-        rotation_angle: 0,
-        rotation_origin: "",
-        icon: null
-    })
-}, {
-    serializers: _.extend({
-        icon: { deserialize: widgets.unpack_models }
-    }, layer.LeafletUILayerModel.serializers)
-});
-
-
-var LeafletPopupModel = layer.LeafletUILayerModel.extend({
-    defaults: _.extend({}, layer.LeafletUILayerModel.prototype.defaults, {
-         _view_name : 'LeafletPopupView',
-         _model_name : 'LeafletPopupModel',
-        location: def_loc,
-        child: null
-    })
-}, {
-    serializers: _.extend({
-        child: { deserialize: widgets.unpack_models }
-    }, layer.LeafletUILayerModel.serializers)
-});
-
-
-var LeafletRasterLayerModel = layer.LeafletLayerModel.extend({
-    defaults: _.extend({}, layer.LeafletLayerModel.prototype.defaults, {
-        _view_name : 'LeafletRasterLayerView',
-        _model_name : 'LeafletRasterLayerModel',
-        visible : true
-    })
-});
-
-
-var LeafletTileLayerModel = LeafletRasterLayerModel.extend({
-    defaults: _.extend({}, LeafletRasterLayerModel.prototype.defaults, {
-        _view_name : 'LeafletTileLayerView',
-        _model_name : 'LeafletTileLayerModel',
-
-        bottom : true,
-        url : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        min_zoom : 0,
-        max_zoom : 18,
-        tile_size : 256,
-        attribution : 'Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
-        detect_retina : false
-    })
-});
-
-
-var LeafletLocalTileLayerModel = LeafletTileLayerModel.extend({
-    defaults: _.extend({}, LeafletTileLayerModel.prototype.defaults, {
-        _view_name : 'LeafletLocalTileLayerView',
-        _model_name : 'LeafletLocalTileLayerModel',
-
-        path : ''
-    })
-});
-
-
-var LeafletWMSLayerModel = LeafletTileLayerModel.extend({
-    defaults: _.extend({}, LeafletTileLayerModel.prototype.defaults, {
-        _view_name : 'LeafletWMSLayerView',
-        _model_name : 'LeafletWMSLayerModel',
-
-        service: 'WMS',
-        request: 'GetMap',
-        layers: '',
-        styles: '',
-        format: 'image/jpeg',
-        transparent: false,
-        version: '1.1.1',
-
-        crs : null,
-        uppercase : false
-    })
-});
 
 
 var LeafletImageOverlayModel = LeafletRasterLayerModel.extend({
@@ -1535,14 +1203,15 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
 
 module.exports = {
     // views
-
-    LeafletIconView : LeafletIconView,
-    LeafletMarkerView : LeafletMarkerView,
-    LeafletPopupView : LeafletPopupView,
-    LeafletRasterLayerView : LeafletRasterLayerView,
-    LeafletTileLayerView : LeafletTileLayerView,
+    LeafletLayerView : layer.LeafletLayerView,
+    LeafletUILayerView : layer.LeafletUILayerView,
+    LeafletIconView : icon.LeafletIconView,
+    LeafletMarkerView : marker.LeafletMarkerView,
+    LeafletPopupView : popup.LeafletPopupView,
+    LeafletRasterLayerView : rasterlayer.LeafletRasterLayerView,
+    LeafletTileLayerView : tilelayer.LeafletTileLayerView,
     LeafletLocalTileLayerView : LeafletLocalTileLayerView,
-    LeafletWMSLayerView : LeafletWMSLayerView,
+    LeafletWMSLayerView : wmslayer.LeafletWMSLayerView,
     LeafletImageOverlayView : LeafletImageOverlayView,
     LeafletVideoOverlayView : LeafletVideoOverlayView,
     LeafletVelocityView : LeafletVelocityView,
@@ -1565,14 +1234,15 @@ module.exports = {
     LeafletSplitMapControlView : LeafletSplitMapControlView,
     LeafletMapView : LeafletMapView,
     // models
-
-    LeafletIconModel : LeafletIconModel,
-    LeafletMarkerModel : LeafletMarkerModel,
-    LeafletPopupModel : LeafletPopupModel,
-    LeafletRasterLayerModel : LeafletRasterLayerModel,
-    LeafletTileLayerModel : LeafletTileLayerModel,
+    LeafletLayerModel : layer.LeafletLayerModel,
+    LeafletUILayerModel : layer.LeafletUILayerModel,
+    LeafletIconModel : icon.LeafletIconModel,
+    LeafletMarkerModel :marker.LeafletMarkerModel,
+    LeafletPopupModel : popup.LeafletPopupModel,
+    LeafletRasterLayerModel : rasterlayer.LeafletRasterLayerModel,
+    LeafletTileLayerModel : tilelayer.LeafletTileLayerModel,
     LeafletLocalTileLayerModel : LeafletLocalTileLayerModel,
-    LeafletWMSLayerModel : LeafletWMSLayerModel,
+    LeafletWMSLayerModel : wmslayer.LeafletWMSLayerModel,
     LeafletImageOverlayModel : LeafletImageOverlayModel,
     LeafletVideoOverlayModel : LeafletVideoOverlayModel,
     LeafletVelocityModel : LeafletVelocityModel,

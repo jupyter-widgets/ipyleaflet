@@ -1,9 +1,11 @@
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 var L = require('leaflet');
-require('Layer.js');
-require('RasterLayer.js');
 
+
+var rasterlayer = require('./RasterLayer.js');
+var LeafletRasterLayerView = rasterlayer.LeafletRasterLayerView;
+var LeafletRasterLayerModel = rasterlayer.LeafletRasterLayerModel;
 
 //Model
 

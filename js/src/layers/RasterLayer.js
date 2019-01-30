@@ -1,8 +1,12 @@
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 var L = require('leaflet');
-require('Layer.js');
 
+var layer = require('./Layer.js');
+var LeafletLayerView = layer.LeafletLayerView;
+var LeafletLayerModel = layer.LeafletLayerModel;
+
+var def_loc = [0.0, 0.0];
 
 // Model
 

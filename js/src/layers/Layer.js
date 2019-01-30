@@ -2,7 +2,6 @@ var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 var L = require('leaflet');
 var utils = require('../utils.js')
-//var utils.LeafletWidgetView = utils.utils.LeafletWidgetView
 
 //Model
 

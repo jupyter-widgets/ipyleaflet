@@ -1,7 +1,11 @@
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 var L = require('leaflet');
-require('TileLayer.js');
+
+
+var tilelayer = require('./TileLayer.js');
+var LeafletTileLayerView = tilelayer.LeafletTileLayerView;
+var LeafletTileLayerModel = tilelayer.LeafletTileLayerModel;
 
 
 //Model

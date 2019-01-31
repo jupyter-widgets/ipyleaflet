@@ -1,11 +1,7 @@
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
-var L = require('leaflet');
+var L = require('../leaflet.js');
 var utils = require('../utils.js')
-
-//Model
-
-// Layer
 
 var LeafletLayerModel = widgets.WidgetModel.extend({
     defaults: _.extend({}, widgets.WidgetModel.prototype.defaults, {
@@ -28,18 +24,12 @@ var LeafletLayerModel = widgets.WidgetModel.extend({
     }, widgets.WidgetModel.serializers)
 });
 
-//UILayer
-
 var LeafletUILayerModel = LeafletLayerModel.extend({
     defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
         _view_name : 'LeafletUILayerView',
         _model_name : 'LeafletUILayerModel'
     })
 });
-
-
-// View
-
 
 var LeafletLayerView = utils.LeafletWidgetView.extend({
 
@@ -133,19 +123,12 @@ var LeafletLayerView = utils.LeafletWidgetView.extend({
     }
 });
 
-
-// UILayer
 var LeafletUILayerView = LeafletLayerView.extend({
 });
 
-
-
 module.exports = {
-  //views
   LeafletLayerView : LeafletLayerView,
   LeafletUILayerView : LeafletUILayerView,
-  //models
   LeafletLayerModel : LeafletLayerModel,
   LeafletUILayerModel : LeafletUILayerModel,
-
 };

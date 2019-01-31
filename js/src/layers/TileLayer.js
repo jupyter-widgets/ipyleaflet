@@ -1,13 +1,9 @@
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
-var L = require('leaflet');
-
-
+var L = require('../leaflet.js');
 var rasterlayer = require('./RasterLayer.js');
 var LeafletRasterLayerView = rasterlayer.LeafletRasterLayerView;
 var LeafletRasterLayerModel = rasterlayer.LeafletRasterLayerModel;
-
-//Model
 
 var LeafletTileLayerModel = LeafletRasterLayerModel.extend({
     defaults: _.extend({}, LeafletRasterLayerModel.prototype.defaults, {
@@ -23,9 +19,6 @@ var LeafletTileLayerModel = LeafletRasterLayerModel.extend({
         detect_retina : false
     })
 });
-
-// View
-
 var LeafletTileLayerView = LeafletRasterLayerView.extend({
 
     create_obj: function () {
@@ -48,12 +41,7 @@ var LeafletTileLayerView = LeafletRasterLayerView.extend({
         }, this);
     },
 });
-
-
 module.exports = {
-  //views
   LeafletTileLayerView : LeafletTileLayerView,
-
-  //models
   LeafletTileLayerModel : LeafletTileLayerModel,
 };

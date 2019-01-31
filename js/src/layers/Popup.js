@@ -1,15 +1,10 @@
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
-var L = require('leaflet');
-
+var L = require('../leaflet.js');
 var layer = require('./Layer.js');
 var LeafletUILayerView = layer.LeafletUILayerView;
 var LeafletUILayerModel = layer.LeafletUILayerModel;
-
 var def_loc = [0.0, 0.0];
-
-
-// Model
 
 var LeafletPopupModel = LeafletUILayerModel.extend({
     defaults: _.extend({}, LeafletUILayerModel.prototype.defaults, {
@@ -23,10 +18,6 @@ var LeafletPopupModel = LeafletUILayerModel.extend({
         child: { deserialize: widgets.unpack_models }
     }, LeafletUILayerModel.serializers)
 });
-
-
-// View
-
 var LeafletPopupView = LeafletUILayerView.extend({
     create_obj: function () {
         this.obj = L.popup(this.get_options())
@@ -106,11 +97,7 @@ var LeafletPopupView = LeafletUILayerView.extend({
         }
     }
 });
-
 module.exports = {
-  //views
   LeafletPopupView : LeafletPopupView,
-
-  //models
   LeafletPopupModel : LeafletPopupModel,
 };

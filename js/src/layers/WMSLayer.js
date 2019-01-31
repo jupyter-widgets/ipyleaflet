@@ -1,14 +1,9 @@
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
-var L = require('leaflet')
-
-
+var L = require('../leaflet.js')
 var tilelayer = require('./TileLayer.js');
 var LeafletTileLayerView = tilelayer.LeafletTileLayerView;
 var LeafletTileLayerModel = tilelayer.LeafletTileLayerModel;
-
-
-//Model
 
 var LeafletWMSLayerModel = LeafletTileLayerModel.extend({
     defaults: _.extend({}, LeafletTileLayerModel.prototype.defaults, {
@@ -25,9 +20,6 @@ var LeafletWMSLayerModel = LeafletTileLayerModel.extend({
         uppercase : false
     })
 });
-
-//View
-
 var LeafletWMSLayerView = LeafletTileLayerView.extend({
 
     create_obj: function () {
@@ -37,11 +29,7 @@ var LeafletWMSLayerView = LeafletTileLayerView.extend({
         );
     },
 });
-
 module.exports = {
-  //views
   LeafletWMSLayerView : LeafletWMSLayerView,
-
-  //models
   LeafletWMSLayerModel : LeafletWMSLayerModel,
 };

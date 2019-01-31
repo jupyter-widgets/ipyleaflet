@@ -1,14 +1,10 @@
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
-var L = require('leaflet');
-
+var L = require('../leaflet.js');
 var layer = require('./Layer.js');
 var LeafletLayerView = layer.LeafletLayerView;
 var LeafletLayerModel = layer.LeafletLayerModel;
-
 var def_loc = [0.0, 0.0];
-
-// Model
 
 var LeafletRasterLayerModel = LeafletLayerModel.extend({
     defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
@@ -17,9 +13,6 @@ var LeafletRasterLayerModel = LeafletLayerModel.extend({
         visible : true
     })
 });
-
-
-//View
 var LeafletRasterLayerView = LeafletLayerView.extend({
     model_events: function () {
         LeafletRasterLayerView.__super__.model_events.apply(this, arguments);
@@ -43,13 +36,7 @@ var LeafletRasterLayerView = LeafletLayerView.extend({
         }
     }
 });
-
-
-
 module.exports = {
-  //views
   LeafletRasterLayerView : LeafletRasterLayerView,
-
-  //models
   LeafletRasterLayerModel : LeafletRasterLayerModel,
 };

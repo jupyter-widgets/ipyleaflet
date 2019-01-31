@@ -1,7 +1,10 @@
-
-
-
-
+var widgets = require('@jupyter-widgets/base');
+var _ = require('underscore');
+var L = require('../leaflet.js')
+var rasterlayer = require('./RasterLayer.js');
+var LeafletRasterLayerView = rasterlayer.LeafletRasterLayerView;
+var LeafletRasterLayerModel = rasterlayer.LeafletRasterLayerModel;
+var def_loc = [0.0, 0.0];
 
 var LeafletImageOverlayModel = LeafletRasterLayerModel.extend({
     defaults: _.extend({}, LeafletRasterLayerModel.prototype.defaults, {
@@ -13,8 +16,6 @@ var LeafletImageOverlayModel = LeafletRasterLayerModel.extend({
         attribution : ''
     })
 });
-
-
 var LeafletImageOverlayView = LeafletRasterLayerView.extend({
 
     create_obj: function () {
@@ -24,7 +25,6 @@ var LeafletImageOverlayView = LeafletRasterLayerView.extend({
             this.get_options()
         );
     },
-
     model_events: function () {
         LeafletImageOverlayView.__super__.model_events.apply(this, arguments);
         this.listenTo(this.model, 'change:url', function () {
@@ -46,3 +46,7 @@ var LeafletImageOverlayView = LeafletRasterLayerView.extend({
         }, this);
     },
 });
+module.exports = {
+  LeafletImageOverlayView : LeafletImageOverlayView,
+  LeafletImageOverlayModel : LeafletImageOverlayModel,
+};

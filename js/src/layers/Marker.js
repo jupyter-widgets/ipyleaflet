@@ -1,11 +1,7 @@
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 var L = require('../leaflet.js');
-//var utils = require('../utils.js')
 var layer = require('./Layer.js');
-
-// Model
-
 var def_loc = [0.0, 0.0];
 
 var LeafletMarkerModel = layer.LeafletUILayerModel.extend({
@@ -31,8 +27,6 @@ var LeafletMarkerModel = layer.LeafletUILayerModel.extend({
         icon: { deserialize: widgets.unpack_models }
     }, layer.LeafletUILayerModel.serializers)
 });
-
-//View
 
 var LeafletMarkerView = layer.LeafletUILayerView.extend({
 
@@ -82,7 +76,6 @@ var LeafletMarkerView = layer.LeafletUILayerView.extend({
             });
         }
     },
-
     model_events: function () {
         LeafletMarkerView.__super__.model_events.apply(this, arguments);
         this.listenTo(this.model, 'change:location', function () {
@@ -129,12 +122,7 @@ var LeafletMarkerView = layer.LeafletUILayerView.extend({
         this.set_icon(this.model.get('icon'));
     },
 });
-
-
 module.exports = {
-  //views
   LeafletMarkerView : LeafletMarkerView,
-
-  //models
   LeafletMarkerModel : LeafletMarkerModel,
 };

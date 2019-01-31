@@ -1,8 +1,9 @@
-
-
-
-
-
+var widgets = require('@jupyter-widgets/base');
+var _ = require('underscore');
+var L = require('../leaflet.js');
+var path = require('./Path.js');
+var LeafletPathView = path.LeafletPathView;
+var LeafletPathModel = path.LeafletPathModel;
 
 var LeafletPolylineModel = LeafletPathModel.extend({
     defaults: _.extend({}, LeafletPathModel.prototype.defaults, {
@@ -14,3 +15,15 @@ var LeafletPolylineModel = LeafletPathModel.extend({
         no_clip : true
     })
 });
+var LeafletPolylineView = LeafletPathView.extend({
+    create_obj: function () {
+        this.obj = L.polyline(
+            this.model.get('locations'),
+            this.get_options()
+        );
+    },
+});
+module.exports = {
+  LeafletPolylineView : LeafletPolylineView,
+  LeafletPolylineModel : LeafletPolylineModel,
+};

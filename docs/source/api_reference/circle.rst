@@ -48,7 +48,7 @@ Attributes
 Attribute         Default Value      Doc
 ==============    ================   ===
 location          (0.0, 0.0)         Circle location
-radius            10                 Circle radius in pixels
+radius            10                 Circle radius in meters
 stroke            True               Set it to `false` to disable borders
 color             "#0033FF"          Stroke color
 opacity           1.0                Stroke opacity

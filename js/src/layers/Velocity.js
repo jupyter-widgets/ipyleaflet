@@ -27,6 +27,7 @@ var LeafletVelocityModel = LeafletLayerModel.extend({
         colorScale: []
     })
 });
+
 var LeafletVelocityView = layer.LeafletLayerView.extend({
     create_obj: function () {
         var options = this.get_options();
@@ -60,6 +61,7 @@ var LeafletVelocityView = layer.LeafletLayerView.extend({
         }, this);
     },
 });
+
 module.exports = {
   LeafletVelocityView : LeafletVelocityView,
   LeafletVelocityModel : LeafletVelocityModel,

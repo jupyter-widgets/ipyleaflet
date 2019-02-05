@@ -19,6 +19,7 @@ var LeafletTileLayerModel = LeafletRasterLayerModel.extend({
         detect_retina : false
     })
 });
+
 var LeafletTileLayerView = LeafletRasterLayerView.extend({
 
     create_obj: function () {
@@ -41,6 +42,7 @@ var LeafletTileLayerView = LeafletRasterLayerView.extend({
         }, this);
     },
 });
+
 module.exports = {
   LeafletTileLayerView : LeafletTileLayerView,
   LeafletTileLayerModel : LeafletTileLayerModel,

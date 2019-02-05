@@ -10,6 +10,7 @@ var LeafletRectangleModel = polygon.LeafletPolygonModel.extend({
         bounds : []
     })
 });
+
 var LeafletRectangleView = polygon.LeafletPolygonView.extend({
     create_obj: function () {
         this.obj = L.rectangle(
@@ -18,6 +19,7 @@ var LeafletRectangleView = polygon.LeafletPolygonView.extend({
         );
     },
 });
+
 module.exports = {
   LeafletRectangleView : LeafletRectangleView,
   LeafletRectangleModel : LeafletRectangleModel,

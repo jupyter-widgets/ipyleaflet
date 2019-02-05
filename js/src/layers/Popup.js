@@ -18,6 +18,7 @@ var LeafletPopupModel = LeafletUILayerModel.extend({
         child: { deserialize: widgets.unpack_models }
     }, LeafletUILayerModel.serializers)
 });
+
 var LeafletPopupView = LeafletUILayerView.extend({
     create_obj: function () {
         this.obj = L.popup(this.get_options())
@@ -97,6 +98,7 @@ var LeafletPopupView = LeafletUILayerView.extend({
         }
     }
 });
+
 module.exports = {
   LeafletPopupView : LeafletPopupView,
   LeafletPopupModel : LeafletPopupModel,

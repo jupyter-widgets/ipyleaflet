@@ -13,6 +13,7 @@ var LeafletRasterLayerModel = LeafletLayerModel.extend({
         visible : true
     })
 });
+
 var LeafletRasterLayerView = LeafletLayerView.extend({
     model_events: function () {
         LeafletRasterLayerView.__super__.model_events.apply(this, arguments);
@@ -36,6 +37,7 @@ var LeafletRasterLayerView = LeafletLayerView.extend({
         }
     }
 });
+
 module.exports = {
   LeafletRasterLayerView : LeafletRasterLayerView,
   LeafletRasterLayerModel : LeafletRasterLayerModel,

@@ -12,6 +12,7 @@ var LeafletGeoJSONModel = featuregroup.LeafletFeatureGroupModel.extend({
         hover_style : {},
     })
 });
+
 var LeafletGeoJSONView = featuregroup.LeafletFeatureGroupView.extend({
     create_obj: function () {
         var that = this;
@@ -54,6 +55,7 @@ var LeafletGeoJSONView = featuregroup.LeafletFeatureGroupView.extend({
         }, this);
     },
 });
+
 module.exports = {
   LeafletGeoJSONView : LeafletGeoJSONView,
   LeafletGeoJSONModel : LeafletGeoJSONModel,

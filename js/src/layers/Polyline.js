@@ -15,6 +15,7 @@ var LeafletPolylineModel = LeafletPathModel.extend({
         no_clip : true
     })
 });
+
 var LeafletPolylineView = LeafletPathView.extend({
     create_obj: function () {
         this.obj = L.polyline(
@@ -23,6 +24,7 @@ var LeafletPolylineView = LeafletPathView.extend({
         );
     },
 });
+
 module.exports = {
   LeafletPolylineView : LeafletPolylineView,
   LeafletPolylineModel : LeafletPolylineModel,

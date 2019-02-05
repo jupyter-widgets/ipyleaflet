@@ -26,6 +26,7 @@ var LeafletCircleMarkerView = path.LeafletPathView.extend({
         }, this);
     },
 });
+
 module.exports = {
   LeafletCircleMarkerView : LeafletCircleMarkerView,
   LeafletCircleMarkerModel : LeafletCircleMarkerModel,

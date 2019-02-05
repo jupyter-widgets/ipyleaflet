@@ -23,6 +23,7 @@ var LeafletPathModel = LeafletVectorLayerModel.extend({
         class_name : ''
     })
 });
+
 var LeafletPathView = LeafletVectorLayerView.extend({
 
     model_events: function () {
@@ -43,6 +44,7 @@ var LeafletPathView = LeafletVectorLayerView.extend({
     },
 
 });
+
 module.exports = {
   LeafletPathView : LeafletPathView,
   LeafletPathModel : LeafletPathModel,

@@ -20,6 +20,7 @@ var LeafletWMSLayerModel = LeafletTileLayerModel.extend({
         uppercase : false
     })
 });
+
 var LeafletWMSLayerView = LeafletTileLayerView.extend({
 
     create_obj: function () {
@@ -29,6 +30,7 @@ var LeafletWMSLayerView = LeafletTileLayerView.extend({
         );
     },
 });
+
 module.exports = {
   LeafletWMSLayerView : LeafletWMSLayerView,
   LeafletWMSLayerModel : LeafletWMSLayerModel,

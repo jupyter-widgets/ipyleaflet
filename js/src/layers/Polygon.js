@@ -9,6 +9,7 @@ var LeafletPolygonModel = polyline.LeafletPolylineModel.extend({
         _model_name : 'LeafletPolygonModel'
     })
 });
+
 var LeafletPolygonView = polyline.LeafletPolylineView.extend({
     create_obj: function () {
         this.obj = L.polygon(
@@ -17,6 +18,7 @@ var LeafletPolygonView = polyline.LeafletPolylineView.extend({
         );
     },
 });
+
 module.exports = {
   LeafletPolygonView : LeafletPolygonView,
   LeafletPolygonModel : LeafletPolygonModel,

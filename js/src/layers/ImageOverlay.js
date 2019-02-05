@@ -16,6 +16,7 @@ var LeafletImageOverlayModel = LeafletRasterLayerModel.extend({
         attribution : ''
     })
 });
+
 var LeafletImageOverlayView = LeafletRasterLayerView.extend({
 
     create_obj: function () {
@@ -46,6 +47,7 @@ var LeafletImageOverlayView = LeafletRasterLayerView.extend({
         }, this);
     },
 });
+
 module.exports = {
   LeafletImageOverlayView : LeafletImageOverlayView,
   LeafletImageOverlayModel : LeafletImageOverlayModel,

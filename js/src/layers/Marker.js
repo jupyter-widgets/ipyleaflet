@@ -122,6 +122,7 @@ var LeafletMarkerView = layer.LeafletUILayerView.extend({
         this.set_icon(this.model.get('icon'));
     },
 });
+
 module.exports = {
   LeafletMarkerView : LeafletMarkerView,
   LeafletMarkerModel : LeafletMarkerModel,

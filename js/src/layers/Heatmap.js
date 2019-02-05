@@ -46,6 +46,7 @@ var LeafletHeatmapView = layer.LeafletLayerView.extend({
         }
     },
 });
+
 module.exports = {
   LeafletHeatmapView : LeafletHeatmapView,
   LeafletHeatmapModel : LeafletHeatmapModel,

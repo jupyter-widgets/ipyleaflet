@@ -34,7 +34,6 @@ var drawcontrol = require('./controls/DrawControl.js')
 var map = require('./Map.js')
 
 //Exports
-
 module.exports = {
     // views
     LeafletLayerView : layer.LeafletLayerView,

@@ -15,6 +15,7 @@ var LeafletFeatureGroupView = layergroup.LeafletLayerGroupView.extend({
         this.obj = L.featureGroup();
     },
 });
+
 module.exports = {
   LeafletFeatureGroupView : LeafletFeatureGroupView,
   LeafletFeatureGroupModel : LeafletFeatureGroupModel,

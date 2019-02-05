@@ -45,6 +45,7 @@ var LeafletLayerGroupView = LeafletLayerView.extend({
         }, this);
     },
 });
+
 module.exports = {
   LeafletLayerGroupView : LeafletLayerGroupView,
   LeafletLayerGroupModel : LeafletLayerGroupModel,

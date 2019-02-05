@@ -13,12 +13,14 @@ var LeafletLocalTileLayerModel = LeafletTileLayerModel.extend({
         path : ''
     })
 });
+
 var LeafletLocalTileLayerView = LeafletTileLayerView.extend({
     create_obj: function () {
         this.model.set('url', window.location.href.replace(/[^/]*$/, '') + this.model.get('path'));
         LeafletLocalTileLayerView.__super__.create_obj.apply(this, arguments);
     }
 });
+
 module.exports = {
   LeafletLocalTileLayerView : LeafletLocalTileLayerView,
   LeafletLocalTileLayerModel : LeafletLocalTileLayerModel,

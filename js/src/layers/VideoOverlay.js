@@ -16,6 +16,7 @@ var LeafletVideoOverlayModel = LeafletRasterLayerModel.extend({
         attribution : ''
     })
 });
+
 var LeafletVideoOverlayView = LeafletRasterLayerView.extend({
 
     create_obj: function () {
@@ -73,6 +74,7 @@ var LeafletVideoOverlayView = LeafletRasterLayerView.extend({
         }, this);
     },
 });
+
 module.exports = {
   LeafletVideoOverlayView : LeafletVideoOverlayView,
   LeafletVideoOverlayModel : LeafletVideoOverlayModel,

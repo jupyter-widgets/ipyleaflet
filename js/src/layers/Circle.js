@@ -9,6 +9,7 @@ var LeafletCircleModel = circlemarker.LeafletCircleMarkerModel.extend({
         _model_name : 'LeafletCircleModel'
     })
 });
+
 var LeafletCircleView = circlemarker.LeafletCircleMarkerView.extend({
     create_obj: function () {
         this.obj = L.circle(
@@ -25,6 +26,7 @@ var LeafletCircleView = circlemarker.LeafletCircleMarkerView.extend({
         }, this);
     },
 });
+
 module.exports = {
   LeafletCircleView : LeafletCircleView,
   LeafletCircleModel : LeafletCircleModel,

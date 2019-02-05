@@ -1,7 +1,7 @@
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
-var L = require('../leaflet.js');
-var utils = require('../utils.js');
+var L = require('./leaflet.js');
+var utils = require('./utils.js');
 var LeafletWidgetView = utils.LeafletWidgetView;
 var LeafletDOMWidgetView = utils.LeafletDOMWidgetView;
 var def_loc = [0.0, 0.0];

@@ -1,4 +1,3 @@
-
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 
@@ -25,7 +24,6 @@ var leaflet_views_common_methods = {
 
 var LeafletWidgetView = widgets.WidgetView.extend(leaflet_views_common_methods);
 var LeafletDOMWidgetView = widgets.DOMWidgetView.extend(leaflet_views_common_methods);
-
 
 module.exports = {
   LeafletWidgetView : LeafletWidgetView,

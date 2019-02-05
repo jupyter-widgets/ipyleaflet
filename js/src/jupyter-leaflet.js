@@ -1,8 +1,3 @@
-var widgets = require('@jupyter-widgets/base');
-var _ = require('underscore');
-var L = require('./leaflet.js');
-var utils = require('./utils.js');
-
 // Layers
 var layer = require('./layers/Layer.js');
 var marker = require('./layers/Marker.js');
@@ -36,7 +31,7 @@ var measurecontrol = require('./controls/MeasureControl.js')
 var drawcontrol = require('./controls/DrawControl.js')
 
 //Map
-var map = require('./map/Map.js')
+var map = require('./Map.js')
 
 //Exports
 

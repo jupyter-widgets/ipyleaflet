@@ -25,10 +25,11 @@ var geojson = require('./layers/GeoJSON.js')
 
 //Controls
 var control = require('./controls/Control.js')
-var splitmap = require('./controls/SplitMapControl.js')
+var splitmapcontrol = require('./controls/SplitMapControl.js')
 var layerscontrol = require('./controls/LayersControl.js')
 var measurecontrol = require('./controls/MeasureControl.js')
 var drawcontrol = require('./controls/DrawControl.js')
+var fullscreencontrol = require('./controls/FullScreenControl.js')
 
 //Map
 var map = require('./Map.js')
@@ -36,6 +37,8 @@ var map = require('./Map.js')
 //Exports
 module.exports = {
     // views
+    LeafletFullScreenControlView : fullscreencontrol.LeafletFullScreenControlView,
+
     LeafletLayerView : layer.LeafletLayerView,
     LeafletUILayerView : layer.LeafletUILayerView,
     LeafletIconView : icon.LeafletIconView,
@@ -64,10 +67,12 @@ module.exports = {
     LeafletLayersControlView : layerscontrol.LeafletLayersControlView,
     LeafletMeasureControlView : measurecontrol.LeafletMeasureControlView,
     LeafletDrawControlView : drawcontrol.LeafletDrawControlView,
-    LeafletSplitMapControlView : splitmap.LeafletSplitMapControlView,
+    LeafletSplitMapControlView : splitmapcontrol.LeafletSplitMapControlView,
     LeafletMapView : map.LeafletMapView,
 
     // models
+    LeafletFullScreenControlModel : fullscreencontrol.LeafletFullScreenControlModel,
+
     LeafletLayerModel : layer.LeafletLayerModel,
     LeafletUILayerModel : layer.LeafletUILayerModel,
     LeafletIconModel : icon.LeafletIconModel,
@@ -96,6 +101,6 @@ module.exports = {
     LeafletLayersControlModel : layerscontrol.LeafletLayersControlModel,
     LeafletMeasureControlModel : measurecontrol.LeafletMeasureControlModel,
     LeafletDrawControlModel : drawcontrol.LeafletDrawControlModel,
-    LeafletSplitMapControlModel : splitmap.LeafletSplitMapControlModel,
+    LeafletSplitMapControlModel : splitmapcontrol.LeafletSplitMapControlModel,
     LeafletMapModel : map.LeafletMapModel
 };

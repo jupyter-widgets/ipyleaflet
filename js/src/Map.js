@@ -125,6 +125,7 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
         return this.create_child_view(child_model, {
             map_view: this
         }).then(function (view) {
+            console.log(view.obj)
             that.obj.addControl(view.obj);
 
             // Trigger the displayed event of the child view.
@@ -164,7 +165,7 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
     create_obj: function () {
         var that = this;
         return this.layoutPromise.then(function(views) {
-            that.obj = L.map(that.el, that.get_options());
+            that.obj = L.map(that.el, that.get_options(), {fullscreenControl: true,});
         });
     },
 
@@ -280,6 +281,7 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
         }
     },
 });
+
 module.exports = {
   LeafletMapView : LeafletMapView,
   LeafletMapModel : LeafletMapModel,

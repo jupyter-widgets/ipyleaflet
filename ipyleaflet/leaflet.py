@@ -557,6 +557,11 @@ class Control(Widget):
         return [name for name in self.traits(o=True)]
 
 
+class FullScreenControl(Control):
+    _view_name = Unicode('LeafletFullScreenControlView').tag(sync=True)
+    _model_name = Unicode('LeafletFullScreenControlModel').tag(sync=True)
+
+
 class LayersControl(Control):
     _view_name = Unicode('LeafletLayersControlView').tag(sync=True)
     _model_name = Unicode('LeafletLayersControlModel').tag(sync=True)

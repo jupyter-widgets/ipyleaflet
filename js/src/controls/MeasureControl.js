@@ -39,7 +39,6 @@ var LeafletMeasureControlView = LeafletControlView.extend({
 
     create_obj: function () {
         this.obj = L.control.measure(this.get_options());
-        this.obj.addTo(this.map_view.obj);
         this.default_units = L.extend({}, this.obj.options.units);
     },
 

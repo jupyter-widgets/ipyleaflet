@@ -13,7 +13,7 @@ var LeafletFullScreenControlModel = LeafletControlModel.extend({
 });
 
 var LeafletFullScreenControlView = LeafletControlView.extend({
-  initialize: function (parameters) {
+    initialize: function (parameters) {
         LeafletFullScreenControlView.__super__.initialize.apply(this, arguments);
         this.map_view = this.options.map_view;
     },
@@ -24,8 +24,7 @@ var LeafletFullScreenControlView = LeafletControlView.extend({
 
     create_obj: function () {
       this.obj = L.control.fullscreen();
-      //this.obj.addTo(this.map_view.obj);
-     },
+    },
 });
 
 module.exports = {

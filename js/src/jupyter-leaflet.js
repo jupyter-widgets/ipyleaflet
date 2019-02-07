@@ -13,25 +13,26 @@ var velocity = require('./layers/Velocity.js');
 var heatmap = require('./layers/Heatmap.js');
 var vectorlayer = require('./layers/VectorLayer.js');
 var path = require('./layers/Path.js');
-var polyline = require('./layers/Polyline.js')
-var polygon = require('./layers/Polygon.js')
-var rectangle = require('./layers/Rectangle.js')
-var circlemarker = require('./layers/CircleMarker.js')
-var circle = require('./layers/Circle.js')
-var markercluster = require('./layers/MarkerCluster.js')
-var layergroup = require('./layers/LayerGroup.js')
-var featuregroup = require('./layers/FeatureGroup.js')
-var geojson = require('./layers/GeoJSON.js')
+var polyline = require('./layers/Polyline.js');
+var polygon = require('./layers/Polygon.js');
+var rectangle = require('./layers/Rectangle.js');
+var circlemarker = require('./layers/CircleMarker.js');
+var circle = require('./layers/Circle.js');
+var markercluster = require('./layers/MarkerCluster.js');
+var layergroup = require('./layers/LayerGroup.js');
+var featuregroup = require('./layers/FeatureGroup.js');
+var geojson = require('./layers/GeoJSON.js');
 
 //Controls
-var control = require('./controls/Control.js')
-var splitmap = require('./controls/SplitMapControl.js')
-var layerscontrol = require('./controls/LayersControl.js')
-var measurecontrol = require('./controls/MeasureControl.js')
-var drawcontrol = require('./controls/DrawControl.js')
+var control = require('./controls/Control.js');
+var splitmapcontrol = require('./controls/SplitMapControl.js');
+var layerscontrol = require('./controls/LayersControl.js');
+var measurecontrol = require('./controls/MeasureControl.js');
+var drawcontrol = require('./controls/DrawControl.js');
+var fullscreencontrol = require('./controls/FullScreenControl.js');
 
 //Map
-var map = require('./Map.js')
+var map = require('./Map.js');
 
 //Exports
 module.exports = {
@@ -64,7 +65,8 @@ module.exports = {
     LeafletLayersControlView : layerscontrol.LeafletLayersControlView,
     LeafletMeasureControlView : measurecontrol.LeafletMeasureControlView,
     LeafletDrawControlView : drawcontrol.LeafletDrawControlView,
-    LeafletSplitMapControlView : splitmap.LeafletSplitMapControlView,
+    LeafletSplitMapControlView : splitmapcontrol.LeafletSplitMapControlView,
+    LeafletFullScreenControlView : fullscreencontrol.LeafletFullScreenControlView,
     LeafletMapView : map.LeafletMapView,
 
     // models
@@ -96,6 +98,7 @@ module.exports = {
     LeafletLayersControlModel : layerscontrol.LeafletLayersControlModel,
     LeafletMeasureControlModel : measurecontrol.LeafletMeasureControlModel,
     LeafletDrawControlModel : drawcontrol.LeafletDrawControlModel,
-    LeafletSplitMapControlModel : splitmap.LeafletSplitMapControlModel,
+    LeafletSplitMapControlModel : splitmapcontrol.LeafletSplitMapControlModel,
+    LeafletFullScreenControlModel : fullscreencontrol.LeafletFullScreenControlModel,
     LeafletMapModel : map.LeafletMapModel
 };

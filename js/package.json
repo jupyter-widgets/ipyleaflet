@@ -31,6 +31,7 @@
     "leaflet-velocity": "^1.2.4",
     "leaflet-measure": "^3.1.0",
     "leaflet-rotatedmarker": "^0.2.0",
+    "leaflet-fullscreen": "^1.0.2",
     "underscore": "^1.8.3"
   },
   "jupyterlab": {

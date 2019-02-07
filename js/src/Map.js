@@ -280,6 +280,7 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
         }
     },
 });
+
 module.exports = {
   LeafletMapView : LeafletMapView,
   LeafletMapModel : LeafletMapModel,

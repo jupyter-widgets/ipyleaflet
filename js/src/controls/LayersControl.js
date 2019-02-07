@@ -61,8 +61,6 @@ var LeafletLayersControlView = LeafletControlView.extend({
             }, {});
             that.obj = L.control.layers(baselayers, overlays);
             return that;
-        }).then(function() {
-            that.obj.addTo(that.map_view.obj);
         });
     }
 });

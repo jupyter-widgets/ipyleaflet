@@ -18,6 +18,18 @@ var LeafletControlView = utils.LeafletWidgetView.extend({
         LeafletControlView.__super__.initialize.apply(this, arguments);
         this.map_view = this.options.map_view;
     },
+
+    render: function (){
+      this.create_obj();
+      this.leaflet_events();
+      this.model_events();
+    },
+
+    leaflet_events: function () {
+    },
+
+    model_events: function () {
+    },
 });
 
 module.exports = {

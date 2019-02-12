@@ -31,14 +31,10 @@ var LeafletDrawControlView = LeafletControlView.extend({
         this.map_view = this.options.map_view;
     },
 
-    render: function () {
-        this.feature_group = L.featureGroup();
-        this.map_view.obj.addLayer(this.feature_group);
-        this.create_obj();
-    },
-
     create_obj: function () {
         var that = this;
+        this.feature_group = L.featureGroup();
+        this.map_view.obj.addLayer(this.feature_group);
         var polyline = this.model.get('polyline');
         if (_.isEmpty(polyline)) { polyline = false; }
         var polygon = this.model.get('polygon');

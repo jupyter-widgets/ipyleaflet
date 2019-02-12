@@ -18,10 +18,6 @@ var LeafletFullScreenControlView = LeafletControlView.extend({
         this.map_view = this.options.map_view;
     },
 
-    render: function () {
-        this.create_obj();
-    },
-
     create_obj: function () {
       this.obj = L.control.fullscreen();
     },

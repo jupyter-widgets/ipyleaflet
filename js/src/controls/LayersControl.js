@@ -28,18 +28,17 @@ var LeafletLayersControlView = LeafletControlView.extend({
         this.map_view = this.options.map_view;
     },
 
-    render: function () {
-        var that = this;
-        this.listenTo(this.map_view.model, 'change:layers', function() {
-            that.toggle_obj();
-        });
-        return this.create_obj();
-    },
-
     toggle_obj: function () {
         this.obj.remove();
         delete this.obj;
         this.create_obj();
+    },
+
+    model_events: function (){
+      var that = this;
+      this.listenTo(this.map_view.model, 'change:layers', function() {
+          that.toggle_obj();
+      });
     },
 
     create_obj: function () {

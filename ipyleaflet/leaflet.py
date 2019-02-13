@@ -644,16 +644,16 @@ class SplitMapControl(Control):
     _view_name = Unicode('LeafletSplitMapControlView').tag(sync=True)
     _model_name = Unicode('LeafletSplitMapControlModel').tag(sync=True)
 
-    left_layer = Instance(TileLayer).tag(sync=True, **widget_serialization)
-    right_layer = Instance(TileLayer).tag(sync=True, **widget_serialization)
+    left_layer = Instance(Layer).tag(sync=True, **widget_serialization)
+    right_layer = Instance(Layer).tag(sync=True, **widget_serialization)
 
     @default('left_layer')
     def _default_left_layer(self):
-        return TileLayer()
+        return Layer()
 
     @default('right_layer')
     def _default_right_layer(self):
-        return TileLayer()
+        return Layer()
 
     def __init__(self, **kwargs):
         super(SplitMapControl, self).__init__(**kwargs)

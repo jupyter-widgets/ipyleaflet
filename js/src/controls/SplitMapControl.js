@@ -26,19 +26,19 @@ var LeafletSplitMapControlView = LeafletControlView.extend({
         this.map_view = this.options.map_view;
     },
 
-    render: function () {
-        var left_layer = this.model.get('left_layer');
-        var right_layer = this.model.get('right_layer');
-        this.create_obj();
-    },
-
     create_obj: function () {
-        var leftChild = this.model.get('left_layer').attributes;
-        var rightChild = this.model.get('right_layer').attributes;
-        var left_layer = L.tileLayer(leftChild.url, leftChild.options).addTo(this.map_view.obj);
-        var right_layer = L.tileLayer(rightChild.url, rightChild.options).addTo(this.map_view.obj);
-        this.obj = L.control.splitMap(left_layer, right_layer);
-    }
+        var leftChild = this.model.get('left_layer');
+        var rightChild = this.model.get('right_layer');
+
+        //this.map_view.add_layer_model(leftChild)
+
+
+       return this.map_view.add_layer_model(leftChild).then((left_layer) => {
+            this.map_view.add_layer_model(rightChild).then((right_layer) => {
+              this.obj = L.control.splitMap(left_layer.obj, right_layer.obj);
+            });
+        });
+    },
 });
 
 module.exports = {

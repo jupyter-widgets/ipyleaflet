@@ -27,15 +27,25 @@ var LeafletSplitMapControlView = LeafletControlView.extend({
     },
 
     create_obj: function () {
-       var leftChild = this.model.get('left_layer');
-       var rightChild = this.model.get('right_layer');
-
-       return this.map_view.add_layer_model(leftChild).then((left_layer) => {
-            this.map_view.add_layer_model(rightChild).then((right_layer) => {
-              this.obj = L.control.splitMap(left_layer.obj, right_layer.obj);
+        var left_model = this.model.get('left_layer');
+        var right_model = this.model.get('right_layer');
+        var layersModel = this.map_view.model.get('layers');
+        layersModel.push(left_model, right_model);
+        return this.map_view.layer_views.update(layersModel).then((views) => {
+            var left_view;
+            var right_view;
+            views.forEach((view)=>{
+                if(view.model === left_model){
+                    left_view = view;
+                }
+                if(view.model === right_model){
+                    right_view = view;
+                }
             });
-        });
-    },
+            
+            this.obj = L.control.splitMap(left_view.obj,right_view.obj);
+       });
+     },
 });
 
 module.exports = {

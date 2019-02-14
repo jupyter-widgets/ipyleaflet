@@ -649,11 +649,11 @@ class SplitMapControl(Control):
 
     @default('left_layer')
     def _default_left_layer(self):
-        return Layer()
+        return TileLayer()
 
     @default('right_layer')
     def _default_right_layer(self):
-        return Layer()
+        return TileLayer()
 
     def __init__(self, **kwargs):
         super(SplitMapControl, self).__init__(**kwargs)

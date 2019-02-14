@@ -12,6 +12,7 @@
   "scripts": {
     "clean": "rimraf dist/ && rimraf ../ipyleaflet/static",
     "build": "webpack",
+    "watch": "webpack --watch",
     "prepublish": "npm run clean && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

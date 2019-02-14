@@ -40,29 +40,29 @@ var LeafletLayerView = utils.LeafletWidgetView.extend({
     },
 
     render: function () {
-        this.create_obj();
-        this.leaflet_events();
-        this.model_events();
+        return Promise.resolve(this.create_obj()).then(() => {
+            this.leaflet_events();
+            this.model_events();
+            this.bind_popup(this.model.get('popup'));
+            this.listenTo(this.model, 'change:popup', function(model, value) {
+                this.bind_popup(value);
+            });
 
-        this.bind_popup(this.model.get('popup'));
-        this.listenTo(this.model, 'change:popup', function(model, value) {
-            this.bind_popup(value);
-        });
-
-        // If the layer is interactive
-        if (this.obj.on) {
-            this.obj.on('click dblclick mousedown mouseup mouseover mouseout', (event) => {
-                this.send({
-                    event: 'interaction',
-                    type: event.type,
-                    coordinates: [event.latlng.lat, event.latlng.lng]
+            // If the layer is interactive
+            if (this.obj.on) {
+                this.obj.on('click dblclick mousedown mouseup mouseover mouseout', (event) => {
+                    this.send({
+                        event: 'interaction',
+                        type: event.type,
+                        coordinates: [event.latlng.lat, event.latlng.lng]
+                    });
                 });
-            });
-            this.obj.on('popupopen', (event) => {
-                // This is a workaround for making maps rendered correctly in popups
-                window.dispatchEvent(new Event('resize'));
-            });
-        }
+                this.obj.on('popupopen', (event) => {
+                    // This is a workaround for making maps rendered correctly in popups
+                    window.dispatchEvent(new Event('resize'));
+                });
+            }
+        })
     },
 
     leaflet_events: function () {

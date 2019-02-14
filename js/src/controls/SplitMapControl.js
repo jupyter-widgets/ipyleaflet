@@ -27,11 +27,8 @@ var LeafletSplitMapControlView = LeafletControlView.extend({
     },
 
     create_obj: function () {
-        var leftChild = this.model.get('left_layer');
-        var rightChild = this.model.get('right_layer');
-
-        //this.map_view.add_layer_model(leftChild)
-
+       var leftChild = this.model.get('left_layer');
+       var rightChild = this.model.get('right_layer');
 
        return this.map_view.add_layer_model(leftChild).then((left_layer) => {
             this.map_view.add_layer_model(rightChild).then((right_layer) => {

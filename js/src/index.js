@@ -18,6 +18,7 @@ module.exports = require('./jupyter-leaflet.js');
 module.exports['version'] = require('../package.json').version;
 
 if (hasL) {
+    console.log("Existing `L` detected, running ipyleaflet's Leaflet in no-conflict mode as `ipyL`");
     ipyL = L.noConflict();
 }
 

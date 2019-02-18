@@ -13,5 +13,11 @@ require('leaflet/dist/images/marker-icon.png');
 require('leaflet/dist/images/marker-icon-2x.png');
 
 // Export everything from jupyter-leaflet and the npm package version number.
+hasL = (typeof(window.L) != 'undefined');
 module.exports = require('./jupyter-leaflet.js');
 module.exports['version'] = require('../package.json').version;
+
+if (hasL) {
+    ipyL = L.noConflict();
+}
+

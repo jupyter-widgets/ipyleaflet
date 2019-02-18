@@ -20,10 +20,4 @@ L.Icon.Default.mergeOptions({
     shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
-if (typeof(L) == 'undefined') {
-    module.exports = L;
-} else {
-    console.log("Existing Leaflet detected in globals as `L`- using `ipyL` for ipyleaflet's reference");
-    ipyL = L.noConflict()    
-    module.exports = ipyL;
-}
+module.exports = L;

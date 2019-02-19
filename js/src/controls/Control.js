@@ -19,10 +19,11 @@ var LeafletControlView = utils.LeafletWidgetView.extend({
         this.map_view = this.options.map_view;
     },
 
-    render: function (){
-      this.create_obj();
-      this.leaflet_events();
-      this.model_events();
+    render: function () {
+      return Promise.resolve(this.create_obj()).then(() => {
+        this.leaflet_events();
+        this.model_events();
+      });
     },
 
     leaflet_events: function () {

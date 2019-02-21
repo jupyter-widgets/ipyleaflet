@@ -27,23 +27,30 @@ var LeafletSplitMapControlView = LeafletControlView.extend({
     },
 
     create_obj: function () {
-        var left_model = this.model.get('left_layer');
-        var right_model = this.model.get('right_layer');
+        var left_models = this.model.get('left_layer');
+        var right_models = this.model.get('right_layer');
+
         var layersModel = this.map_view.model.get('layers');
-        layersModel.push(left_model, right_model);
+
+
+        left_models.forEach((left_model)=>{layersModel.push(left_model)});
+        right_models.forEach((right_model)=>{layersModel.push(right_model)});
+
+        //layersModel.push(left_model, right_model);
+
         return this.map_view.layer_views.update(layersModel).then((views) => {
-            var left_view;
-            var right_view;
+            var left_view = [];
+            var right_view = [];
             views.forEach((view)=>{
-                if(view.model === left_model){
-                    left_view = view;
+                if(view.model in left_models){
+                    left_view.push(view.obj);
                 }
-                if(view.model === right_model){
-                    right_view = view;
+                if(view.model in right_models){
+                    right_view.push(view.obj);
                 }
             });
-            
-            this.obj = L.control.splitMap(left_view.obj,right_view.obj);
+
+            this.obj = L.control.splitMap(left_view,right_view);
        });
      },
 });

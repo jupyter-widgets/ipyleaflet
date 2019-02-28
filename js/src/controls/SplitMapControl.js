@@ -20,30 +20,35 @@ var LeafletSplitMapControlModel = LeafletControlModel.extend({
     })
 });
 
+function asArray (arg) {
+    return Array.isArray(arg) ? arg : [arg]
+}
+
 var LeafletSplitMapControlView = LeafletControlView.extend({
-  initialize: function (parameters) {
+    initialize: function (parameters) {
         LeafletSplitMapControlView.__super__.initialize.apply(this, arguments);
         this.map_view = this.options.map_view;
     },
 
     create_obj: function () {
-        var left_model = this.model.get('left_layer');
-        var right_model = this.model.get('right_layer');
+        var left_models = asArray(this.model.get('left_layer'));
+        var right_models = asArray(this.model.get('right_layer'));
         var layersModel = this.map_view.model.get('layers');
-        layersModel.push(left_model, right_model);
+        layersModel = layersModel.concat(left_models, right_models);
+
         return this.map_view.layer_views.update(layersModel).then((views) => {
-            var left_view;
-            var right_view;
+            var left_views = [];
+            var right_views = [];
             views.forEach((view)=>{
-                if(view.model === left_model){
-                    left_view = view;
+                if(left_models.includes(view.model)){
+                    left_views.push(view.obj);
                 }
-                if(view.model === right_model){
-                    right_view = view;
+                if(right_models.includes(view.model)){
+                    right_views.push(view.obj);
                 }
             });
-            
-            this.obj = L.control.splitMap(left_view.obj,right_view.obj);
+
+            this.obj = L.control.splitMap(left_views, right_views);
        });
      },
 });

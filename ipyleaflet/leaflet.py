@@ -7,7 +7,7 @@ from ipywidgets import (
 
 from traitlets import (
     Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
-    link, observe, default, validate, TraitError
+    link, observe, default, validate, TraitError, Union
 )
 
 from branca.colormap import linear, ColorMap
@@ -644,8 +644,8 @@ class SplitMapControl(Control):
     _view_name = Unicode('LeafletSplitMapControlView').tag(sync=True)
     _model_name = Unicode('LeafletSplitMapControlModel').tag(sync=True)
 
-    left_layer = Instance(Layer).tag(sync=True, **widget_serialization)
-    right_layer = Instance(Layer).tag(sync=True, **widget_serialization)
+    left_layer = Union((Instance(Layer), List(Instance(Layer)))).tag(sync=True, **widget_serialization)
+    right_layer = Union((Instance(Layer), List(Instance(Layer)))).tag(sync=True, **widget_serialization)
 
     @default('left_layer')
     def _default_left_layer(self):

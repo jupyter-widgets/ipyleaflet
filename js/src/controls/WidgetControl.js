@@ -8,7 +8,7 @@ var LeafletControlModel = control.LeafletControlModel;
 
 L.Control.WidgetControl = L.Control.extend({
     options: {
-        position: 'topleft',
+        position: 'topright',
         title: {
             'false': 'View WidgetControl',
             'true': 'Exit WidgetControl'
@@ -61,6 +61,7 @@ L.Control.WidgetControl = L.Control.extend({
 		return this;
     },
     */
+
     _updateContent: function () {
 
 		if (!this._content) { return; }
@@ -74,6 +75,9 @@ L.Control.WidgetControl = L.Control.extend({
 
 		//var content = (typeof this._content === 'function') ? this._content(this._source || this) : this._content;
         var node = this._container
+        L.DomEvent.disableClickPropagation(node);
+        L.DomEvent.disableScrollPropagation(node);
+
         var content = this._content;
 		while (node.hasChildNodes()) {
 			node.removeChild(node.firstChild);
@@ -95,7 +99,7 @@ L.Control.WidgetControl = L.Control.extend({
 		//this._container.style.visibility = '';
 
 		//this._adjustPan();
-},
+    },
 
 
     getContent: function(){
@@ -109,13 +113,13 @@ L.Control.WidgetControl = L.Control.extend({
     },
 
     onAdd: function (map) {
-        var container = L.DomUtil.create('div', 'leaflet-control');
+        var container = L.DomUtil.create('div', 'leaflet-widgetcontrol');
         this._container = container ;
         return container;
     },
 });
 
-L.control.widget = function (options) {
+L.control.widgetcontrol = function (options) {
     return new L.Control.WidgetControl(options);
 };
 
@@ -141,7 +145,7 @@ var LeafletWidgetControlView = LeafletControlView.extend({
     },
 
     create_obj: function () {
-        this.obj = L.control.widget();
+        this.obj = L.control.widgetcontrol(this.get_options());
         this.create_child_view(this.model.get('widget')).then((view)=>{
             this.obj.setContent(view.el)
         })

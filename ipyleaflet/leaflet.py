@@ -567,7 +567,7 @@ class WidgetControl(Control):
 
     position = Enum(
         ['topright', 'topleft', 'bottomright', 'bottomleft'],
-        default_value='topright',
+        default_value='topleft',
         help="""Possible values are topleft, topright, bottomleft
                 or bottomright"""
     ).tag(sync=True, o=True)

@@ -5,7 +5,8 @@
 }
 
 .leaflet-widgetcontrol {
-    background-color: #f7f7f7;
+    background-color: #ffffff;
+    border-radius: 4.5px;
     box-shadow: 4px 5px 8px 0px #9e9e9e
 }
 

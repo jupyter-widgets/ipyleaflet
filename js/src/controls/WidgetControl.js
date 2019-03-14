@@ -7,24 +7,22 @@ var LeafletControlModel = control.LeafletControlModel;
 
 L.Control.WidgetControl = L.Control.extend({
     options: {
-        position: 'topright',
+        position: 'topleft',
+        widget : 'null',
     },
 
     _updateContent: function () {
-		if (!this._content) { return; }
+        if (!this._content) { return; }
         var node = this._container
         L.DomEvent.disableClickPropagation(node);
         L.DomEvent.disableScrollPropagation(node);
         var content = this._content;
-		while (node.hasChildNodes()) {
-			node.removeChild(node.firstChild);
-		}
-		node.appendChild(content);
+        node.appendChild(content);
     },
 
     update: function () {
-		if (!this._map) { return; }
-		this._updateContent();
+        if (!this._map) { return; }
+        this._updateContent();
     },
 
     getContent: function(){
@@ -60,20 +58,33 @@ var LeafletWidgetControlModel = LeafletControlModel.extend({
     serializers: _.extend({
         widget: { deserialize: widgets.unpack_models }
     }, LeafletControlModel.serializers)
-
 });
 
 var LeafletWidgetControlView = LeafletControlView.extend({
     initialize: function (parameters) {
         LeafletWidgetControlView.__super__.initialize.apply(this, arguments);
         this.map_view = this.options.map_view;
+        this.widget_view = undefined;
+    },
+
+    set_widget: function(value){
+        if (this.widget_view){
+            this.widget_view.remove();
+        }
+        if (value){
+            return this.create_child_view(value).then((view)=>{
+                this.widget_view = view;
+                this.obj.setContent(view.el)
+            })
+        }
     },
 
     create_obj: function () {
         this.obj = L.control.widgetcontrol(this.get_options());
-        this.create_child_view(this.model.get('widget')).then((view)=>{
-            this.obj.setContent(view.el)
-        })
+        this.set_widget(this.model.get('widget'));
+        this.listenTo(this.model, 'change:widget', function(model){
+            this.set_widget(this.model.get('widget'));
+        });
     },
 });
 

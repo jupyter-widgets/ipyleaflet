@@ -561,9 +561,7 @@ class WidgetControl(Control):
     _view_name = Unicode('LeafletWidgetControlView').tag(sync=True)
     _model_name = Unicode('LeafletWidgetControlModel').tag(sync=True)
 
-    widget = Instance(
-        DOMWidget, allow_none=True, default_value=None
-    ).tag(sync=True, **widget_serialization)
+    widget = Instance(DOMWidget).tag(sync=True, **widget_serialization)
 
     position = Enum(
         ['topright', 'topleft', 'bottomright', 'bottomleft'],

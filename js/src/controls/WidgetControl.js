@@ -10,23 +10,14 @@ L.Control.WidgetControl = L.Control.extend({
         position: 'topleft',
     },
 
-    _updateContent: function () {
-        if (!this._content) { return; }
-        this._container.appendChild(this._content);
-    },
-
-    update: function () {
-        if (!this._map) { return; }
-        this._updateContent();
-    },
-
     getContent: function(){
         return this._content;
     },
 
     setContent: function(content){
+        if (!this._map) { return; }
         this._content = content;
-        this.update();
+        this._container.appendChild(this._content);
         return this;
     },
 

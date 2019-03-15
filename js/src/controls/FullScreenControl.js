@@ -6,10 +6,10 @@ var LeafletControlView = control.LeafletControlView;
 var LeafletControlModel = control.LeafletControlModel;
 
 var LeafletFullScreenControlModel = LeafletControlModel.extend({
-  defaults: _.extend({}, LeafletControlModel.prototype.defaults, {
-    _view_name : 'LeafletFullScreenControlView',
-    _model_name : 'LeafletFullScreenControlModel',
-  })
+    defaults: _.extend({}, LeafletControlModel.prototype.defaults, {
+        _view_name: 'LeafletFullScreenControlView',
+        _model_name: 'LeafletFullScreenControlModel',
+    })
 });
 
 var LeafletFullScreenControlView = LeafletControlView.extend({
@@ -19,11 +19,11 @@ var LeafletFullScreenControlView = LeafletControlView.extend({
     },
 
     create_obj: function () {
-      this.obj = L.control.fullscreen();
+        this.obj = L.control.fullscreen();
     },
 });
 
 module.exports = {
-  LeafletFullScreenControlView : LeafletFullScreenControlView,
-  LeafletFullScreenControlModel : LeafletFullScreenControlModel,
+    LeafletFullScreenControlView : LeafletFullScreenControlView,
+    LeafletFullScreenControlModel : LeafletFullScreenControlModel,
 };

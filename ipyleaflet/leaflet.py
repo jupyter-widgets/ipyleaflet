@@ -557,6 +557,20 @@ class Control(Widget):
         return [name for name in self.traits(o=True)]
 
 
+class WidgetControl(Control):
+    _view_name = Unicode('LeafletWidgetControlView').tag(sync=True)
+    _model_name = Unicode('LeafletWidgetControlModel').tag(sync=True)
+
+    widget = Instance(DOMWidget).tag(sync=True, **widget_serialization)
+
+    position = Enum(
+        ['topright', 'topleft', 'bottomright', 'bottomleft'],
+        default_value='topleft',
+        help="""Possible values are topleft, topright, bottomleft
+                or bottomright"""
+    ).tag(sync=True, o=True)
+
+
 class FullScreenControl(Control):
     _view_name = Unicode('LeafletFullScreenControlView').tag(sync=True)
     _model_name = Unicode('LeafletFullScreenControlModel').tag(sync=True)

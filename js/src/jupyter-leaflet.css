@@ -4,6 +4,12 @@
     flex: 1 1 auto;
 }
 
+.leaflet-widgetcontrol {
+    background-color: #ffffff;
+    border-radius: 4.5px;
+    box-shadow: 4px 5px 8px 0px #9e9e9e
+}
+
 .jp-LinkedOutputView .jupyter-widgets.leaflet-container {
     min-height: 360px;  /* Min-height required for mirred output in jlab < 0.31.6 */
     height: 100%;

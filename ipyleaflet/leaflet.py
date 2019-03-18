@@ -21,6 +21,7 @@ from .basemaps import basemaps
 from ._version import EXTENSION_VERSION
 
 def_loc = [0.0, 0.0]
+allowed_crs = ['Earth', 'EPSG3395', 'EPSG3857', 'EPSG4326', 'Base', 'Simple']
 
 
 def basemap_to_tiles(bm, day='yesterday', **kwargs):
@@ -258,7 +259,7 @@ class WMSLayer(TileLayer):
     styles = Unicode().tag(sync=True, o=True)
     format = Unicode('image/jpeg').tag(sync=True, o=True)
     transparent = Bool(False).tag(sync=True, o=True)
-    crs = Unicode(allow_none=True, default_value=None).tag(sync=True, o=True)
+    crs = Enum(values=allowed_crs, default_value='EPSG3857').tag(sync=True)
     uppercase = Bool(False).tag(sync=True, o=True)
 
 
@@ -762,6 +763,7 @@ class Map(DOMWidget, InteractMixin):
     max_zoom = Int(18).tag(sync=True, o=True)
     min_zoom = Int(1).tag(sync=True, o=True)
     interpolation = Unicode('bilinear').tag(sync=True, o=True)
+    crs = Enum(values=allowed_crs, default_value='EPSG3857').tag(sync=True)
 
     # Specification of the basemap
     basemap = Dict(default_value=dict(

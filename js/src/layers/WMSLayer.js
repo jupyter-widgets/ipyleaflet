@@ -22,16 +22,15 @@ var LeafletWMSLayerModel = LeafletTileLayerModel.extend({
 });
 
 var LeafletWMSLayerView = LeafletTileLayerView.extend({
-
     create_obj: function () {
         this.obj = L.tileLayer.wms(
             this.model.get('url'),
-            this.get_options()
+            _.extend({crs: L.CRS[this.model.get('crs')]}, this.get_options())
         );
     },
 });
 
 module.exports = {
-  LeafletWMSLayerView : LeafletWMSLayerView,
-  LeafletWMSLayerModel : LeafletWMSLayerModel,
+    LeafletWMSLayerView: LeafletWMSLayerView,
+    LeafletWMSLayerModel: LeafletWMSLayerModel,
 };

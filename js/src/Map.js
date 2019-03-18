@@ -53,7 +53,8 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         west : def_loc[1],
         options : [],
         layers : [],
-        controls : []
+        controls : [],
+        crs: 'EPSG3857'
     }),
 
     update_bounds: function() {
@@ -162,9 +163,8 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
     },
 
     create_obj: function () {
-        var that = this;
-        return this.layoutPromise.then(function(views) {
-            that.obj = L.map(that.el, that.get_options());
+        return this.layoutPromise.then((views) => {
+            this.obj = L.map(this.el, _.extend({crs: L.CRS[this.model.get('crs')]}, this.get_options()));
         });
     },
 

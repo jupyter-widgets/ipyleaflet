@@ -4,7 +4,11 @@
 Layers Control
 ==============
 
-The ``LayersControl`` allows one to display a selector on the top right of the map in order to select which tile layer to display on the map.
+The ``LayersControl`` allows one to display a layer selector on the map in order
+to select which layers to display on the map.
+
+Layers have a ``name`` attribute which is displayed in the selector and can be changed
+by the user.
 
 .. code::
 

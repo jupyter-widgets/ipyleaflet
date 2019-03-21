@@ -9,7 +9,8 @@ var LeafletControlModel = widgets.WidgetModel.extend({
         _model_name : 'LeafletControlModel',
         _view_module : 'jupyter-leaflet',
         _model_module : 'jupyter-leaflet',
-        options : []
+        options : [],
+        position: 'topleft',
     })
 });
 
@@ -20,20 +21,28 @@ var LeafletControlView = utils.LeafletWidgetView.extend({
     },
 
     render: function () {
-      return Promise.resolve(this.create_obj()).then(() => {
-        this.leaflet_events();
-        this.model_events();
-      });
+        return Promise.resolve(this.create_obj()).then(() => {
+            this.leaflet_events();
+            this.model_events();
+        });
     },
 
     leaflet_events: function () {
     },
 
     model_events: function () {
+        var key;
+        var o = this.model.get('options');
+        for (var i=0; i<o.length; i++) {
+            key = o[i];
+            this.listenTo(this.model, 'change:' + key, function () {
+                L.setOptions(this.obj, this.get_options());
+            }, this);
+        }
     },
 });
 
 module.exports = {
-  LeafletControlView : LeafletControlView,
-  LeafletControlModel : LeafletControlModel,
+    LeafletControlView: LeafletControlView,
+    LeafletControlModel: LeafletControlModel,
 };

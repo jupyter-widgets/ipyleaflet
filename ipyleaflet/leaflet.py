@@ -552,6 +552,13 @@ class Control(Widget):
 
     options = List(trait=Unicode).tag(sync=True)
 
+    position = Enum(
+        ['topright', 'topleft', 'bottomright', 'bottomleft'],
+        default_value='topleft',
+        help="""Possible values are topleft, topright, bottomleft
+                or bottomright"""
+    ).tag(sync=True, o=True)
+
     @default('options')
     def _default_options(self):
         return [name for name in self.traits(o=True)]
@@ -563,12 +570,10 @@ class WidgetControl(Control):
 
     widget = Instance(DOMWidget).tag(sync=True, **widget_serialization)
 
-    position = Enum(
-        ['topright', 'topleft', 'bottomright', 'bottomleft'],
-        default_value='topleft',
-        help="""Possible values are topleft, topright, bottomleft
-                or bottomright"""
-    ).tag(sync=True, o=True)
+    max_width = Int(default_value=None, allow_none=True).tag(sync=True)
+    min_width = Int(default_value=None, allow_none=True).tag(sync=True)
+    max_height = Int(default_value=None, allow_none=True).tag(sync=True)
+    min_height = Int(default_value=None, allow_none=True).tag(sync=True)
 
 
 class FullScreenControl(Control):
@@ -589,13 +594,6 @@ class MeasureControl(Control):
     _area_units = ['acres', 'hectares', 'sqfeet', 'sqmeters', 'sqmiles']
     _custom_units_dict = {}
     _custom_units = Dict().tag(sync=True)
-
-    position = Enum(
-        ['topright', 'topleft', 'bottomright', 'bottomleft'],
-        default_value='topright',
-        help="""Possible values are topleft, topright, bottomleft
-                or bottomright"""
-    ).tag(sync=True, o=True)
 
     primary_length_unit = Enum(
         values=_length_units,

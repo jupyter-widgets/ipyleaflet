@@ -10,7 +10,6 @@ var LeafletMeasureControlModel = LeafletControlModel.extend({
         _view_name: 'LeafletMeasureControlView',
         _model_name: 'LeafletMeasureControlModel',
 
-        position: 'topright',
         primary_length_unit: 'feet',
         secondary_length_unit: undefined,
         primary_area_unit: 'acres',

@@ -1,7 +1,7 @@
 .. raw:: html
     :file: embed_widgets/wms_layer.html
 
-WMS layer
+WMS Layer
 =========
 
 Example

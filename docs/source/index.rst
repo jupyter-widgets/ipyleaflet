@@ -18,6 +18,7 @@ ipyleaflet: Interactive maps in the Jupyter notebook
     :maxdepth: 2
 
     api_reference/tile_layer
+    api_reference/local_tile_layer
     api_reference/marker
     api_reference/icon
     api_reference/popup

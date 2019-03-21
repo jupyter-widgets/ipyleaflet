@@ -1,8 +1,8 @@
 .. raw:: html
     :file: embed_widgets/split_map_control.html
 
-Split Map Control
-=================
+SplitMap Control
+================
 
 Example
 -------

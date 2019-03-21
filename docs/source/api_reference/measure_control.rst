@@ -1,8 +1,8 @@
 .. raw:: html
     :file: embed_widgets/measure_control.html
 
-MeasureControl
-==============
+Measure Control
+===============
 
 Example
 -------

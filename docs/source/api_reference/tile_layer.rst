@@ -1,7 +1,7 @@
 .. raw:: html
     :file: embed_widgets/tile_layer.html
 
-Tile layer
+Tile Layer
 ==========
 
 Example

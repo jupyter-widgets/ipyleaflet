@@ -1,8 +1,8 @@
 .. raw:: html
     :file: embed_widgets/fullscreen_control.html
 
-FullscreenControl
-=================
+Fullscreen Control
+==================
 
 Example
 -------

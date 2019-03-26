@@ -5,18 +5,19 @@ var utils = require('../utils.js')
 
 var LeafletLayerModel = widgets.WidgetModel.extend({
     defaults: _.extend({}, widgets.WidgetModel.prototype.defaults, {
-        _view_name : 'LeafletLayerView',
-        _model_name : 'LeafletLayerModel',
-        _view_module : 'jupyter-leaflet',
-        _model_module : 'jupyter-leaflet',
-        opacity : 1.0,
-        bottom : false,
-        options : [],
-        name : '',
-        base : false,
+        _view_name: 'LeafletLayerView',
+        _model_name: 'LeafletLayerModel',
+        _view_module: 'jupyter-leaflet',
+        _model_module: 'jupyter-leaflet',
+        opacity: 1.0,
+        bottom: false,
+        options: [],
+        name: '',
+        base: false,
         popup: null,
-        popup_min_width: 400,
-        popup_max_height: 400,
+        popup_min_width: 50,
+        popup_max_width: 300,
+        popup_max_height: null,
     })
 }, {
     serializers: _.extend({
@@ -26,8 +27,8 @@ var LeafletLayerModel = widgets.WidgetModel.extend({
 
 var LeafletUILayerModel = LeafletLayerModel.extend({
     defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
-        _view_name : 'LeafletUILayerView',
-        _model_name : 'LeafletUILayerModel'
+        _view_name: 'LeafletUILayerView',
+        _model_name: 'LeafletUILayerModel'
     })
 });
 
@@ -47,30 +48,28 @@ var LeafletLayerView = utils.LeafletWidgetView.extend({
             this.listenTo(this.model, 'change:popup', function(model, value) {
                 this.bind_popup(value);
             });
-
-            // If the layer is interactive
-            if (this.obj.on) {
-                this.obj.on('click dblclick mousedown mouseup mouseover mouseout', (event) => {
-                    this.send({
-                        event: 'interaction',
-                        type: event.type,
-                        coordinates: [event.latlng.lat, event.latlng.lng]
-                    });
-                });
-                this.obj.on('popupopen', (event) => {
-                    // This is a workaround for making maps rendered correctly in popups
-                    window.dispatchEvent(new Event('resize'));
-                });
-            }
         })
     },
 
     leaflet_events: function () {
+        // If the layer is interactive
+        if (this.obj.on) {
+            this.obj.on('click dblclick mousedown mouseup mouseover mouseout', (event) => {
+                this.send({
+                    event: 'interaction',
+                    type: event.type,
+                    coordinates: [event.latlng.lat, event.latlng.lng]
+                });
+            });
+            this.obj.on('popupopen', (event) => {
+                // This is a workaround for making maps rendered correctly in popups
+                window.dispatchEvent(new Event('resize'));
+            });
+        }
     },
 
     model_events: function () {
-        this.listenTo(this.model, 'change:popup_min_width', this.update_popup, this);
-        this.listenTo(this.model, 'change:popup_max_height', this.update_popup, this);
+        this.model.on_some_change(['popup_min_width', 'popup_max_width', 'popup_max_height'], this.update_popup, this);
     },
 
     remove: function() {
@@ -110,6 +109,7 @@ var LeafletLayerView = utils.LeafletWidgetView.extend({
     popup_options: function () {
         return {
             minWidth: this.model.get('popup_min_width'),
+            maxWidth: this.model.get('popup_max_width'),
             maxHeight: this.model.get('popup_max_height')
         };
     },
@@ -127,8 +127,8 @@ var LeafletUILayerView = LeafletLayerView.extend({
 });
 
 module.exports = {
-  LeafletLayerView : LeafletLayerView,
-  LeafletUILayerView : LeafletUILayerView,
-  LeafletLayerModel : LeafletLayerModel,
-  LeafletUILayerModel : LeafletUILayerModel,
+    LeafletLayerView: LeafletLayerView,
+    LeafletUILayerView: LeafletUILayerView,
+    LeafletLayerModel: LeafletLayerModel,
+    LeafletUILayerModel: LeafletUILayerModel,
 };

@@ -75,8 +75,9 @@ class Layer(Widget, InteractMixin):
     base = Bool(False).tag(sync=True)
     bottom = Bool(False).tag(sync=True)
     popup = Instance(Widget, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
-    popup_min_width = Int(400).tag(sync=True)
-    popup_max_height = Int(400).tag(sync=True)
+    popup_min_width = Int(50).tag(sync=True)
+    popup_max_width = Int(300).tag(sync=True)
+    popup_max_height = Int(default_value=None, allow_none=True).tag(sync=True)
 
     options = List(trait=Unicode).tag(sync=True)
 
@@ -192,8 +193,9 @@ class Popup(UILayer):
     ).tag(sync=True, **widget_serialization)
 
     # Options
-    min_width = Int(400).tag(sync=True, o=True)
-    max_height = Int(400).tag(sync=True, o=True)
+    min_width = Int(50).tag(sync=True, o=True)
+    max_width = Int(300).tag(sync=True, o=True)
+    max_height = Int(default_value=None, allow_none=True).tag(sync=True, o=True)
     auto_pan = Bool(True).tag(sync=True, o=True)
     auto_pan_padding_top_left = List(allow_none=True, default_value=None).tag(sync=True, o=True)
     auto_pan_padding_bottom_right = List(allow_none=True, default_value=None).tag(sync=True, o=True)

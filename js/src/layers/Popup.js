@@ -8,10 +8,13 @@ var def_loc = [0.0, 0.0];
 
 var LeafletPopupModel = LeafletUILayerModel.extend({
     defaults: _.extend({}, LeafletUILayerModel.prototype.defaults, {
-         _view_name : 'LeafletPopupView',
-         _model_name : 'LeafletPopupModel',
+        _view_name: 'LeafletPopupView',
+        _model_name: 'LeafletPopupModel',
         location: def_loc,
-        child: null
+        child: null,
+        min_width: 50,
+        max_width: 300,
+        max_height: null,
     })
 }, {
     serializers: _.extend({
@@ -33,14 +36,7 @@ var LeafletPopupView = LeafletUILayerView.extend({
 
     render: function() {
         LeafletPopupView.__super__.render.apply(this, arguments);
-        var that = this;
-        var child_view = this.set_child(this.model.get('child'));
-        this.listenTo(this.model, 'change:child', function(model, value) {
-            this.set_child(value);
-        });
-        this.listenTo(this.model, 'change:min_width', this.update_popup, this);
-        this.listenTo(this.model, 'change:max_height', this.update_popup, this);
-        return child_view;
+        return this.set_child(this.model.get('child'));
     },
 
     remove: function() {
@@ -62,6 +58,7 @@ var LeafletPopupView = LeafletUILayerView.extend({
             this.child_promise = this.child_promise.then(function() {
                 return that.create_child_view(value).then(function(view) {
                     that.obj.setContent(view.el);
+                    that.force_update();
 
                     // Trigger the displayed event of the child view.
                     that.displayed.then(function() {
@@ -76,18 +73,29 @@ var LeafletPopupView = LeafletUILayerView.extend({
         return this.child_promise;
     },
 
-    model_events: function () {
-        LeafletPopupView.__super__.model_events.apply(this, arguments);
+    leaflet_events: function () {
+        LeafletPopupView.__super__.leaflet_events.apply(this, arguments);
         this.obj.on('add', (event) => {
             // This is a workaround for making maps rendered correctly in popups
             window.dispatchEvent(new Event('resize'));
         });
     },
 
+    model_events: function () {
+        LeafletPopupView.__super__.model_events.apply(this, arguments);
+        this.model.on('change:child', function(model, value) {
+            this.set_child(value);
+        });
+        this.model.on_some_change(['min_width', 'max_width', 'max_height'], this.update_popup, this);
+    },
+
     update_popup: function () {
         L.setOptions(this.obj, this.get_options());
+        this.force_update();
+    },
 
-        // Enforce the options update
+    force_update: function () {
+        // This is a workaround for enforcing the options update
         if (this.map_view.obj.hasLayer(this.obj)) {
             this.map_view.obj.closePopup(this.obj);
             this.map_view.obj.openPopup(this.obj);
@@ -100,6 +108,6 @@ var LeafletPopupView = LeafletUILayerView.extend({
 });
 
 module.exports = {
-  LeafletPopupView : LeafletPopupView,
-  LeafletPopupModel : LeafletPopupModel,
+    LeafletPopupView: LeafletPopupView,
+    LeafletPopupModel: LeafletPopupModel,
 };

@@ -45,3 +45,4 @@ ipyleaflet: Interactive maps in the Jupyter notebook
     api_reference/measure_control
     api_reference/split_map_control
     api_reference/draw_control
+    api_reference/widget_control

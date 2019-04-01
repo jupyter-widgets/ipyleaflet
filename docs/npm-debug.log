@@ -1,0 +1,19 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'run', 'watch' ]
+2 info using npm@3.5.2
+3 info using node@v8.10.0
+4 verbose stack Error: ENOENT: no such file or directory, open '/home/vasa/dev/vasavan/ipyleaflet/package.json'
+5 verbose cwd /home/vasa/dev/vasavan/ipyleaflet/docs
+6 error Linux 4.15.0-45-generic
+7 error argv "/usr/bin/node" "/usr/bin/npm" "run" "watch"
+8 error node v8.10.0
+9 error npm  v3.5.2
+10 error path /home/vasa/dev/vasavan/ipyleaflet/package.json
+11 error code ENOENT
+12 error errno -2
+13 error syscall open
+14 error enoent ENOENT: no such file or directory, open '/home/vasa/dev/vasavan/ipyleaflet/package.json'
+15 error enoent ENOENT: no such file or directory, open '/home/vasa/dev/vasavan/ipyleaflet/package.json'
+15 error enoent This is most likely not a problem with npm itself
+15 error enoent and is related to npm not being able to find a file.
+16 verbose exit [ -2, true ]

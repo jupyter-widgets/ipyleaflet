@@ -83,8 +83,8 @@ var LeafletPopupView = LeafletUILayerView.extend({
 
     model_events: function () {
         LeafletPopupView.__super__.model_events.apply(this, arguments);
-        this.model.on('change:child', function(model, value) {
-            this.set_child(value);
+        this.model.on('change:child', () => {
+            this.set_child(this.model.get('child'));
         });
         this.model.on_some_change(['min_width', 'max_width', 'max_height'], this.update_popup, this);
     },

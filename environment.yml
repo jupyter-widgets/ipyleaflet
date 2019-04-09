@@ -11,3 +11,4 @@ dependencies:
   - matplotlib
   - branca
   - geopandas
+  - netcdf4

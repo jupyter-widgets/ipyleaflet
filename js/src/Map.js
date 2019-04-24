@@ -70,7 +70,7 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         layers : [],
         controls : [],
         crs: 'EPSG3857',
-        style: 'move'
+        style: null
     }),
 
     update_bounds: function() {
@@ -99,7 +99,8 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
 }, {
     serializers: _.extend({
         layers : { deserialize: widgets.unpack_models },
-        controls : { deserialize: widgets.unpack_models }
+        controls : { deserialize: widgets.unpack_models },
+        style : { deserialize: widgets.unpack_models }
     }, widgets.DOMWidgetModel.serializers)
 });
 

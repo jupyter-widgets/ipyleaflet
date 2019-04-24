@@ -753,7 +753,7 @@ class MapStyle(Style, Widget):
     """ Map Style Widget """
     _model_name = Unicode('LeafletMapStyleModel').tag(sync=True)
     _model_module = Unicode("jupyter-leaflet").tag(sync=True)
-    cursor = Unicode(help='Cursor type').tag(sync=True)
+    cursor = Unicode('move', help='Cursor type').tag(sync=True)
 
 
 class Map(DOMWidget, InteractMixin):

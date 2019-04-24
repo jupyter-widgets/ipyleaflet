@@ -6,6 +6,21 @@ var LeafletWidgetView = utils.LeafletWidgetView;
 var LeafletDOMWidgetView = utils.LeafletDOMWidgetView;
 var def_loc = [0.0, 0.0];
 
+var LeafletMapStyleModel = widgets.StyleModel.extend({
+    defaults: _.extend({}, widgets.StyleModel.prototype.defaults, {
+        _model_name : "LeafletMapStyleModel",
+        _model_module : "jupyter-leaflet",
+        }),
+
+    styleProperties: {
+        cursor: {
+            selector: '.leaflet-grab',
+            attribute: 'cursor',
+            default: 'move'
+        }
+    },
+});
+
 var LeafletMapModel = widgets.DOMWidgetModel.extend({
     defaults: _.extend({}, widgets.DOMWidgetModel.prototype.defaults, {
         _view_name : "LeafletMapView",
@@ -54,7 +69,8 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         options : [],
         layers : [],
         controls : [],
-        crs: 'EPSG3857'
+        crs: 'EPSG3857',
+        style: 'move'
     }),
 
     update_bounds: function() {
@@ -284,4 +300,5 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
 module.exports = {
   LeafletMapView : LeafletMapView,
   LeafletMapModel : LeafletMapModel,
+  LeafletMapStyleModel: LeafletMapStyleModel,
 };

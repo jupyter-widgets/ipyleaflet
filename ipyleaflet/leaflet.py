@@ -2,8 +2,10 @@ import copy
 
 from ipywidgets import (
     Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
-    interactive
+    interactive, Style, CoreWidget
 )
+
+from ipywidgets.widgets.trait_types import InstanceDict
 
 from traitlets import (
     Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
@@ -747,6 +749,13 @@ class DrawControl(Control):
         self.send({'msg': 'clear_markers'})
 
 
+class MapStyle(Style, Widget):
+    """ Map Style Widget """
+    _model_name = Unicode('LeafletMapStyleModel').tag(sync=True)
+    _model_module = Unicode("jupyter-leaflet").tag(sync=True)
+    cursor = Unicode(help='Cursor type').tag(sync=True)
+
+
 class Map(DOMWidget, InteractMixin):
     _view_name = Unicode('LeafletMapView').tag(sync=True)
     _model_name = Unicode('LeafletMapModel').tag(sync=True)
@@ -799,6 +808,8 @@ class Map(DOMWidget, InteractMixin):
     # marker_zoom_animation = Bool(?).tag(sync=True, o=True)
 
     options = List(trait=Unicode).tag(sync=True)
+
+    style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
 
     @default('options')
     def _default_options(self):

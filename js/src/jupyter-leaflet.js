@@ -103,5 +103,6 @@ module.exports = {
     LeafletSplitMapControlModel : splitmapcontrol.LeafletSplitMapControlModel,
     LeafletFullScreenControlModel : fullscreencontrol.LeafletFullScreenControlModel,
     LeafletWidgetControlModel : widgetcontrol.LeafletWidgetControlModel,
-    LeafletMapModel : map.LeafletMapModel
+    LeafletMapModel : map.LeafletMapModel,
+    LeafletMapStyleModel : map.LeafletMapStyleModel,
 };

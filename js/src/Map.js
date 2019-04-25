@@ -15,7 +15,7 @@ var LeafletMapStyleModel = widgets.StyleModel.extend({
 
 LeafletMapStyleModel.styleProperties = {
      cursor: {
-         selector: '',
+         selector: '.leaflet-grab',
          attribute: 'cursor',
          default: 'hand'
      }
@@ -157,8 +157,10 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
     render: function () {
         LeafletMapView.__super__.render.apply(this);
         this.el.classList.add('jupyter-widgets');
+        this.map_container = document.createElement('div');
+        this.el.appendChild(this.map_container);
         if (this.get_options().interpolation == 'nearest') {
-            this.el.classList.add('crisp-image');
+            this.map_container.classList.add('crisp-image');
         }
         this.layer_views = new widgets.ViewList(this.add_layer_model, this.remove_layer_view, this);
         this.control_views = new widgets.ViewList(this.add_control_model, this.remove_control_view, this);
@@ -181,7 +183,7 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
 
     create_obj: function () {
         return this.layoutPromise.then((views) => {
-            this.obj = L.map(this.el, _.extend({crs: L.CRS[this.model.get('crs')]}, this.get_options()));
+            this.obj = L.map(this.map_container, _.extend({crs: L.CRS[this.model.get('crs')]}, this.get_options()));
         });
     },
 

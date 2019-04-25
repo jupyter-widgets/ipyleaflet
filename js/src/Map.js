@@ -10,16 +10,16 @@ var LeafletMapStyleModel = widgets.StyleModel.extend({
     defaults: _.extend({}, widgets.StyleModel.prototype.defaults, {
         _model_name : "LeafletMapStyleModel",
         _model_module : "jupyter-leaflet",
-        }),
-
-    styleProperties: {
-        cursor: {
-            selector: '.leaflet-grab',
-            attribute: 'cursor',
-            default: 'move'
-        }
-    },
+    })
 });
+
+LeafletMapStyleModel.styleProperties = {
+     cursor: {
+         selector: '',
+         attribute: 'cursor',
+         default: 'hand'
+     }
+};
 
 var LeafletMapModel = widgets.DOMWidgetModel.extend({
     defaults: _.extend({}, widgets.DOMWidgetModel.prototype.defaults, {

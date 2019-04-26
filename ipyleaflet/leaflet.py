@@ -2,7 +2,7 @@ import copy
 
 from ipywidgets import (
     Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
-    interactive, Style, CoreWidget
+    interactive, Style
 )
 
 from ipywidgets.widgets.trait_types import InstanceDict
@@ -809,8 +809,9 @@ class Map(DOMWidget, InteractMixin):
 
     options = List(trait=Unicode).tag(sync=True)
 
-    default_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
-    dragging_style = InstanceDict(MapStyle, default_value={'cursor': 'move'}).tag(sync=True, **widget_serialization)
+    style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
+    dragging_style = Dict({'cursor':'move'}).tag(sync=True)
+    default_style = Dict({'cursor':'hand'}).tag(sync=True)
 
     @default('options')
     def _default_options(self):

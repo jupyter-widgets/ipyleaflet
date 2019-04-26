@@ -809,7 +809,8 @@ class Map(DOMWidget, InteractMixin):
 
     options = List(trait=Unicode).tag(sync=True)
 
-    style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
+    default_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
+    dragging_style = InstanceDict(MapStyle, default_value={'cursor': 'move'}).tag(sync=True, **widget_serialization)
 
     @default('options')
     def _default_options(self):

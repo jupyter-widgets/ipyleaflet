@@ -70,7 +70,8 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         layers : [],
         controls : [],
         crs: 'EPSG3857',
-        style: null
+        default_style: null,
+        dragging_style: null,
     }),
 
     update_bounds: function() {
@@ -100,7 +101,8 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
     serializers: _.extend({
         layers : { deserialize: widgets.unpack_models },
         controls : { deserialize: widgets.unpack_models },
-        style : { deserialize: widgets.unpack_models }
+        default_style : { deserialize: widgets.unpack_models },
+        dragging_style : { deserialize: widgets.unpack_models },
     }, widgets.DOMWidgetModel.serializers)
 });
 
@@ -195,11 +197,31 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
                 var c = e.target.getCenter();
                 that.model.set('center', [c.lat, c.lng]);
                 that.dirty = false;
-            }
+            };
+            var style_view = Object.keys(that.model.get('default_style').views)[0];
+            that.model.get('default_style').views[style_view].then(function(view) {
+                view.style();
+            });
+            var dragging_style_view = Object.keys(that.model.get('dragging_style').views)[0];
+            that.model.get('dragging_style').views[dragging_style_view].then(function(view) {
+                view.unstyle();
+            });
             that.model.update_bounds().then(function() {
                 that.touch();
             });
         });
+
+        this.obj.on('movestart', function (e) {
+            var style_view = Object.keys(that.model.get('default_style').views)[0];
+            that.model.get('default_style').views[style_view].then(function(view) {
+                view.unstyle();
+            });
+            var dragging_style_view = Object.keys(that.model.get('dragging_style').views)[0];
+            that.model.get('dragging_style').views[dragging_style_view].then(function(view) {
+                view.style();
+            });
+        });
+
         this.obj.on('zoomend', function (e) {
             if (!that.dirty) {
                 that.dirty = true;

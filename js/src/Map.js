@@ -73,7 +73,17 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         style: null,
         default_style: {'cursor': 'grab'},
         dragging_style: {'cursor': 'move'},
+        _dragging: false
     }),
+
+    update_style: function() {
+        if (!this.get('_dragging')) {
+            var new_style = this.get('default_style');
+        } else {
+            var new_style = this.get('dragging_style');
+        };
+        this.get('style').set('cursor', new_style.cursor);
+    },
 
     update_bounds: function() {
         var that = this;
@@ -198,14 +208,16 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
                 that.model.set('center', [c.lat, c.lng]);
                 that.dirty = false;
             };
-            that.model.get('style').set('cursor', that.model.get('default_style').cursor)
             that.model.update_bounds().then(function() {
                 that.touch();
             });
+            that.model.set('_dragging', false);
+            that.model.update_style();
         });
 
         this.obj.on('movestart', function (e) {
-            that.model.get('style').set('cursor', that.model.get('dragging_style').cursor)
+            that.model.set('_dragging', true);
+            that.model.update_style();
         });
 
         this.obj.on('zoomend', function (e) {
@@ -268,6 +280,12 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
             this.model.update_bounds().then(function() {
                 that.touch();
             });
+        }, this);
+        this.listenTo(this.model, 'change:dragging_style', function () {
+            this.model.update_style();
+        }, this);
+        this.listenTo(this.model, 'change:default_style', function () {
+            this.model.update_style();
         }, this);
     },
 

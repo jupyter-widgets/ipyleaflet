@@ -753,7 +753,7 @@ class MapStyle(Style, Widget):
     """ Map Style Widget """
     _model_name = Unicode('LeafletMapStyleModel').tag(sync=True)
     _model_module = Unicode("jupyter-leaflet").tag(sync=True)
-    cursor = Unicode('hand', help='Cursor type').tag(sync=True)
+    cursor = Unicode('grab', help='Cursor type').tag(sync=True)
 
 
 class Map(DOMWidget, InteractMixin):
@@ -811,7 +811,7 @@ class Map(DOMWidget, InteractMixin):
 
     style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
     dragging_style = Dict({'cursor':'move'}).tag(sync=True)
-    default_style = Dict({'cursor':'hand'}).tag(sync=True)
+    default_style = Dict({'cursor':'grab'}).tag(sync=True)
 
     @default('options')
     def _default_options(self):

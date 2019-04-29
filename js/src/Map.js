@@ -17,7 +17,7 @@ LeafletMapStyleModel.styleProperties = {
      cursor: {
          selector: '.leaflet-grab',
          attribute: 'cursor',
-         default: 'hand'
+         default: 'grab'
      }
 };
 
@@ -71,7 +71,7 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         controls : [],
         crs: 'EPSG3857',
         style: null,
-        default_style: {'cursor': 'hand'},
+        default_style: {'cursor': 'grab'},
         dragging_style: {'cursor': 'move'},
     }),
 

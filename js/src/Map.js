@@ -71,8 +71,8 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         controls : [],
         crs: 'EPSG3857',
         style: null,
-        default_style: {'cursor': 'grab'},
-        dragging_style: {'cursor': 'move'},
+        default_style: null,
+        dragging_style: null,
         _dragging: false
     }),
 
@@ -82,7 +82,7 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         } else {
             var new_style = this.get('dragging_style');
         };
-        this.get('style').set('cursor', new_style.cursor);
+        this.set('style', new_style);
     },
 
     update_bounds: function() {
@@ -113,6 +113,8 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         layers : { deserialize: widgets.unpack_models },
         controls : { deserialize: widgets.unpack_models },
         style: { deserialize: widgets.unpack_models },
+        default_style: { deserialize: widgets.unpack_models },
+        dragging_style: { deserialize: widgets.unpack_models },
     }, widgets.DOMWidgetModel.serializers)
 });
 

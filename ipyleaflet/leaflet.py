@@ -24,6 +24,12 @@ from ._version import EXTENSION_VERSION
 
 def_loc = [0.0, 0.0]
 allowed_crs = ['Earth', 'EPSG3395', 'EPSG3857', 'EPSG4326', 'Base', 'Simple']
+allowed_cursor = ['alias', 'cell', 'grab', 'move', 'crosshair', 'context-menu',
+                  'n-resize', 'ne-resize', 'e-resize', 'se-resize', 's-resize',
+                  'sw-resize', 'w-resize', 'nw-resize', 'nesw-resize',
+                  'nwse-resize', 'row-resize', 'col-resize', 'copy', 'default',
+                  'grabbing', 'help', 'no-drop', 'not-allowed', 'pointer',
+                  'progress', 'text', 'wait', 'zoom-in', 'zoom-out']
 
 
 def basemap_to_tiles(bm, day='yesterday', **kwargs):
@@ -753,7 +759,7 @@ class MapStyle(Style, Widget):
     """ Map Style Widget """
     _model_name = Unicode('LeafletMapStyleModel').tag(sync=True)
     _model_module = Unicode("jupyter-leaflet").tag(sync=True)
-    cursor = Unicode('grab', help='Cursor type').tag(sync=True)
+    cursor = Enum(values=allowed_cursor, default_value='grab').tag(sync=True)
 
 
 class Map(DOMWidget, InteractMixin):
@@ -810,8 +816,12 @@ class Map(DOMWidget, InteractMixin):
     options = List(trait=Unicode).tag(sync=True)
 
     style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
-    dragging_style = Dict({'cursor':'move'}).tag(sync=True)
-    default_style = Dict({'cursor':'grab'}).tag(sync=True)
+    default_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
+    dragging_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
+
+    @default('dragging_style')
+    def _default_dragging_style(self):
+        return {'cursor': 'move'}
 
     @default('options')
     def _default_options(self):

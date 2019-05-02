@@ -6,6 +6,21 @@ var LeafletWidgetView = utils.LeafletWidgetView;
 var LeafletDOMWidgetView = utils.LeafletDOMWidgetView;
 var def_loc = [0.0, 0.0];
 
+var LeafletMapStyleModel = widgets.StyleModel.extend({
+    defaults: _.extend({}, widgets.StyleModel.prototype.defaults, {
+        _model_name : "LeafletMapStyleModel",
+        _model_module : "jupyter-leaflet",
+    })
+});
+
+LeafletMapStyleModel.styleProperties = {
+     cursor: {
+         selector: '.leaflet-grab',
+         attribute: 'cursor',
+         default: 'grab'
+     }
+};
+
 var LeafletMapModel = widgets.DOMWidgetModel.extend({
     defaults: _.extend({}, widgets.DOMWidgetModel.prototype.defaults, {
         _view_name : "LeafletMapView",
@@ -54,8 +69,21 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         options : [],
         layers : [],
         controls : [],
-        crs: 'EPSG3857'
+        crs: 'EPSG3857',
+        style: null,
+        default_style: null,
+        dragging_style: null,
+        _dragging: false
     }),
+
+    update_style: function() {
+        if (!this.get('_dragging')) {
+            var new_style = this.get('default_style');
+        } else {
+            var new_style = this.get('dragging_style');
+        };
+        this.set('style', new_style);
+    },
 
     update_bounds: function() {
         var that = this;
@@ -83,7 +111,10 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
 }, {
     serializers: _.extend({
         layers : { deserialize: widgets.unpack_models },
-        controls : { deserialize: widgets.unpack_models }
+        controls : { deserialize: widgets.unpack_models },
+        style: { deserialize: widgets.unpack_models },
+        default_style: { deserialize: widgets.unpack_models },
+        dragging_style: { deserialize: widgets.unpack_models },
     }, widgets.DOMWidgetModel.serializers)
 });
 
@@ -140,8 +171,10 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
     render: function () {
         LeafletMapView.__super__.render.apply(this);
         this.el.classList.add('jupyter-widgets');
+        this.map_container = document.createElement('div');
+        this.el.appendChild(this.map_container);
         if (this.get_options().interpolation == 'nearest') {
-            this.el.classList.add('crisp-image');
+            this.map_container.classList.add('crisp-image');
         }
         this.layer_views = new widgets.ViewList(this.add_layer_model, this.remove_layer_view, this);
         this.control_views = new widgets.ViewList(this.add_control_model, this.remove_control_view, this);
@@ -164,7 +197,7 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
 
     create_obj: function () {
         return this.layoutPromise.then((views) => {
-            this.obj = L.map(this.el, _.extend({crs: L.CRS[this.model.get('crs')]}, this.get_options()));
+            this.obj = L.map(this.map_container, _.extend({crs: L.CRS[this.model.get('crs')]}, this.get_options()));
         });
     },
 
@@ -176,11 +209,19 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
                 var c = e.target.getCenter();
                 that.model.set('center', [c.lat, c.lng]);
                 that.dirty = false;
-            }
+            };
             that.model.update_bounds().then(function() {
                 that.touch();
             });
+            that.model.set('_dragging', false);
+            that.model.update_style();
         });
+
+        this.obj.on('movestart', function (e) {
+            that.model.set('_dragging', true);
+            that.model.update_style();
+        });
+
         this.obj.on('zoomend', function (e) {
             if (!that.dirty) {
                 that.dirty = true;
@@ -242,6 +283,12 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
                 that.touch();
             });
         }, this);
+        this.listenTo(this.model, 'change:dragging_style', function () {
+            this.model.update_style();
+        }, this);
+        this.listenTo(this.model, 'change:default_style', function () {
+            this.model.update_style();
+        }, this);
     },
 
     handle_msg: function (content) {
@@ -284,4 +331,5 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
 module.exports = {
   LeafletMapView : LeafletMapView,
   LeafletMapModel : LeafletMapModel,
+  LeafletMapStyleModel: LeafletMapStyleModel,
 };

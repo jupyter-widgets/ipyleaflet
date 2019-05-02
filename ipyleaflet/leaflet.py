@@ -2,8 +2,10 @@ import copy
 
 from ipywidgets import (
     Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
-    interactive
+    interactive, Style
 )
+
+from ipywidgets.widgets.trait_types import InstanceDict
 
 from traitlets import (
     Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
@@ -22,6 +24,12 @@ from ._version import EXTENSION_VERSION
 
 def_loc = [0.0, 0.0]
 allowed_crs = ['Earth', 'EPSG3395', 'EPSG3857', 'EPSG4326', 'Base', 'Simple']
+allowed_cursor = ['alias', 'cell', 'grab', 'move', 'crosshair', 'context-menu',
+                  'n-resize', 'ne-resize', 'e-resize', 'se-resize', 's-resize',
+                  'sw-resize', 'w-resize', 'nw-resize', 'nesw-resize',
+                  'nwse-resize', 'row-resize', 'col-resize', 'copy', 'default',
+                  'grabbing', 'help', 'no-drop', 'not-allowed', 'pointer',
+                  'progress', 'text', 'wait', 'zoom-in', 'zoom-out']
 
 
 def basemap_to_tiles(bm, day='yesterday', **kwargs):
@@ -747,6 +755,13 @@ class DrawControl(Control):
         self.send({'msg': 'clear_markers'})
 
 
+class MapStyle(Style, Widget):
+    """ Map Style Widget """
+    _model_name = Unicode('LeafletMapStyleModel').tag(sync=True)
+    _model_module = Unicode("jupyter-leaflet").tag(sync=True)
+    cursor = Enum(values=allowed_cursor, default_value='grab').tag(sync=True)
+
+
 class Map(DOMWidget, InteractMixin):
     _view_name = Unicode('LeafletMapView').tag(sync=True)
     _model_name = Unicode('LeafletMapModel').tag(sync=True)
@@ -799,6 +814,14 @@ class Map(DOMWidget, InteractMixin):
     # marker_zoom_animation = Bool(?).tag(sync=True, o=True)
 
     options = List(trait=Unicode).tag(sync=True)
+
+    style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
+    default_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
+    dragging_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
+
+    @default('dragging_style')
+    def _default_dragging_style(self):
+        return {'cursor': 'move'}
 
     @default('options')
     def _default_options(self):

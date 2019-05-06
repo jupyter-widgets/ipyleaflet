@@ -171,6 +171,7 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
     render: function () {
         LeafletMapView.__super__.render.apply(this);
         this.el.classList.add('jupyter-widgets');
+        this.el.classList.add('leaflet-widgets');
         this.map_container = document.createElement('div');
         this.el.appendChild(this.map_container);
         if (this.get_options().interpolation == 'nearest') {

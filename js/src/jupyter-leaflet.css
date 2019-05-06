@@ -1,18 +1,23 @@
-.jupyter-widgets > .leaflet-container {
+.leaflet-container {
+    height: 100%;
+    width: 100%;
+}
+
+.jupyter-widgets.leaflet-widgets {
     height: 400px;
     overflow: hidden;
     flex: 1 1 auto;
+}
+
+.jp-LinkedOutputView .jupyter-widgets.leaflet-widgets {
+    min-height: 360px;  /* Min-height required for mirred output in jlab < 0.31.6 */
+    height: 100%;
 }
 
 .leaflet-widgetcontrol {
     background: var(--jp-layout-color1);
     border-radius: 4.5px;
     box-shadow: 4px 5px 8px 0px #9e9e9e
-}
-
-.jp-LinkedOutputView .jupyter-widgets > .leaflet-container {
-    min-height: 360px;  /* Min-height required for mirred output in jlab < 0.31.6 */
-    height: 100%;
 }
 
 .leaflet-control-velocity.leaflet-control {

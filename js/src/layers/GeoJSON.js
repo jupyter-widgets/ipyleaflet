@@ -16,9 +16,9 @@ var LeafletGeoJSONModel = featuregroup.LeafletFeatureGroupModel.extend({
 var LeafletGeoJSONView = featuregroup.LeafletFeatureGroupView.extend({
     create_obj: function () {
         var that = this;
-        var model_style = this.model.get('style');
         style = function (feature) {
-            return _.extend(feature.properties.style, model_style);
+            var model_style = that.model.get('style');
+            return _.extend(feature.properties.style || {}, model_style);
         }
         this.obj = L.geoJson(this.model.get('data'), {
             style: style,

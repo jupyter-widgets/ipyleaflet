@@ -241,6 +241,9 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
                 location: that.model.get('location')
             });
         });
+        this.obj.on('fullscreenchange', function() {
+            that.model.set('fullscreen', that.obj.isFullscreen());
+        });
     },
     model_events: function () {
         var that = this;
@@ -288,6 +291,12 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
         }, this);
         this.listenTo(this.model, 'change:default_style', function () {
             this.model.update_style();
+        }, this);
+        this.listenTo(this.model, 'change:fullscreen', function () {
+            var fullscreen = this.model.get('fullscreen');
+            if (this.obj.isFullscreen() !== fullscreen) {
+                this.obj.toggleFullscreen();
+            }
         }, this);
     },
 

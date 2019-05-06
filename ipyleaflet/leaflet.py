@@ -815,6 +815,7 @@ class Map(DOMWidget, InteractMixin):
     # zoom_animation = Bool(?).tag(sync=True, o=True)
     zoom_animation_threshold = Int(4).tag(sync=True, o=True)
     # marker_zoom_animation = Bool(?).tag(sync=True, o=True)
+    fullscreen = Bool(False).tag(sync=True, o=True)
 
     options = List(trait=Unicode).tag(sync=True)
 

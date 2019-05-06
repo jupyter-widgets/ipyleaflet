@@ -13,11 +13,12 @@ require('leaflet/dist/images/marker-icon.png');
 require('leaflet/dist/images/marker-icon-2x.png');
 
 // Export everything from jupyter-leaflet and the npm package version number.
-hasL = (typeof(window.L) != 'undefined');
+var _oldL = window.L;
 module.exports = require('./jupyter-leaflet.js');
 module.exports['version'] = require('../package.json').version;
 
-if (hasL) {
+// if previous L existed and it got changed while loading this module
+if (_oldL !== undefined && _oldL !== window.L) {
     console.log("Existing `L` detected, running ipyleaflet's Leaflet in no-conflict mode as `ipyL`");
     ipyL = L.noConflict();
 }

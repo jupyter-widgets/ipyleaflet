@@ -234,7 +234,8 @@ class TileLayer(RasterLayer):
     tile_size = Int(256).tag(sync=True, o=True)
     attribution = Unicode('Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors').tag(sync=True, o=True)
     detect_retina = Bool(False).tag(sync=True, o=True)
-
+    no_wrap = Bool(False).tag(sync=True, o=True)
+    
     _load_callbacks = Instance(CallbackDispatcher, ())
 
     def __init__(self, **kwargs):

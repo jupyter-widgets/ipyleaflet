@@ -77,7 +77,19 @@ var LeafletWidgetControlView = LeafletControlView.extend({
                 // Trigger the displayed event of the child view.
                 this.displayed.then(() => {
                     this.widget_view.trigger('displayed', this);
+
                     this.widget_view.displayed.then(() => {
+                        // Workaround for box containers
+                        if (widget_model.get('children')) {
+                            _.each(widget_model.get('children'), (child) => {
+                                _.each(child.views, (view_promise) => {
+                                    view_promise.then((view) => {
+                                        view.trigger('displayed', this);
+                                    });
+                                });
+                            });
+                        }
+
                         this.updateLayout();
                         this.obj.setContent(view.el);
                     });

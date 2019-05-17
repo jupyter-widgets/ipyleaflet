@@ -58,16 +58,48 @@ Example
   </script>
   <div style ="height:30px;"> </div>
 
+
+Information
+-----------
+
+The ``Choropleth`` takes ``geo_data`` and ``choro_data`` as arguments.
+
+The ``geo_data`` is a `GeoJSON
+<https://geojson.org>`_ dictionary, for `instance
+<https://raw.githubusercontent.com/jupyter-widgets/ipyleaflet/master/examples/us-states.json>`_ :
+
+.. code::
+
+    {
+        "type": "FeatureCollection",
+        "features":[{
+            "type":"Feature",
+            "id":"AL",
+            "properties":{"name":"Alabama"},
+            "geometry":{
+                "type":"Polygon",
+                "coordinates": [[[-87.359296,35.00118]]] ...
+            }
+        }]
+    }
+
+The ``choro_data`` is a dictionary that takes ``'id'`` from ``'features'`` as key and float as value, in order to build the colormap :
+
+.. code::
+
+    {'AL': 7.1,
+     'AK': 6.8}
+
+
 Attributes
 ----------
 
-============   ===
-Attribute      Doc
-============   ===
-geo_data       Data dictionary
-choro_data     Choropleth data dictionary
+============   ==========================  ===========
+Attribute      Doc                         Description
+============   ==========================  ===========
+geo_data       Data dictionary             GeoJSON dictionary
+choro_data     Choropleth data dictionary  Dictionary id/float
 value_min      Color scale minimum value
 value_max      Color scale maximum value
 colormap       Map of color from branca
-
-============   ===
+============   ==========================  ===========

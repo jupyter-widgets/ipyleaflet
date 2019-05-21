@@ -34,6 +34,7 @@ ipyleaflet: Interactive maps in the Jupyter notebook
     api_reference/velocity
     api_reference/layer_group
     api_reference/geo_json
+    api_reference/geodata
     api_reference/choropleth
 
 .. toctree::

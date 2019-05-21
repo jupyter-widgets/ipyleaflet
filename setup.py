@@ -138,6 +138,7 @@ setup_args = {
         'traittypes>=0.2.1,<3',
         'xarray>=0.10',
         'branca>=0.3.1,<0.4'
+        'geopandas>=0.5.0'
         ],
     'packages': find_packages(),
     'zip_safe': False,

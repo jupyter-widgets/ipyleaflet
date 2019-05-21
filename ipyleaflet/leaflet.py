@@ -1,5 +1,7 @@
 import copy
 
+import json
+
 from ipywidgets import (
     Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
     interactive, Style
@@ -15,6 +17,8 @@ from traitlets import (
 from branca.colormap import linear, ColorMap
 
 from traittypes import Dataset
+
+from geopandas import GeoDataFrame
 
 from .xarray_ds import ds_x_to_json
 
@@ -235,7 +239,7 @@ class TileLayer(RasterLayer):
     attribution = Unicode('Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors').tag(sync=True, o=True)
     detect_retina = Bool(False).tag(sync=True, o=True)
     no_wrap = Bool(False).tag(sync=True, o=True)
-    
+
     _load_callbacks = Instance(CallbackDispatcher, ())
 
     def __init__(self, **kwargs):
@@ -501,6 +505,22 @@ class GeoJSON(FeatureGroup):
         The hover callback takes an unpacked set of keyword arguments.
         '''
         self._hover_callbacks.register_callback(callback, remove=remove)
+
+
+class GeoData(GeoJSON):
+
+    geo_dataframe = Instance(GeoDataFrame)
+
+    def __init__(self, **kwargs):
+        super(GeoJSON, self).__init__(**kwargs)
+        self.data = self._get_data()
+
+    @observe('geo_dataframe')
+    def _update_data(self, change):
+        self.data = self._get_data()
+
+    def _get_data(self):
+        return json.loads(self.geo_dataframe.to_json())
 
 
 class Choropleth(GeoJSON):

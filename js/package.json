@@ -1,6 +1,6 @@
 {
   "name": "jupyter-leaflet",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "description": "jupyter - leaflet bridge",
   "author": "Project Jupyter",
   "license": "MIT",

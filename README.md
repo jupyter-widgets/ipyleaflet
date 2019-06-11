@@ -1,32 +1,36 @@
 # ipyleaflet
 
 [![Documentation](http://readthedocs.org/projects/ipyleaflet/badge/?version=latest)](https://ipyleaflet.readthedocs.io/en/latest/?badge=latest)
-[![Binder](https://img.shields.io/badge/launch-binder-brightgreen.svg)](https://mybinder.org/v2/gh/jupyter-widgets/ipyleaflet/0.9.0?filepath=examples)
+[![Binder](https://img.shields.io/badge/launch-binder-brightgreen.svg)](https://mybinder.org/v2/gh/jupyter-widgets/ipyleaflet/stable?filepath=examples)
 [![Join the Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jupyter-widgets/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 A Jupyter / Leaflet bridge enabling interactive maps in the Jupyter notebook.
 
 ## Usage
 
-Selecting a basemap for a leaflet map:
+**Selecting a basemap for a leaflet map:**
 
 ![Basemap Screencast](basemap.gif)
 
-Loading a geojson map:
+**Loading a geojson map:**
 
 ![GeoJSON Screencast](geojson.gif)
 
-Making use of leafletjs primitives:
+**Making use of leafletjs primitives:**
 
 ![Primitives Screencast](primitives.gif)
 
-Using the splitmap control:
+**Using the splitmap control:**
 
 ![Splitmap Screencast](splitmap.gif)
 
-Displaying velocity data on the top of a map:
+**Displaying velocity data on the top of a map:**
 
 ![Velocity Screencast](velocity.gif)
+
+**Choropleth layer:**
+
+![Choropleth Screencast](choropleth.gif)
 
 ## Installation
 
@@ -67,11 +71,27 @@ $ cd ipyleaflet
 $ pip install -e .
 $ jupyter nbextension install --py --symlink --sys-prefix ipyleaflet
 $ jupyter nbextension enable --py --sys-prefix ipyleaflet
+$ jupyter labextension install js  # If you are developing on JupyterLab
 ```
 
-Note for developers: the `--symlink` argument on Linux or OS X allows one to
-modify the JavaScript code in-place. This feature is not available
-with Windows.
+Note for developers:
+
+- the ``-e`` pip option allows one to modify the Python code in-place. Restart the kernel in order to see the changes.
+- the ``--symlink`` argument on Linux or OS X allows one to modify the JavaScript code in-place. This feature is not available with Windows.
+
+    For automatically building the JavaScript code every time there is a change, run the following command from the ``ipyleaflet/js/`` directory:
+
+    ```
+    $ npm run watch
+    ```
+
+    If you are on JupyterLab you also need to run the following in a separate terminal:
+
+    ```
+    $ jupyter lab --watch
+    ```
+
+    Every time a JavaScript build has terminated you need to refresh the Notebook page in order to load the JavaScript code again.
 
 ## Documentation
 

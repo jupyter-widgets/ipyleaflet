@@ -50,7 +50,7 @@ basemaps = Bunch(
         url = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
         max_zoom = 17,
         attribution = 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
-        name = 'OpenTopMap'
+        name = 'OpenTopoMap'
     ),
     OpenMapSurfer = Bunch(
         Roads = dict(
@@ -85,7 +85,7 @@ basemaps = Bunch(
             url = 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
             max_zoom = 20,
             attribution = 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012',
-            name = 'Esri.WoldStreetMap'
+            name = 'Esri.WorldStreetMap'
         ),
         DeLorme = dict(
             url = 'http://server.arcgisonline.com/ArcGIS/rest/services/Specialty/DeLorme_World_Base_Map/MapServer/tile/{z}/{y}/{x}',
@@ -129,54 +129,60 @@ basemaps = Bunch(
     ),
     CartoDB = Bunch(
         Positron = dict(
-            url = 'http://tile.mtbmap.cz/mtbmap_tiles/{z}/{x}/{y}.png',
+            url = 'http://c.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
             max_zoom = 20,
-            attribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &amp; USGS',
+            attribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
             name = 'CartoDB.Positron'
         ),
         DarkMatter = dict(
             url = 'http://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-            max_zoom = 19,
+            max_zoom = 20,
             attribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
             name = 'CartoDB.DarkMatter'
         )
     ),
     NASAGIBS = Bunch(
         ModisTerraTrueColorCR = dict(
-            url = 'https://map1.vis.earthdata.nasa.gov/wmts-webmerc/MODIS_Terra_CorrectedReflectance_TrueColor/default/%s/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
+            url = 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/%s/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
             max_zoom = 9,
             attribution = 'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
             name = 'NASAGIBS.ModisTerraTrueColorCR'
         ),
         ModisTerraBands367CR = dict(
-            url = 'https://map1.vis.earthdata.nasa.gov/wmts-webmerc/MODIS_Terra_CorrectedReflectance_Bands367/default/%s/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
+            url = 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_Bands367/default/%s/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
             max_zoom = 9,
             attribution = 'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
             name = 'NASAGIBS.ModisTerraBands367CR'
         ),
         ModisTerraBands721CR = dict(
-            url = 'https://map1.vis.earthdata.nasa.gov/wmts-webmerc/MODIS_Terra_CorrectedReflectance_Bands721/default/%s/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
+            url = 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_Bands721/default/%s/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
             max_zoom = 9,
             attribution = 'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
             name = 'NASAGIBS.MidsTerraBands721CR'
         ),
         ModisAquaTrueColorCR = dict(
-            url = 'https://map1.vis.earthdata.nasa.gov/wmts-webmerc/MODIS_Aqua_CorrectedReflectance_TrueColor/default/%s/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
+            url = 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Aqua_CorrectedReflectance_TrueColor/default/%s/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
             max_zoom = 9,
             attribution = 'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
             name = 'NASAGIBS.ModisAquaTrueColorCR'
         ),
         ModisAquaBands721CR = dict(
-            url = 'https://map1.vis.earthdata.nasa.gov/wmts-webmerc/MODIS_Aqua_CorrectedReflectance_Bands721/default/%s/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
+            url = 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Aqua_CorrectedReflectance_Bands721/default/%s/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
             max_zoom = 9,
             attribution = 'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
             name = 'NASAGIBS.ModisAquaBands721CR'
         ),
+        ViirsTrueColorCR = dict(
+            url = 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_SNPP_CorrectedReflectance_TrueColor/default/%s/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
+            max_zoom = 9,
+            attribution = 'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
+            name = 'NASAGIBS.ViirsTrueColorCR'
+        ),
         ViirsEarthAtNight2012 = dict(
-            url = 'http://map1.vis.earthdata.nasa.gov/wmts-webmerc/VIIRS_CityLights_2012/default/2012-08-01/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpg',
+            url = 'http://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_Black_Marble/default/2012-01-01/GoogleMapsCompatible_Level8/{z}/{y}/{x}.png',
             max_zoom = 8,
             attribution = 'Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
-            name = 'BASAGIBS.ViirsEarthAtNight2012'
+            name = 'NASAGIBS.ViirsEarthAtNight2012'
         )
     ),
     Strava = Bunch(

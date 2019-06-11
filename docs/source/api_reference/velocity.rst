@@ -11,6 +11,15 @@ Example
 
     from ipyleaflet import Map, Velocity, TileLayer, basemaps
     import xarray as xr
+    import os
+
+    if not os.path.exists('wind-global.nc'):
+      url = 'https://github.com/benbovy/xvelmap/raw/master/notebooks/wind-global.nc'
+      import requests
+      r = requests.get(url)
+      wind_data = r.content
+      with open('wind-global.nc', 'wb') as f:
+          f.write(wind_data)
 
     center = [0, 0]
     zoom = 1

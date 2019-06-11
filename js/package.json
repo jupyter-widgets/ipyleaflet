@@ -1,6 +1,6 @@
 {
   "name": "jupyter-leaflet",
-  "version": "0.9.0",
+  "version": "0.10.4",
   "description": "jupyter - leaflet bridge",
   "author": "Project Jupyter",
   "license": "MIT",
@@ -12,6 +12,7 @@
   "scripts": {
     "clean": "rimraf dist/ && rimraf ../ipyleaflet/static",
     "build": "webpack",
+    "watch": "webpack --watch",
     "prepublish": "npm run clean && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -25,11 +26,13 @@
   "dependencies": {
     "@jupyter-widgets/base": "^1.1",
     "leaflet": "^1.3.0",
-    "leaflet-draw": "^0.4.10",
+    "leaflet-draw": "^1.0.4",
     "leaflet.markercluster": "^1.2.0",
-    "leaflet-splitmap": "^1.0.0",
+    "leaflet-splitmap": "^1.0.1",
     "leaflet-velocity": "^1.2.4",
     "leaflet-measure": "^3.1.0",
+    "leaflet-rotatedmarker": "^0.2.0",
+    "leaflet-fullscreen": "^1.0.2",
     "underscore": "^1.8.3"
   },
   "jupyterlab": {

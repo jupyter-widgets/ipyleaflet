@@ -1,14 +1,24 @@
+import copy
+
+import json
+
 from ipywidgets import (
     Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
-    interactive
+    interactive, Style
 )
+
+from ipywidgets.widgets.trait_types import InstanceDict
 
 from traitlets import (
     Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
-    link, observe, default, validate, TraitError
+    link, observe, default, validate, TraitError, Union
 )
 
+from branca.colormap import linear, ColorMap
+
 from traittypes import Dataset
+
+from geopandas import GeoDataFrame
 
 from .xarray_ds import ds_x_to_json
 
@@ -17,6 +27,13 @@ from .basemaps import basemaps
 from ._version import EXTENSION_VERSION
 
 def_loc = [0.0, 0.0]
+allowed_crs = ['Earth', 'EPSG3395', 'EPSG3857', 'EPSG4326', 'Base', 'Simple']
+allowed_cursor = ['alias', 'cell', 'grab', 'move', 'crosshair', 'context-menu',
+                  'n-resize', 'ne-resize', 'e-resize', 'se-resize', 's-resize',
+                  'sw-resize', 'w-resize', 'nw-resize', 'nesw-resize',
+                  'nwse-resize', 'row-resize', 'col-resize', 'copy', 'default',
+                  'grabbing', 'help', 'no-drop', 'not-allowed', 'pointer',
+                  'progress', 'text', 'wait', 'zoom-in', 'zoom-out']
 
 
 def basemap_to_tiles(bm, day='yesterday', **kwargs):
@@ -70,17 +87,78 @@ class Layer(Widget, InteractMixin):
     base = Bool(False).tag(sync=True)
     bottom = Bool(False).tag(sync=True)
     popup = Instance(Widget, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
+    popup_min_width = Int(50).tag(sync=True)
+    popup_max_width = Int(300).tag(sync=True)
+    popup_max_height = Int(default_value=None, allow_none=True).tag(sync=True)
 
     options = List(trait=Unicode).tag(sync=True)
+
+    def __init__(self, **kwargs):
+        super(Layer, self).__init__(**kwargs)
+        self.on_msg(self._handle_mouse_events)
 
     @default('options')
     def _default_options(self):
         return [name for name in self.traits(o=True)]
 
+    # Event handling
+    _click_callbacks = Instance(CallbackDispatcher, ())
+    _dblclick_callbacks = Instance(CallbackDispatcher, ())
+    _mousedown_callbacks = Instance(CallbackDispatcher, ())
+    _mouseup_callbacks = Instance(CallbackDispatcher, ())
+    _mouseover_callbacks = Instance(CallbackDispatcher, ())
+    _mouseout_callbacks = Instance(CallbackDispatcher, ())
+
+    def _handle_mouse_events(self, _, content, buffers):
+        event_type = content.get('type', '')
+        if event_type == 'click':
+            self._click_callbacks(**content)
+        if event_type == 'dblclick':
+            self._dblclick_callbacks(**content)
+        if event_type == 'mousedown':
+            self._mousedown_callbacks(**content)
+        if event_type == 'mouseup':
+            self._mouseup_callbacks(**content)
+        if event_type == 'mouseover':
+            self._mouseover_callbacks(**content)
+        if event_type == 'mouseout':
+            self._mouseout_callbacks(**content)
+
+    def on_click(self, callback, remove=False):
+        self._click_callbacks.register_callback(callback, remove=remove)
+
+    def on_dblclick(self, callback, remove=False):
+        self._dblclick_callbacks.register_callback(callback, remove=remove)
+
+    def on_mousedown(self, callback, remove=False):
+        self._mousedown_callbacks.register_callback(callback, remove=remove)
+
+    def on_mouseup(self, callback, remove=False):
+        self._mouseup_callbacks.register_callback(callback, remove=remove)
+
+    def on_mouseover(self, callback, remove=False):
+        self._mouseover_callbacks.register_callback(callback, remove=remove)
+
+    def on_mouseout(self, callback, remove=False):
+        self._mouseout_callbacks.register_callback(callback, remove=remove)
+
 
 class UILayer(Layer):
     _view_name = Unicode('LeafletUILayerView').tag(sync=True)
     _model_name = Unicode('LeafletUILayerModel').tag(sync=True)
+
+
+class Icon(UILayer):
+    _view_name = Unicode('LeafletIconView').tag(sync=True)
+    _model_name = Unicode('LeafletIconModel').tag(sync=True)
+
+    icon_url = Unicode('').tag(sync=True, o=True)
+    shadow_url = Unicode(None, allow_none=True).tag(sync=True, o=True)
+    icon_size = Tuple((10, 10), allow_none=True).tag(sync=True, o=True)
+    shadow_size = Tuple((10, 10), allow_none=True).tag(sync=True, o=True)
+    icon_anchor = Tuple((0, 0), allow_none=True).tag(sync=True, o=True)
+    shadow_anchor = Tuple((0, 0), allow_none=True).tag(sync=True, o=True)
+    popup_anchor = Tuple((0, 0), allow_none=True).tag(sync=True, o=True)
 
 
 class Marker(UILayer):
@@ -90,6 +168,7 @@ class Marker(UILayer):
     location = List(def_loc).tag(sync=True)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True)
     visible = Bool(True).tag(sync=True)
+    icon = Instance(Icon, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
 
     # Options
     z_index_offset = Int(0).tag(sync=True, o=True)
@@ -99,6 +178,8 @@ class Marker(UILayer):
     alt = Unicode('').tag(sync=True, o=True)
     rise_on_hover = Bool(False).tag(sync=True, o=True)
     rise_offset = Int(250).tag(sync=True, o=True)
+    rotation_angle = Float(0).tag(sync=True, o=True)
+    rotation_origin = Unicode('').tag(sync=True, o=True)
 
     _move_callbacks = Instance(CallbackDispatcher, ())
 
@@ -124,9 +205,9 @@ class Popup(UILayer):
     ).tag(sync=True, **widget_serialization)
 
     # Options
-    max_width = Int(300).tag(sync=True, o=True)
     min_width = Int(50).tag(sync=True, o=True)
-    max_height = Int(allow_none=True, default_value=None).tag(sync=True, o=True)
+    max_width = Int(300).tag(sync=True, o=True)
+    max_height = Int(default_value=None, allow_none=True).tag(sync=True, o=True)
     auto_pan = Bool(True).tag(sync=True, o=True)
     auto_pan_padding_top_left = List(allow_none=True, default_value=None).tag(sync=True, o=True)
     auto_pan_padding_bottom_right = List(allow_none=True, default_value=None).tag(sync=True, o=True)
@@ -157,6 +238,7 @@ class TileLayer(RasterLayer):
     tile_size = Int(256).tag(sync=True, o=True)
     attribution = Unicode('Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors').tag(sync=True, o=True)
     detect_retina = Bool(False).tag(sync=True, o=True)
+    no_wrap = Bool(False).tag(sync=True, o=True)
 
     _load_callbacks = Instance(CallbackDispatcher, ())
 
@@ -172,6 +254,13 @@ class TileLayer(RasterLayer):
         self._load_callbacks.register_callback(callback, remove=remove)
 
 
+class LocalTileLayer(TileLayer):
+    _view_name = Unicode('LeafletLocalTileLayerView').tag(sync=True)
+    _model_name = Unicode('LeafletLocalTileLayerModel').tag(sync=True)
+
+    path = Unicode('').tag(sync=True)
+
+
 class WMSLayer(TileLayer):
     _view_name = Unicode('LeafletWMSLayerView').tag(sync=True)
     _model_name = Unicode('LeafletWMSLayerModel').tag(sync=True)
@@ -185,7 +274,7 @@ class WMSLayer(TileLayer):
     styles = Unicode().tag(sync=True, o=True)
     format = Unicode('image/jpeg').tag(sync=True, o=True)
     transparent = Bool(False).tag(sync=True, o=True)
-    crs = Unicode(allow_none=True, default_value=None).tag(sync=True, o=True)
+    crs = Enum(values=allowed_crs, default_value='EPSG3857').tag(sync=True)
     uppercase = Bool(False).tag(sync=True, o=True)
 
 
@@ -303,7 +392,7 @@ class Polyline(Path):
 
     # Options
     smooth_factor = Float(1.0).tag(sync=True, o=True)
-    no_clip = Bool(False).tag(sync=True, o=True)
+    no_clip = Bool(True).tag(sync=True, o=True)
 
 
 class Polygon(Polyline):
@@ -418,11 +507,66 @@ class GeoJSON(FeatureGroup):
         self._hover_callbacks.register_callback(callback, remove=remove)
 
 
-class MultiPolygon(FeatureGroup):
-    _view_name = Unicode('LeafletMultiPolygonView').tag(sync=True)
-    _model_name = Unicode('LeafletMultiPolygonModel').tag(sync=True)
+class GeoData(GeoJSON):
 
-    locations = List().tag(sync=True)
+    geo_dataframe = Instance(GeoDataFrame)
+
+    def __init__(self, **kwargs):
+        super(GeoJSON, self).__init__(**kwargs)
+        self.data = self._get_data()
+
+    @observe('geo_dataframe')
+    def _update_data(self, change):
+        self.data = self._get_data()
+
+    def _get_data(self):
+        return json.loads(self.geo_dataframe.to_json())
+
+
+class Choropleth(GeoJSON):
+
+    geo_data = Dict()
+    choro_data = Dict()
+    value_min = Float(None, allow_none=True)
+    value_max = Float(None, allow_none=True)
+    colormap = Instance(ColorMap)
+    border_color = Color('black')
+
+    @observe('choro_data')
+    def _update_bounds(self, change):
+        self.value_min = min(self.choro_data.items(), key=lambda x: x[1])[1]
+        self.value_max = max(self.choro_data.items(), key=lambda x: x[1])[1]
+
+    @observe('value_min', 'value_max', 'geo_data', 'choro_data', 'colormap', 'border_color')
+    def _update_data(self, change):
+        self.data = self._get_data()
+
+    @default('colormap')
+    def _default_colormap(self):
+        return linear.OrRd_06
+
+    def _get_data(self):
+        if not self.geo_data:
+            return {}
+
+        if self.value_min is None:
+            self.value_min = min(self.choro_data.items(), key=lambda x: x[1])[1]
+        if self.value_max is None:
+            self.value_max = max(self.choro_data.items(), key=lambda x: x[1])[1]
+
+        colormap = self.colormap.scale(self.value_min, self.value_max)
+        color_dict = {key: colormap(self.choro_data[key]) for key in self.choro_data.keys()}
+
+        data = copy.deepcopy(self.geo_data)
+        for feature in data['features']:
+            feature['properties']['style'] = dict(fillColor=color_dict[feature['id']],
+                                                  color=self.border_color,
+                                                  weight=0.9)
+        return data
+
+    def __init__(self, **kwargs):
+        super(Choropleth, self).__init__(**kwargs)
+        self.data = self._get_data()
 
 
 class ControlException(TraitError):
@@ -440,9 +584,33 @@ class Control(Widget):
 
     options = List(trait=Unicode).tag(sync=True)
 
+    position = Enum(
+        ['topright', 'topleft', 'bottomright', 'bottomleft'],
+        default_value='topleft',
+        help="""Possible values are topleft, topright, bottomleft
+                or bottomright"""
+    ).tag(sync=True, o=True)
+
     @default('options')
     def _default_options(self):
         return [name for name in self.traits(o=True)]
+
+
+class WidgetControl(Control):
+    _view_name = Unicode('LeafletWidgetControlView').tag(sync=True)
+    _model_name = Unicode('LeafletWidgetControlModel').tag(sync=True)
+
+    widget = Instance(DOMWidget).tag(sync=True, **widget_serialization)
+
+    max_width = Int(default_value=None, allow_none=True).tag(sync=True)
+    min_width = Int(default_value=None, allow_none=True).tag(sync=True)
+    max_height = Int(default_value=None, allow_none=True).tag(sync=True)
+    min_height = Int(default_value=None, allow_none=True).tag(sync=True)
+
+
+class FullScreenControl(Control):
+    _view_name = Unicode('LeafletFullScreenControlView').tag(sync=True)
+    _model_name = Unicode('LeafletFullScreenControlModel').tag(sync=True)
 
 
 class LayersControl(Control):
@@ -458,13 +626,6 @@ class MeasureControl(Control):
     _area_units = ['acres', 'hectares', 'sqfeet', 'sqmeters', 'sqmiles']
     _custom_units_dict = {}
     _custom_units = Dict().tag(sync=True)
-
-    position = Enum(
-        ['topright', 'topleft', 'bottomright', 'bottomleft'],
-        default_value='topright',
-        help="""Possible values are topleft, topright, bottomleft
-                or bottomright"""
-    ).tag(sync=True, o=True)
 
     primary_length_unit = Enum(
         values=_length_units,
@@ -527,8 +688,8 @@ class SplitMapControl(Control):
     _view_name = Unicode('LeafletSplitMapControlView').tag(sync=True)
     _model_name = Unicode('LeafletSplitMapControlModel').tag(sync=True)
 
-    left_layer = Instance(TileLayer).tag(sync=True, **widget_serialization)
-    right_layer = Instance(TileLayer).tag(sync=True, **widget_serialization)
+    left_layer = Union((Instance(Layer), List(Instance(Layer)))).tag(sync=True, **widget_serialization)
+    right_layer = Union((Instance(Layer), List(Instance(Layer)))).tag(sync=True, **widget_serialization)
 
     @default('left_layer')
     def _default_left_layer(self):
@@ -615,6 +776,16 @@ class DrawControl(Control):
         self.send({'msg': 'clear_markers'})
 
 
+class MapStyle(Style, Widget):
+    """ Map Style Widget """
+    _model_name = Unicode('LeafletMapStyleModel').tag(sync=True)
+    _model_module = Unicode("jupyter-leaflet").tag(sync=True)
+
+    _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
+
+    cursor = Enum(values=allowed_cursor, default_value='grab').tag(sync=True)
+
+
 class Map(DOMWidget, InteractMixin):
     _view_name = Unicode('LeafletMapView').tag(sync=True)
     _model_name = Unicode('LeafletMapModel').tag(sync=True)
@@ -631,6 +802,7 @@ class Map(DOMWidget, InteractMixin):
     max_zoom = Int(18).tag(sync=True, o=True)
     min_zoom = Int(1).tag(sync=True, o=True)
     interpolation = Unicode('bilinear').tag(sync=True, o=True)
+    crs = Enum(values=allowed_crs, default_value='EPSG3857').tag(sync=True)
 
     # Specification of the basemap
     basemap = Dict(default_value=dict(
@@ -664,8 +836,17 @@ class Map(DOMWidget, InteractMixin):
     # zoom_animation = Bool(?).tag(sync=True, o=True)
     zoom_animation_threshold = Int(4).tag(sync=True, o=True)
     # marker_zoom_animation = Bool(?).tag(sync=True, o=True)
+    fullscreen = Bool(False).tag(sync=True, o=True)
 
     options = List(trait=Unicode).tag(sync=True)
+
+    style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
+    default_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
+    dragging_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
+
+    @default('dragging_style')
+    def _default_dragging_style(self):
+        return {'cursor': 'move'}
 
     @default('options')
     def _default_options(self):

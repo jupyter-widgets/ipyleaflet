@@ -1,7 +1,7 @@
 .. raw:: html
     :file: embed_widgets/tile_layer.html
 
-Tile layer
+Tile Layer
 ==========
 
 Example
@@ -57,4 +57,5 @@ attribution        "Map data (c) <a href=\'https://openstreetmap.org\'>OpenStree
 detect_retina      False
 opacity            1.0
 visible            True
+no_wrap            False
 ===============    ===================================================================================

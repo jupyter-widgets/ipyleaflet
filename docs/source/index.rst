@@ -8,15 +8,23 @@ ipyleaflet: Interactive maps in the Jupyter notebook
     installation
 
 .. toctree::
-    :caption: API Reference
+    :caption: Map
     :maxdepth: 2
 
     api_reference/map
+
+.. toctree::
+    :caption: Layers
+    :maxdepth: 2
+
     api_reference/tile_layer
+    api_reference/local_tile_layer
     api_reference/marker
+    api_reference/icon
     api_reference/popup
     api_reference/wms_layer
     api_reference/image_video_overlay
+    api_reference/polyline
     api_reference/polygon
     api_reference/rectangle
     api_reference/circle
@@ -26,7 +34,16 @@ ipyleaflet: Interactive maps in the Jupyter notebook
     api_reference/velocity
     api_reference/layer_group
     api_reference/geo_json
+    api_reference/geodata
+    api_reference/choropleth
+
+.. toctree::
+    :caption: Controls
+    :maxdepth: 2
+
     api_reference/layers_control
+    api_reference/fullscreen_control
     api_reference/measure_control
     api_reference/split_map_control
     api_reference/draw_control
+    api_reference/widget_control

@@ -9,3 +9,4 @@ dependencies:
   - requests
   - pillow
   - matplotlib
+  - flask

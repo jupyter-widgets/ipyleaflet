@@ -9,6 +9,7 @@ dependencies:
   - requests
   - pillow
   - matplotlib
+  - flask
   - branca
   - geopandas
   - netcdf4

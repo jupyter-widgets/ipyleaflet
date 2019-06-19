@@ -8,7 +8,9 @@ var LeafletControlModel = control.LeafletControlModel;
 var LeafletLayersControlModel = LeafletControlModel.extend({
   defaults: _.extend({}, LeafletControlModel.prototype.defaults, {
         _view_name: 'LeafletLayersControlView',
-        _model_name: 'LeafletLayersControlModel'
+        _model_name: 'LeafletLayersControlModel',
+        
+        selected: []
     })
 });
 
@@ -43,6 +45,26 @@ var LeafletLayersControlView = LeafletControlView.extend({
 
     create_obj: function () {
         var that = this;
+
+        that.map_view.obj.on("overlayadd", function(event){
+            var sel = that.model.get('selected');
+            var pos = sel.indexOf(event.name);
+            if(pos == -1){
+                sel.push(event.name);
+                that.model.set('selected', sel);
+            }
+        });
+
+        that.map_view.obj.on("overlayremove", function(event){
+            var sel = that.model.get('selected');
+            var pos = sel.indexOf(event.name);
+            if(pos != -1){
+                sel.splice(pos, 1);
+                that.model.set('selected', sel);
+            };
+
+        });
+
         return Promise.all(this.map_view.layer_views.views).then(function(views) {
             var baselayers = views.reduce(function (ov, view) {
                 if (view.model.get("base"))
@@ -51,13 +73,22 @@ var LeafletLayersControlView = LeafletControlView.extend({
                 }
                 return ov;
             }, {});
+
+            var sel = that.model.get('selected');
             var overlays = views.reduce(function (ov, view) {
                 if (!(view.model.get("base")))
                 {
-                    ov[view.model.get("name")] = view.obj;
+                    var name = view.model.get("name");
+                    ov[name] = view.obj;
+
+                    var pos = sel.indexOf(name);
+                    if(pos == -1){
+                        sel.push(name);
+                    }
                 }
                 return ov;
             }, {});
+            that.model.set('selected', sel);
             that.obj = L.control.layers(baselayers, overlays);
             return that;
         }).then(function() {

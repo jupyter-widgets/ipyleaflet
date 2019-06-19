@@ -8,6 +8,11 @@ ipyleaflet: Interactive maps in the Jupyter notebook
     installation
 
 .. toctree::
+    :caption: Usage
+
+    usage
+
+.. toctree::
     :caption: Map
     :maxdepth: 2
 

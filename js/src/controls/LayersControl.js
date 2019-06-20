@@ -61,6 +61,7 @@ var LeafletLayersControlView = LeafletControlView.extend({
             var pos = sel.indexOf(event.name);
             if(pos != -1){
                 sel.splice(pos, 1);
+                that.model.set('selected_overlays', sel);
             }
         });
 

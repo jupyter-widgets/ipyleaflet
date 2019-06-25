@@ -84,6 +84,7 @@ var LeafletWidgetControlView = LeafletControlView.extend({
                     this.widget_view.trigger('displayed', this);
                     this.widget_view.displayed.then(() => {
                         this.updateLayout();
+                        PMessaging.MessageLoop.sendMessage(view.pWidget, PWidgets.Widget.Msg.BeforeAttach);
                         this.obj.setContent(view.el);
                         PMessaging.MessageLoop.sendMessage(view.pWidget, PWidgets.Widget.Msg.AfterAttach);
                     });

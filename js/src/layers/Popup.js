@@ -2,6 +2,8 @@ var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 var L = require('../leaflet.js');
 var layer = require('./Layer.js');
+var PMessaging = require('@phosphor/messaging');
+var PWidgets = require('@phosphor/widgets');
 var LeafletUILayerView = layer.LeafletUILayerView;
 var LeafletUILayerModel = layer.LeafletUILayerModel;
 var def_loc = [0.0, 0.0];
@@ -57,14 +59,10 @@ var LeafletPopupView = LeafletUILayerView.extend({
             var that = this;
             this.child_promise = this.child_promise.then(function() {
                 return that.create_child_view(value).then(function(view) {
-                    that.obj.setContent(view.el);
+                    PMessaging.MessageLoop.sendMessage(view.pWidget, PWidgets.Widget.Msg.BeforeAttach);
+                    thar.obj.setContent(view.el);
+                    PMessaging.MessageLoop.sendMessage(view.pWidget, PWidgets.Widget.Msg.AfterAttach);
                     that.force_update();
-
-                    // Trigger the displayed event of the child view.
-                    that.displayed.then(function() {
-                        view.trigger('displayed', that);
-                    });
-
                     that.child = view;
                     that.trigger('child:created');
                 });
@@ -99,8 +97,7 @@ var LeafletPopupView = LeafletUILayerView.extend({
         if (this.map_view.obj.hasLayer(this.obj)) {
             this.map_view.obj.closePopup(this.obj);
             this.map_view.obj.openPopup(this.obj);
-        }
-        else {
+        } else {
             this.map_view.obj.openPopup(this.obj);
             this.map_view.obj.closePopup(this.obj);
         }

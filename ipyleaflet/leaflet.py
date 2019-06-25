@@ -18,8 +18,6 @@ from branca.colormap import linear, ColorMap
 
 from traittypes import Dataset
 
-from geopandas import GeoDataFrame
-
 from .xarray_ds import ds_x_to_json
 
 from .basemaps import basemaps
@@ -511,7 +509,7 @@ class GeoJSON(FeatureGroup):
 
 class GeoData(GeoJSON):
 
-    geo_dataframe = Instance(GeoDataFrame)
+    geo_dataframe = Instance('geopandas.GeoDataFrame')
 
     def __init__(self, **kwargs):
         super(GeoJSON, self).__init__(**kwargs)

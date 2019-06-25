@@ -14,7 +14,7 @@ var LeafletLayerGroupModel = LeafletLayerModel.extend({
 }, {
     serializers: _.extend({
         layers: { deserialize: widgets.unpack_models }
-    }, widgets.DOMWidgetModel.serializers)
+    }, widgets.WidgetModel.serializers)
 });
 
 var LeafletLayerGroupView = LeafletLayerView.extend({

@@ -14,7 +14,7 @@ var LeafletMarkerClusterModel = LeafletLayerModel.extend({
 }, {
     serializers: _.extend({
         markers: { deserialize: widgets.unpack_models }
-    }, widgets.DOMWidgetModel.serializers)
+    }, widgets.WidgetModel.serializers)
 });
 
 var LeafletMarkerClusterView = layer.LeafletLayerView.extend({

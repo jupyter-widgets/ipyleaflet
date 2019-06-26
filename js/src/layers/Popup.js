@@ -60,7 +60,7 @@ var LeafletPopupView = LeafletUILayerView.extend({
             this.child_promise = this.child_promise.then(function() {
                 return that.create_child_view(value).then(function(view) {
                     PMessaging.MessageLoop.sendMessage(view.pWidget, PWidgets.Widget.Msg.BeforeAttach);
-                    thar.obj.setContent(view.el);
+                    that.obj.setContent(view.el);
                     PMessaging.MessageLoop.sendMessage(view.pWidget, PWidgets.Widget.Msg.AfterAttach);
                     that.force_update();
                     that.child = view;

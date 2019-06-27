@@ -19,7 +19,7 @@ var LeafletFullScreenControlView = LeafletControlView.extend({
     },
 
     create_obj: function () {
-        this.obj = L.control.fullscreen();
+        this.obj = L.control.fullscreen(this.get_options());
     },
 });
 

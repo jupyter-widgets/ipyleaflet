@@ -778,6 +778,16 @@ class DrawControl(Control):
         self.send({'msg': 'clear_markers'})
 
 
+class ZoomControl(Control):
+    _view_name = Unicode('LeafletZoomControlView').tag(sync=True)
+    _model_name = Unicode('LeafletZoomControlModel').tag(sync=True)
+
+    zoom_in_text = Unicode('+').tag(sync=True)
+    zoom_in_title = Unicode('Zoom in').tag(sync=True)
+    zoom_out_text = Unicode('-').tag(sync=True)
+    zoom_out_title = Unicode('Zoom out').tag(sync=True)
+
+
 class MapStyle(Style, Widget):
     """ Map Style Widget """
     _model_name = Unicode('LeafletMapStyleModel').tag(sync=True)

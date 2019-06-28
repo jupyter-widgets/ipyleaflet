@@ -33,6 +33,7 @@ var LeafletTileLayerView = LeafletRasterLayerView.extend({
                 event: 'load'
             });
         });
+        this.model.on('msg:custom', _.bind(this.handle_message, this));
     },
 
     model_events: function () {
@@ -40,6 +41,13 @@ var LeafletTileLayerView = LeafletRasterLayerView.extend({
         this.listenTo(this.model, 'change:url', function () {
             this.obj.setUrl(this.model.get('url'));
         }, this);
+    },
+
+    handle_message: function(content) {
+        console.log('handle_message');
+        if(content.msg == 'redraw'){
+            this.obj.redraw();
+        }
     },
 });
 

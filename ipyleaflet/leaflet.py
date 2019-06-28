@@ -253,6 +253,8 @@ class TileLayer(RasterLayer):
     def on_load(self, callback, remove=False):
         self._load_callbacks.register_callback(callback, remove=remove)
 
+    def redraw(self): 
+        self.send({'msg':'redraw'})
 
 class LocalTileLayer(TileLayer):
     _view_name = Unicode('LeafletLocalTileLayerView').tag(sync=True)

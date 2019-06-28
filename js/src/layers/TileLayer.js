@@ -44,7 +44,6 @@ var LeafletTileLayerView = LeafletRasterLayerView.extend({
     },
 
     handle_message: function(content) {
-        console.log('handle_message');
         if(content.msg == 'redraw'){
             this.obj.redraw();
         }

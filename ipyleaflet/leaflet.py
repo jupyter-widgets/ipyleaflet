@@ -849,7 +849,7 @@ class Map(DOMWidget, InteractMixin):
     # marker_zoom_animation = Bool(?).tag(sync=True, o=True)
     fullscreen = Bool(False).tag(sync=True, o=True)
     zoom_control = Bool(True)
-    
+
     options = List(trait=Unicode).tag(sync=True)
 
     style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
@@ -893,8 +893,14 @@ class Map(DOMWidget, InteractMixin):
         self.on_displayed(self._fire_children_displayed)
         self.on_msg(self._handle_leaflet_event)
         
-        if self.zoom_control:
+    @observe('zoom_control')
+    def observe_zoom_control(self, change):
+        if change['new']:
             self.add_control(ZoomControl())
+        else:
+            for control in self.controls:
+                if isinstance(control, ZoomControl):
+                    self.remove_control(control)   
 
     def _fire_children_displayed(self, widget, **kwargs):
         for layer in self.layers:

@@ -56,7 +56,6 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         inertia_deceleration : 3000,
         inertia_max_speed : 1500,
         // inertia_threshold : int(?)
-        attribution_control : true,
         // fade_animation : bool(?),
         // zoom_animation : bool(?),
         zoom_animation_threshold : 4,
@@ -200,7 +199,9 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
             var options = _.extend(
                 {
                     crs: L.CRS[this.model.get('crs')],
-                    zoomControl: false
+                    zoomControl: false,
+                    attributionControl : false,
+
                 }, 
                 this.get_options()
             );

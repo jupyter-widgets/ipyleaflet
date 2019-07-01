@@ -24,6 +24,7 @@ var featuregroup = require('./layers/FeatureGroup.js');
 var geojson = require('./layers/GeoJSON.js');
 
 //Controls
+var attributioncontrol = require('./controls/AttributionControl.js')
 var control = require('./controls/Control.js');
 var splitmapcontrol = require('./controls/SplitMapControl.js');
 var layerscontrol = require('./controls/LayersControl.js');
@@ -79,6 +80,7 @@ module.exports = {
     LeafletLayerGroupView : layergroup.LeafletLayerGroupView,
     LeafletFeatureGroupView : featuregroup.LeafletFeatureGroupView,
     LeafletGeoJSONView : geojson.LeafletGeoJSONView,
+    LeafletAttributionControlView : zoomcontrol.LeafletAttributionControlView,
     LeafletControlView : control.LeafletControlView,
     LeafletLayersControlView : layerscontrol.LeafletLayersControlView,
     LeafletMeasureControlView : measurecontrol.LeafletMeasureControlView,
@@ -114,6 +116,7 @@ module.exports = {
     LeafletLayerGroupModel : layergroup.LeafletLayerGroupModel,
     LeafletFeatureGroupModel : featuregroup.LeafletFeatureGroupModel,
     LeafletGeoJSONModel : geojson.LeafletGeoJSONModel,
+    LeafletAttributionControlModel : zoomcontrol.LeafletAttributionControlModel,
     LeafletControlModel : control.LeafletControlModel,
     LeafletLayersControlModel : layerscontrol.LeafletLayersControlModel,
     LeafletMeasureControlModel : measurecontrol.LeafletMeasureControlModel,

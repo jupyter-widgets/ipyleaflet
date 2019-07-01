@@ -848,14 +848,14 @@ class Map(DOMWidget, InteractMixin):
     zoom_animation_threshold = Int(4).tag(sync=True, o=True)
     # marker_zoom_animation = Bool(?).tag(sync=True, o=True)
     fullscreen = Bool(False).tag(sync=True, o=True)
-
+    zoom_control = Bool(True)
+    
     options = List(trait=Unicode).tag(sync=True)
 
     style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
     default_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
     dragging_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
 
-    zoom_control = Bool(False)
 
     @default('dragging_style')
     def _default_dragging_style(self):
@@ -892,7 +892,7 @@ class Map(DOMWidget, InteractMixin):
         super(Map, self).__init__(**kwargs)
         self.on_displayed(self._fire_children_displayed)
         self.on_msg(self._handle_leaflet_event)
-
+        
         if self.zoom_control:
             self.add_control(ZoomControl())
 

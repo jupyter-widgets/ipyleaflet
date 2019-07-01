@@ -842,7 +842,6 @@ class Map(DOMWidget, InteractMixin):
     inertia_deceleration = Int(3000).tag(sync=True, o=True)
     inertia_max_speed = Int(1500).tag(sync=True, o=True)
     # inertia_threshold = Int(?, o=True).tag(sync=True)
-    zoom_control = Bool(True).tag(sync=True, o=True)
     attribution_control = Bool(True).tag(sync=True, o=True)
     # fade_animation = Bool(?).tag(sync=True, o=True)
     # zoom_animation = Bool(?).tag(sync=True, o=True)
@@ -855,6 +854,8 @@ class Map(DOMWidget, InteractMixin):
     style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
     default_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
     dragging_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
+
+    zoom_control = Bool(True).tag(sync=True)
 
     @default('dragging_style')
     def _default_dragging_style(self):

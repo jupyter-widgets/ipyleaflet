@@ -893,7 +893,7 @@ class Map(DOMWidget, InteractMixin):
         self.on_displayed(self._fire_children_displayed)
         self.on_msg(self._handle_leaflet_event)
 
-        if zoom_control:
+        if self.zoom_control:
             self.add_control(ZoomControl())
 
     def _fire_children_displayed(self, widget, **kwargs):

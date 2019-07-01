@@ -905,7 +905,7 @@ class Map(DOMWidget, InteractMixin):
 
         if self.zoom_control:
             self.add_control(self.zoom_control_instance)
-
+            
         if self.attribution_control:
             self.add_control(self.attribution_control_instance)
         

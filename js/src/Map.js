@@ -56,7 +56,6 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         inertia_deceleration : 3000,
         inertia_max_speed : 1500,
         // inertia_threshold : int(?)
-        zoom_control : false,
         attribution_control : true,
         // fade_animation : bool(?),
         // zoom_animation : bool(?),

@@ -849,7 +849,6 @@ class Map(DOMWidget, InteractMixin):
     inertia_deceleration = Int(3000).tag(sync=True, o=True)
     inertia_max_speed = Int(1500).tag(sync=True, o=True)
     # inertia_threshold = Int(?, o=True).tag(sync=True)
-    attribution_control = Bool(True).tag(sync=True, o=True)
     # fade_animation = Bool(?).tag(sync=True, o=True)
     # zoom_animation = Bool(?).tag(sync=True, o=True)
     zoom_animation_threshold = Int(4).tag(sync=True, o=True)
@@ -864,6 +863,9 @@ class Map(DOMWidget, InteractMixin):
     
     zoom_control = Bool(True)
     zoom_control_instance = ZoomControl()
+
+    attribution_control = Bool(True)
+    attribution_control_instance = AttributionControl()
 
     @default('dragging_style')
     def _default_dragging_style(self):
@@ -900,6 +902,12 @@ class Map(DOMWidget, InteractMixin):
         super(Map, self).__init__(**kwargs)
         self.on_displayed(self._fire_children_displayed)
         self.on_msg(self._handle_leaflet_event)
+
+        if self.zoom_control:
+            self.add_control(self.zoom_control_instance)
+
+        if self.attribution_control:
+            self.add_control(self.attribution_control_instance)
         
     @observe('zoom_control')
     def observe_zoom_control(self, change):
@@ -908,6 +916,14 @@ class Map(DOMWidget, InteractMixin):
         else:
             if self.zoom_control_instance in self.controls:
                 self.remove_control(self.zoom_control_instance)
+
+    @observe('attribution_control')
+    def observe_attribution_control(self, change):
+        if change['new']:
+            self.add_control(self.attribution_control_instance)
+        else:
+            if self.attribution_control_instance in self.controls:
+                self.remove_control(self.attribution_control_instance)
 
     def _fire_children_displayed(self, widget, **kwargs):
         for layer in self.layers:

@@ -788,6 +788,13 @@ class ZoomControl(Control):
     zoom_out_title = Unicode('Zoom out').tag(sync=True, o=True)
 
 
+class AttributionControl(Control):
+    _view_name = Unicode('LeafletAttributionControlView').tag(sync=True)
+    _model_name = Unicode('LeafletAttributionControlModel').tag(sync=True)
+
+    prefix = Unicode('Leaflet').tag(sync=True, o=True)
+
+
 class MapStyle(Style, Widget):
     """ Map Style Widget """
     _model_name = Unicode('LeafletMapStyleModel').tag(sync=True)

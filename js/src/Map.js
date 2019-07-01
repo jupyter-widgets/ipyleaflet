@@ -200,7 +200,7 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
             var options = _.extend(
                 {
                     crs: L.CRS[this.model.get('crs')],
-                    zoom_control: false
+                    zoomControl: false
                 }, 
                 this.get_options()
             );

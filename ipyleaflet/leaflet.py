@@ -855,7 +855,7 @@ class Map(DOMWidget, InteractMixin):
     default_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
     dragging_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
 
-    zoom_control = Bool(True).tag(sync=True)
+    zoom_control = Bool(False)
 
     @default('dragging_style')
     def _default_dragging_style(self):
@@ -892,6 +892,9 @@ class Map(DOMWidget, InteractMixin):
         super(Map, self).__init__(**kwargs)
         self.on_displayed(self._fire_children_displayed)
         self.on_msg(self._handle_leaflet_event)
+
+        if zoom_control:
+            self.add_control(ZoomControl())
 
     def _fire_children_displayed(self, widget, **kwargs):
         for layer in self.layers:

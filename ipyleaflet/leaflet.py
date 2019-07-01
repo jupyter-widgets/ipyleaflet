@@ -782,10 +782,10 @@ class ZoomControl(Control):
     _view_name = Unicode('LeafletZoomControlView').tag(sync=True)
     _model_name = Unicode('LeafletZoomControlModel').tag(sync=True)
 
-    zoom_in_text = Unicode('+').tag(sync=True)
-    zoom_in_title = Unicode('Zoom in').tag(sync=True)
-    zoom_out_text = Unicode('-').tag(sync=True)
-    zoom_out_title = Unicode('Zoom out').tag(sync=True)
+    zoom_in_text = Unicode('+').tag(sync=True, o=True)
+    zoom_in_title = Unicode('Zoom in').tag(sync=True, o=True)
+    zoom_out_text = Unicode('-').tag(sync=True, o=True)
+    zoom_out_title = Unicode('Zoom out').tag(sync=True, o=True)
 
 
 class MapStyle(Style, Widget):

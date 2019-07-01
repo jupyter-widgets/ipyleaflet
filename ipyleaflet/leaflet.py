@@ -865,7 +865,7 @@ class Map(DOMWidget, InteractMixin):
     zoom_control_instance = ZoomControl()
 
     attribution_control = Bool(True)
-    attribution_control_instance = AttributionControl()
+    attribution_control_instance = AttributionControl(position='bottomright')
 
     @default('dragging_style')
     def _default_dragging_style(self):

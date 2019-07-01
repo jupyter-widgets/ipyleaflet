@@ -848,14 +848,15 @@ class Map(DOMWidget, InteractMixin):
     zoom_animation_threshold = Int(4).tag(sync=True, o=True)
     # marker_zoom_animation = Bool(?).tag(sync=True, o=True)
     fullscreen = Bool(False).tag(sync=True, o=True)
-    zoom_control = Bool(True)
 
     options = List(trait=Unicode).tag(sync=True)
 
     style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
     default_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
     dragging_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
-
+    
+    zoom_control = Bool(True)
+    zoom_control_instance = ZoomControl()
 
     @default('dragging_style')
     def _default_dragging_style(self):
@@ -896,11 +897,10 @@ class Map(DOMWidget, InteractMixin):
     @observe('zoom_control')
     def observe_zoom_control(self, change):
         if change['new']:
-            self.add_control(ZoomControl())
+            self.add_control(self.zoom_control_instance)
         else:
-            for control in self.controls:
-                if isinstance(control, ZoomControl):
-                    self.remove_control(control)   
+            if self.zoom_control_instance in self.controls:
+                self.remove_control(self.zoom_control_instance)
 
     def _fire_children_displayed(self, widget, **kwargs):
         for layer in self.layers:

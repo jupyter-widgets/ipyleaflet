@@ -778,6 +778,16 @@ class DrawControl(Control):
         self.send({'msg': 'clear_markers'})
 
 
+class ZoomControl(Control):
+    _view_name = Unicode('LeafletZoomControlView').tag(sync=True)
+    _model_name = Unicode('LeafletZoomControlModel').tag(sync=True)
+
+    zoom_in_text = Unicode('+').tag(sync=True, o=True)
+    zoom_in_title = Unicode('Zoom in').tag(sync=True, o=True)
+    zoom_out_text = Unicode('-').tag(sync=True, o=True)
+    zoom_out_title = Unicode('Zoom out').tag(sync=True, o=True)
+
+
 class MapStyle(Style, Widget):
     """ Map Style Widget """
     _model_name = Unicode('LeafletMapStyleModel').tag(sync=True)
@@ -832,7 +842,6 @@ class Map(DOMWidget, InteractMixin):
     inertia_deceleration = Int(3000).tag(sync=True, o=True)
     inertia_max_speed = Int(1500).tag(sync=True, o=True)
     # inertia_threshold = Int(?, o=True).tag(sync=True)
-    zoom_control = Bool(True).tag(sync=True, o=True)
     attribution_control = Bool(True).tag(sync=True, o=True)
     # fade_animation = Bool(?).tag(sync=True, o=True)
     # zoom_animation = Bool(?).tag(sync=True, o=True)
@@ -845,6 +854,9 @@ class Map(DOMWidget, InteractMixin):
     style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
     default_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
     dragging_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
+    
+    zoom_control = Bool(True)
+    zoom_control_instance = ZoomControl()
 
     @default('dragging_style')
     def _default_dragging_style(self):
@@ -881,6 +893,14 @@ class Map(DOMWidget, InteractMixin):
         super(Map, self).__init__(**kwargs)
         self.on_displayed(self._fire_children_displayed)
         self.on_msg(self._handle_leaflet_event)
+        
+    @observe('zoom_control')
+    def observe_zoom_control(self, change):
+        if change['new']:
+            self.add_control(self.zoom_control_instance)
+        else:
+            if self.zoom_control_instance in self.controls:
+                self.remove_control(self.zoom_control_instance)
 
     def _fire_children_displayed(self, widget, **kwargs):
         for layer in self.layers:

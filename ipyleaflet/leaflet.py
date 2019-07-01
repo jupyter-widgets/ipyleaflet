@@ -893,6 +893,9 @@ class Map(DOMWidget, InteractMixin):
         super(Map, self).__init__(**kwargs)
         self.on_displayed(self._fire_children_displayed)
         self.on_msg(self._handle_leaflet_event)
+
+        if self.zoom_control:
+            self.add_control(self.zoom_control_instance)
         
     @observe('zoom_control')
     def observe_zoom_control(self, change):

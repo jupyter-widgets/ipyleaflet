@@ -197,7 +197,10 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
 
     create_obj: function () {
         return this.layoutPromise.then((views) => {
-            this.obj = L.map(this.map_container, _.extend({crs: L.CRS[this.model.get('crs')]}, this.get_options()));
+            options = this.get_options();
+            options['zoom_control'] = false;
+            
+            this.obj = L.map(this.map_container, _.extend({crs: L.CRS[this.model.get('crs')]}, options));
         });
     },
 

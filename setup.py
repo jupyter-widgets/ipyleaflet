@@ -134,7 +134,7 @@ setup_args = {
         ('etc/jupyter/nbconfig/notebook.d' , ['jupyter-leaflet.json'])
     ],
     'install_requires': [
-        'ipywidgets>=7.0.0,<8',
+        'ipywidgets>=7.5.0,<8',
         'traittypes>=0.2.1,<3',
         'xarray>=0.10',
         'branca>=0.3.1,<0.4'

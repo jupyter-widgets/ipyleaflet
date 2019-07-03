@@ -21,7 +21,7 @@ module.exports = [
             libraryTarget: 'amd'
         }
     },
-    {// jupyter-leaflet bundle for the notebook
+    {// jupyter-leaflet bundle for the classic notebook
         entry: './src/notebook.js',
         output: {
             filename: 'index.js',
@@ -34,7 +34,7 @@ module.exports = [
         },
         externals: ['@jupyter-widgets/base']
     },
-    {// embeddable jupyter-leaflet bundle
+    {// jupyter-leaflet bundle for unpkg
         entry: './src/embed.js',
         output: {
             filename: 'index.js',

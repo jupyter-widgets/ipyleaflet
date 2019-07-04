@@ -32,6 +32,7 @@ var LeafletGeoJSONView = featuregroup.LeafletFeatureGroupView.extend({
                     }
                     that.send({
                         event: e.type,
+                        feature: feature,
                         properties: feature.properties,
                         id: feature.id
                     });

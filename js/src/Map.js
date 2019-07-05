@@ -93,11 +93,14 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
                 west: 180
             };
             Object.keys(views).reduce(function (bnds, key) {
-                var view_bounds = views[key].obj.getBounds();
-                bnds.north = Math.max(bnds.north, view_bounds.getNorth());
-                bnds.south = Math.min(bnds.south, view_bounds.getSouth());
-                bnds.east = Math.max(bnds.east, view_bounds.getEast());
-                bnds.west = Math.min(bnds.west, view_bounds.getWest());
+                var obj = views[key].obj;
+                if (obj) {
+                    var view_bounds = obj.getBounds();
+                    bnds.north = Math.max(bnds.north, view_bounds.getNorth());
+                    bnds.south = Math.min(bnds.south, view_bounds.getSouth());
+                    bnds.east = Math.max(bnds.east, view_bounds.getEast());
+                    bnds.west = Math.min(bnds.west, view_bounds.getWest());
+                }
                 return bnds;
             }, bounds);
             that.set('north', bounds.north);

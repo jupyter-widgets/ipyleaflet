@@ -253,7 +253,7 @@ class TileLayer(RasterLayer):
     def on_load(self, callback, remove=False):
         self._load_callbacks.register_callback(callback, remove=remove)
 
-    def redraw(self): 
+    def redraw(self):
         self.send({'msg':'redraw'})
 
 class LocalTileLayer(TileLayer):
@@ -514,7 +514,7 @@ class GeoData(GeoJSON):
     geo_dataframe = Instance('geopandas.GeoDataFrame')
 
     def __init__(self, **kwargs):
-        super(GeoJSON, self).__init__(**kwargs)
+        super(GeoData, self).__init__(**kwargs)
         self.data = self._get_data()
 
     @observe('geo_dataframe')
@@ -860,7 +860,7 @@ class Map(DOMWidget, InteractMixin):
     style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
     default_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
     dragging_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
-    
+
     zoom_control = Bool(True)
     zoom_control_instance = ZoomControl()
 
@@ -905,10 +905,10 @@ class Map(DOMWidget, InteractMixin):
 
         if self.zoom_control:
             self.add_control(self.zoom_control_instance)
-            
+
         if self.attribution_control:
             self.add_control(self.attribution_control_instance)
-        
+
     @observe('zoom_control')
     def observe_zoom_control(self, change):
         if change['new']:

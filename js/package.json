@@ -5,6 +5,12 @@
   "author": "Project Jupyter",
   "license": "MIT",
   "main": "src/index.js",
+  "keywords": [
+    "jupyter",
+    "jupyterlab",
+    "jupyterlab-extension",
+    "widgets"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/jupyter-widgets/ipyleaflet.git"

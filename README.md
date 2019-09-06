@@ -51,14 +51,7 @@ notebook 5.3 and above
 If you have JupyterLab, you will also need to install the JupyterLab extension:
 
 ```
-$ jupyter labextension install jupyter-leaflet
-```
-
-Some users have found that the ``jupyterlab-manager`` is also required
-in jupyterlab if the map does not display.
-
-```
-$ jupyter labextension install @jupyter-widgets/jupyterlab-manager
+$ jupyter labextension install @jupyter-widgets/jupyterlab-manager jupyter-leaflet
 ```
 
 ## Installation from sources
@@ -71,7 +64,7 @@ $ cd ipyleaflet
 $ pip install -e .
 $ jupyter nbextension install --py --symlink --sys-prefix ipyleaflet
 $ jupyter nbextension enable --py --sys-prefix ipyleaflet
-$ jupyter labextension install js  # If you are developing on JupyterLab
+$ jupyter labextension install @jupyter-widgets/jupyterlab-manager js  # If you are developing on JupyterLab
 ```
 
 Note for developers:

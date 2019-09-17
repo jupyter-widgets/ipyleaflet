@@ -89,7 +89,7 @@ class Layer(Widget, InteractMixin):
     popup_max_width = Int(300).tag(sync=True)
     popup_max_height = Int(default_value=None, allow_none=True).tag(sync=True)
 
-    options = List(trait=Unicode).tag(sync=True)
+    options = List(trait=Unicode()).tag(sync=True)
 
     def __init__(self, **kwargs):
         super(Layer, self).__init__(**kwargs)
@@ -312,7 +312,7 @@ class Velocity(Layer):
     longitude_dimension = Unicode('longitude', help='Name of the longitude dimension in the dataset')
     units = Unicode(None, allow_none=True)
 
-    data = Dataset().tag(sync=True, to_json=ds_x_to_json)
+    data = Dataset().tag(dtype=None, sync=True, to_json=ds_x_to_json)
 
     # Options
     display_values = Bool(True).tag(sync=True, o=True)
@@ -431,7 +431,7 @@ class MarkerCluster(Layer):
     _view_name = Unicode('LeafletMarkerClusterView').tag(sync=True)
     _model_name = Unicode('LeafletMarkerClusterModel').tag(sync=True)
 
-    markers = Tuple(trait=Instance(Marker)).tag(sync=True, **widget_serialization)
+    markers = Tuple().tag(trait=Instance(Marker), sync=True, **widget_serialization)
 
 
 class LayerGroup(Layer):
@@ -584,7 +584,7 @@ class Control(Widget):
     _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
 
-    options = List(trait=Unicode).tag(sync=True)
+    options = List(trait=Unicode()).tag(sync=True)
 
     position = Enum(
         ['topright', 'topleft', 'bottomright', 'bottomleft'],
@@ -855,7 +855,7 @@ class Map(DOMWidget, InteractMixin):
     # marker_zoom_animation = Bool(?).tag(sync=True, o=True)
     fullscreen = Bool(False).tag(sync=True, o=True)
 
-    options = List(trait=Unicode).tag(sync=True)
+    options = List(trait=Unicode()).tag(sync=True)
 
     style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
     default_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)

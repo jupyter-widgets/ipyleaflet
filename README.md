@@ -32,6 +32,10 @@ A Jupyter / Leaflet bridge enabling interactive maps in the Jupyter notebook.
 
 ![Choropleth Screencast](choropleth.gif)
 
+**Widget control**
+
+![Widget Control](widget_control.gif)
+
 ## Installation
 
 Using conda:

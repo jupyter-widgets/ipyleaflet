@@ -239,6 +239,7 @@ class TileLayer(RasterLayer):
     attribution = Unicode('Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors').tag(sync=True, o=True)
     detect_retina = Bool(False).tag(sync=True, o=True)
     no_wrap = Bool(False).tag(sync=True, o=True)
+    tms = Bool(False).tag(sync=True, o=True)
 
     _load_callbacks = Instance(CallbackDispatcher, ())
 

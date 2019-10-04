@@ -16,7 +16,8 @@ var LeafletTileLayerModel = LeafletRasterLayerModel.extend({
         max_zoom : 18,
         tile_size : 256,
         attribution : 'Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
-        detect_retina : false
+        detect_retina : false,
+        tms: false,
     })
 });
 

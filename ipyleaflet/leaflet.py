@@ -439,7 +439,7 @@ class LayerGroup(Layer):
     _view_name = Unicode('LeafletLayerGroupView').tag(sync=True)
     _model_name = Unicode('LeafletLayerGroupModel').tag(sync=True)
 
-    layers = Tuple(trait=Instance(Layer)).tag(sync=True, **widget_serialization)
+    layers = Tuple().tag(trait=Instance(Layer), sync=True, **widget_serialization)
 
     _layer_ids = List()
 
@@ -881,7 +881,7 @@ class Map(DOMWidget, InteractMixin):
     east = Float(def_loc[1], read_only=True).tag(sync=True)
     west = Float(def_loc[1], read_only=True).tag(sync=True)
 
-    layers = Tuple(trait=Instance(Layer)).tag(sync=True, **widget_serialization)
+    layers = Tuple().tag(trait=Instance(Layer), sync=True, **widget_serialization)
 
     @default('layers')
     def _default_layers(self):
@@ -968,7 +968,7 @@ class Map(DOMWidget, InteractMixin):
     def clear_layers(self):
         self.layers = ()
 
-    controls = Tuple(trait=Instance(Control)).tag(sync=True, **widget_serialization)
+    controls = Tuple().tag(trait=Instance(Control), sync=True, **widget_serialization)
     _control_ids = List()
 
     @validate('controls')

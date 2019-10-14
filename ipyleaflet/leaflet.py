@@ -467,6 +467,13 @@ class LayerGroup(Layer):
             raise LayerException('layer not on in layergroup: %r' % layer)
         self.layers = tuple([l for l in self.layers if l.model_id != layer.model_id])
 
+    def substitute_layer(self, old, new):
+        if isinstance(new, dict):
+            new = basemap_to_tiles(new)
+        if old.model_id not in self._layer_ids:
+            raise LayerException('Could not substitute layer: layer not in layergroup.')
+        self.layers = tuple([new if l.model_id == old.model_id else l for l in self.layers])
+
     def clear_layers(self):
         self.layers = ()
 

@@ -37,10 +37,7 @@ var LeafletPathView = LeafletVectorLayerView.extend({
             }, this);
         }
 
-        for (var i=0; i<o.length; i++) {
-            key = o[i];
-            this.obj.setStyle(this.get_options());
-        }
+        this.obj.setStyle(this.get_options());
     },
 
 });

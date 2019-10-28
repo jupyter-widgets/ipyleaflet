@@ -915,6 +915,9 @@ class LayersControl(Control):
     _view_name = Unicode('LeafletLayersControlView').tag(sync=True)
     _model_name = Unicode('LeafletLayersControlModel').tag(sync=True)
 
+    selected_base = Unicode('').tag(sync=True)
+    selected_overlays = Tuple(trait=Unicode).tag(sync=True)
+
 
 class MeasureControl(Control):
     _view_name = Unicode('LeafletMeasureControlView').tag(sync=True)

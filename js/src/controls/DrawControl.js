@@ -60,7 +60,8 @@ var LeafletDrawControlView = LeafletControlView.extend({
                 circlemarker: circlemarker,
                 rectangle: rectangle,
                 marker: marker
-            }
+            },
+            this.get_options()
         });
         this.map_view.obj.on('draw:created', function (e) {
             var type = e.layerType;

@@ -4,6 +4,7 @@ var L = require('../leaflet.js');
 var rasterlayer = require('./RasterLayer.js');
 var LeafletRasterLayerView = rasterlayer.LeafletRasterLayerView;
 var LeafletRasterLayerModel = rasterlayer.LeafletRasterLayerModel;
+var Spinner = require('spin.js').Spinner;
 
 var LeafletTileLayerModel = LeafletRasterLayerModel.extend({
     defaults: _.extend({}, LeafletRasterLayerModel.prototype.defaults, {
@@ -18,6 +19,7 @@ var LeafletTileLayerModel = LeafletRasterLayerModel.extend({
         attribution : 'Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
         detect_retina : false,
         tms: false,
+        show_loading: false,
     })
 });
 
@@ -28,15 +30,24 @@ var LeafletTileLayerView = LeafletRasterLayerView.extend({
             this.model.get('url'),
             this.get_options()
         );
+        this.model.on('msg:custom', _.bind(this.handle_message, this));
+    },
+
+    leaflet_events: function () {
+        LeafletTileLayerView.__super__.leaflet_events.apply(this, arguments);
         var that = this;
+        this.obj.on('loading', function (e) {
+            if (that.model.get('show_loading'))
+                that.spinner = new Spinner().spin(that.map_view.el);
+        });
         this.obj.on('load', function() {
             that.send({
                 event: 'load'
             });
+            if (that.model.get('show_loading'))
+                that.spinner.stop();
         });
-        this.model.on('msg:custom', _.bind(this.handle_message, this));
     },
-
     model_events: function () {
         LeafletTileLayerView.__super__.model_events.apply(this, arguments);
         this.listenTo(this.model, 'change:url', function () {

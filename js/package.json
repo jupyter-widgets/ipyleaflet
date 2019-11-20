@@ -40,7 +40,8 @@
     "leaflet-rotatedmarker": "^0.2.0",
     "leaflet-fullscreen": "^1.0.2",
     "leaflet-transform": "^1.0.3",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "spin.js": "^4.1.0"
   },
   "jupyterlab": {
     "extension": "src/jupyterlab-plugin"

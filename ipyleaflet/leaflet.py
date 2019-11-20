@@ -240,6 +240,7 @@ class TileLayer(RasterLayer):
     detect_retina = Bool(False).tag(sync=True, o=True)
     no_wrap = Bool(False).tag(sync=True, o=True)
     tms = Bool(False).tag(sync=True, o=True)
+    show_loading = Bool(False).tag(sync=True)
 
     _load_callbacks = Instance(CallbackDispatcher, ())
 

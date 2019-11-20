@@ -876,8 +876,6 @@ class Map(DOMWidget, InteractMixin):
     attribution_control = Bool(True)
     attribution_control_instance = AttributionControl(position='bottomright')
 
-    show_progress = Bool(False)
-
     @default('dragging_style')
     def _default_dragging_style(self):
         return {'cursor': 'move'}

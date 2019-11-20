@@ -44,6 +44,7 @@ require('leaflet.markercluster/dist/MarkerCluster.css');
 require('leaflet.markercluster/dist/MarkerCluster.Default.css');
 require('leaflet-measure/dist/leaflet-measure.css');
 require('leaflet-fullscreen/dist/leaflet.fullscreen.css');
+require('spin.js/spin.css');
 require('./jupyter-leaflet.css');
 
 // Forcibly load the marker icon images to be in the bundle.

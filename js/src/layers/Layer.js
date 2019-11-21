@@ -67,6 +67,17 @@ var LeafletLayerView = utils.LeafletWidgetView.extend({
                 // This is a workaround for making maps rendered correctly in popups
                 window.dispatchEvent(new Event('resize'));
             });
+            // this layer is transformable
+            if (this.obj.transform) {
+                // add the handler only when the layer has been added
+                this.obj.on('add', () => {
+                    this.update_transform();
+                });
+                this.obj.on('transformed', () => {
+                    this.model.set('locations', this.obj.getLatLngs());
+                    this.touch();
+                });
+            }
         }
     },
 

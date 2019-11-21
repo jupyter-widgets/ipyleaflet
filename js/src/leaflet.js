@@ -7,6 +7,7 @@ require('leaflet-measure');
 require('./leaflet-heat.js');
 require('leaflet-rotatedmarker');
 require('leaflet-fullscreen');
+require('leaflet-transform');
 
 // https://github.com/Leaflet/Leaflet/issues/4968
 // Marker file names are hard-coded in the leaflet source causing

@@ -393,10 +393,15 @@ class Polyline(Path):
     _model_name = Unicode('LeafletPolylineModel').tag(sync=True)
 
     locations = List().tag(sync=True)
+    scaling = Bool(True).tag(sync=True)
+    rotation = Bool(True).tag(sync=True)
+    uniform_scaling = Bool(False).tag(sync=True)
 
     # Options
     smooth_factor = Float(1.0).tag(sync=True, o=True)
     no_clip = Bool(True).tag(sync=True, o=True)
+    transform = Bool(False).tag(sync=True, o=True)
+    draggable = Bool(False).tag(sync=True, o=True)
 
 
 class Polygon(Polyline):

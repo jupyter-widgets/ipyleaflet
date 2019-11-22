@@ -496,6 +496,7 @@ class GeoJSON(FeatureGroup):
     data = Dict().tag(sync=True)
     style = Dict().tag(sync=True)
     hover_style = Dict().tag(sync=True)
+    point_style = Dict().tag(sync=True)
 
     _click_callbacks = Instance(CallbackDispatcher, ())
     _hover_callbacks = Instance(CallbackDispatcher, ())

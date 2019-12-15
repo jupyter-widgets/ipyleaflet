@@ -1,3 +1,5 @@
+from here import basemap_to_tiles as here_basemap_to_tiles
+
 class Bunch(dict):
     """A dict with attribute-access"""
 
@@ -254,5 +256,21 @@ basemaps = Bunch(
             min_zoom = 1,
             max_zoom = 18
         )
+    ),
+
+    HERE = Bunch(
+        Default = here_basemap_to_tiles(
+            maptype="base", tiletype="maptile", scheme="normal.day"),
+        Satellite = here_basemap_to_tiles(
+            maptype="aerial", tiletype="maptile", scheme="satellite.day"),
+        TrafficDay = here_basemap_to_tiles(
+            maptype='traffic', tiletype='traffictile', scheme="normal.day"),
+        TrafficNight = here_basemap_to_tiles(
+            maptype='traffic', tiletype='traffictile', scheme="normal.night"),
+        TransitDay = here_basemap_to_tiles(
+            maptype='base', tiletype='maptile', scheme="normal.day.transit"),
+        TransitNight = here_basemap_to_tiles(
+            maptype='base', tiletype='maptile', scheme="normal.night.transit"),
+        Parameterized = here_basemap_to_tiles,
     )
 )

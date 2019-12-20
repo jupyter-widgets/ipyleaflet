@@ -1,3 +1,5 @@
+from here import basemap_to_tiles as here_basemap_to_tiles
+
 class Bunch(dict):
     """A dict with attribute-access"""
 
@@ -219,7 +221,7 @@ basemaps = Bunch(
     ),
     Stamen = Bunch(
         Terrain = dict(
-            url = 'http://stamen-tiles-a.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png',
+            url = 'https://stamen-tiles-a.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png',
             attribution = ''.join([
                 'Map tiles by <a href="http://stamen.com/">Stamen Design</a>, ',
                 'under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. ',
@@ -231,7 +233,7 @@ basemaps = Bunch(
             max_zoom = 18
         ),
         Toner = dict(
-            url = 'http://stamen-tiles-a.a.ssl.fastly.net/toner/{z}/{x}/{y}.png',
+            url = 'https://stamen-tiles-a.a.ssl.fastly.net/toner/{z}/{x}/{y}.png',
             attribution = ''.join([
                 'Map tiles by <a href="http://stamen.com/">Stamen Design</a>, ',
                 'under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. ',
@@ -243,7 +245,7 @@ basemaps = Bunch(
             max_zoom = 20
         ),
         Watercolor = dict(
-            url = 'http://stamen-tiles-a.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.png',
+            url = 'https://stamen-tiles-a.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.png',
             attribution = ''.join([
                 'Map tiles by <a href="http://stamen.com/">Stamen Design</a>, ',
                 'under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. ',
@@ -254,5 +256,21 @@ basemaps = Bunch(
             min_zoom = 1,
             max_zoom = 18
         )
+    ),
+
+    HERE = Bunch(
+        Default = here_basemap_to_tiles(
+            maptype="base", tiletype="maptile", scheme="normal.day"),
+        Satellite = here_basemap_to_tiles(
+            maptype="aerial", tiletype="maptile", scheme="satellite.day"),
+        TrafficDay = here_basemap_to_tiles(
+            maptype='traffic', tiletype='traffictile', scheme="normal.day"),
+        TrafficNight = here_basemap_to_tiles(
+            maptype='traffic', tiletype='traffictile', scheme="normal.night"),
+        TransitDay = here_basemap_to_tiles(
+            maptype='base', tiletype='maptile', scheme="normal.day.transit"),
+        TransitNight = here_basemap_to_tiles(
+            maptype='base', tiletype='maptile', scheme="normal.night.transit"),
+        Parameterized = here_basemap_to_tiles,
     )
 )

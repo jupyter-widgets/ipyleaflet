@@ -1,3 +1,7 @@
+# Copyright (c) Jupyter Development Team.
+# Distributed under the terms of the Modified BSD License.
+#
+
 def ds_x_to_json(ds, widget):
     return ds2json(
             ds,

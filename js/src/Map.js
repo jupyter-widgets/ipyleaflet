@@ -1,3 +1,6 @@
+// Copyright (c) Jupyter Development Team.
+// Distributed under the terms of the Modified BSD License.
+
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 var L = require('./leaflet.js');
@@ -56,8 +59,6 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
         inertia_deceleration : 3000,
         inertia_max_speed : 1500,
         // inertia_threshold : int(?)
-        zoom_control : true,
-        attribution_control : true,
         // fade_animation : bool(?),
         // zoom_animation : bool(?),
         zoom_animation_threshold : 4,
@@ -95,11 +96,14 @@ var LeafletMapModel = widgets.DOMWidgetModel.extend({
                 west: 180
             };
             Object.keys(views).reduce(function (bnds, key) {
-                var view_bounds = views[key].obj.getBounds();
-                bnds.north = Math.max(bnds.north, view_bounds.getNorth());
-                bnds.south = Math.min(bnds.south, view_bounds.getSouth());
-                bnds.east = Math.max(bnds.east, view_bounds.getEast());
-                bnds.west = Math.min(bnds.west, view_bounds.getWest());
+                var obj = views[key].obj;
+                if (obj) {
+                    var view_bounds = obj.getBounds();
+                    bnds.north = Math.max(bnds.north, view_bounds.getNorth());
+                    bnds.south = Math.min(bnds.south, view_bounds.getSouth());
+                    bnds.east = Math.max(bnds.east, view_bounds.getEast());
+                    bnds.west = Math.min(bnds.west, view_bounds.getWest());
+                }
                 return bnds;
             }, bounds);
             that.set('north', bounds.north);
@@ -198,7 +202,17 @@ var LeafletMapView = utils.LeafletDOMWidgetView.extend({
 
     create_obj: function () {
         return this.layoutPromise.then((views) => {
-            this.obj = L.map(this.map_container, _.extend({crs: L.CRS[this.model.get('crs')]}, this.get_options()));
+            var options = _.extend(
+                {
+                    crs: L.CRS[this.model.get('crs')],
+                    zoomControl: false,
+                    attributionControl : false,
+
+                }, 
+                this.get_options()
+            );
+            
+            this.obj = L.map(this.map_container, options);
         });
     },
 

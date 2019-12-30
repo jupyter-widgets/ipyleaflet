@@ -1,3 +1,6 @@
+// Copyright (c) Jupyter Development Team.
+// Distributed under the terms of the Modified BSD License.
+
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 var L = require('../leaflet.js');
@@ -37,10 +40,7 @@ var LeafletPathView = LeafletVectorLayerView.extend({
             }, this);
         }
 
-        for (var i=0; i<o.length; i++) {
-            key = o[i];
-            this.obj.setStyle(this.get_options());
-        }
+        this.obj.setStyle(this.get_options());
     },
 
 });

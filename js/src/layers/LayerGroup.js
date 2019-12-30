@@ -1,3 +1,6 @@
+// Copyright (c) Jupyter Development Team.
+// Distributed under the terms of the Modified BSD License.
+
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 var L = require('../leaflet.js');
@@ -14,7 +17,7 @@ var LeafletLayerGroupModel = LeafletLayerModel.extend({
 }, {
     serializers: _.extend({
         layers: { deserialize: widgets.unpack_models }
-    }, widgets.DOMWidgetModel.serializers)
+    }, widgets.WidgetModel.serializers)
 });
 
 var LeafletLayerGroupView = LeafletLayerView.extend({

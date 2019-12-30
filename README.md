@@ -1,7 +1,7 @@
 # ipyleaflet
 
 [![Documentation](http://readthedocs.org/projects/ipyleaflet/badge/?version=latest)](https://ipyleaflet.readthedocs.io/en/latest/?badge=latest)
-[![Binder](https://img.shields.io/badge/launch-binder-brightgreen.svg)](https://mybinder.org/v2/gh/jupyter-widgets/ipyleaflet/stable?filepath=examples)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jupyter-widgets/ipyleaflet/stable?filepath=examples)
 [![Join the Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jupyter-widgets/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 A Jupyter / Leaflet bridge enabling interactive maps in the Jupyter notebook.
@@ -32,46 +32,57 @@ A Jupyter / Leaflet bridge enabling interactive maps in the Jupyter notebook.
 
 ![Choropleth Screencast](choropleth.gif)
 
+**Widget control**
+
+![Widget Control](widget_control.gif)
+
 ## Installation
 
 Using conda:
 
 ```
-$ conda install -c conda-forge ipyleaflet
+conda install -c conda-forge ipyleaflet
 ```
 
 Using pip:
 
 ```
-$ pip install ipyleaflet
-$ jupyter nbextension enable --py --sys-prefix ipyleaflet  # can be skipped for
-notebook 5.3 and above
+pip install ipyleaflet
 ```
 
-If you have JupyterLab, you will also need to install the JupyterLab extension:
+If you are using the classic Jupyter Notebook < 5.3 you need to run this extra command:
 
 ```
-$ jupyter labextension install jupyter-leaflet
+jupyter nbextension enable --py --sys-prefix ipyleaflet
 ```
 
-Some users have found that the ``jupyterlab-manager`` is also required
-in jupyterlab if the map does not display.
+If you are using JupyterLab, you will need to install the JupyterLab extension:
 
 ```
-$ jupyter labextension install @jupyter-widgets/jupyterlab-manager
+jupyter labextension install @jupyter-widgets/jupyterlab-manager jupyter-leaflet
 ```
 
 ## Installation from sources
 
-For a development installation (requires npm):
+For a development installation (requires npm, you can install it with `conda install -c conda-forge nodejs`):
 
 ```
-$ git clone https://github.com/jupyter-widgets/ipyleaflet.git
-$ cd ipyleaflet
-$ pip install -e .
-$ jupyter nbextension install --py --symlink --sys-prefix ipyleaflet
-$ jupyter nbextension enable --py --sys-prefix ipyleaflet
-$ jupyter labextension install js  # If you are developing on JupyterLab
+git clone https://github.com/jupyter-widgets/ipyleaflet.git
+cd ipyleaflet
+pip install -e .
+```
+
+If you are using the classic Jupyter Notebook you need to install the nbextension:
+
+```
+jupyter nbextension install --py --symlink --sys-prefix ipyleaflet
+jupyter nbextension enable --py --sys-prefix ipyleaflet
+```
+
+If you are using JupyterLab, you need to install the labextension for ipywidgets and ipyleaflet:
+
+```
+jupyter labextension install @jupyter-widgets/jupyterlab-manager js
 ```
 
 Note for developers:
@@ -82,13 +93,13 @@ Note for developers:
     For automatically building the JavaScript code every time there is a change, run the following command from the ``ipyleaflet/js/`` directory:
 
     ```
-    $ npm run watch
+    npm run watch
     ```
 
     If you are on JupyterLab you also need to run the following in a separate terminal:
 
     ```
-    $ jupyter lab --watch
+    jupyter lab --watch
     ```
 
     Every time a JavaScript build has terminated you need to refresh the Notebook page in order to load the JavaScript code again.

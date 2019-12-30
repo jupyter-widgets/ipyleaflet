@@ -1,9 +1,14 @@
+// Copyright (c) Jupyter Development Team.
+// Distributed under the terms of the Modified BSD License.
+
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 var L = require('../leaflet.js');
 var control = require('./Control.js');
 var LeafletControlView = control.LeafletControlView;
 var LeafletControlModel = control.LeafletControlModel;
+var PMessaging = require('@phosphor/messaging');
+var PWidgets = require('@phosphor/widgets');
 
 L.Control.WidgetControl = L.Control.extend({
     updateLayout: function(options) {
@@ -14,12 +19,15 @@ L.Control.WidgetControl = L.Control.extend({
         });
     },
 
-    getContent: function(){
+    getContent: function() {
         return this._content;
     },
 
-    setContent: function(content){
-        if (!this._map) { return; }
+    setContent: function(content) {
+        if (!this._map)
+        {
+            return;
+        }
 
         this._content = content;
         this._container.appendChild(this._content);
@@ -79,7 +87,9 @@ var LeafletWidgetControlView = LeafletControlView.extend({
                     this.widget_view.trigger('displayed', this);
                     this.widget_view.displayed.then(() => {
                         this.updateLayout();
+                        PMessaging.MessageLoop.sendMessage(view.pWidget, PWidgets.Widget.Msg.BeforeAttach);
                         this.obj.setContent(view.el);
+                        PMessaging.MessageLoop.sendMessage(view.pWidget, PWidgets.Widget.Msg.AfterAttach);
                     });
                 });
             })

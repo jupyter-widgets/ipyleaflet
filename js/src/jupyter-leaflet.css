@@ -1,3 +1,7 @@
+/* Copyright (c) Jupyter Development Team.
+ * Distributed under the terms of the Modified BSD License.
+ */
+
 .leaflet-container {
     height: 100%;
     width: 100%;
@@ -14,20 +18,6 @@
     height: 100%;
 }
 
-.leaflet-widgetcontrol {
-    background: var(--jp-layout-color1);
-    border-radius: 4.5px;
-    box-shadow: 4px 5px 8px 0px #9e9e9e
-}
-
-.leaflet-control-velocity.leaflet-control {
-    background: rgba(255, 255, 255, 0.7);
-    margin: 0;
-    padding: 0 5px;
-    color: #333;
-    font-size: 11px;
-}
-
 /* Leaflet crispness override */
 .crisp-image {
     /* Preserve crisp pixels with scaled up images */
@@ -39,4 +29,100 @@
     image-rendering: crisp-edges;               /* CSS4 Proposed  */
     image-rendering: pixelated;                 /* CSS4 Proposed  */
     -ms-interpolation-mode: nearest-neighbor;   /* IE8+           */
+}
+
+/* JupyterLab themes support */
+/* Popup */
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+    background-color: var(--jp-layout-color1);
+    color: var(--jp-ui-font-color1);
+    border-width: var(--jp-border-width);
+    border-color: var(--jp-border-color1);
+}
+
+/* Basic controls */
+.leaflet-bar a, .leaflet-bar a:hover {
+    background-color: var(--jp-layout-color1);
+    color: var(--jp-ui-font-color1);
+    border-width: var(--jp-border-width);
+    border-color: var(--jp-border-color1);
+}
+
+.leaflet-bar a:hover {
+    background-color: var(--jp-layout-color2);
+    color: var(--jp-ui-font-color2);
+}
+
+.leaflet-bar a.leaflet-disabled {
+    background-color: var(--jp-layout-color3);
+    color: var(--jp-ui-font-color3);
+}
+
+/* Widget control */
+.leaflet-widgetcontrol {
+    background: var(--jp-layout-color1);
+    border-radius: 4.5px;
+    box-shadow: 4px 5px 8px 0px #9e9e9e
+}
+
+/* SplitMap control */
+.leaflet-sbs-divider {
+    background-color: var(--jp-layout-color1);
+}
+
+.leaflet-sbs-range::-webkit-slider-thumb {
+    background-color: var(--jp-layout-color1);
+    border-width: var(--jp-border-width);
+    border-color: var(--jp-border-color1);
+}
+
+.leaflet-sbs-range::-ms-thumb {
+    background-color: var(--jp-layout-color1);
+    border-width: var(--jp-border-width);
+    border-color: var(--jp-border-color1);
+}
+
+.leaflet-sbs-range::-moz-range-thumb {
+    background-color: var(--jp-layout-color1);
+    border-width: var(--jp-border-width);
+    border-color: var(--jp-border-color1);
+}
+
+/* Measure control */
+.leaflet-control-measure {
+    background-color: var(--jp-layout-color1);
+    border-width: var(--jp-border-width);
+    border-color: var(--jp-border-color1);
+    color: var(--jp-ui-font-color1);
+}
+
+/* Layers control */
+.leaflet-control-layers {
+    background-color: var(--jp-layout-color1);
+    border-width: var(--jp-border-width);
+    border-color: var(--jp-border-color1);
+    color: var(--jp-ui-font-color1);
+}
+
+.leaflet-control-layers-expanded {
+    background-color: var(--jp-layout-color1);
+    border-width: var(--jp-border-width);
+    border-color: var(--jp-border-color1);
+    color: var(--jp-ui-font-color1);
+}
+
+/* Attribution control */
+.leaflet-container .leaflet-control-attribution {
+    background-color: var(--jp-layout-color1);
+    border-width: var(--jp-border-width);
+    border-color: var(--jp-border-color1);
+    color: var(--jp-ui-font-color1);
+}
+
+.leaflet-control-velocity.leaflet-control {
+    background: var(--jp-layout-color1);
+    margin: 0;
+    padding: 0 5px;
+    color: var(--jp-ui-font-color1);
+    font-size: 11px;
 }

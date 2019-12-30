@@ -8,25 +8,30 @@ var control = require('./Control.js');
 var LeafletControlView = control.LeafletControlView;
 var LeafletControlModel = control.LeafletControlModel;
 
-var LeafletFullScreenControlModel = LeafletControlModel.extend({
+var LeafletZoomControlModel = LeafletControlModel.extend({
     defaults: _.extend({}, LeafletControlModel.prototype.defaults, {
-        _view_name: 'LeafletFullScreenControlView',
-        _model_name: 'LeafletFullScreenControlModel',
+        _view_name: 'LeafletZoomControlView',
+        _model_name: 'LeafletZoomControlModel',
+
+        zoom_in_text: '+',
+        zoom_in_title: 'Zoom in',
+        zoom_out_text: '-',
+        zoom_out_title: 'Zoom out',
     })
 });
 
-var LeafletFullScreenControlView = LeafletControlView.extend({
+var LeafletZoomControlView = LeafletControlView.extend({
     initialize: function (parameters) {
-        LeafletFullScreenControlView.__super__.initialize.apply(this, arguments);
+        LeafletZoomControlView.__super__.initialize.apply(this, arguments);
         this.map_view = this.options.map_view;
     },
 
     create_obj: function () {
-        this.obj = L.control.fullscreen(this.get_options());
+        this.obj = L.control.zoom(this.get_options());
     },
 });
 
 module.exports = {
-    LeafletFullScreenControlView : LeafletFullScreenControlView,
-    LeafletFullScreenControlModel : LeafletFullScreenControlModel,
+    LeafletZoomControlView : LeafletZoomControlView,
+    LeafletZoomControlModel : LeafletZoomControlModel,
 };

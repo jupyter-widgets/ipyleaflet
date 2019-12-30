@@ -1,5 +1,10 @@
+// Copyright (c) Jupyter Development Team.
+// Distributed under the terms of the Modified BSD License.
+
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
+var PMessaging = require('@phosphor/messaging');
+var PWidgets = require('@phosphor/widgets');
 var L = require('../leaflet.js');
 var utils = require('../utils.js')
 
@@ -65,6 +70,17 @@ var LeafletLayerView = utils.LeafletWidgetView.extend({
                 // This is a workaround for making maps rendered correctly in popups
                 window.dispatchEvent(new Event('resize'));
             });
+            // this layer is transformable
+            if (this.obj.transform) {
+                // add the handler only when the layer has been added
+                this.obj.on('add', () => {
+                    this.update_transform();
+                });
+                this.obj.on('transformed', () => {
+                    this.model.set('locations', this.obj.getLatLngs());
+                    this.touch();
+                });
+            }
         }
     },
 
@@ -91,12 +107,9 @@ var LeafletLayerView = utils.LeafletWidgetView.extend({
             var that = this;
             this.popup_content_promise = this.popup_content_promise.then(function() {
                 return that.create_child_view(value).then(function(view) {
+                    PMessaging.MessageLoop.sendMessage(view.pWidget, PWidgets.Widget.Msg.BeforeAttach);
                     that.obj.bindPopup(view.el, that.popup_options());
-
-                    // Trigger the displayed event of the child view.
-                    that.displayed.then(function() {
-                        view.trigger('displayed', that);
-                    });
+                    PMessaging.MessageLoop.sendMessage(view.pWidget, PWidgets.Widget.Msg.AfterAttach);
 
                     that.popup_content = view;
                     that.trigger('popup_content:created');

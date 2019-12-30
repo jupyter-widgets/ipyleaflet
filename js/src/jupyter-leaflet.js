@@ -1,3 +1,6 @@
+// Copyright (c) Jupyter Development Team.
+// Distributed under the terms of the Modified BSD License.
+
 // Layers
 var layer = require('./layers/Layer.js');
 var marker = require('./layers/Marker.js');
@@ -24,6 +27,7 @@ var featuregroup = require('./layers/FeatureGroup.js');
 var geojson = require('./layers/GeoJSON.js');
 
 //Controls
+var attributioncontrol = require('./controls/AttributionControl.js')
 var control = require('./controls/Control.js');
 var splitmapcontrol = require('./controls/SplitMapControl.js');
 var layerscontrol = require('./controls/LayersControl.js');
@@ -31,9 +35,25 @@ var measurecontrol = require('./controls/MeasureControl.js');
 var drawcontrol = require('./controls/DrawControl.js');
 var fullscreencontrol = require('./controls/FullScreenControl.js');
 var widgetcontrol = require('./controls/WidgetControl.js')
+var zoomcontrol = require('./controls/ZoomControl.js')
 
 //Map
 var map = require('./Map.js');
+
+// Load css
+require('leaflet/dist/leaflet.css');
+require('leaflet-draw/dist/leaflet.draw.css');
+require('leaflet.markercluster/dist/MarkerCluster.css');
+require('leaflet.markercluster/dist/MarkerCluster.Default.css');
+require('leaflet-measure/dist/leaflet-measure.css');
+require('leaflet-fullscreen/dist/leaflet.fullscreen.css');
+require('spin.js/spin.css');
+require('./jupyter-leaflet.css');
+
+// Forcibly load the marker icon images to be in the bundle.
+require('leaflet/dist/images/marker-shadow.png');
+require('leaflet/dist/images/marker-icon.png');
+require('leaflet/dist/images/marker-icon-2x.png');
 
 //Exports
 module.exports = {
@@ -62,6 +82,7 @@ module.exports = {
     LeafletLayerGroupView : layergroup.LeafletLayerGroupView,
     LeafletFeatureGroupView : featuregroup.LeafletFeatureGroupView,
     LeafletGeoJSONView : geojson.LeafletGeoJSONView,
+    LeafletAttributionControlView : attributioncontrol.LeafletAttributionControlView,
     LeafletControlView : control.LeafletControlView,
     LeafletLayersControlView : layerscontrol.LeafletLayersControlView,
     LeafletMeasureControlView : measurecontrol.LeafletMeasureControlView,
@@ -69,6 +90,7 @@ module.exports = {
     LeafletSplitMapControlView : splitmapcontrol.LeafletSplitMapControlView,
     LeafletFullScreenControlView : fullscreencontrol.LeafletFullScreenControlView,
     LeafletWidgetControlView : widgetcontrol.LeafletWidgetControlView,
+    LeafletZoomControlView : zoomcontrol.LeafletZoomControlView,
     LeafletMapView : map.LeafletMapView,
 
     // models
@@ -96,6 +118,7 @@ module.exports = {
     LeafletLayerGroupModel : layergroup.LeafletLayerGroupModel,
     LeafletFeatureGroupModel : featuregroup.LeafletFeatureGroupModel,
     LeafletGeoJSONModel : geojson.LeafletGeoJSONModel,
+    LeafletAttributionControlModel : attributioncontrol.LeafletAttributionControlModel,
     LeafletControlModel : control.LeafletControlModel,
     LeafletLayersControlModel : layerscontrol.LeafletLayersControlModel,
     LeafletMeasureControlModel : measurecontrol.LeafletMeasureControlModel,
@@ -103,6 +126,7 @@ module.exports = {
     LeafletSplitMapControlModel : splitmapcontrol.LeafletSplitMapControlModel,
     LeafletFullScreenControlModel : fullscreencontrol.LeafletFullScreenControlModel,
     LeafletWidgetControlModel : widgetcontrol.LeafletWidgetControlModel,
+    LeafletZoomControlModel : zoomcontrol.LeafletZoomControlModel,
     LeafletMapModel : map.LeafletMapModel,
     LeafletMapStyleModel : map.LeafletMapStyleModel,
 };

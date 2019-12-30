@@ -1,3 +1,6 @@
+// Copyright (c) Jupyter Development Team.
+// Distributed under the terms of the Modified BSD License.
+
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 var L = require('../leaflet.js');
@@ -16,7 +19,8 @@ var LeafletLocalTileLayerModel = LeafletTileLayerModel.extend({
 
 var LeafletLocalTileLayerView = LeafletTileLayerView.extend({
     create_obj: function () {
-        this.model.set('url', window.location.href.replace(/[^/]*$/, '') + this.model.get('path'));
+        this.model.set('url', this.model.get('path'));
+        this.model.save_changes();
         LeafletLocalTileLayerView.__super__.create_obj.apply(this, arguments);
     }
 });

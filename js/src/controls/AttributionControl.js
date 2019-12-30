@@ -8,25 +8,26 @@ var control = require('./Control.js');
 var LeafletControlView = control.LeafletControlView;
 var LeafletControlModel = control.LeafletControlModel;
 
-var LeafletFullScreenControlModel = LeafletControlModel.extend({
+var LeafletAttributionControlModel = LeafletControlModel.extend({
     defaults: _.extend({}, LeafletControlModel.prototype.defaults, {
-        _view_name: 'LeafletFullScreenControlView',
-        _model_name: 'LeafletFullScreenControlModel',
+        _view_name: 'LeafletAttributionControlView',
+        _model_name: 'LeafletAttributionControlModel',
+
     })
 });
 
-var LeafletFullScreenControlView = LeafletControlView.extend({
+var LeafletAttributionControlView = LeafletControlView.extend({
     initialize: function (parameters) {
-        LeafletFullScreenControlView.__super__.initialize.apply(this, arguments);
+        LeafletAttributionControlView.__super__.initialize.apply(this, arguments);
         this.map_view = this.options.map_view;
     },
 
     create_obj: function () {
-        this.obj = L.control.fullscreen(this.get_options());
+        this.obj = L.control.attribution(this.get_options());
     },
 });
 
 module.exports = {
-    LeafletFullScreenControlView : LeafletFullScreenControlView,
-    LeafletFullScreenControlModel : LeafletFullScreenControlModel,
+    LeafletAttributionControlView : LeafletAttributionControlView,
+    LeafletAttributionControlModel : LeafletAttributionControlModel,
 };

@@ -1,3 +1,7 @@
+# Copyright (c) Jupyter Development Team.
+# Distributed under the terms of the Modified BSD License.
+#
+
 import copy
 
 import json
@@ -17,8 +21,6 @@ from traitlets import (
 from branca.colormap import linear, ColorMap
 
 from traittypes import Dataset
-
-from geopandas import GeoDataFrame
 
 from .xarray_ds import ds_x_to_json
 
@@ -91,7 +93,7 @@ class Layer(Widget, InteractMixin):
     popup_max_width = Int(300).tag(sync=True)
     popup_max_height = Int(default_value=None, allow_none=True).tag(sync=True)
 
-    options = List(trait=Unicode).tag(sync=True)
+    options = List(trait=Unicode()).tag(sync=True)
 
     def __init__(self, **kwargs):
         super(Layer, self).__init__(**kwargs)
@@ -235,10 +237,14 @@ class TileLayer(RasterLayer):
     url = Unicode('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').tag(sync=True)
     min_zoom = Int(0).tag(sync=True, o=True)
     max_zoom = Int(18).tag(sync=True, o=True)
+    min_native_zoom = Int(0).tag(sync=True, o=True)
+    max_native_zoom = Int(18).tag(sync=True, o=True)
     tile_size = Int(256).tag(sync=True, o=True)
     attribution = Unicode('Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors').tag(sync=True, o=True)
     detect_retina = Bool(False).tag(sync=True, o=True)
     no_wrap = Bool(False).tag(sync=True, o=True)
+    tms = Bool(False).tag(sync=True, o=True)
+    show_loading = Bool(False).tag(sync=True)
 
     _load_callbacks = Instance(CallbackDispatcher, ())
 
@@ -253,6 +259,8 @@ class TileLayer(RasterLayer):
     def on_load(self, callback, remove=False):
         self._load_callbacks.register_callback(callback, remove=remove)
 
+    def redraw(self):
+        self.send({'msg':'redraw'})
 
 class LocalTileLayer(TileLayer):
     _view_name = Unicode('LeafletLocalTileLayerView').tag(sync=True)
@@ -310,7 +318,7 @@ class Velocity(Layer):
     longitude_dimension = Unicode('longitude', help='Name of the longitude dimension in the dataset')
     units = Unicode(None, allow_none=True)
 
-    data = Dataset().tag(sync=True, to_json=ds_x_to_json)
+    data = Dataset().tag(dtype=None, sync=True, to_json=ds_x_to_json)
 
     # Options
     display_values = Bool(True).tag(sync=True, o=True)
@@ -389,10 +397,15 @@ class Polyline(Path):
     _model_name = Unicode('LeafletPolylineModel').tag(sync=True)
 
     locations = List().tag(sync=True)
+    scaling = Bool(True).tag(sync=True)
+    rotation = Bool(True).tag(sync=True)
+    uniform_scaling = Bool(False).tag(sync=True)
 
     # Options
     smooth_factor = Float(1.0).tag(sync=True, o=True)
     no_clip = Bool(True).tag(sync=True, o=True)
+    transform = Bool(False).tag(sync=True, o=True)
+    draggable = Bool(False).tag(sync=True, o=True)
 
 
 class Polygon(Polyline):
@@ -429,14 +442,14 @@ class MarkerCluster(Layer):
     _view_name = Unicode('LeafletMarkerClusterView').tag(sync=True)
     _model_name = Unicode('LeafletMarkerClusterModel').tag(sync=True)
 
-    markers = Tuple(trait=Instance(Marker)).tag(sync=True, **widget_serialization)
+    markers = Tuple().tag(trait=Instance(Marker), sync=True, **widget_serialization)
 
 
 class LayerGroup(Layer):
     _view_name = Unicode('LeafletLayerGroupView').tag(sync=True)
     _model_name = Unicode('LeafletLayerGroupModel').tag(sync=True)
 
-    layers = Tuple(trait=Instance(Layer)).tag(sync=True, **widget_serialization)
+    layers = Tuple().tag(trait=Instance(Layer), sync=True, **widget_serialization)
 
     _layer_ids = List()
 
@@ -464,6 +477,13 @@ class LayerGroup(Layer):
             raise LayerException('layer not on in layergroup: %r' % layer)
         self.layers = tuple([l for l in self.layers if l.model_id != layer.model_id])
 
+    def substitute_layer(self, old, new):
+        if isinstance(new, dict):
+            new = basemap_to_tiles(new)
+        if old.model_id not in self._layer_ids:
+            raise LayerException('Could not substitute layer: layer not in layergroup.')
+        self.layers = tuple([new if l.model_id == old.model_id else l for l in self.layers])
+
     def clear_layers(self):
         self.layers = ()
 
@@ -480,6 +500,7 @@ class GeoJSON(FeatureGroup):
     data = Dict().tag(sync=True)
     style = Dict().tag(sync=True)
     hover_style = Dict().tag(sync=True)
+    point_style = Dict().tag(sync=True)
 
     _click_callbacks = Instance(CallbackDispatcher, ())
     _hover_callbacks = Instance(CallbackDispatcher, ())
@@ -509,10 +530,10 @@ class GeoJSON(FeatureGroup):
 
 class GeoData(GeoJSON):
 
-    geo_dataframe = Instance(GeoDataFrame)
+    geo_dataframe = Instance('geopandas.GeoDataFrame')
 
     def __init__(self, **kwargs):
-        super(GeoJSON, self).__init__(**kwargs)
+        super(GeoData, self).__init__(**kwargs)
         self.data = self._get_data()
 
     @observe('geo_dataframe')
@@ -582,7 +603,7 @@ class Control(Widget):
     _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
 
-    options = List(trait=Unicode).tag(sync=True)
+    options = List(trait=Unicode()).tag(sync=True)
 
     position = Enum(
         ['topright', 'topleft', 'bottomright', 'bottomleft'],
@@ -776,6 +797,23 @@ class DrawControl(Control):
         self.send({'msg': 'clear_markers'})
 
 
+class ZoomControl(Control):
+    _view_name = Unicode('LeafletZoomControlView').tag(sync=True)
+    _model_name = Unicode('LeafletZoomControlModel').tag(sync=True)
+
+    zoom_in_text = Unicode('+').tag(sync=True, o=True)
+    zoom_in_title = Unicode('Zoom in').tag(sync=True, o=True)
+    zoom_out_text = Unicode('-').tag(sync=True, o=True)
+    zoom_out_title = Unicode('Zoom out').tag(sync=True, o=True)
+
+
+class AttributionControl(Control):
+    _view_name = Unicode('LeafletAttributionControlView').tag(sync=True)
+    _model_name = Unicode('LeafletAttributionControlModel').tag(sync=True)
+
+    prefix = Unicode('Leaflet').tag(sync=True, o=True)
+
+
 class MapStyle(Style, Widget):
     """ Map Style Widget """
     _model_name = Unicode('LeafletMapStyleModel').tag(sync=True)
@@ -830,19 +868,23 @@ class Map(DOMWidget, InteractMixin):
     inertia_deceleration = Int(3000).tag(sync=True, o=True)
     inertia_max_speed = Int(1500).tag(sync=True, o=True)
     # inertia_threshold = Int(?, o=True).tag(sync=True)
-    zoom_control = Bool(True).tag(sync=True, o=True)
-    attribution_control = Bool(True).tag(sync=True, o=True)
     # fade_animation = Bool(?).tag(sync=True, o=True)
     # zoom_animation = Bool(?).tag(sync=True, o=True)
     zoom_animation_threshold = Int(4).tag(sync=True, o=True)
     # marker_zoom_animation = Bool(?).tag(sync=True, o=True)
     fullscreen = Bool(False).tag(sync=True, o=True)
 
-    options = List(trait=Unicode).tag(sync=True)
+    options = List(trait=Unicode()).tag(sync=True)
 
     style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
     default_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
     dragging_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
+
+    zoom_control = Bool(True)
+    zoom_control_instance = ZoomControl()
+
+    attribution_control = Bool(True)
+    attribution_control_instance = AttributionControl(position='bottomright')
 
     @default('dragging_style')
     def _default_dragging_style(self):
@@ -857,7 +899,7 @@ class Map(DOMWidget, InteractMixin):
     east = Float(def_loc[1], read_only=True).tag(sync=True)
     west = Float(def_loc[1], read_only=True).tag(sync=True)
 
-    layers = Tuple(trait=Instance(Layer)).tag(sync=True, **widget_serialization)
+    layers = Tuple().tag(trait=Instance(Layer), sync=True, **widget_serialization)
 
     @default('layers')
     def _default_layers(self):
@@ -879,6 +921,28 @@ class Map(DOMWidget, InteractMixin):
         super(Map, self).__init__(**kwargs)
         self.on_displayed(self._fire_children_displayed)
         self.on_msg(self._handle_leaflet_event)
+
+        if self.zoom_control:
+            self.add_control(self.zoom_control_instance)
+
+        if self.attribution_control:
+            self.add_control(self.attribution_control_instance)
+
+    @observe('zoom_control')
+    def observe_zoom_control(self, change):
+        if change['new']:
+            self.add_control(self.zoom_control_instance)
+        else:
+            if self.zoom_control_instance in self.controls:
+                self.remove_control(self.zoom_control_instance)
+
+    @observe('attribution_control')
+    def observe_attribution_control(self, change):
+        if change['new']:
+            self.add_control(self.attribution_control_instance)
+        else:
+            if self.attribution_control_instance in self.controls:
+                self.remove_control(self.attribution_control_instance)
 
     def _fire_children_displayed(self, widget, **kwargs):
         for layer in self.layers:
@@ -922,7 +986,7 @@ class Map(DOMWidget, InteractMixin):
     def clear_layers(self):
         self.layers = ()
 
-    controls = Tuple(trait=Instance(Control)).tag(sync=True, **widget_serialization)
+    controls = Tuple().tag(trait=Instance(Control), sync=True, **widget_serialization)
     _control_ids = List()
 
     @validate('controls')

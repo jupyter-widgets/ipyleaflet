@@ -1,3 +1,6 @@
+// Copyright (c) Jupyter Development Team.
+// Distributed under the terms of the Modified BSD License.
+
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 var L = require('../leaflet.js');
@@ -10,17 +13,19 @@ var LeafletGeoJSONModel = featuregroup.LeafletFeatureGroupModel.extend({
         data : {},
         style : {},
         hover_style : {},
+        point_style : {},
     })
 });
 
 var LeafletGeoJSONView = featuregroup.LeafletFeatureGroupView.extend({
     create_obj: function () {
         var that = this;
-        style = function (feature) {
+        var style = function (feature) {
             var model_style = that.model.get('style');
             return _.extend(feature.properties.style || {}, model_style);
         }
-        this.obj = L.geoJson(this.model.get('data'), {
+
+        var options = {
             style: style,
             onEachFeature: function (feature, layer) {
                 var mouseevent = function (e) {
@@ -32,6 +37,7 @@ var LeafletGeoJSONView = featuregroup.LeafletFeatureGroupView.extend({
                     }
                     that.send({
                         event: e.type,
+                        feature: feature,
                         properties: feature.properties,
                         id: feature.id
                     });
@@ -41,7 +47,17 @@ var LeafletGeoJSONView = featuregroup.LeafletFeatureGroupView.extend({
                     click: mouseevent
                 });
             }
-        });
+        };
+
+        var point_style = that.model.get('point_style');
+
+        if (Object.keys(point_style).length !== 0) {
+            options.pointToLayer = function(feature, latlng) {
+                return new L.CircleMarker(latlng, point_style)
+            }
+        }
+
+        this.obj = L.geoJson(this.model.get('data'), options);
     },
 
     model_events: function () {

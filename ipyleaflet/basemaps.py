@@ -1,3 +1,7 @@
+# Copyright (c) Jupyter Development Team.
+# Distributed under the terms of the Modified BSD License.
+#
+
 class Bunch(dict):
     """A dict with attribute-access"""
 
@@ -219,7 +223,7 @@ basemaps = Bunch(
     ),
     Stamen = Bunch(
         Terrain = dict(
-            url = 'http://stamen-tiles-a.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png',
+            url = 'https://stamen-tiles-a.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png',
             attribution = ''.join([
                 'Map tiles by <a href="http://stamen.com/">Stamen Design</a>, ',
                 'under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. ',
@@ -231,7 +235,7 @@ basemaps = Bunch(
             max_zoom = 18
         ),
         Toner = dict(
-            url = 'http://stamen-tiles-a.a.ssl.fastly.net/toner/{z}/{x}/{y}.png',
+            url = 'https://stamen-tiles-a.a.ssl.fastly.net/toner/{z}/{x}/{y}.png',
             attribution = ''.join([
                 'Map tiles by <a href="http://stamen.com/">Stamen Design</a>, ',
                 'under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. ',
@@ -243,7 +247,7 @@ basemaps = Bunch(
             max_zoom = 20
         ),
         Watercolor = dict(
-            url = 'http://stamen-tiles-a.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.png',
+            url = 'https://stamen-tiles-a.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.png',
             attribution = ''.join([
                 'Map tiles by <a href="http://stamen.com/">Stamen Design</a>, ',
                 'under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. ',

@@ -1,3 +1,6 @@
+// Copyright (c) Jupyter Development Team.
+// Distributed under the terms of the Modified BSD License.
+
 // Export everything from jupyter-leaflet and the npm package version number.
 var _oldL = window.L;
 module.exports = require('./jupyter-leaflet.js');

@@ -1,3 +1,6 @@
+// Copyright (c) Jupyter Development Team.
+// Distributed under the terms of the Modified BSD License.
+
 var widgets = require('@jupyter-widgets/base');
 var _ = require('underscore');
 var L = require('../leaflet.js');
@@ -14,7 +17,6 @@ var LeafletZoomControlModel = LeafletControlModel.extend({
         zoom_in_title: 'Zoom in',
         zoom_out_text: '-',
         zoom_out_title: 'Zoom out',
-
     })
 });
 

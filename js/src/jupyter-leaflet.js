@@ -1,3 +1,6 @@
+// Copyright (c) Jupyter Development Team.
+// Distributed under the terms of the Modified BSD License.
+
 // Layers
 var layer = require('./layers/Layer.js');
 var marker = require('./layers/Marker.js');

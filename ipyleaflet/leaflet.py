@@ -919,7 +919,6 @@ class Map(DOMWidget, InteractMixin):
 
     def __init__(self, **kwargs):
         super(Map, self).__init__(**kwargs)
-        self.on_displayed(self._fire_children_displayed)
         self.on_msg(self._handle_leaflet_event)
 
         if self.zoom_control:
@@ -943,12 +942,6 @@ class Map(DOMWidget, InteractMixin):
         else:
             if self.attribution_control_instance in self.controls:
                 self.remove_control(self.attribution_control_instance)
-
-    def _fire_children_displayed(self, widget, **kwargs):
-        for layer in self.layers:
-            layer._handle_displayed(**kwargs)
-        for control in self.controls:
-            control._handle_displayed(**kwargs)
 
     _layer_ids = List()
 

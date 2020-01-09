@@ -12,7 +12,18 @@ var {antPath} = require('leaflet-ant-path');
 var LeafletAntPathModel = LeafletVectorLayerModel.extend({
     defaults: _.extend({}, LeafletVectorLayerModel.prototype.defaults, {
         _view_name : 'LeafletAntPathView',
-        _model_name : 'LeafletAntPathModel'
+        _model_name : 'LeafletAntPathModel',
+
+        use : 'polyline',
+        delay : 400,
+        weight : 5,
+        dash_array : [10, 20],
+        color : '#0000FF',
+        pulse_color : '#FFFFFF',
+        paused : false,
+        reverse : false,
+        hardware_accelerated : false,
+        radius : 10
     })
 });
 
@@ -23,14 +34,12 @@ var LeafletAntPathView = LeafletVectorLayerView.extend({
 
     model_events: function () {
         LeafletAntPathView.__super__.model_events.apply(this, arguments);
-        var key;
-        var o = this.model.get('options');
-        for (var i=0; i<o.length; i++) {
-            key = o[i];
-            this.listenTo(this.model, 'change:' + key, function () {
-                this.obj.setStyle(this.get_ant_options());
-            }, this);
-        }
+        this.listenTo(this.model, 'change:locations', function () {
+            this.obj.setLatLngs(this.model.get('locations'));
+        }, this);
+        this.model.on_some_change(this.model.get('options'), () => {
+            this.obj.setStyle(this.get_ant_options());
+        });
 
         this.obj.setStyle(this.get_ant_options());
     },

@@ -399,7 +399,7 @@ class AntPath(VectorLayer):
     locations = List().tag(sync=True)
 
     # Options
-    use = Unicode('polyline').tag(sync=True, o=True)
+    use = Enum(values=['polyline', 'polygon', 'rectangle', 'circle'], default_value='polyline').tag(sync=True, o=True)
     delay = Int(400).tag(sync=True, o=True)
     weight = Int(5).tag(sync=True, o=True)
     dash_array = List([10, 20]).tag(sync=True, o=True)

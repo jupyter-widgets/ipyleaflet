@@ -1,0 +1,142 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.039882,
+          38.898321
+        ]
+      },
+      "properties": {
+        "marker-symbol": "bus",
+        "name": "The Exchange",
+        "address": "1719 G St NW"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.038193,
+          38.901345
+        ]
+      },
+      "properties": {
+        "marker-symbol": "bus",
+        "name": "Blackfin",
+        "address": "1620 I St NW"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.03195,
+          38.907826
+        ]
+      },
+      "properties": {
+        "marker-symbol": "glass",
+        "name": "Churchkey",
+        "address": "1337 14th St NW",
+        "note": "Ask the bartender for the password"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.0276460,
+          38.9007690
+        ]
+      },
+      "properties": {
+        "marker-symbol": "glass",
+        "name": "Capitol City Brewing Company",
+        "address": "1100 New York Ave NW",
+        "note": "Ask the bartender for the password"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.036554,
+          38.900201
+        ]
+      },
+      "properties": {
+        "marker-symbol": "glass",
+        "name": "Off The Record",
+        "address": "800 16th St NW"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.071309,
+          38.919986
+        ]
+      },
+      "properties": {
+        "marker-symbol": "glass",
+        "name": "breadsoda",
+        "address": "2233 Wisconsin Ave NW"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.042084,
+          38.906459
+        ]
+      },
+      "properties": {
+        "marker-symbol": "glass",
+        "name": "St. Arnold's on Jefferson",
+        "address": "1827 Jefferson Pl NW"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.028620,
+          38.931821
+        ]
+      },
+      "properties": {
+        "marker-symbol": "glass",
+        "name": "Meridian Pint",
+        "address": "3400 11th St NW"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.070275,
+          38.906094
+        ]
+      },
+      "properties": {
+        "marker-symbol": "glass",
+        "name": "The Tombs",
+        "address": "1226 36th St NW"
+      }
+    }
+  ]
+}

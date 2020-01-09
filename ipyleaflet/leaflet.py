@@ -163,6 +163,19 @@ class Icon(UILayer):
     popup_anchor = Tuple((0, 0), allow_none=True).tag(sync=True, o=True)
 
 
+class AwesomeIcon(UILayer):
+    _view_name = Unicode('LeafletAwesomeIconView').tag(sync=True)
+    _model_name = Unicode('LeafletAwesomeIconModel').tag(sync=True)
+
+    name = Unicode('home').tag(sync=True)
+    marker_color = Enum(
+        values=['white', 'red', 'darkred', 'lightred', 'orange', 'beige', 'green', 'darkgreen', 'lightgreen', 'blue', 'darkblue', 'lightblue', 'purple', 'darkpurple', 'pink', 'cadetblue', 'white', 'gray', 'lightgray', 'black'],
+        default_value='blue'
+    ).tag(sync=True)
+    icon_color = Color('white').tag(sync=True)
+    spin = Bool(False).tag(sync=True)
+
+
 class Marker(UILayer):
     _view_name = Unicode('LeafletMarkerView').tag(sync=True)
     _model_name = Unicode('LeafletMarkerModel').tag(sync=True)
@@ -170,7 +183,7 @@ class Marker(UILayer):
     location = List(def_loc).tag(sync=True)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True)
     visible = Bool(True).tag(sync=True)
-    icon = Instance(Icon, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
+    icon = Union((Instance(Icon), Instance(AwesomeIcon)), allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
 
     # Options
     z_index_offset = Int(0).tag(sync=True, o=True)

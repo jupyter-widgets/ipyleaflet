@@ -24,12 +24,7 @@ var LeafletTileLayerModel = LeafletRasterLayerModel.extend({
         tms: false,
         show_loading: false,
         loading: false,
-    }),
-    
-    update_loading: function(value) {
-        console.log(value);
-        this.set('loading', value);
-    }
+    })
 });
 
 var LeafletTileLayerView = LeafletRasterLayerView.extend({
@@ -46,14 +41,12 @@ var LeafletTileLayerView = LeafletRasterLayerView.extend({
         LeafletTileLayerView.__super__.leaflet_events.apply(this, arguments);
         var that = this;
         this.obj.on('loading', function (e) {
-            //that.model.update_loading(true);
             that.model.set('loading', true);
             that.model.save_changes();
             if (that.model.get('show_loading'))
                 that.spinner = new Spinner().spin(that.map_view.el);
         });
         this.obj.on('load', function(e) {
-            //that.model.update_loading(false);
             that.model.set('loading', false);
             that.model.save_changes();
             that.send({

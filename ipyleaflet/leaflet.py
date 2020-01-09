@@ -392,6 +392,25 @@ class Path(VectorLayer):
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True, o=True)
 
 
+class AntPath(VectorLayer):
+    _view_name = Unicode('LeafletAntPathView').tag(sync=True)
+    _model_name = Unicode('LeafletAntPathModel').tag(sync=True)
+
+    locations = List().tag(sync=True)
+
+    # Options
+    use = Unicode('polyline').tag(sync=True, o=True)
+    delay = Int(400).tag(sync=True, o=True)
+    weight = Int(5).tag(sync=True, o=True)
+    dash_array = List([10, 20]).tag(sync=True, o=True)
+    color = Color('#0000FF').tag(sync=True, o=True)
+    pulse_color = Color('#FFFFFF').tag(sync=True, o=True)
+    paused = Bool(False).tag(sync=True, o=True)
+    reverse = Bool(False).tag(sync=True, o=True)
+    hardware_accelerated = Bool(False).tag(sync=True, o=True)
+    radius = Int(10).tag(sync=True, o=True)
+
+
 class Polyline(Path):
     _view_name = Unicode('LeafletPolylineView').tag(sync=True)
     _model_name = Unicode('LeafletPolylineModel').tag(sync=True)

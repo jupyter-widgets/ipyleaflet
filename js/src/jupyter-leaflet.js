@@ -16,6 +16,7 @@ var velocity = require('./layers/Velocity.js');
 var heatmap = require('./layers/Heatmap.js');
 var vectorlayer = require('./layers/VectorLayer.js');
 var path = require('./layers/Path.js');
+var antpath = require('./layers/AntPath.js');
 var polyline = require('./layers/Polyline.js');
 var polygon = require('./layers/Polygon.js');
 var rectangle = require('./layers/Rectangle.js');
@@ -73,6 +74,7 @@ module.exports = {
     LeafletHeatmapView : heatmap.LeafletHeatmapView,
     LeafletVectorLayerView : vectorlayer.LeafletVectorLayerView,
     LeafletPathView : path.LeafletPathView,
+    LeafletAntPathView : antpath.LeafletAntPathView,
     LeafletPolylineView : polyline.LeafletPolylineView,
     LeafletPolygonView : polygon.LeafletPolygonView,
     LeafletRectangleView : rectangle.LeafletRectangleView,
@@ -109,6 +111,7 @@ module.exports = {
     LeafletHeatmapModel : heatmap.LeafletHeatmapModel,
     LeafletVectorLayerModel : vectorlayer.LeafletVectorLayerModel,
     LeafletPathModel : path.LeafletPathModel,
+    LeafletAntPathModel : antpath.LeafletAntPathModel,
     LeafletPolylineModel : polyline.LeafletPolylineModel,
     LeafletPolygonModel : polygon.LeafletPolygonModel,
     LeafletRectangleModel : rectangle.LeafletRectangleModel,

@@ -106,10 +106,15 @@ var LeafletLayerView = utils.LeafletWidgetView.extend({
         if (value) {
             var that = this;
             this.popup_content_promise = this.popup_content_promise.then(function() {
-                return that.create_child_view(value).then(function(view) {
-                    PMessaging.MessageLoop.sendMessage(view.pWidget, PWidgets.Widget.Msg.BeforeAttach);
-                    that.obj.bindPopup(view.el, that.popup_options());
-                    PMessaging.MessageLoop.sendMessage(view.pWidget, PWidgets.Widget.Msg.AfterAttach);
+                return that.create_child_view(value, {map_view: that.map_view}).then(function(view) {
+                    // If it's a Popup widget
+                    if (value.name == 'LeafletPopupModel') {
+                        that.obj.bindPopup(view.obj, that.popup_options());
+                    } else {
+                        PMessaging.MessageLoop.sendMessage(view.pWidget, PWidgets.Widget.Msg.BeforeAttach);
+                        that.obj.bindPopup(view.el, that.popup_options());
+                        PMessaging.MessageLoop.sendMessage(view.pWidget, PWidgets.Widget.Msg.AfterAttach);
+                    }
 
                     that.popup_content = view;
                     that.trigger('popup_content:created');

@@ -2,20 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 #
 
-class Bunch(dict):
-    """A dict with attribute-access"""
-
-    def __getattr__(self, key):
-        try:
-            return self.__getitem__(key)
-        except KeyError:
-            raise AttributeError(key)
-
-    def __setattr__(self, key, value):
-        self.__setitem__(key, value)
-
-    def __dir__(self):
-        return self.keys()
+from traitlets.utils.bunch import Bunch
 
 basemaps = Bunch(
     OpenStreetMap = Bunch(

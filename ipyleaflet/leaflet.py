@@ -163,6 +163,19 @@ class Icon(UILayer):
     popup_anchor = Tuple((0, 0), allow_none=True).tag(sync=True, o=True)
 
 
+class AwesomeIcon(UILayer):
+    _view_name = Unicode('LeafletAwesomeIconView').tag(sync=True)
+    _model_name = Unicode('LeafletAwesomeIconModel').tag(sync=True)
+
+    name = Unicode('home').tag(sync=True)
+    marker_color = Enum(
+        values=['white', 'red', 'darkred', 'lightred', 'orange', 'beige', 'green', 'darkgreen', 'lightgreen', 'blue', 'darkblue', 'lightblue', 'purple', 'darkpurple', 'pink', 'cadetblue', 'white', 'gray', 'lightgray', 'black'],
+        default_value='blue'
+    ).tag(sync=True)
+    icon_color = Color('white').tag(sync=True)
+    spin = Bool(False).tag(sync=True)
+
+
 class Marker(UILayer):
     _view_name = Unicode('LeafletMarkerView').tag(sync=True)
     _model_name = Unicode('LeafletMarkerModel').tag(sync=True)
@@ -170,7 +183,7 @@ class Marker(UILayer):
     location = List(def_loc).tag(sync=True)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True)
     visible = Bool(True).tag(sync=True)
-    icon = Instance(Icon, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
+    icon = Union((Instance(Icon), Instance(AwesomeIcon)), allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
 
     # Options
     z_index_offset = Int(0).tag(sync=True, o=True)
@@ -391,6 +404,25 @@ class Path(VectorLayer):
     pointer_events = Unicode('').tag(sync=True, o=True)
     class_name = Unicode('').tag(sync=True, o=True)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True, o=True)
+
+
+class AntPath(VectorLayer):
+    _view_name = Unicode('LeafletAntPathView').tag(sync=True)
+    _model_name = Unicode('LeafletAntPathModel').tag(sync=True)
+
+    locations = List().tag(sync=True)
+
+    # Options
+    use = Enum(values=['polyline', 'polygon', 'rectangle', 'circle'], default_value='polyline').tag(sync=True, o=True)
+    delay = Int(400).tag(sync=True, o=True)
+    weight = Int(5).tag(sync=True, o=True)
+    dash_array = List([10, 20]).tag(sync=True, o=True)
+    color = Color('#0000FF').tag(sync=True, o=True)
+    pulse_color = Color('#FFFFFF').tag(sync=True, o=True)
+    paused = Bool(False).tag(sync=True, o=True)
+    reverse = Bool(False).tag(sync=True, o=True)
+    hardware_accelerated = Bool(False).tag(sync=True, o=True)
+    radius = Int(10).tag(sync=True, o=True)
 
 
 class Polyline(Path):
@@ -920,7 +952,6 @@ class Map(DOMWidget, InteractMixin):
 
     def __init__(self, **kwargs):
         super(Map, self).__init__(**kwargs)
-        self.on_displayed(self._fire_children_displayed)
         self.on_msg(self._handle_leaflet_event)
 
         if self.zoom_control:
@@ -944,12 +975,6 @@ class Map(DOMWidget, InteractMixin):
         else:
             if self.attribution_control_instance in self.controls:
                 self.remove_control(self.attribution_control_instance)
-
-    def _fire_children_displayed(self, widget, **kwargs):
-        for layer in self.layers:
-            layer._handle_displayed(**kwargs)
-        for control in self.controls:
-            control._handle_displayed(**kwargs)
 
     _layer_ids = List()
 

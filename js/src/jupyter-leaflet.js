@@ -5,6 +5,7 @@
 var layer = require('./layers/Layer.js');
 var marker = require('./layers/Marker.js');
 var icon = require('./layers/Icon.js');
+var awesomeicon = require('./layers/AwesomeIcon.js');
 var popup = require('./layers/Popup.js');
 var rasterlayer = require('./layers/RasterLayer.js');
 var tilelayer = require('./layers/TileLayer.js');
@@ -16,6 +17,7 @@ var velocity = require('./layers/Velocity.js');
 var heatmap = require('./layers/Heatmap.js');
 var vectorlayer = require('./layers/VectorLayer.js');
 var path = require('./layers/Path.js');
+var antpath = require('./layers/AntPath.js');
 var polyline = require('./layers/Polyline.js');
 var polygon = require('./layers/Polygon.js');
 var rectangle = require('./layers/Rectangle.js');
@@ -47,6 +49,7 @@ require('leaflet.markercluster/dist/MarkerCluster.css');
 require('leaflet.markercluster/dist/MarkerCluster.Default.css');
 require('leaflet-measure/dist/leaflet-measure.css');
 require('leaflet-fullscreen/dist/leaflet.fullscreen.css');
+require('leaflet.awesome-markers/dist/leaflet.awesome-markers.css');
 require('spin.js/spin.css');
 require('./jupyter-leaflet.css');
 
@@ -61,6 +64,7 @@ module.exports = {
     LeafletLayerView : layer.LeafletLayerView,
     LeafletUILayerView : layer.LeafletUILayerView,
     LeafletIconView : icon.LeafletIconView,
+    LeafletAwesomeIconView : awesomeicon.LeafletAwesomeIconView,
     LeafletMarkerView : marker.LeafletMarkerView,
     LeafletPopupView : popup.LeafletPopupView,
     LeafletRasterLayerView : rasterlayer.LeafletRasterLayerView,
@@ -73,6 +77,7 @@ module.exports = {
     LeafletHeatmapView : heatmap.LeafletHeatmapView,
     LeafletVectorLayerView : vectorlayer.LeafletVectorLayerView,
     LeafletPathView : path.LeafletPathView,
+    LeafletAntPathView : antpath.LeafletAntPathView,
     LeafletPolylineView : polyline.LeafletPolylineView,
     LeafletPolygonView : polygon.LeafletPolygonView,
     LeafletRectangleView : rectangle.LeafletRectangleView,
@@ -97,6 +102,7 @@ module.exports = {
     LeafletLayerModel : layer.LeafletLayerModel,
     LeafletUILayerModel : layer.LeafletUILayerModel,
     LeafletIconModel : icon.LeafletIconModel,
+    LeafletAwesomeIconModel : awesomeicon.LeafletAwesomeIconModel,
     LeafletMarkerModel :marker.LeafletMarkerModel,
     LeafletPopupModel : popup.LeafletPopupModel,
     LeafletRasterLayerModel : rasterlayer.LeafletRasterLayerModel,
@@ -109,6 +115,7 @@ module.exports = {
     LeafletHeatmapModel : heatmap.LeafletHeatmapModel,
     LeafletVectorLayerModel : vectorlayer.LeafletVectorLayerModel,
     LeafletPathModel : path.LeafletPathModel,
+    LeafletAntPathModel : antpath.LeafletAntPathModel,
     LeafletPolylineModel : polyline.LeafletPolylineModel,
     LeafletPolygonModel : polygon.LeafletPolygonModel,
     LeafletRectangleModel : rectangle.LeafletRectangleModel,

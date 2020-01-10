@@ -258,7 +258,7 @@ class TileLayer(RasterLayer):
     no_wrap = Bool(False).tag(sync=True, o=True)
     tms = Bool(False).tag(sync=True, o=True)
     show_loading = Bool(False).tag(sync=True)
-    loading = Bool(False).tag(sync=True)
+    loading = Bool(False, read_only=True).tag(sync=True)
 
     _load_callbacks = Instance(CallbackDispatcher, ())
 

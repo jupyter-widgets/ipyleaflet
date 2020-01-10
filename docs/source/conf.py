@@ -15,7 +15,7 @@ templates_path = ['_templates']
 
 def setup(app):
     app.add_javascript("https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js")
-    app.add_javascript("https://unpkg.com/@jupyter-widgets/html-manager@0.15.0/dist/embed-amd.js")
+    app.add_javascript("https://unpkg.com/@jupyter-widgets/html-manager@0.18.4/dist/embed-amd.js")
 
     app.add_stylesheet("main_stylesheet.css")
 

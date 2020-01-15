@@ -1,47 +1,49 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-var widgets = require('@jupyter-widgets/base');
-var _ = require('underscore');
-var L = require('../leaflet.js');
-var layer = require('./Layer.js');
-var LeafletLayerView = layer.LeafletLayerView;
-var LeafletLayerModel = layer.LeafletLayerModel;
-var def_loc = [0.0, 0.0];
+const layer = require('./Layer.js');
 
-var LeafletRasterLayerModel = LeafletLayerModel.extend({
-    defaults: _.extend({}, LeafletLayerModel.prototype.defaults, {
-        _view_name : 'LeafletRasterLayerView',
-        _model_name : 'LeafletRasterLayerModel',
-        visible : true
-    })
-});
+export class LeafletRasterLayerModel extends layer.LeafletLayerModel {
+  defaults() {
+    return {
+      ...super.defaults(),
+      _view_name: 'LeafletRasterLayerView',
+      _model_name: 'LeafletRasterLayerModel',
+      visible: true
+    };
+  }
+}
 
-var LeafletRasterLayerView = LeafletLayerView.extend({
-    model_events: function () {
-        LeafletRasterLayerView.__super__.model_events.apply(this, arguments);
-        this.listenTo(this.model, 'change:opacity', function () {
-            if (this.model.get('visible')) {
-                this.obj.setOpacity(this.model.get('opacity'));
-            }
-        }, this);
-        this.listenTo(this.model, 'change:visible', function () {
-            if (this.model.get('visible')) {
-                this.obj.setOpacity(this.model.get('opacity'));
-            } else {
-                this.obj.setOpacity(0);
-            }
-        }, this);
-
+export class LeafletRasterLayerView extends layer.LeafletLayerView {
+  model_events() {
+    super.model_events();
+    this.listenTo(
+      this.model,
+      'change:opacity',
+      function() {
         if (this.model.get('visible')) {
-            this.obj.setOpacity(this.model.get('opacity'));
-        } else {
-            this.obj.setOpacity(0);
+          this.obj.setOpacity(this.model.get('opacity'));
         }
-    }
-});
+      },
+      this
+    );
+    this.listenTo(
+      this.model,
+      'change:visible',
+      function() {
+        if (this.model.get('visible')) {
+          this.obj.setOpacity(this.model.get('opacity'));
+        } else {
+          this.obj.setOpacity(0);
+        }
+      },
+      this
+    );
 
-module.exports = {
-  LeafletRasterLayerView : LeafletRasterLayerView,
-  LeafletRasterLayerModel : LeafletRasterLayerModel,
-};
+    if (this.model.get('visible')) {
+      this.obj.setOpacity(this.model.get('opacity'));
+    } else {
+      this.obj.setOpacity(0);
+    }
+  }
+}

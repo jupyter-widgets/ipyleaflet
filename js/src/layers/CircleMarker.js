@@ -1,36 +1,36 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-var widgets = require('@jupyter-widgets/base');
-var _ = require('underscore');
-var L = require('../leaflet.js');
-var path = require('./Path.js');
-var def_loc = [0.0, 0.0];
+const L = require('../leaflet.js');
+const path = require('./Path.js');
 
-var LeafletCircleMarkerModel = path.LeafletPathModel.extend({
-    defaults: _.extend({}, path.LeafletPathModel.prototype.defaults, {
-        _view_name : 'LeafletCircleMarkerView',
-        _model_name : 'LeafletCircleMarkerModel',
-        location : def_loc
-    })
-});
+const DEFAULT_LOCATION = [0.0, 0.0];
 
-var LeafletCircleMarkerView = path.LeafletPathView.extend({
-    create_obj: function () {
-        this.obj = L.circleMarker(
-            this.model.get('location'), this.get_options()
-        );
-    },
+export class LeafletCircleMarkerModel extends path.LeafletPathModel {
+  defaults() {
+    return {
+      ...super.defaults(),
+      _view_name: 'LeafletCircleMarkerView',
+      _model_name: 'LeafletCircleMarkerModel',
+      location: DEFAULT_LOCATION
+    };
+  }
+}
 
-    model_events: function () {
-        LeafletCircleMarkerView.__super__.model_events.apply(this, arguments);
-        this.listenTo(this.model, 'change:location', function () {
-            this.obj.setLatLng(this.model.get('location'));
-        }, this);
-    },
-});
+export class LeafletCircleMarkerView extends path.LeafletPathView {
+  create_obj() {
+    this.obj = L.circleMarker(this.model.get('location'), this.get_options());
+  }
 
-module.exports = {
-  LeafletCircleMarkerView : LeafletCircleMarkerView,
-  LeafletCircleMarkerModel : LeafletCircleMarkerModel,
-};
+  model_events() {
+    super.model_events();
+    this.listenTo(
+      this.model,
+      'change:location',
+      function() {
+        this.obj.setLatLng(this.model.get('location'));
+      },
+      this
+    );
+  }
+}

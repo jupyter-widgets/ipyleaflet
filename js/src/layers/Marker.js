@@ -43,23 +43,21 @@ export class LeafletMarkerView extends layer.LeafletUILayerView {
   }
 
   create_obj() {
-    var that = this;
     this.obj = L.marker(this.model.get('location'), this.get_options());
 
-    this.obj.on('dragend', function(event) {
+    this.obj.on('dragend', event => {
       var marker = event.target;
       var position = marker.getLatLng();
-      that.model.set('location', [position.lat, position.lng]);
-      that.touch();
+      this.model.set('location', [position.lat, position.lng]);
+      this.touch();
     });
   }
 
   remove() {
     super.remove();
-    var that = this;
-    this.icon_promise.then(function() {
-      if (that.icon) {
-        that.icon.remove();
+    this.icon_promise.then(() => {
+      if (this.icon) {
+        this.icon.remove();
       }
     });
   }
@@ -69,11 +67,10 @@ export class LeafletMarkerView extends layer.LeafletUILayerView {
       this.icon.remove();
     }
     if (value) {
-      var that = this;
-      this.icon_promise = this.icon_promise.then(function() {
-        return that.create_child_view(value).then(function(view) {
-          that.obj.setIcon(view.obj);
-          that.icon = view;
+      this.icon_promise = this.icon_promise.then(() => {
+        return this.create_child_view(value).then(view => {
+          this.obj.setIcon(view.obj);
+          this.icon = view;
         });
       });
     }

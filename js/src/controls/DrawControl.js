@@ -36,7 +36,6 @@ export class LeafletDrawControlView extends control.LeafletControlView {
   }
 
   create_obj() {
-    var that = this;
     this.feature_group = L.featureGroup();
     this.map_view.obj.addLayer(this.feature_group);
     var polyline = this.model.get('polyline');
@@ -78,33 +77,33 @@ export class LeafletDrawControlView extends control.LeafletControlView {
         marker: marker
       }
     });
-    this.map_view.obj.on('draw:created', function(e) {
+    this.map_view.obj.on('draw:created', e => {
       var layer = e.layer;
       var geo_json = layer.toGeoJSON();
       geo_json.properties.style = layer.options;
-      that.send({
+      this.send({
         event: 'draw:created',
         geo_json: geo_json
       });
-      that.feature_group.addLayer(layer);
+      this.feature_group.addLayer(layer);
     });
-    this.map_view.obj.on('draw:edited', function(e) {
+    this.map_view.obj.on('draw:edited', e => {
       var layers = e.layers;
-      layers.eachLayer(function(layer) {
+      layers.eachLayer(layer => {
         var geo_json = layer.toGeoJSON();
         geo_json.properties.style = layer.options;
-        that.send({
+        this.send({
           event: 'draw:edited',
           geo_json: geo_json
         });
       });
     });
-    this.map_view.obj.on('draw:deleted', function(e) {
+    this.map_view.obj.on('draw:deleted', e => {
       var layers = e.layers;
-      layers.eachLayer(function(layer) {
+      layers.eachLayer(layer => {
         var geo_json = layer.toGeoJSON();
         geo_json.properties.style = layer.options;
-        that.send({
+        this.send({
           event: 'draw:deleted',
           geo_json: geo_json
         });

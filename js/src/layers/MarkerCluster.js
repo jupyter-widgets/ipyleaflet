@@ -29,7 +29,6 @@ export class LeafletMarkerClusterView extends layer.LeafletLayerView {
 
   update_markers(newMarkers, oldMarkers) {
     // Shortcut the case of appending markers
-    var that = this;
     var appendOnly =
       oldMarkers.length <= newMarkers.length &&
       oldMarkers === newMarkers.slice(0, oldMarkers.length);
@@ -40,14 +39,14 @@ export class LeafletMarkerClusterView extends layer.LeafletLayerView {
       this.obj.clearLayers();
       markers = newMarkers;
     }
-    var markerViews = markers.map(function(m) {
-      return that.create_child_view(m, { map_view: that.map_view });
+    var markerViews = markers.map(m => {
+      return this.create_child_view(m, { map_view: this.map_view });
     });
-    return Promise.all(markerViews).then(function(mViews) {
+    return Promise.all(markerViews).then(mViews => {
       var leafletMarkers = mViews.map(function(mv) {
         return mv.obj;
       });
-      that.obj.addLayers(leafletMarkers);
+      this.obj.addLayers(leafletMarkers);
     });
   }
 

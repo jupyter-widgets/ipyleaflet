@@ -35,22 +35,21 @@ export class LeafletTileLayerView extends rasterlayer.LeafletRasterLayerView {
 
   leaflet_events() {
     super.leaflet_events();
-    var that = this;
-    this.obj.on('loading', function(event) {
-      that.model.set('loading', true);
-      that.model.save_changes();
-      if (that.model.get('show_loading')) {
-        that.spinner = new Spinner().spin(that.map_view.el);
+    this.obj.on('loading', event => {
+      this.model.set('loading', true);
+      this.model.save_changes();
+      if (this.model.get('show_loading')) {
+        this.spinner = new Spinner().spin(this.map_view.el);
       }
     });
-    this.obj.on('load', function(event) {
-      that.model.set('loading', false);
-      that.model.save_changes();
-      that.send({
+    this.obj.on('load', event => {
+      this.model.set('loading', false);
+      this.model.save_changes();
+      this.send({
         event: 'load'
       });
-      if (that.model.get('show_loading')) {
-        that.spinner.stop();
+      if (this.model.get('show_loading')) {
+        this.spinner.stop();
       }
     });
   }

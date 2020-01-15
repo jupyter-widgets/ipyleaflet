@@ -37,9 +37,8 @@ export class LeafletLayerGroupView extends layer.LeafletLayerView {
   }
 
   add_layer_model(child_model) {
-    var that = this;
-    return this.create_child_view(child_model).then(function(child_view) {
-      that.obj.addLayer(child_view.obj);
+    return this.create_child_view(child_model).then(child_view => {
+      this.obj.addLayer(child_view.obj);
       return child_view;
     });
   }

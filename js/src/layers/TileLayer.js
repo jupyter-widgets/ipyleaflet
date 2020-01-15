@@ -1,7 +1,6 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const _ = require('underscore');
 const L = require('../leaflet.js');
 const rasterlayer = require('./RasterLayer.js');
 const Spinner = require('spin.js').Spinner;
@@ -30,7 +29,7 @@ export class LeafletTileLayerModel extends rasterlayer.LeafletRasterLayerModel {
 export class LeafletTileLayerView extends rasterlayer.LeafletRasterLayerView {
   create_obj() {
     this.obj = L.tileLayer(this.model.get('url'), this.get_options());
-    this.model.on('msg:custom', _.bind(this.handle_message, this));
+    this.model.on('msg:custom', this.handle_message.bind(this));
   }
 
   leaflet_events() {

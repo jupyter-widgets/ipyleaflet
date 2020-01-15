@@ -35,8 +35,7 @@
     "leaflet-velocity": "^1.2.4",
     "leaflet.awesome-markers": "^2.0.5",
     "leaflet.markercluster": "^1.2.0",
-    "spin.js": "^4.1.0",
-    "underscore": "^1.8.3"
+    "spin.js": "^4.1.0"
   },
   "devDependencies": {
     "css-loader": "^3.4.2",

@@ -1,7 +1,6 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const _ = require('underscore');
 const L = require('../leaflet.js');
 const layer = require('./Layer.js');
 const utils = require('../utils');
@@ -70,7 +69,7 @@ export class LeafletVelocityView extends layer.LeafletLayerView {
       'change:' + key,
       function() {
         var options = {};
-        options[utils.camel_case(key)] = _.extend({}, this.model.get(key));
+        options[utils.camel_case(key)] = { ...this.model.get(key) };
         L.setOptions(this.obj, options);
       },
       this

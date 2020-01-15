@@ -2,7 +2,6 @@
 // Distributed under the terms of the Modified BSD License.
 
 const widgets = require('@jupyter-widgets/base');
-const _ = require('underscore');
 const L = require('./leaflet.js');
 const utils = require('./utils.js');
 
@@ -195,7 +194,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       this.remove_control_view,
       this
     );
-    this.displayed.then(_.bind(this.render_leaflet, this));
+    this.displayed.then(this.render_leaflet.bind(this));
   }
 
   render_leaflet() {

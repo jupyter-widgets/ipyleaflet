@@ -1,57 +1,61 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-var widgets = require('@jupyter-widgets/base');
-var _ = require('underscore');
-var L = require('../leaflet.js')
-var rasterlayer = require('./RasterLayer.js');
-var LeafletRasterLayerView = rasterlayer.LeafletRasterLayerView;
-var LeafletRasterLayerModel = rasterlayer.LeafletRasterLayerModel;
-var def_loc = [0.0, 0.0];
+const L = require('../leaflet.js');
+const rasterlayer = require('./RasterLayer.js');
 
-var LeafletImageOverlayModel = LeafletRasterLayerModel.extend({
-    defaults: _.extend({}, LeafletRasterLayerModel.prototype.defaults, {
-        _view_name : 'LeafletImageOverlayView',
-        _model_name : 'LeafletImageOverlayModel',
+const DEFAULT_LOCATION = [0.0, 0.0];
 
-        url : '',
-        bounds : [def_loc, def_loc],
-        attribution : ''
-    })
-});
+export class LeafletImageOverlayModel extends rasterlayer.LeafletRasterLayerModel {
+  defaults() {
+    return {
+      _view_name: 'LeafletImageOverlayView',
+      _model_name: 'LeafletImageOverlayModel',
+      url: '',
+      bounds: [DEFAULT_LOCATION, DEFAULT_LOCATION],
+      attribution: ''
+    };
+  }
+}
 
-var LeafletImageOverlayView = LeafletRasterLayerView.extend({
+export class LeafletImageOverlayView extends rasterlayer.LeafletRasterLayerView {
+  create_obj() {
+    this.obj = L.imageOverlay(
+      this.model.get('url'),
+      this.model.get('bounds'),
+      this.get_options()
+    );
+  }
 
-    create_obj: function () {
-        this.obj = L.imageOverlay(
-            this.model.get('url'),
-            this.model.get('bounds'),
-            this.get_options()
-        );
-    },
-    model_events: function () {
-        LeafletImageOverlayView.__super__.model_events.apply(this, arguments);
-        this.listenTo(this.model, 'change:url', function () {
-            url = this.model.get('url');
-            bounds = this.model.get('bounds');
-            options = this.get_options();
-            this.map_view.obj.removeLayer(this.obj);
-            this.obj = L.imageOverlay(url, bounds, options);
-            this.map_view.obj.addLayer(this.obj);
-        }, this);
+  model_events() {
+    super.model_events();
 
-        this.listenTo(this.model, 'change:bounds', function () {
-            url = this.model.get('url');
-            bounds = this.model.get('bounds');
-            options = this.get_options();
-            this.map_view.obj.removeLayer(this.obj);
-            this.obj = L.imageOverlay(url, bounds, options);
-            this.map_view.obj.addLayer(this.obj);
-        }, this);
-    },
-});
+    this.listenTo(
+      this.model,
+      'change:url',
+      function() {
+        const url = this.model.get('url');
+        const bounds = this.model.get('bounds');
+        const options = this.get_options();
+        this.map_view.obj.removeLayer(this.obj);
+        this.obj = L.imageOverlay(url, bounds, options);
+        this.map_view.obj.addLayer(this.obj);
+      },
+      this
+    );
 
-module.exports = {
-  LeafletImageOverlayView : LeafletImageOverlayView,
-  LeafletImageOverlayModel : LeafletImageOverlayModel,
-};
+    this.listenTo(
+      this.model,
+      'change:bounds',
+      function() {
+        const url = this.model.get('url');
+        const bounds = this.model.get('bounds');
+        const options = this.get_options();
+        this.map_view.obj.removeLayer(this.obj);
+        this.obj = L.imageOverlay(url, bounds, options);
+        this.map_view.obj.addLayer(this.obj);
+      },
+      this
+    );
+  }
+}

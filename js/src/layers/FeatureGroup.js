@@ -1,25 +1,21 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-var widgets = require('@jupyter-widgets/base');
-var _ = require('underscore');
-var L = require('../leaflet.js');
-var layergroup = require('./LayerGroup.js')
+const L = require('../leaflet.js');
+const layergroup = require('./LayerGroup.js');
 
-var LeafletFeatureGroupModel = layergroup.LeafletLayerGroupModel.extend({
-    defaults: _.extend({}, layergroup.LeafletLayerGroupModel.prototype.defaults, {
-        _view_name : 'LeafletFeatureGroupView',
-        _model_name : 'LeafletFeatureGroupModel'
-    })
-});
+export class LeafletFeatureGroupModel extends layergroup.LeafletLayerGroupModel {
+  defaults() {
+    return {
+      ...super.defaults(),
+      _view_name: 'LeafletFeatureGroupView',
+      _model_name: 'LeafletFeatureGroupModel'
+    };
+  }
+}
 
-var LeafletFeatureGroupView = layergroup.LeafletLayerGroupView.extend({
-    create_obj: function () {
-        this.obj = L.featureGroup();
-    },
-});
-
-module.exports = {
-  LeafletFeatureGroupView : LeafletFeatureGroupView,
-  LeafletFeatureGroupModel : LeafletFeatureGroupModel,
-};
+export class LeafletFeatureGroupView extends layergroup.LeafletLayerGroupView {
+  create_obj() {
+    this.obj = L.featureGroup();
+  }
+}

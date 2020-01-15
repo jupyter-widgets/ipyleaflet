@@ -8,6 +8,6 @@ module.exports['version'] = require('../package.json').version;
 
 // if previous L existed and it got changed while loading this module
 if (_oldL !== undefined && _oldL !== window.L) {
-    console.log("Existing `L` detected, running ipyleaflet's Leaflet in no-conflict mode as `ipyL`");
-    ipyL = L.noConflict();
+  console.log("Existing `L` detected, running ipyleaflet's Leaflet in no-conflict mode as `ipyL`");
+  ipyL = L.noConflict();
 }

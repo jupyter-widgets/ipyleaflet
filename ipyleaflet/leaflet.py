@@ -914,10 +914,7 @@ class Map(DOMWidget, InteractMixin):
     dragging_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
 
     zoom_control = Bool(True)
-    zoom_control_instance = ZoomControl()
-
     attribution_control = Bool(True)
-    attribution_control_instance = AttributionControl(position='bottomright')
 
     @default('dragging_style')
     def _default_dragging_style(self):
@@ -955,14 +952,17 @@ class Map(DOMWidget, InteractMixin):
         self.on_msg(self._handle_leaflet_event)
 
         if self.zoom_control:
+            self.zoom_control_instance = ZoomControl()
             self.add_control(self.zoom_control_instance)
 
         if self.attribution_control:
+            self.attribution_control_instance = AttributionControl(position='bottomright')
             self.add_control(self.attribution_control_instance)
 
     @observe('zoom_control')
     def observe_zoom_control(self, change):
         if change['new']:
+            self.zoom_control_instance = ZoomControl()
             self.add_control(self.zoom_control_instance)
         else:
             if self.zoom_control_instance in self.controls:
@@ -971,6 +971,7 @@ class Map(DOMWidget, InteractMixin):
     @observe('attribution_control')
     def observe_attribution_control(self, change):
         if change['new']:
+            self.attribution_control_instance = AttributionControl(position='bottomright')
             self.add_control(self.attribution_control_instance)
         else:
             if self.attribution_control_instance in self.controls:

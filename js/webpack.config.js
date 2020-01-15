@@ -9,7 +9,7 @@ var rules = [
     {
         test: /\.(jpg|png|gif|svg)$/,
         use: ['file-loader']
-    },
+    }
 ];
 
 module.exports = [

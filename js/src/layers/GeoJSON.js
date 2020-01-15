@@ -21,23 +21,22 @@ export class LeafletGeoJSONModel extends featuregroup.LeafletFeatureGroupModel {
 
 export class LeafletGeoJSONView extends featuregroup.LeafletFeatureGroupView {
   create_obj() {
-    var that = this;
-    var style = function(feature) {
-      var model_style = that.model.get('style');
+    var style = feature => {
+      var model_style = this.model.get('style');
       return _.extend(feature.properties.style || {}, model_style);
     };
 
     var options = {
       style: style,
-      onEachFeature: function(feature, layer) {
-        var mouseevent = function(e) {
+      onEachFeature: (feature, layer) => {
+        var mouseevent = e => {
           if (e.type == 'mouseover') {
-            layer.setStyle(that.model.get('hover_style'));
-            layer.once('mouseout', function() {
-              that.obj.resetStyle(layer);
+            layer.setStyle(this.model.get('hover_style'));
+            layer.once('mouseout', () => {
+              this.obj.resetStyle(layer);
             });
           }
-          that.send({
+          this.send({
             event: e.type,
             feature: feature,
             properties: feature.properties,
@@ -51,7 +50,7 @@ export class LeafletGeoJSONView extends featuregroup.LeafletFeatureGroupView {
       }
     };
 
-    var point_style = that.model.get('point_style');
+    var point_style = this.model.get('point_style');
 
     if (Object.keys(point_style).length !== 0) {
       options.pointToLayer = function(feature, latlng) {

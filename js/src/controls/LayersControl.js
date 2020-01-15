@@ -37,16 +37,14 @@ export class LeafletLayersControlView extends control.LeafletControlView {
   }
 
   model_events() {
-    var that = this;
-    this.listenTo(this.map_view.model, 'change:layers', function() {
-      that.toggle_obj();
+    this.listenTo(this.map_view.model, 'change:layers', () => {
+      this.toggle_obj();
     });
   }
 
   create_obj() {
-    var that = this;
     return Promise.all(this.map_view.layer_views.views)
-      .then(function(views) {
+      .then(views => {
         var baselayers = views.reduce(function(ov, view) {
           if (view.model.get('base')) {
             ov[view.model.get('name')] = view.obj;
@@ -59,11 +57,11 @@ export class LeafletLayersControlView extends control.LeafletControlView {
           }
           return ov;
         }, {});
-        that.obj = L.control.layers(baselayers, overlays, that.get_options());
-        return that;
+        this.obj = L.control.layers(baselayers, overlays, this.get_options());
+        return this;
       })
-      .then(function() {
-        that.obj.addTo(that.map_view.obj);
+      .then(() => {
+        this.obj.addTo(this.map_view.obj);
       });
   }
 }

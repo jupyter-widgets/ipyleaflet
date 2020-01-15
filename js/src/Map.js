@@ -93,8 +93,7 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
   }
 
   update_bounds() {
-    var that = this;
-    return widgets.resolvePromisesDict(this.views).then(function(views) {
+    return widgets.resolvePromisesDict(this.views).then(views => {
       var bounds = {
         north: -90,
         south: 90,
@@ -112,10 +111,10 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
         }
         return bnds;
       }, bounds);
-      that.set('north', bounds.north);
-      that.set('south', bounds.south);
-      that.set('east', bounds.east);
-      that.set('west', bounds.west);
+      this.set('north', bounds.north);
+      this.set('south', bounds.south);
+      this.set('east', bounds.east);
+      this.set('west', bounds.west);
     });
   }
 }
@@ -143,15 +142,14 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
   }
 
   add_layer_model(child_model) {
-    var that = this;
     return this.create_child_view(child_model, {
       map_view: this
-    }).then(function(view) {
-      that.obj.addLayer(view.obj);
+    }).then(view => {
+      this.obj.addLayer(view.obj);
 
       // Trigger the displayed event of the child view.
-      that.displayed.then(function() {
-        view.trigger('displayed', that);
+      this.displayed.then(() => {
+        view.trigger('displayed', this);
       });
 
       return view;
@@ -164,15 +162,14 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
   }
 
   add_control_model(child_model) {
-    var that = this;
     return this.create_child_view(child_model, {
       map_view: this
-    }).then(function(view) {
-      that.obj.addControl(view.obj);
+      }).then(view => {
+      this.obj.addControl(view.obj);
 
       // Trigger the displayed event of the child view.
-      that.displayed.then(function() {
-        view.trigger('displayed', that);
+      this.displayed.then(() => {
+        view.trigger('displayed', this);
       });
 
       return view;
@@ -202,16 +199,15 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
   }
 
   render_leaflet() {
-    var that = this;
-    this.create_obj().then(function() {
-      that.layer_views.update(that.model.get('layers'));
-      that.control_views.update(that.model.get('controls'));
-      that.leaflet_events();
-      that.model_events();
-      that.model.update_bounds().then(function() {
-        that.touch();
+    this.create_obj().then(() => {
+      this.layer_views.update(this.model.get('layers'));
+      this.control_views.update(this.model.get('controls'));
+      this.leaflet_events();
+      this.model_events();
+      this.model.update_bounds().then(() => {
+        this.touch();
       });
-      return that;
+      return this;
     });
   }
 
@@ -228,58 +224,55 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
   }
 
   leaflet_events() {
-    var that = this;
-
-    this.obj.on('moveend', function(e) {
-      if (!that.dirty) {
-        that.dirty = true;
+    this.obj.on('moveend', e => {
+      if (!this.dirty) {
+        this.dirty = true;
         var c = e.target.getCenter();
-        that.model.set('center', [c.lat, c.lng]);
-        that.dirty = false;
+        this.model.set('center', [c.lat, c.lng]);
+        this.dirty = false;
       }
-      that.model.update_bounds().then(function() {
-        that.touch();
+      this.model.update_bounds().then(() => {
+        this.touch();
       });
-      that.model.set('_dragging', false);
-      that.model.update_style();
+      this.model.set('_dragging', false);
+      this.model.update_style();
     });
 
-    this.obj.on('movestart', function(e) {
-      that.model.set('_dragging', true);
-      that.model.update_style();
+    this.obj.on('movestart', e => {
+      this.model.set('_dragging', true);
+      this.model.update_style();
     });
 
-    this.obj.on('zoomend', function(e) {
-      if (!that.dirty) {
-        that.dirty = true;
+    this.obj.on('zoomend', e => {
+      if (!this.dirty) {
+        this.dirty = true;
         var z = e.target.getZoom();
-        that.model.set('zoom', z);
-        that.dirty = false;
+        this.model.set('zoom', z);
+        this.dirty = false;
       }
-      that.model.update_bounds().then(function() {
-        that.touch();
+      this.model.update_bounds().then(() => {
+        this.touch();
       });
     });
 
     this.obj.on(
       'click dblclick mousedown mouseup mouseover mouseout mousemove contextmenu preclick',
-      function(event) {
-        that.send({
+      event => {
+        this.send({
           event: 'interaction',
           type: event.type,
           coordinates: [event.latlng.lat, event.latlng.lng],
-          location: that.model.get('location')
+          location: this.model.get('location')
         });
       }
     );
 
-    this.obj.on('fullscreenchange', function() {
-      that.model.set('fullscreen', that.obj.isFullscreen());
+    this.obj.on('fullscreenchange', () => {
+      this.model.set('fullscreen', this.obj.isFullscreen());
     });
   }
 
   model_events() {
-    var that = this;
     this.listenTo(this.model, 'msg:custom', this.handle_msg, this);
     this.listenTo(
       this.model,
@@ -315,9 +308,8 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
           });
           this.dirty = false;
         }
-        var that = this;
-        this.model.update_bounds().then(function() {
-          that.touch();
+        this.model.update_bounds().then(() => {
+          this.touch();
         });
       },
       this
@@ -331,9 +323,8 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
           this.obj.panTo(this.model.get('center'));
           this.dirty = false;
         }
-        var that = this;
-        this.model.update_bounds().then(function() {
-          that.touch();
+        this.model.update_bounds().then(() => {
+          this.touch();
         });
       },
       this

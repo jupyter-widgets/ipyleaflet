@@ -102,10 +102,9 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
 
   remove() {
     super.remove();
-    var that = this;
-    this.popup_content_promise.then(function() {
-      if (that.popup_content) {
-        that.popup_content.remove();
+    this.popup_content_promise.then(() => {
+      if (this.popup_content) {
+        this.popup_content.remove();
       }
     });
   }
@@ -116,27 +115,26 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
       this.popup_content.remove();
     }
     if (value) {
-      var that = this;
-      this.popup_content_promise = this.popup_content_promise.then(function() {
-        return that
-          .create_child_view(value, { map_view: that.map_view })
-          .then(function(view) {
+      this.popup_content_promise = this.popup_content_promise.then(() => {
+        return this
+          .create_child_view(value, { map_view: this.map_view })
+          .then(view => {
             // If it's a Popup widget
             if (value.name == 'LeafletPopupModel') {
-              that.obj.bindPopup(view.obj, that.popup_options());
+              this.obj.bindPopup(view.obj, this.popup_options());
             } else {
               PMessaging.MessageLoop.sendMessage(
                 view.pWidget,
                 PWidgets.Widget.Msg.BeforeAttach
               );
-              that.obj.bindPopup(view.el, that.popup_options());
+              this.obj.bindPopup(view.el, this.popup_options());
               PMessaging.MessageLoop.sendMessage(
                 view.pWidget,
                 PWidgets.Widget.Msg.AfterAttach
               );
             }
-            that.popup_content = view;
-            that.trigger('popup_content:created');
+            this.popup_content = view;
+            this.trigger('popup_content:created');
           });
       });
     }

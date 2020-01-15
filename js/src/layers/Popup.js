@@ -48,10 +48,9 @@ export class LeafletPopupView extends layer.LeafletUILayerView {
 
   remove() {
     super.remove();
-    var that = this;
-    this.child_promise.then(function() {
-      if (that.child) {
-        that.child.remove();
+    this.child_promise.then(() => {
+      if (this.child) {
+        this.child.remove();
       }
     });
   }
@@ -61,21 +60,20 @@ export class LeafletPopupView extends layer.LeafletUILayerView {
       this.child.remove();
     }
     if (value) {
-      var that = this;
-      this.child_promise = this.child_promise.then(function() {
-        return that.create_child_view(value).then(function(view) {
+      this.child_promise = this.child_promise.then(() => {
+        return this.create_child_view(value).then(view => {
           PMessaging.MessageLoop.sendMessage(
             view.pWidget,
             PWidgets.Widget.Msg.BeforeAttach
           );
-          that.obj.setContent(view.el);
+          this.obj.setContent(view.el);
           PMessaging.MessageLoop.sendMessage(
             view.pWidget,
             PWidgets.Widget.Msg.AfterAttach
           );
-          that.force_update();
-          that.child = view;
-          that.trigger('child:created');
+          this.force_update();
+          this.child = view;
+          this.trigger('child:created');
         });
       });
     }

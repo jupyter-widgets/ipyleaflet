@@ -26,30 +26,29 @@ export class LeafletVideoOverlayView extends rasterlayer.LeafletRasterLayerView 
       this.model.get('bounds'),
       this.get_options()
     );
-    var that = this;
-    this.obj.on('load', function() {
+    this.obj.on('load', () => {
       var MyPauseControl = L.Control.extend({
-        onAdd: function() {
+        onAdd: () => {
           var button = L.DomUtil.create('button');
           button.innerHTML = '&#10074&#10074';
-          L.DomEvent.on(button, 'click', function() {
-            that.obj.getElement().pause();
+          L.DomEvent.on(button, 'click', () => {
+            this.obj.getElement().pause();
           });
           return button;
         }
       });
       var MyPlayControl = L.Control.extend({
-        onAdd: function() {
+        onAdd: () => {
           var button = L.DomUtil.create('button');
           button.innerHTML = '&#9658';
-          L.DomEvent.on(button, 'click', function() {
-            that.obj.getElement().play();
+          L.DomEvent.on(button, 'click', () => {
+            this.obj.getElement().play();
           });
           return button;
         }
       });
-      new MyPauseControl().addTo(that.map_view.obj);
-      new MyPlayControl().addTo(that.map_view.obj);
+      new MyPauseControl().addTo(this.map_view.obj);
+      new MyPlayControl().addTo(this.map_view.obj);
     });
   }
 

@@ -948,6 +948,9 @@ class Map(DOMWidget, InteractMixin):
                                           (self.south, self.west)))
 
     def __init__(self, **kwargs):
+        self.zoom_control_instance = None
+        self.attribution_control_instance = None
+
         super(Map, self).__init__(**kwargs)
         self.on_msg(self._handle_leaflet_event)
 
@@ -965,7 +968,7 @@ class Map(DOMWidget, InteractMixin):
             self.zoom_control_instance = ZoomControl()
             self.add_control(self.zoom_control_instance)
         else:
-            if self.zoom_control_instance in self.controls:
+            if self.zoom_control_instance is not None and self.zoom_control_instance in self.controls:
                 self.remove_control(self.zoom_control_instance)
 
     @observe('attribution_control')
@@ -974,7 +977,7 @@ class Map(DOMWidget, InteractMixin):
             self.attribution_control_instance = AttributionControl(position='bottomright')
             self.add_control(self.attribution_control_instance)
         else:
-            if self.attribution_control_instance in self.controls:
+            if self.attribution_control_instance is not None and self.attribution_control_instance in self.controls:
                 self.remove_control(self.attribution_control_instance)
 
     _layer_ids = List()

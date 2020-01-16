@@ -2,7 +2,6 @@
 // Distributed under the terms of the Modified BSD License.
 
 const widgets = require('@jupyter-widgets/base');
-const _ = require('underscore');
 const L = require('../leaflet.js');
 const control = require('./Control.js');
 
@@ -39,27 +38,27 @@ export class LeafletDrawControlView extends control.LeafletControlView {
     this.feature_group = L.featureGroup();
     this.map_view.obj.addLayer(this.feature_group);
     var polyline = this.model.get('polyline');
-    if (_.isEmpty(polyline)) {
+    if (!Object.keys(polyline).length) {
       polyline = false;
     }
     var polygon = this.model.get('polygon');
-    if (_.isEmpty(polygon)) {
+    if (!Object.keys(polygon).length) {
       polygon = false;
     }
     var circle = this.model.get('circle');
-    if (_.isEmpty(circle)) {
+    if (!Object.keys(circle).length) {
       circle = false;
     }
     var circlemarker = this.model.get('circlemarker');
-    if (_.isEmpty(circlemarker)) {
+    if (!Object.keys(circlemarker).length) {
       circlemarker = false;
     }
     var rectangle = this.model.get('rectangle');
-    if (_.isEmpty(rectangle)) {
+    if (!Object.keys(rectangle).length) {
       rectangle = false;
     }
     var marker = this.model.get('marker');
-    if (_.isEmpty(marker)) {
+    if (!Object.keys(marker).length) {
       marker = false;
     }
     this.obj = new L.Control.Draw({

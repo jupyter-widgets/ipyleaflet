@@ -8,7 +8,14 @@ var rules = [
     },
     {
         test: /\.(jpg|png|gif|svg)$/,
-        use: ['file-loader']
+        use: [
+            {
+                loader: 'file-loader',
+                options: {
+                    esModule: false,
+                }
+            }
+        ],
     }
 ];
 

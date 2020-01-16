@@ -1,7 +1,6 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const _ = require('underscore');
 const L = require('../leaflet.js');
 const featuregroup = require('./FeatureGroup.js');
 
@@ -22,8 +21,12 @@ export class LeafletGeoJSONModel extends featuregroup.LeafletFeatureGroupModel {
 export class LeafletGeoJSONView extends featuregroup.LeafletFeatureGroupView {
   create_obj() {
     var style = feature => {
-      var model_style = this.model.get('style');
-      return _.extend(feature.properties.style || {}, model_style);
+      const model_style = this.model.get('style');
+      const feature_style = feature.properties.style || {};
+      return {
+         ...feature_style,
+         ...model_style
+      };
     };
 
     var options = {

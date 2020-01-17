@@ -1,34 +1,28 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-var widgets = require('@jupyter-widgets/base');
-var _ = require('underscore');
-var L = require('../leaflet.js');
-var layer = require('./Layer.js');
+const L = require('../leaflet.js');
+const layer = require('./Layer.js');
 
-var LeafletIconModel = layer.LeafletUILayerModel.extend({
-    defaults: _.extend({}, layer.LeafletUILayerModel.prototype.defaults, {
-        _view_name :'LeafletIconView',
-        _model_name : 'LeafletIconModel',
-        icon_url: "",
-        shadow_url: "",
-        icon_size :  [10, 10],
-        shadow_size :  [10, 10],
-        icon_anchor: [0, 0],
-        shadow_anchor: [0, 0],
-        popup_anchor: [0, 0]
-    })
-});
+export class LeafletIconModel extends layer.LeafletUILayerModel {
+  defaults() {
+    return {
+      ...super.defaults(),
+      _view_name: 'LeafletIconView',
+      _model_name: 'LeafletIconModel',
+      icon_url: '',
+      shadow_url: '',
+      icon_size: [10, 10],
+      shadow_size: [10, 10],
+      icon_anchor: [0, 0],
+      shadow_anchor: [0, 0],
+      popup_anchor: [0, 0]
+    };
+  }
+}
 
-var LeafletIconView = layer.LeafletUILayerView.extend({
-
-    create_obj: function () {
-        this.obj = L.icon(this.get_options());
-    },
-
-});
-
-module.exports = {
-  LeafletIconView : LeafletIconView,
-  LeafletIconModel : LeafletIconModel,
-};
+export class LeafletIconView extends layer.LeafletUILayerView {
+  create_obj() {
+    this.obj = L.icon(this.get_options());
+  }
+}

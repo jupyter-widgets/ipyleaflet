@@ -38,21 +38,24 @@ allowed_cursor = ['alias', 'cell', 'grab', 'move', 'crosshair', 'context-menu',
                   'progress', 'text', 'wait', 'zoom-in', 'zoom-out']
 
 
-def basemap_to_tiles(bm, day='yesterday', **kwargs):
+def basemap_to_tiles(basemap, day='yesterday', **kwargs):
     # Format the URL with modisdate
     from datetime import date, timedelta
+
     if day == 'yesterday':
         yesterday = date.today() - timedelta(1)
         day = yesterday.strftime('%Y-%m-%d')
-    url = bm.get('url', '')
+
+    url = basemap.get('url', '')
     if url.count('%'):
         url = url % day
+
     return TileLayer(
         url=url,
-        max_zoom=bm.get('max_zoom', 19),
-        min_zoom=bm.get('min_zoom', 1),
-        attribution=bm.get('attribution', ''),
-        name=bm.get('name', ''),
+        max_zoom=basemap.get('max_zoom', 19),
+        min_zoom=basemap.get('min_zoom', 1),
+        attribution=basemap.get('attribution', ''),
+        name=basemap.get('name', ''),
         **kwargs
     )
 
@@ -163,6 +166,19 @@ class Icon(UILayer):
     popup_anchor = Tuple((0, 0), allow_none=True).tag(sync=True, o=True)
 
 
+class AwesomeIcon(UILayer):
+    _view_name = Unicode('LeafletAwesomeIconView').tag(sync=True)
+    _model_name = Unicode('LeafletAwesomeIconModel').tag(sync=True)
+
+    name = Unicode('home').tag(sync=True)
+    marker_color = Enum(
+        values=['white', 'red', 'darkred', 'lightred', 'orange', 'beige', 'green', 'darkgreen', 'lightgreen', 'blue', 'darkblue', 'lightblue', 'purple', 'darkpurple', 'pink', 'cadetblue', 'white', 'gray', 'lightgray', 'black'],
+        default_value='blue'
+    ).tag(sync=True)
+    icon_color = Color('white').tag(sync=True)
+    spin = Bool(False).tag(sync=True)
+
+
 class Marker(UILayer):
     _view_name = Unicode('LeafletMarkerView').tag(sync=True)
     _model_name = Unicode('LeafletMarkerModel').tag(sync=True)
@@ -170,7 +186,7 @@ class Marker(UILayer):
     location = List(def_loc).tag(sync=True)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True)
     visible = Bool(True).tag(sync=True)
-    icon = Instance(Icon, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
+    icon = Union((Instance(Icon), Instance(AwesomeIcon)), allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
 
     # Options
     z_index_offset = Int(0).tag(sync=True, o=True)
@@ -245,6 +261,7 @@ class TileLayer(RasterLayer):
     no_wrap = Bool(False).tag(sync=True, o=True)
     tms = Bool(False).tag(sync=True, o=True)
     show_loading = Bool(False).tag(sync=True)
+    loading = Bool(False, read_only=True).tag(sync=True)
 
     _load_callbacks = Instance(CallbackDispatcher, ())
 
@@ -390,6 +407,25 @@ class Path(VectorLayer):
     pointer_events = Unicode('').tag(sync=True, o=True)
     class_name = Unicode('').tag(sync=True, o=True)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True, o=True)
+
+
+class AntPath(VectorLayer):
+    _view_name = Unicode('LeafletAntPathView').tag(sync=True)
+    _model_name = Unicode('LeafletAntPathModel').tag(sync=True)
+
+    locations = List().tag(sync=True)
+
+    # Options
+    use = Enum(values=['polyline', 'polygon', 'rectangle', 'circle'], default_value='polyline').tag(sync=True, o=True)
+    delay = Int(400).tag(sync=True, o=True)
+    weight = Int(5).tag(sync=True, o=True)
+    dash_array = List([10, 20]).tag(sync=True, o=True)
+    color = Color('#0000FF').tag(sync=True, o=True)
+    pulse_color = Color('#FFFFFF').tag(sync=True, o=True)
+    paused = Bool(False).tag(sync=True, o=True)
+    reverse = Bool(False).tag(sync=True, o=True)
+    hardware_accelerated = Bool(False).tag(sync=True, o=True)
+    radius = Int(10).tag(sync=True, o=True)
 
 
 class Polyline(Path):
@@ -843,11 +879,13 @@ class Map(DOMWidget, InteractMixin):
     crs = Enum(values=allowed_crs, default_value='EPSG3857').tag(sync=True)
 
     # Specification of the basemap
-    basemap = Dict(default_value=dict(
+    basemap = Union(
+        (Dict(), Instance(TileLayer)),
+        default_value=dict(
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             max_zoom=19,
             attribution='Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
-        )).tag(sync=True, o=True)
+        ))
     modisdate = Unicode('yesterday').tag(sync=True)
 
     # Interaction options
@@ -881,10 +919,7 @@ class Map(DOMWidget, InteractMixin):
     dragging_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
 
     zoom_control = Bool(True)
-    zoom_control_instance = ZoomControl()
-
     attribution_control = Bool(True)
-    attribution_control_instance = AttributionControl(position='bottomright')
 
     @default('dragging_style')
     def _default_dragging_style(self):
@@ -903,7 +938,11 @@ class Map(DOMWidget, InteractMixin):
 
     @default('layers')
     def _default_layers(self):
-        return (basemap_to_tiles(self.basemap, self.modisdate, base=True),)
+        basemap = self.basemap if isinstance(self.basemap, TileLayer) else basemap_to_tiles(self.basemap, self.modisdate)
+
+        basemap.base = True
+
+        return (basemap, )
 
     bounds = Tuple(read_only=True)
     bounds_polygon = Tuple(read_only=True)
@@ -918,37 +957,37 @@ class Map(DOMWidget, InteractMixin):
                                           (self.south, self.west)))
 
     def __init__(self, **kwargs):
+        self.zoom_control_instance = None
+        self.attribution_control_instance = None
+
         super(Map, self).__init__(**kwargs)
-        self.on_displayed(self._fire_children_displayed)
         self.on_msg(self._handle_leaflet_event)
 
         if self.zoom_control:
+            self.zoom_control_instance = ZoomControl()
             self.add_control(self.zoom_control_instance)
 
         if self.attribution_control:
+            self.attribution_control_instance = AttributionControl(position='bottomright')
             self.add_control(self.attribution_control_instance)
 
     @observe('zoom_control')
     def observe_zoom_control(self, change):
         if change['new']:
+            self.zoom_control_instance = ZoomControl()
             self.add_control(self.zoom_control_instance)
         else:
-            if self.zoom_control_instance in self.controls:
+            if self.zoom_control_instance is not None and self.zoom_control_instance in self.controls:
                 self.remove_control(self.zoom_control_instance)
 
     @observe('attribution_control')
     def observe_attribution_control(self, change):
         if change['new']:
+            self.attribution_control_instance = AttributionControl(position='bottomright')
             self.add_control(self.attribution_control_instance)
         else:
-            if self.attribution_control_instance in self.controls:
+            if self.attribution_control_instance is not None and self.attribution_control_instance in self.controls:
                 self.remove_control(self.attribution_control_instance)
-
-    def _fire_children_displayed(self, widget, **kwargs):
-        for layer in self.layers:
-            layer._handle_displayed(**kwargs)
-        for control in self.controls:
-            control._handle_displayed(**kwargs)
 
     _layer_ids = List()
 

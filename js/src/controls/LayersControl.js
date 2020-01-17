@@ -1,72 +1,67 @@
-var widgets = require('@jupyter-widgets/base');
-var _ = require('underscore');
-var L = require('../leaflet.js');
-var control = require('./Control.js');
-var LeafletControlView = control.LeafletControlView;
-var LeafletControlModel = control.LeafletControlModel;
+// Copyright (c) Jupyter Development Team.
+// Distributed under the terms of the Modified BSD License.
 
-var LeafletLayersControlModel = LeafletControlModel.extend({
-  defaults: _.extend({}, LeafletControlModel.prototype.defaults, {
-        _view_name: 'LeafletLayersControlView',
-        _model_name: 'LeafletLayersControlModel'
-    })
-});
+const L = require('../leaflet.js');
+const control = require('./Control.js');
 
-var LeafletLayersControlView = LeafletControlView.extend({
-    /**
-     *
-     * Core leaflet layers control maintains its own list of layers internally
-     * causing issues when the layers of the underlying map changes
-     * exogeneously, for example from a model change.
-     *
-     * For this reason, upon change of the underlying list of layers, we
-     * destroy the layers control object and create a new one.
-     */
+export class LeafletLayersControlModel extends control.LeafletControlModel {
+  defaults() {
+    return {
+      ...super.defaults(),
+      _view_name: 'LeafletLayersControlView',
+      _model_name: 'LeafletLayersControlModel'
+    };
+  }
+}
 
-    initialize: function (parameters) {
-        LeafletLayersControlView.__super__.initialize.apply(this, arguments);
-        this.map_view = this.options.map_view;
-    },
+export class LeafletLayersControlView extends control.LeafletControlView {
+  /**
+   * Core leaflet layers control maintains its own list of layers internally
+   * causing issues when the layers of the underlying map changes
+   * exogeneously, for example from a model change.
+   *
+   * For this reason, upon change of the underlying list of layers, we
+   * destroy the layers control object and create a new one.
+   */
 
-    toggle_obj: function () {
-        this.obj.remove();
-        delete this.obj;
-        this.create_obj();
-    },
+  initialize(parameters) {
+    super.initialize(parameters);
+    super.initialize(parameters);
+    this.map_view = this.options.map_view;
+  }
 
-    model_events: function (){
-      var that = this;
-      this.listenTo(this.map_view.model, 'change:layers', function() {
-          that.toggle_obj();
+  toggle_obj() {
+    this.obj.remove();
+    delete this.obj;
+    this.create_obj();
+  }
+
+  model_events() {
+    this.listenTo(this.map_view.model, 'change:layers', () => {
+      this.toggle_obj();
+    });
+  }
+
+  create_obj() {
+    return Promise.all(this.map_view.layer_views.views)
+      .then(views => {
+        var baselayers = views.reduce(function(ov, view) {
+          if (view.model.get('base')) {
+            ov[view.model.get('name')] = view.obj;
+          }
+          return ov;
+        }, {});
+        var overlays = views.reduce(function(ov, view) {
+          if (!view.model.get('base')) {
+            ov[view.model.get('name')] = view.obj;
+          }
+          return ov;
+        }, {});
+        this.obj = L.control.layers(baselayers, overlays, this.get_options());
+        return this;
+      })
+      .then(() => {
+        this.obj.addTo(this.map_view.obj);
       });
-    },
-
-    create_obj: function () {
-        var that = this;
-        return Promise.all(this.map_view.layer_views.views).then(function(views) {
-            var baselayers = views.reduce(function (ov, view) {
-                if (view.model.get("base"))
-                {
-                    ov[view.model.get("name")] = view.obj;
-                }
-                return ov;
-            }, {});
-            var overlays = views.reduce(function (ov, view) {
-                if (!(view.model.get("base")))
-                {
-                    ov[view.model.get("name")] = view.obj;
-                }
-                return ov;
-            }, {});
-            that.obj = L.control.layers(baselayers, overlays, that.get_options());
-            return that;
-        }).then(function() {
-               that.obj.addTo(that.map_view.obj);
-        });
-    }
-});
-
-module.exports = {
-  LeafletLayersControlView : LeafletLayersControlView,
-  LeafletLayersControlModel : LeafletLayersControlModel,
-};
+  }
+}

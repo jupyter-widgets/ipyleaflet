@@ -61,4 +61,5 @@ opacity            1.0
 visible            True
 no_wrap            False
 show_loading       False
+loading            False (dynamically updated)
 ===============    ===================================================================================

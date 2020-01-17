@@ -93,21 +93,26 @@ def build_tiles_url(**kwargs):
 def basemap_to_tiles(basemap, **kwargs):
     """Return a TileLayer instance with information for HERE map tiles.
 
+    :param basemap: A dictionary with key/value pairs describing valid combinations
+                    of attributes for HERE Location Services map tiles.
+    :param kwargs:  Keyword arguments used for generating the tiles URL as well as
+                    the TileLayer instance using it.
+    :return: A TileLayer instance.
+
     Example:
 
-    >>> basemap_to_tiles(apikey="foobar")
-    {'url': 'https://3.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/{z}/{x}/{y}/256/png8?lg=eng&apiKey=foobar',
-     'min_zoom': 1,
-     'max_zoom': 18,
-     'attribution': '&copy; <a href="https://here.com">HERE.com</a>',
-     'name': 'HERE'}
+    >>> basemap_to_tiles(basemaps.Default, apikey="foobar").url
+    'https://4.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/{z}/{x}/{y}/256/png8?lg=eng&apiKey=foobar'
     """
+    basemap2 = {}
+    basemap2.update(basemap)
+    basemap2.update(kwargs)
     return TileLayer(
-        url=build_tiles_url(**basemap, **kwargs),
+        url=build_tiles_url(**basemap2),
         min_zoom=kwargs.get("min_zoom", 1),
         max_zoom=kwargs.get("max_zoom", 18),
         attribution='&copy; <a href="https://here.com">HERE.com</a>',
-        name="HERE." + kwargs.get("scheme", "normal.day"),
+        name="HERE." + kwargs.get("scheme",  basemap.get("scheme", "normal.day")),
         **kwargs
     )
 

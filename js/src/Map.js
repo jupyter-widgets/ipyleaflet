@@ -39,13 +39,6 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       zoom: 12,
       max_zoom: 18,
       min_zoom: 1,
-      basemap: {
-        url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        max_zoom: 19,
-        attribution:
-          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-        name: 'OpenStreetMap.Mapnik'
-      },
       dragging: true,
       touch_zoom: true,
       scroll_wheel_zoom: false,

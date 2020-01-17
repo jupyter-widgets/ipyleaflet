@@ -879,11 +879,13 @@ class Map(DOMWidget, InteractMixin):
     crs = Enum(values=allowed_crs, default_value='EPSG3857').tag(sync=True)
 
     # Specification of the basemap
-    basemap = Dict(default_value=dict(
+    basemap = Union(
+        (Dict(), Instance(TileLayer)),
+        default_value=dict(
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             max_zoom=19,
             attribution='Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
-        )).tag(sync=True, o=True)
+        ))
     modisdate = Unicode('yesterday').tag(sync=True)
 
     # Interaction options
@@ -936,7 +938,11 @@ class Map(DOMWidget, InteractMixin):
 
     @default('layers')
     def _default_layers(self):
-        return (basemap_to_tiles(self.basemap, self.modisdate, base=True),)
+        basemap = self.basemap if isinstance(self.basemap, TileLayer) else basemap_to_tiles(self.basemap, self.modisdate)
+
+        basemap.base = True
+
+        return (basemap, )
 
     bounds = Tuple(read_only=True)
     bounds_polygon = Tuple(read_only=True)

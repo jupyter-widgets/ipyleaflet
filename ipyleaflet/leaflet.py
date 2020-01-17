@@ -38,21 +38,24 @@ allowed_cursor = ['alias', 'cell', 'grab', 'move', 'crosshair', 'context-menu',
                   'progress', 'text', 'wait', 'zoom-in', 'zoom-out']
 
 
-def basemap_to_tiles(bm, day='yesterday', **kwargs):
+def basemap_to_tiles(basemap, day='yesterday', **kwargs):
     # Format the URL with modisdate
     from datetime import date, timedelta
+
     if day == 'yesterday':
         yesterday = date.today() - timedelta(1)
         day = yesterday.strftime('%Y-%m-%d')
-    url = bm.get('url', '')
+
+    url = basemap.get('url', '')
     if url.count('%'):
         url = url % day
+
     return TileLayer(
         url=url,
-        max_zoom=bm.get('max_zoom', 19),
-        min_zoom=bm.get('min_zoom', 1),
-        attribution=bm.get('attribution', ''),
-        name=bm.get('name', ''),
+        max_zoom=basemap.get('max_zoom', 19),
+        min_zoom=basemap.get('min_zoom', 1),
+        attribution=basemap.get('attribution', ''),
+        name=basemap.get('name', ''),
         **kwargs
     )
 

@@ -26,5 +26,4 @@ def test_basemap_to_tiles():
     assert "ls.hereapi.com" in b2t(Default, config={"apikey": "foo"}).url
     assert "api.here.com" in b2t(Default, config={"app_code": "foo", "app_id": "bar"}).url
     assert "lg=ita" in b2t(Satellite, config={"lg": "ita"}).url
-    assert b2t(Default, config={"dummy": 42}).url
     assert b2t(Default, config={"attribution": "foo"}).attribution == attribution

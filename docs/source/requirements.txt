@@ -1,3 +1,4 @@
 ipyleaflet
+jupyter_sphinx
 scipy
 netcdf4

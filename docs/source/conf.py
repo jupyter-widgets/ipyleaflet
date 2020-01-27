@@ -2,7 +2,7 @@
 import sphinx_rtd_theme
 
 extensions = [
-    'nbsphinx'
+    'jupyter_sphinx.execute',
 ]
 
 templates_path = ['_templates']

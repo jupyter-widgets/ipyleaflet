@@ -1,4 +1,4 @@
 ipyleaflet
-jupyter_sphinx
+jupyter_sphinx>=0.2.3,<0.3
 scipy
 netcdf4

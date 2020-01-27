@@ -36,9 +36,8 @@ LeafletMarkerModel.serializers = {
 };
 
 export class LeafletMarkerView extends layer.LeafletUILayerView {
-  initialize() {
-    // Public constructor
-    super.initialize.apply(this, arguments);
+  initialize(parameters) {
+    super.initialize(parameters);
     this.icon_promise = Promise.resolve();
   }
 

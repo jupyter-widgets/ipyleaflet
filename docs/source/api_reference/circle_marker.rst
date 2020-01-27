@@ -1,13 +1,10 @@
-.. raw:: html
-    :file: embed_widgets/circle_marker.html
-
 Circle Marker
 =============
 
 Example
 -------
 
-.. code::
+.. jupyter-execute::
 
     from ipyleaflet import Map, basemaps, basemap_to_tiles, CircleMarker
 
@@ -24,21 +21,6 @@ Example
     m.add_layer(circle_marker)
 
     m
-
-.. raw:: html
-
-
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-    "version_major": 2,
-    "version_minor": 0,
-    "model_id": "4d87774ea99b44049ef5c00a3db02520"
-    }
-    </script>
-    <div style ="height:30px;"> </div>
-
-
-
 
 
 Attributes

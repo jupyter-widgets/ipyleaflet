@@ -1,13 +1,10 @@
-.. raw:: html
-    :file: embed_widgets/widget_control.html
-
 Widget Control
 ==============
 
 Example
 -------
 
-.. code::
+.. jupyter-execute::
 
     from ipyleaflet import Map, basemaps, WidgetControl
     from ipywidgets import IntSlider, ColorPicker, jslink
@@ -22,16 +19,6 @@ Example
     widget_control2 = WidgetControl(widget=color_picker, position='bottomright')
     m.add_control(widget_control2)
     m
-
-.. raw:: html
-
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-        "version_major": 2,
-        "version_minor": 0,
-        "model_id": "6fa0bd5f965f4887b8fff4cea0bfea71"
-    }
-    </script>
 
 
 Attributes

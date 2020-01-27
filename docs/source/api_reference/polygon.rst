@@ -1,13 +1,10 @@
-.. raw:: html
-    :file: embed_widgets/polygon.html
-
 Polygon/Multipolygon
 ====================
 
 Example Polygon
 ---------------
 
-.. code::
+.. jupyter-execute::
 
     from ipyleaflet import Map, Polygon
 
@@ -22,23 +19,11 @@ Example Polygon
 
     m
 
-.. raw:: html
-
-  <script type="application/vnd.jupyter.widget-view+json">
-  {
-    "model_id": "c7eeeba10da14d6d952eb47205ba4e79",
-    "version_major": 2,
-    "version_minor": 0
-  }
-  </script>
-  <div style ="height:30px;"> </div>
-
-
 
 Example Polygon with hole
 -------------------------
 
-.. code::
+.. jupyter-execute::
 
   from ipyleaflet import Map, Polygon
 
@@ -55,22 +40,11 @@ Example Polygon with hole
 
   m
 
-.. raw:: html
-
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-    "version_major": 2,
-    "version_minor": 0,
-    "model_id": "e65df81e068740a88e660f6ba3048314"
-    }
-    </script>
-    <div style ="height:30px;"> </div>
-
 
 Example Multipolygon
 --------------------
 
-.. code::
+.. jupyter-execute::
 
     from ipyleaflet import Map, Polygon
 
@@ -84,22 +58,6 @@ Example Multipolygon
     m.add_layer(multipolygon);
 
     m
-
-.. raw:: html
-
-
-  <script type="application/vnd.jupyter.widget-view+json">
-  {
-  "model_id": "b7217555f2714518948d9bbd47acf23c",
-  "version_major": 2,
-  "version_minor": 0
-  }
-  </script>
-  <div style ="height:30px;"> </div>
-
-
-
-
 
 
 Attributes

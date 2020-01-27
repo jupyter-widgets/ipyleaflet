@@ -1,13 +1,10 @@
-.. raw:: html
-    :file: embed_widgets/image_video_overlay.html
-
 Image overlay and Video overlay
 ===============================
 
 Example
 -------
 
-.. code::
+.. jupyter-execute::
 
     from ipyleaflet import Map, VideoOverlay
 
@@ -21,15 +18,6 @@ Example
     m.add_layer(video);
     m
 
-.. raw:: html
-
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-    "model_id": "87d4292e2f214b97913a846cd527e8e5",
-    "version_major": 2,
-    "version_minor": 0
-    }
-    </script>
 
 Attributes
 ----------

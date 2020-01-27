@@ -1,13 +1,10 @@
-.. raw:: html
-    :file: embed_widgets/wms_layer.html
-
 WMS Layer
 =========
 
 Example
 -------
 
-.. code::
+.. jupyter-execute::
 
     from ipyleaflet import Map, WMSLayer
 
@@ -20,15 +17,6 @@ Example
 
     m
 
-.. raw:: html
-
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-        "model_id": "768133089a2b4e56bb9a751b4a0ae077",
-        "version_major": 2,
-        "version_minor": 0
-    }
-    </script>
 
 Attributes
 ----------

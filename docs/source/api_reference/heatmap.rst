@@ -1,13 +1,10 @@
-.. raw:: html
-    :file: embed_widgets/heatmap.html
-
 Heatmap
 =======
 
 Example
 -------
 
-.. code::
+.. jupyter-execute::
 
     from ipyleaflet import Map, Heatmap
     from random import uniform
@@ -22,15 +19,6 @@ Example
 
     m
 
-.. raw:: html
-
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-        "version_major": 2,
-        "version_minor": 0,
-        "model_id": "f2ea9daf01fd4bf59c32ac98672caba0"
-    }
-    </script>
 
 Attributes
 ----------

@@ -17,6 +17,7 @@ ipyleaflet: Interactive maps in the Jupyter notebook
     :maxdepth: 2
 
     api_reference/map
+    api_reference/basemaps
 
 .. toctree::
     :caption: Layers

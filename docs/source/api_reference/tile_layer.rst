@@ -1,13 +1,10 @@
-.. raw:: html
-    :file: embed_widgets/tile_layer.html
-
 Tile Layer
 ==========
 
 Example
 -------
 
-.. code::
+.. jupyter-execute::
 
     from ipyleaflet import Map, basemaps, basemap_to_tiles
 
@@ -17,15 +14,6 @@ Example
     m.add_layer(dark_matter_layer)
     m
 
-.. raw:: html
-
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-        "model_id": "9a95fa8590fc4911a0145cfa5111b2d2",
-        "version_major": 2,
-        "version_minor": 0
-    }
-    </script>
 
 Usage
 -----

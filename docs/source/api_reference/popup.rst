@@ -1,13 +1,10 @@
-.. raw:: html
-    :file: embed_widgets/popup.html
-
 Popup
 =====
 
 Example
 -------
 
-.. code::
+.. jupyter-execute::
 
     from ipywidgets import HTML
 
@@ -42,15 +39,6 @@ Example
 
     m
 
-.. raw:: html
-
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-    "model_id": "4786c6b0f48743f18ace18fa903ff2ed",
-    "version_major": 2,
-    "version_minor": 0
-    }
-    </script>
 
 Attributes
 ----------

@@ -1,12 +1,9 @@
-.. raw:: html
-   :file: embed_widgets/draw_control.html
-
 Draw Control
 ============
 
 The ``DrawControl`` allows one to draw shapes on the map such as ``Rectangle`` ``Circle`` or lines.
 
-.. code::
+.. jupyter-execute::
 
     from ipyleaflet import Map, basemaps, basemap_to_tiles, DrawControl
 
@@ -53,12 +50,3 @@ The ``DrawControl`` allows one to draw shapes on the map such as ``Rectangle`` `
 
     m
 
-.. raw:: html
-
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-    "model_id": "1cc6a5ba697b40e99ebecebc0737c901",
-    "version_major": 2,
-    "version_minor": 0
-    }
-    </script>

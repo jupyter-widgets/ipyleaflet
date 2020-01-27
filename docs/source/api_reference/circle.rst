@@ -1,14 +1,10 @@
-.. raw:: html
-    :file: embed_widgets/circle.html
-
-
 Circle
 ======
 
 Example
 -------
 
-.. code::
+.. jupyter-execute::
 
     from ipyleaflet import Map, basemaps, basemap_to_tiles, Circle
 
@@ -25,20 +21,6 @@ Example
     m.add_layer(circle)
 
     m
-
-.. raw:: html
-
-   <script type="application/vnd.jupyter.widget-view+json">
-   {
-   "version_major": 2,
-   "version_minor": 0,
-   "model_id": "d4cc4e52e8ee43b3ba2c455bc2abd864"
-   }
-
-   </script>
-   <div style ="height:30px;"> </div>
-
-
 
 
 Attributes

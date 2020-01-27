@@ -1,0 +1,3 @@
+ipyleaflet
+scipy
+netcdf4

@@ -36,8 +36,8 @@ export class LeafletPopupView extends layer.LeafletUILayerView {
     );
   }
 
-  initialize() {
-    super.initialize();
+  initialize(parameters) {
+    super.initialize(parameters);
     this.child_promise = Promise.resolve();
   }
 

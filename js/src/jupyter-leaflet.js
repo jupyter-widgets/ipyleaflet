@@ -38,6 +38,7 @@ var drawcontrol = require('./controls/DrawControl.js');
 var fullscreencontrol = require('./controls/FullScreenControl.js');
 var widgetcontrol = require('./controls/WidgetControl.js')
 var zoomcontrol = require('./controls/ZoomControl.js')
+var scalecontrol = require('./controls/ScaleControl.js')
 
 //Map
 var map = require('./Map.js');
@@ -96,6 +97,7 @@ module.exports = {
     LeafletFullScreenControlView : fullscreencontrol.LeafletFullScreenControlView,
     LeafletWidgetControlView : widgetcontrol.LeafletWidgetControlView,
     LeafletZoomControlView : zoomcontrol.LeafletZoomControlView,
+    LeafletScaleControlView : scalecontrol.LeafletScaleControlView,
     LeafletMapView : map.LeafletMapView,
 
     // models
@@ -134,6 +136,7 @@ module.exports = {
     LeafletFullScreenControlModel : fullscreencontrol.LeafletFullScreenControlModel,
     LeafletWidgetControlModel : widgetcontrol.LeafletWidgetControlModel,
     LeafletZoomControlModel : zoomcontrol.LeafletZoomControlModel,
+    LeafletScaleControlModel : scalecontrol.LeafletScaleControlModel,
     LeafletMapModel : map.LeafletMapModel,
     LeafletMapStyleModel : map.LeafletMapStyleModel,
 };

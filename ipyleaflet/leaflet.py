@@ -843,6 +843,16 @@ class ZoomControl(Control):
     zoom_out_title = Unicode('Zoom out').tag(sync=True, o=True)
 
 
+class ScaleControl(Control):
+    _view_name = Unicode('LeafletScaleControlView').tag(sync=True)
+    _model_name = Unicode('LeafletScaleControlModel').tag(sync=True)
+
+    max_width = Int(100).tag(sync=True, o=True)
+    metric = Bool(True).tag(sync=True, o=True)
+    imperial = Bool(True).tag(sync=True, o=True)
+    update_when_idle = Bool(False).tag(sync=True, o=True)
+
+
 class AttributionControl(Control):
     _view_name = Unicode('LeafletAttributionControlView').tag(sync=True)
     _model_name = Unicode('LeafletAttributionControlModel').tag(sync=True)

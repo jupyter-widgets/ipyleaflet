@@ -30,4 +30,12 @@ export class LeafletWMSLayerView extends tilelayer.LeafletTileLayerView {
       crs: L.CRS[this.model.get('crs')]
     });
   }
+
+  model_events() {
+    for (var option in this.get_options()) {
+      this.model.on('change:' + option, () => {
+        this.obj.setParams(this.get_options());
+      });
+    }
+  }
 }

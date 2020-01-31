@@ -49,6 +49,8 @@ ipyleaflet: Interactive maps in the Jupyter notebook
     :caption: Controls
     :maxdepth: 2
 
+    api_reference/zoom_control
+    api_reference/scale_control
     api_reference/layers_control
     api_reference/fullscreen_control
     api_reference/measure_control

@@ -24,12 +24,13 @@ Example
 Attributes
 ----------
 
-=====================   ========================================
-Attribute               Doc
-=====================   ========================================
-widget                  Widget content
-min_width               Min width of the widget
-max_width               Min width of the widget
-min_height              Min height of the widget
-max_height              Min height of the widget
-=====================   ========================================
+================    ================   ===
+Attribute           Default Value      Doc
+================    ================   ===
+position            'topleft'          Position of the control, can be 'bottomleft', 'bottomright', 'topleft', or 'topright'
+widget              None               Widget content
+min_width           None               Min width of the widget (in pixels), if None it will respect the content size
+max_width           None               Min width of the widget (in pixels), if None it will respect the content size
+min_height          None               Min height of the widget (in pixels), if None it will respect the content size
+max_height          None               Min height of the widget (in pixels), if None it will respect the content size
+================    ================   ===

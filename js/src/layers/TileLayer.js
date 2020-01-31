@@ -59,7 +59,8 @@ export class LeafletTileLayerView extends rasterlayer.LeafletRasterLayerView {
       this.model,
       'change:url',
       function() {
-        this.obj.setUrl(this.model.get('url'));
+        this.obj.setUrl(this.model.get('url'), true);
+        this.obj.refresh();
       },
       this
     );

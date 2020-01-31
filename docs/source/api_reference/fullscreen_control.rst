@@ -13,3 +13,9 @@ Example
 
     m
 
+
+================    ================   ===
+Attribute           Default Value      Doc
+================    ================   ===
+position            'topleft'          Position of the control, can be 'bottomleft', 'bottomright', 'topleft', or 'topright'
+================    ================   ===

@@ -25,9 +25,6 @@ from traitlets.utils.bunch import Bunch
 from ipyleaflet import TileLayer
 
 
-attribution = '&copy; <a href="https://here.com">HERE.com</a>'
-
-
 def build_tiles_url(**kwargs):
     """Return a HERE map tiles URL configured by keyword arguments.
 
@@ -115,7 +112,7 @@ def basemap_to_tiles(basemap, config={}, **kwargs):
         url=build_tiles_url(**basemap2),
         min_zoom=kwargs.get("min_zoom", 1),
         max_zoom=kwargs.get("max_zoom", 18),
-        attribution=attribution,
+        attribution='&copy; <a href="https://here.com">HERE.com</a>',
         name="HERE." + config.get("scheme",  basemap.get("scheme", "normal.day")),
         **kwargs
     )

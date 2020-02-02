@@ -106,7 +106,7 @@ def basemap_to_tiles(basemap, config={}, **kwargs):
     'https://4.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/{z}/{x}/{y}/256/png8?lg=eng&apiKey=foobar'
     """
     return TileLayer(
-        url=build_tiles_url(**basemap, **config),
+        url=build_tiles_url(**{**basemap, **config}),
         min_zoom=kwargs.get("min_zoom", 1),
         max_zoom=kwargs.get("max_zoom", 18),
         attribution='&copy; <a href="https://here.com">HERE.com</a>',

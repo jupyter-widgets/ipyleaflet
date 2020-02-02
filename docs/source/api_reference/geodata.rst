@@ -1,6 +1,3 @@
-.. raw:: html
-    :file: embed_widgets/geodata.html
-
 GeoData
 =======
 
@@ -11,7 +8,7 @@ GeoData
 Example
 -------
 
-.. code::
+.. jupyter-execute::
 
     from ipyleaflet import Map, GeoData, basemaps, LayersControl
     import geopandas
@@ -37,18 +34,6 @@ Example
     m.add_control(LayersControl())
 
     m
-
-
-.. raw:: html
-
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-        "version_major": 2,
-        "version_minor": 0,
-        "model_id": "c24c1ac66eaa4c2ab6a7485fc238cf0c"
-    }
-    </script>
-
 
 
 Attributes

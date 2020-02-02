@@ -1,6 +1,3 @@
-.. raw:: html
-    :file: embed_widgets/awesome_icon.html
-
 AwesomeIcon
 ===========
 
@@ -9,7 +6,7 @@ Font-Awesome icons for markers, see https://fontawesome.com/v4.7.0/icons for ava
 Example
 -------
 
-.. code::
+.. jupyter-execute::
 
     from ipyleaflet import AwesomeIcon, Marker, Map
 
@@ -39,16 +36,6 @@ Example
     m.add_layer(marker2)
 
     m
-
-.. raw:: html
-
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-        "version_major": 2,
-        "version_minor": 0,
-        "model_id": "91eefec4ff454ce39a578507f70194c2"
-    }
-    </script>
 
 Interactions
 ------------

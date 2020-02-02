@@ -1,14 +1,10 @@
-.. raw:: html
-    :file: embed_widgets/geo_json.html
-
-
 GeoJSON
 =======
 
 Example
 -------
 
-.. code::
+.. jupyter-execute::
 
     from ipyleaflet import Map, GeoJSON
     import json
@@ -28,20 +24,6 @@ Example
     geo_json = GeoJSON(data=data, style = {'color': 'green', 'opacity':1, 'weight':1.9, 'dashArray':'9', 'fillOpacity':0.1})
     m.add_layer(geo_json)
     m
-
-
-
-.. raw:: html
-
-   <script type="application/vnd.jupyter.widget-view+json">
-   {
-   "model_id": "a0ec2b16f90545b081bba47a03e520a4",
-   "version_major": 2,
-   "version_minor": 0
-   }
-   </script>
-   <div style ="height:30px;"> </div>
-
 
 
 Attributes

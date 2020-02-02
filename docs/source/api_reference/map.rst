@@ -1,13 +1,10 @@
-.. raw:: html
-    :file: embed_widgets/map.html
-
 Map
 ===
 
 Example
 -------
 
-.. code::
+.. jupyter-execute::
 
     from ipyleaflet import Map, basemaps, basemap_to_tiles
 
@@ -19,15 +16,6 @@ Example
 
     m
 
-.. raw:: html
-
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-    "model_id": "ab2369332a024dda83800361d0a1343e",
-    "version_major": 2,
-    "version_minor": 0
-    }
-    </script>
 
 Attributes
 ----------

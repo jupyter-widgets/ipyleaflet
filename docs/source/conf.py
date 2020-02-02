@@ -2,21 +2,13 @@
 import sphinx_rtd_theme
 
 extensions = [
-    # 'sphinx.ext.autodoc',
-    # 'sphinx.ext.intersphinx',
-    # 'sphinx.ext.autosummary',
-    # 'sphinx.ext.viewcode',
-    # 'sphinx.ext.napoleon',
-    # 'jupyter_sphinx.embed_widgets',
+    'jupyter_sphinx.execute',
 ]
 
 templates_path = ['_templates']
 
 
 def setup(app):
-    app.add_javascript("https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js")
-    app.add_javascript("https://unpkg.com/@jupyter-widgets/html-manager@0.18.4/dist/embed-amd.js")
-
     app.add_stylesheet("main_stylesheet.css")
 
 master_doc = 'index'

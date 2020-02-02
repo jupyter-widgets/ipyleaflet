@@ -108,7 +108,7 @@ export class LeafletDrawControlView extends control.LeafletControlView {
         });
       });
     });
-    this.model.on('msg:custom', _.bind(this.handle_message, this));
+    this.model.on('msg:custom', this.handle_message.bind(this));
   }
 
   handle_message(content) {

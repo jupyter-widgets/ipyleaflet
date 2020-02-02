@@ -1,13 +1,10 @@
-.. raw:: html
-    :file: embed_widgets/split_map_control.html
-
 SplitMap Control
 ================
 
 Example
 -------
 
-.. code::
+.. jupyter-execute::
 
     from ipyleaflet import Map, basemaps, basemap_to_tiles, SplitMapControl
 
@@ -21,15 +18,6 @@ Example
 
     m
 
-.. raw:: html
-
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-    "model_id": "09e886eadb98445bb73a4ae67ea618b4",
-    "version_major": 2,
-    "version_minor": 0
-    }
-    </script>
 
 Attributes
 ----------

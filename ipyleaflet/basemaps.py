@@ -43,20 +43,6 @@ basemaps = Bunch(
         attribution='Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
         name='OpenTopoMap'
     ),
-    OpenMapSurfer=Bunch(
-        Roads=dict(
-            url='http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}',
-            max_zoom=20,
-            attribution='Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-            name='OpenMapSurfer.Roads'
-        ),
-        Grayscale=dict(
-            url='http://korona.geog.uni-heidelberg.de/tiles/roadsg/x={x}&y={y}&z={z}',
-            max_zoom=19,
-            attribution='Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-            name='OpenMapSurfer.Grayscale'
-        )
-    ),
     Hydda=Bunch(
         Full=dict(
             url='http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png',

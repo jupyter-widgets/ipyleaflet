@@ -399,7 +399,7 @@ class Path(VectorLayer):
     color = Color('#0033FF').tag(sync=True, o=True)
     weight = Int(5).tag(sync=True, o=True)
     fill = Bool(True).tag(sync=True, o=True)
-    fill_color = Color('#0033FF').tag(sync=True, o=True)
+    fill_color = Color(None, allow_none=True).tag(sync=True, o=True)
     fill_opacity = Float(0.2).tag(sync=True, o=True)
     dash_array = Unicode(allow_none=True, default_value=None).tag(sync=True, o=True)
     line_cap = Unicode('round').tag(sync=True, o=True)

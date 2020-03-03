@@ -23,7 +23,7 @@
     "watch": "webpack --watch"
   },
   "dependencies": {
-    "@jupyter-widgets/base": "^2.0",
+    "@jupyter-widgets/base": "^2 || ^3",
     "leaflet": "^1.3.0",
     "leaflet-ant-path": "^1.3.0",
     "leaflet-draw": "^1.0.4",

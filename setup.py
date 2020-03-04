@@ -6,9 +6,10 @@ from setuptools.command.build_py import build_py
 from setuptools.command.egg_info import egg_info
 from subprocess import check_call
 from glob import glob
+from distutils import log
 import os
+import json
 import sys
-import platform
 
 here = os.path.dirname(os.path.abspath(__file__))
 node_root = os.path.join(here, 'js')
@@ -16,18 +17,18 @@ is_repo = os.path.exists(os.path.join(here, '.git'))
 
 npm_path = os.pathsep.join([
     os.path.join(node_root, 'node_modules', '.bin'),
-                os.environ.get('PATH', os.defpath),
+    os.environ.get('PATH', os.defpath),
 ])
 
-from distutils import log
 log.set_verbosity(log.DEBUG)
 log.info('setup.py entered')
 log.info('$PATH=%s' % os.environ['PATH'])
 
 LONG_DESCRIPTION = 'A Jupyter widget for dynamic Leaflet maps'
 
+
 def js_prerelease(command, strict=False):
-    """decorator for building minified js/css prior to another command"""
+    """Decorator for building minified js/css prior to another command."""
     class DecoratedCommand(command):
         def run(self):
             jsdeps = self.distribution.get_command_obj('jsdeps')
@@ -52,10 +53,23 @@ def js_prerelease(command, strict=False):
             update_package_data(self.distribution)
     return DecoratedCommand
 
+
+def get_data_files():
+    with open(os.path.join('js', 'package.json')) as f:
+        package_json = json.load(f)
+    tgz = '%s-%s.tgz' % (package_json['name'], package_json['version'])
+
+    return [
+        ('share/jupyter/nbextensions/jupyter-leaflet', glob('ipyleaflet/static/*')),
+        ('etc/jupyter/nbconfig/notebook.d', ['jupyter-leaflet.json']),
+        ('share/jupyter/lab/extensions', ['js/' + tgz]),
+    ]
+
+
 def update_package_data(distribution):
-    """update package_data to catch changes during setup"""
+    """Update package_data to catch changes during setup."""
     build_py = distribution.get_command_obj('build_py')
-    # distribution.package_data = find_package_data()
+    distribution.data_files = get_data_files()
     # re-init build_py options which load package_data
     build_py.finalize_options()
 
@@ -101,6 +115,7 @@ class NPM(Command):
         if self.should_run_npm_install():
             log.info("Installing build dependencies with npm.  This may take a while...")
             check_call(['npm', 'install'], cwd=node_root, stdout=sys.stdout, stderr=sys.stderr)
+            check_call(['npm', 'pack'], cwd=node_root, stdout=sys.stdout, stderr=sys.stderr)
             os.utime(self.node_modules, None)
 
         for t in self.targets:
@@ -124,20 +139,13 @@ setup_args = {
     'long_description': LONG_DESCRIPTION,
     'license': 'MIT License',
     'include_package_data': True,
-    'data_files': [
-        ('share/jupyter/nbextensions/jupyter-leaflet', [
-            'ipyleaflet/static/extension.js',
-            'ipyleaflet/static/index.js',
-            'ipyleaflet/static/index.js.map'
-        ] + glob('ipyleaflet/static/*.png') + glob('ipyleaflet/static/*.svg')),
-        ('etc/jupyter/nbconfig/notebook.d' , ['jupyter-leaflet.json'])
-    ],
+    'data_files': get_data_files(),
     'install_requires': [
         'ipywidgets>=7.5.0,<8',
         'traittypes>=0.2.1,<3',
         'xarray>=0.10',
         'branca>=0.3.1,<0.4'
-        ],
+    ],
     'packages': find_packages(),
     'zip_safe': False,
     'cmdclass': {

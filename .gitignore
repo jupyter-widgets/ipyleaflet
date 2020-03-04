@@ -10,3 +10,5 @@ ipyleaflet/static/
 
 # OS X
 .DS_Store
+
+js/jupyter-leaflet-*.tgz

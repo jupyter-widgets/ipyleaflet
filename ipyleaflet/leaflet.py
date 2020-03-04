@@ -24,8 +24,6 @@ from traittypes import Dataset
 
 from .xarray_ds import ds_x_to_json
 
-from .basemaps import basemaps
-
 from ._version import EXTENSION_VERSION
 
 def_loc = [0.0, 0.0]
@@ -277,7 +275,8 @@ class TileLayer(RasterLayer):
         self._load_callbacks.register_callback(callback, remove=remove)
 
     def redraw(self):
-        self.send({'msg':'redraw'})
+        self.send({'msg': 'redraw'})
+
 
 class LocalTileLayer(TileLayer):
     _view_name = Unicode('LeafletLocalTileLayerView').tag(sync=True)
@@ -347,8 +346,8 @@ class Velocity(Layer):
         'displayPosition': 'bottomleft',
         'displayEmptyString': 'No velocity data',
         'speedUnit': 'kt'
-        }).tag(sync=True)
-    min_velocity = Float(0).tag(sync=True,o=True)
+    }).tag(sync=True)
+    min_velocity = Float(0).tag(sync=True, o=True)
     max_velocity = Float(10).tag(sync=True, o=True)
     velocity_scale = Float(0.005).tag(sync=True, o=True)
     color_scale = List([
@@ -367,7 +366,7 @@ class Velocity(Layer):
         "rgb(237,45,28)",
         "rgb(220,24,32)",
         "rgb(180,0,35)"
-        ]).tag(sync=True, o=True)
+    ]).tag(sync=True, o=True)
 
 
 class Heatmap(RasterLayer):
@@ -718,8 +717,8 @@ class MeasureControl(Control):
     completed_color = Color('#C8F2BE').tag(sync=True, o=True)
 
     popup_options = Dict({
-      'className': 'leaflet-measure-resultpopup',
-      'autoPanPadding': [10, 10]
+        'className': 'leaflet-measure-resultpopup',
+        'autoPanPadding': [10, 10]
     }).tag(sync=True, o=True)
 
     capture_z_index = Int(10000).tag(sync=True, o=True)

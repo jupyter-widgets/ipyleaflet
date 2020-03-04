@@ -51,17 +51,17 @@ def build_tiles_url(**kwargs):
     'https://4.traffic.maps.api.here.com/maptile/2.1/traffictile/newest/normal.day/{z}/{x}/{y}/256/png8?lg=eng&app_id=foo&app_code=bar'
     """
     params = dict(
-        server     = random.choice("1234"),
-        maptype    = "base",
-        tiletype   = "maptile",
-        scheme     = "normal.day",
-        tilesize   = "256",
-        tileformat = "png8",
-        lg         = "eng",
+        server=random.choice("1234"),
+        maptype="base",
+        tiletype="maptile",
+        scheme="normal.day",
+        tilesize="256",
+        tileformat="png8",
+        lg="eng",
         # x, y, and z will remain unchanged in the resulting URL.
-        x          = "{{x}}",
-        y          = "{{y}}",
-        z          = "{{z}}",
+        x="{{x}}",
+        y="{{y}}",
+        z="{{z}}",
     )
     params.update(kwargs)
     tiles_url = (

@@ -17,7 +17,7 @@ before_install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda info -a
-  - conda create -q -n test-environment python=$PYTHON_VERSION ipywidgets nodejs
+  - conda create -q -n test-environment python=$PYTHON_VERSION ipywidgets nodejs flake8
   - source activate test-environment
   - if [[ $TRAVIS_OS_NAME == linux ]]; then conda install -c conda-forge jupyterlab; fi
 install:
@@ -27,3 +27,4 @@ script:
   - test -d $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet
   - test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet/extension.js
   - test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet/index.js
+  - flake8 ipyleaflet --ignore=E501

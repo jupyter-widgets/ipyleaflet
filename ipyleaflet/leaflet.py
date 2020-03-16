@@ -15,7 +15,7 @@ from ipywidgets.widgets.trait_types import InstanceDict
 
 from traitlets import (
     Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
-    link, observe, default, validate, TraitError, Union
+    link, observe, default, validate, TraitError, Union, Any
 )
 
 from branca.colormap import linear, ColorMap
@@ -587,6 +587,7 @@ class Choropleth(GeoJSON):
     value_max = Float(None, allow_none=True)
     colormap = Instance(ColorMap)
     border_color = Color('black')
+    style_callback = Any()
 
     @observe('choro_data')
     def _update_bounds(self, change):
@@ -611,13 +612,18 @@ class Choropleth(GeoJSON):
             self.value_max = max(self.choro_data.items(), key=lambda x: x[1])[1]
 
         colormap = self.colormap.scale(self.value_min, self.value_max)
-        color_dict = {key: colormap(self.choro_data[key]) for key in self.choro_data.keys()}
-
         data = copy.deepcopy(self.geo_data)
-        for feature in data['features']:
-            feature['properties']['style'] = dict(fillColor=color_dict[feature['id']],
-                                                  color=self.border_color,
-                                                  weight=0.9)
+
+        if self.style_callback:
+            for feature in data['features']:
+                feature['properties']['style'] = self.style_callback(feature, colormap,self.choro_data[feature['id']])
+        else:
+            color_dict = {key: colormap(self.choro_data[key]) for key in self.choro_data.keys()}
+
+            for feature in data['features']:
+                feature['properties']['style'] = dict(fillColor=color_dict[feature['id']],
+                                                      color=self.border_color,
+                                                      weight=0.9)
         return data
 
     def __init__(self, **kwargs):

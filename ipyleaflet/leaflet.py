@@ -616,7 +616,7 @@ class Choropleth(GeoJSON):
 
         if self.style_callback:
             for feature in data['features']:
-                feature['properties']['style'] = self.style_callback(feature, colormap,self.choro_data[feature['id']])
+                feature['properties']['style'] = self.style_callback(feature, colormap, self.choro_data[feature['id']])
         else:
             color_dict = {key: colormap(self.choro_data[key]) for key in self.choro_data.keys()}
 

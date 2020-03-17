@@ -536,13 +536,34 @@ class GeoJSON(FeatureGroup):
     style = Dict().tag(sync=True)
     hover_style = Dict().tag(sync=True)
     point_style = Dict().tag(sync=True)
+    style_callback = Any()
 
     _click_callbacks = Instance(CallbackDispatcher, ())
     _hover_callbacks = Instance(CallbackDispatcher, ())
 
+    @observe('data', 'style', 'style_callback')
+    def _update_data(self, change):
+        self.data = self._get_data()
+
+    def _get_data(self):
+        if self.style_callback:
+            if self.data['type'] == 'Feature':
+                self.data['properties']['style'] = self.style_callback(self.data)
+            elif self.data['type'] == 'FeatureCollection':
+                for feature in self.data['features']:
+                    feature['properties']['style'] = self.style_callback(feature)
+        else:
+            if self.data['type'] == 'Feature':
+                self.data['properties']['style'] = self.style
+            elif self.data['type'] == 'FeatureCollection':
+                for feature in self.data['features']:
+                    feature['properties']['style'] = self.style
+        return self.data
+
     def __init__(self, **kwargs):
         super(GeoJSON, self).__init__(**kwargs)
         self.on_msg(self._handle_m_msg)
+        self.data = self._get_data()
 
     def _handle_m_msg(self, _, content, buffers):
         if content.get('event', '') == 'click':
@@ -580,14 +601,12 @@ class GeoData(GeoJSON):
 
 
 class Choropleth(GeoJSON):
-
     geo_data = Dict()
     choro_data = Dict()
     value_min = Float(None, allow_none=True)
     value_max = Float(None, allow_none=True)
     colormap = Instance(ColorMap)
     border_color = Color('black')
-    style_callback = Any()
 
     @observe('choro_data')
     def _update_bounds(self, change):

@@ -15,7 +15,7 @@ from ipywidgets.widgets.trait_types import InstanceDict
 
 from traitlets import (
     Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
-    link, observe, default, validate, TraitError, Union
+    link, observe, default, validate, TraitError, Union, Any
 )
 
 from branca.colormap import linear, ColorMap
@@ -536,13 +536,40 @@ class GeoJSON(FeatureGroup):
     style = Dict().tag(sync=True)
     hover_style = Dict().tag(sync=True)
     point_style = Dict().tag(sync=True)
+    style_callback = Any()
 
     _click_callbacks = Instance(CallbackDispatcher, ())
     _hover_callbacks = Instance(CallbackDispatcher, ())
 
+    @validate('style_callback')
+    def _validate_style_callback(self, proposal):
+        if not callable(proposal.value):
+            raise TraitError('style_callback should be callable (functor/function/lambda)')
+        return proposal.value
+
+    @observe('data', 'style', 'style_callback')
+    def _update_data(self, change):
+        self.data = self._get_data()
+
+    def _get_data(self):
+        if self.style_callback:
+            if self.data['type'] == 'Feature':
+                self.data['properties']['style'] = self.style_callback(self.data)
+            elif self.data['type'] == 'FeatureCollection':
+                for feature in self.data['features']:
+                    feature['properties']['style'] = self.style_callback(feature)
+        else:
+            if self.data['type'] == 'Feature':
+                self.data['properties']['style'] = self.style
+            elif self.data['type'] == 'FeatureCollection':
+                for feature in self.data['features']:
+                    feature['properties']['style'] = self.style
+        return self.data
+
     def __init__(self, **kwargs):
         super(GeoJSON, self).__init__(**kwargs)
         self.on_msg(self._handle_m_msg)
+        self.data = self._get_data()
 
     def _handle_m_msg(self, _, content, buffers):
         if content.get('event', '') == 'click':
@@ -580,26 +607,35 @@ class GeoData(GeoJSON):
 
 
 class Choropleth(GeoJSON):
-
     geo_data = Dict()
     choro_data = Dict()
     value_min = Float(None, allow_none=True)
     value_max = Float(None, allow_none=True)
     colormap = Instance(ColorMap)
-    border_color = Color('black')
 
     @observe('choro_data')
     def _update_bounds(self, change):
         self.value_min = min(self.choro_data.items(), key=lambda x: x[1])[1]
         self.value_max = max(self.choro_data.items(), key=lambda x: x[1])[1]
 
-    @observe('value_min', 'value_max', 'geo_data', 'choro_data', 'colormap', 'border_color')
-    def _update_data(self, change):
+    @observe('value_min', 'value_max', 'geo_data', 'choro_data', 'colormap')
+    def _update_choropleth_data(self, change):
         self.data = self._get_data()
 
     @default('colormap')
     def _default_colormap(self):
         return linear.OrRd_06
+
+    @default('style_callback')
+    def _default_style_callback(self):
+        def compute_style(feature, colormap, choro_data):
+            return dict(
+                fillColor=colormap(choro_data),
+                color='black',
+                weight=0.9
+            )
+
+        return compute_style
 
     def _get_data(self):
         if not self.geo_data:
@@ -611,13 +647,11 @@ class Choropleth(GeoJSON):
             self.value_max = max(self.choro_data.items(), key=lambda x: x[1])[1]
 
         colormap = self.colormap.scale(self.value_min, self.value_max)
-        color_dict = {key: colormap(self.choro_data[key]) for key in self.choro_data.keys()}
-
         data = copy.deepcopy(self.geo_data)
+
         for feature in data['features']:
-            feature['properties']['style'] = dict(fillColor=color_dict[feature['id']],
-                                                  color=self.border_color,
-                                                  weight=0.9)
+            feature['properties']['style'] = self.style_callback(feature, colormap, self.choro_data[feature['id']])
+
         return data
 
     def __init__(self, **kwargs):

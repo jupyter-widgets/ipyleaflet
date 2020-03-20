@@ -1,2 +1,4 @@
 recursive-include ipyleaflet/static *.*
 include jupyter-leaflet.json
+include js/*tgz
+include js/package.json

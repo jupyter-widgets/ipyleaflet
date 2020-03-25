@@ -547,7 +547,7 @@ class GeoJSON(FeatureGroup):
             raise TraitError('style_callback should be callable (functor/function/lambda)')
         return proposal.value
 
-    @observe('data', 'style', 'style_callback')
+    @observe('style', 'style_callback')
     def _update_data(self, change):
         self.data = self._get_data()
 
@@ -619,7 +619,7 @@ class Choropleth(GeoJSON):
         self.value_max = max(self.choro_data.items(), key=lambda x: x[1])[1]
 
     @observe('value_min', 'value_max', 'geo_data', 'choro_data', 'colormap')
-    def _update_data(self, change):
+    def _update_choropleth_data(self, change):
         self.data = self._get_data()
 
     @default('colormap')

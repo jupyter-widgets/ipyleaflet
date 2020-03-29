@@ -612,7 +612,7 @@ class Choropleth(GeoJSON):
     value_min = Float(None, allow_none=True)
     value_max = Float(None, allow_none=True)
     colormap = Instance(ColorMap)
-    key_on = Unicode()
+    key_on = Unicode('id')
 
     @observe('choro_data')
     def _update_bounds(self, change):
@@ -637,10 +637,6 @@ class Choropleth(GeoJSON):
             )
 
         return compute_style
-
-    @default('key_on')
-    def _default_key_on(self):
-        return 'id'
 
     def _get_data(self):
         if not self.geo_data:

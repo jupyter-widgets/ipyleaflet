@@ -547,7 +547,7 @@ class GeoJSON(FeatureGroup):
             raise TraitError('style_callback should be callable (functor/function/lambda)')
         return proposal.value
 
-    @observe('data', 'style', 'style_callback')
+    @observe('style', 'style_callback')
     def _update_data(self, change):
         self.data = self._get_data()
 

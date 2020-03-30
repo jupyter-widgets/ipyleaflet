@@ -14,7 +14,7 @@ from ipywidgets import (
 from ipywidgets.widgets.trait_types import InstanceDict
 
 from traitlets import (
-    Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
+    CFloat, Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
     link, observe, default, validate, TraitError, Union, Any
 )
 
@@ -608,8 +608,8 @@ class GeoData(GeoJSON):
 class Choropleth(GeoJSON):
     geo_data = Dict()
     choro_data = Dict()
-    value_min = Float(None, allow_none=True)
-    value_max = Float(None, allow_none=True)
+    value_min = CFloat(None, allow_none=True)
+    value_max = CFloat(None, allow_none=True)
     colormap = Instance(ColorMap)
     key_on = Unicode('id')
 

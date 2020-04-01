@@ -45,8 +45,8 @@ Example
       m
 
 
-Information
------------
+Usage
+-----
 
 The ``Choropleth`` takes ``geo_data`` and ``choro_data`` as arguments.
 
@@ -69,7 +69,7 @@ The ``geo_data`` is a `GeoJSON
         }]
     }
 
-The ``choro_data`` is a dictionary that takes ``'id'`` from ``'features'`` as key and float as value, in order to build the colormap :
+The ``choro_data`` is a dictionary that maps an key to a float value, in order to build the colormap :
 
 .. code::
 
@@ -77,15 +77,30 @@ The ``choro_data`` is a dictionary that takes ``'id'`` from ``'features'`` as ke
      'AK': 6.8}
 
 
+The ``Choropleth`` layer is then created specifying on which key the colormap is applied:
+
+.. code::
+
+    Choropleth(
+        geo_data=geo_data,
+        choro_data=choro_data,
+        key_on='id'
+    )
+
+
 Attributes
 ----------
 
-============   ==========================  ===========
-Attribute      Doc                         Description
-============   ==========================  ===========
-geo_data       Data dictionary             GeoJSON dictionary
-choro_data     Choropleth data dictionary  Dictionary id/float
-value_min      Color scale minimum value
-value_max      Color scale maximum value
-colormap       Map of color from branca
-============   ==========================  ===========
+==============   ==========================  ===========
+Attribute        Default                     Doc
+==============   ==========================  ===========
+geo_data         {}                          Data dictionary
+choro_data       {}                          Mapping key -> float data for constructing the colormap
+key_on           'id'                        Key used for the colormap construction
+value_min                                    Color scale minimum value
+value_max                                    Color scale maximum value
+colormap         OrRd_06                     Map of color from branca
+style                                        Style dictionary
+hover_style                                  Hover style dictionary
+style_callback                               Styling function that is called for each feature, and should return the feature style. This styling function takes the feature, the colormap function and the key data as arguments.
+==============   ==========================  ===========

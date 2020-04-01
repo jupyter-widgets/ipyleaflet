@@ -135,7 +135,7 @@ basemaps = Bunch(
             url='https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_Bands721/default/%s/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
             max_zoom=9,
             attribution='Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
-            name='NASAGIBS.MidsTerraBands721CR'
+            name='NASAGIBS.ModisTerraBands721CR'
         ),
         ModisAquaTrueColorCR=dict(
             url='https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Aqua_CorrectedReflectance_TrueColor/default/%s/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',

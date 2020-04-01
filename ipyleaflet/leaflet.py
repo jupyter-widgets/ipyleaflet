@@ -170,7 +170,9 @@ class AwesomeIcon(UILayer):
 
     name = Unicode('home').tag(sync=True)
     marker_color = Enum(
-        values=['white', 'red', 'darkred', 'lightred', 'orange', 'beige', 'green', 'darkgreen', 'lightgreen', 'blue', 'darkblue', 'lightblue', 'purple', 'darkpurple', 'pink', 'cadetblue', 'white', 'gray', 'lightgray', 'black'],
+        values=['white', 'red', 'darkred', 'lightred', 'orange', 'beige', 'green', 'darkgreen', 'lightgreen', 'blue',
+                'darkblue', 'lightblue', 'purple', 'darkpurple', 'pink', 'cadetblue', 'white', 'gray', 'lightgray',
+                'black'],
         default_value='blue'
     ).tag(sync=True)
     icon_color = Color('white').tag(sync=True)
@@ -184,7 +186,8 @@ class Marker(UILayer):
     location = List(def_loc).tag(sync=True)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True)
     visible = Bool(True).tag(sync=True)
-    icon = Union((Instance(Icon), Instance(AwesomeIcon)), allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
+    icon = Union((Instance(Icon), Instance(AwesomeIcon)), allow_none=True, default_value=None).tag(sync=True,
+                                                                                                   **widget_serialization)
 
     # Options
     z_index_offset = Int(0).tag(sync=True, o=True)
@@ -254,7 +257,8 @@ class TileLayer(RasterLayer):
     min_native_zoom = Int(0).tag(sync=True, o=True)
     max_native_zoom = Int(18).tag(sync=True, o=True)
     tile_size = Int(256).tag(sync=True, o=True)
-    attribution = Unicode('Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors').tag(sync=True, o=True)
+    attribution = Unicode('Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors').tag(
+        sync=True, o=True)
     detect_retina = Bool(False).tag(sync=True, o=True)
     no_wrap = Bool(False).tag(sync=True, o=True)
     tms = Bool(False).tag(sync=True, o=True)
@@ -382,6 +386,28 @@ class Heatmap(RasterLayer):
     radius = Float(25.0).tag(sync=True, o=True)
     blur = Float(15.0).tag(sync=True, o=True)
     gradient = Dict({0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}).tag(sync=True, o=True)
+
+
+class VectorTileLayer(Layer):
+    _view_name = Unicode('LeafletVectorTileLayerView').tag(sync=True)
+    _model_name = Unicode('LeafletVectorTileLayerModel').tag(sync=True)
+
+    url = Unicode().tag(sync=True, o=True)
+    vector_tile_layer_styles = Dict().tag(sync=True, o=True)
+
+    def __init__(self, **kwargs):
+        super(VectorTileLayer, self).__init__(**kwargs)
+        self.on_msg(self._handle_leaflet_event)
+
+    def _handle_leaflet_event(self, _, content, buffers):
+        if content.get('event', '') == 'load':
+            self._load_callbacks(**content)
+
+    def on_load(self, callback, remove=False):
+        self._load_callbacks.register_callback(callback, remove=remove)
+
+    def redraw(self):
+        self.send({'msg': 'redraw'})
 
 
 class VectorLayer(Layer):
@@ -650,7 +676,8 @@ class Choropleth(GeoJSON):
         data = copy.deepcopy(self.geo_data)
 
         for feature in data['features']:
-            feature['properties']['style'] = self.style_callback(feature, colormap, self.choro_data[feature[self.key_on]])
+            feature['properties']['style'] = self.style_callback(feature, colormap,
+                                                                 self.choro_data[feature[self.key_on]])
 
         return data
 
@@ -914,10 +941,10 @@ class Map(DOMWidget, InteractMixin):
 
     # Map options
     center = List(def_loc).tag(sync=True, o=True)
-    zoom_start = Int(12).tag(sync=True, o=True)
-    zoom = Int(12).tag(sync=True, o=True)
-    max_zoom = Int(18).tag(sync=True, o=True)
-    min_zoom = Int(1).tag(sync=True, o=True)
+    zoom_start = CFloat(12).tag(sync=True, o=True)
+    zoom = CFloat(12).tag(sync=True, o=True)
+    max_zoom = CFloat(18).tag(sync=True, o=True)
+    min_zoom = CFloat(1).tag(sync=True, o=True)
     interpolation = Unicode('bilinear').tag(sync=True, o=True)
     crs = Enum(values=allowed_crs, default_value='EPSG3857').tag(sync=True)
 
@@ -981,11 +1008,12 @@ class Map(DOMWidget, InteractMixin):
 
     @default('layers')
     def _default_layers(self):
-        basemap = self.basemap if isinstance(self.basemap, TileLayer) else basemap_to_tiles(self.basemap, self.modisdate)
+        basemap = self.basemap if isinstance(self.basemap, TileLayer) else basemap_to_tiles(self.basemap,
+                                                                                            self.modisdate)
 
         basemap.base = True
 
-        return (basemap, )
+        return (basemap,)
 
     bounds = Tuple(read_only=True)
     bounds_polygon = Tuple(read_only=True)

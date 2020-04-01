@@ -9,8 +9,8 @@ export class LeafletVectorTileLayerModel extends layer.LeafletLayerModel {
       ...super.defaults(),
       _view_name: 'LeafletVectorTileLayerView',
       _model_name: 'LeafletVectorTileLayerModel',
-      url: 'https://free-{s}.tilehosting.com/data/v3/{z}/{x}/{y}.pbf.pict?key={apiKey}',
-      options: { apiKey : 'VrAl6k9W8JkD4G5584Sz' },
+      url: 'https://vector.hereapi.com/v2/vectortiles/base/mc/{z}/{x}/{y}/omv?apiKey={apiKey}',
+      options: { apiKey : '0es5QrwgHuJCR5oNpzUHi_TiLyw-59jrC2JPiNfPwGE' },
       attribution:
         'Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
     };

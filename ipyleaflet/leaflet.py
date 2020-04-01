@@ -392,8 +392,8 @@ class VectorTileLayer(Layer):
     _view_name = Unicode('LeafletVectorTileLayerView').tag(sync=True)
     _model_name = Unicode('LeafletVectorTileLayerModel').tag(sync=True)
 
-    url = Unicode('https://free-{s}.tilehosting.com/data/v3/{z}/{x}/{y}.pbf.pict?key={apiKey}').tag(sync=True)
-    options = Dict({'apiKey': 'VrAl6k9W8JkD4G5584Sz'})
+    url = Unicode('https://vector.hereapi.com/v2/vectortiles/base/mc/{z}/{x}/{y}/omv?apiKey={apiKey}').tag(sync=True)
+    options = Dict({'apiKey': '0es5QrwgHuJCR5oNpzUHi_TiLyw-59jrC2JPiNfPwGE'})
     attribution = Unicode('Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors').tag(
         sync=True, o=True)
 

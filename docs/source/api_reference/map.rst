@@ -59,6 +59,7 @@ Method             Arguments                                 Doc
 ================   =====================================     ===
 add_layer          Layer instance                            Add a new layer to the map
 remove_layer       Layer instance                            Remove a layer from the map
+substitute_layer   Layer instance                            Substitute a layer with a new layer
 clear_layers                                                 Remove all layers from the map
 add_control        Control instance                          Add a new control to the map
 remove_control     Control instance                          Remove a control from the map

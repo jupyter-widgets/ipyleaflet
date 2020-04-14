@@ -9,6 +9,7 @@ var awesomeicon = require('./layers/AwesomeIcon.js');
 var popup = require('./layers/Popup.js');
 var rasterlayer = require('./layers/RasterLayer.js');
 var tilelayer = require('./layers/TileLayer.js');
+var vectortilelayer = require('./layers/VectorTileLayer.js');
 var localtilelayer = require('./layers/LocalTileLayer.js');
 var wmslayer = require('./layers/WMSLayer.js');
 var imageoverlay = require('./layers/ImageOverlay.js');
@@ -70,6 +71,7 @@ module.exports = {
     LeafletPopupView : popup.LeafletPopupView,
     LeafletRasterLayerView : rasterlayer.LeafletRasterLayerView,
     LeafletTileLayerView : tilelayer.LeafletTileLayerView,
+    LeafletVectorTileLayerView : vectortilelayer.LeafletVectorTileLayerView,
     LeafletLocalTileLayerView : localtilelayer.LeafletLocalTileLayerView,
     LeafletWMSLayerView : wmslayer.LeafletWMSLayerView,
     LeafletImageOverlayView : imageoverlay.LeafletImageOverlayView,
@@ -109,6 +111,7 @@ module.exports = {
     LeafletPopupModel : popup.LeafletPopupModel,
     LeafletRasterLayerModel : rasterlayer.LeafletRasterLayerModel,
     LeafletTileLayerModel : tilelayer.LeafletTileLayerModel,
+    LeafletVectorTileLayerModel : vectortilelayer.LeafletVectorTileLayerModel,
     LeafletLocalTileLayerModel : localtilelayer.LeafletLocalTileLayerModel,
     LeafletWMSLayerModel : wmslayer.LeafletWMSLayerModel,
     LeafletImageOverlayModel : imageoverlay.LeafletImageOverlayModel,

@@ -1,4 +1,5 @@
 const L = require('leaflet');
+require('leaflet.vectorgrid');
 require('leaflet-splitmap');
 require('leaflet-draw');
 require('leaflet.markercluster');

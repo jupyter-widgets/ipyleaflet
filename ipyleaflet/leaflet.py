@@ -393,6 +393,8 @@ class VectorTileLayer(Layer):
     _model_name = Unicode('LeafletVectorTileLayerModel').tag(sync=True)
 
     url = Unicode().tag(sync=True, o=True)
+    attribution = Unicode().tag(sync=True, o=True)
+
     vector_tile_layer_styles = Dict().tag(sync=True, o=True)
 
     def __init__(self, **kwargs):

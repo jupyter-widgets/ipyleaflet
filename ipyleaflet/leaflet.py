@@ -393,18 +393,13 @@ class VectorTileLayer(Layer):
     _model_name = Unicode('LeafletVectorTileLayerModel').tag(sync=True)
 
     url = Unicode().tag(sync=True, o=True)
+    attribution = Unicode().tag(sync=True, o=True)
+
     vector_tile_layer_styles = Dict().tag(sync=True, o=True)
 
     def __init__(self, **kwargs):
         super(VectorTileLayer, self).__init__(**kwargs)
         self.on_msg(self._handle_leaflet_event)
-
-    def _handle_leaflet_event(self, _, content, buffers):
-        if content.get('event', '') == 'load':
-            self._load_callbacks(**content)
-
-    def on_load(self, callback, remove=False):
-        self._load_callbacks.register_callback(callback, remove=remove)
 
     def redraw(self):
         self.send({'msg': 'redraw'})

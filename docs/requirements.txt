@@ -1,5 +1,5 @@
 ipyleaflet
-jupyter-sphinx>=0.2.3,<0.3
+jupyter-sphinx==0.2.4a1
 scipy
 netcdf4
 geopandas

@@ -46,6 +46,7 @@ var map = require('./Map.js');
 
 // Load css
 require('leaflet/dist/leaflet.css');
+require('leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css'); // Re-uses images from ~leaflet package
 require('leaflet-draw/dist/leaflet.draw.css');
 require('leaflet.markercluster/dist/MarkerCluster.css');
 require('leaflet.markercluster/dist/MarkerCluster.Default.css');
@@ -55,10 +56,6 @@ require('leaflet.awesome-markers/dist/leaflet.awesome-markers.css');
 require('spin.js/spin.css');
 require('./jupyter-leaflet.css');
 
-// Forcibly load the marker icon images to be in the bundle.
-require('leaflet/dist/images/marker-shadow.png');
-require('leaflet/dist/images/marker-icon.png');
-require('leaflet/dist/images/marker-icon-2x.png');
 
 //Exports
 module.exports = {

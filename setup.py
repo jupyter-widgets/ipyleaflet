@@ -126,33 +126,33 @@ version_ns = {}
 with open(os.path.join(here, 'ipyleaflet', '_version.py')) as f:
     exec(f.read(), {}, version_ns)
 
-setup_args = {
-    'name': 'ipyleaflet',
-    'version': version_ns['__version__'],
-    'description': 'A Jupyter widget for dynamic Leaflet maps',
-    'long_description': LONG_DESCRIPTION,
-    'license': 'MIT License',
-    'include_package_data': True,
-    'data_files': get_data_files(),
-    'install_requires': [
+setup(
+    name='ipyleaflet',
+    version=version_ns['__version__'],
+    description='A Jupyter widget for dynamic Leaflet maps',
+    long_description=LONG_DESCRIPTION,
+    license='MIT License',
+    include_package_data=True,
+    data_files=get_data_files(),
+    install_requires=[
         'ipywidgets>=7.5.0,<8',
         'traittypes>=0.2.1,<3',
         'xarray>=0.10',
         'branca>=0.3.1,<0.4'
     ],
-    'packages': find_packages(),
-    'zip_safe': False,
-    'cmdclass': {
+    packages=find_packages(),
+    zip_safe=False,
+    cmdclass={
         'build_py': js_prerelease(build_py),
         'egg_info': js_prerelease(egg_info),
         'sdist': js_prerelease(sdist, strict=True),
         'jsdeps': NPM,
     },
-    'author': 'Project Jupyter',
-    'author_email': 'jupyter@googlegroups.com',
-    'url': 'https://github.com/jupyter-widgets/ipyleaflet',
-    'keywords': ['ipython', 'jupyter', 'widgets', 'graphics', 'GIS'],
-    'classifiers': [
+    author='Project Jupyter',
+    author_email='jupyter@googlegroups.com',
+    url='https://github.com/jupyter-widgets/ipyleaflet',
+    keywords=['ipython', 'jupyter', 'widgets', 'graphics', 'GIS'],
+    classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Intended Audience :: Science/Research',
@@ -165,6 +165,4 @@ setup_args = {
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ],
-}
-
-setup(**setup_args)
+)

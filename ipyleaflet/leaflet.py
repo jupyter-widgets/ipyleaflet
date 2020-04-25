@@ -579,7 +579,7 @@ class GeoJSON(FeatureGroup):
             elif self.data['type'] == 'FeatureCollection':
                 for feature in self.data['features']:
                     feature['properties']['style'] = self.style_callback(feature)
-        else:
+        elif self.style:
             if self.data['type'] == 'Feature':
                 self.data['properties']['style'] = self.style
             elif self.data['type'] == 'FeatureCollection':

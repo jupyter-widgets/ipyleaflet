@@ -915,6 +915,11 @@ class AttributionControl(Control):
     prefix = Unicode('Leaflet').tag(sync=True, o=True)
 
 
+class LegendCntrol(Control):
+    _view_name = Unicode('LeafletLegendControlView').tag(sync=True)
+    _model_name = Unicode('LeafletLegendControlModel').tag(sync=True)
+
+
 class MapStyle(Style, Widget):
     """ Map Style Widget """
     _model_name = Unicode('LeafletMapStyleModel').tag(sync=True)

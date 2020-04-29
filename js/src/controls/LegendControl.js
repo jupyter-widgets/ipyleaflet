@@ -1,18 +1,18 @@
 const L = require('../leaflet.js');
 const control = require('./Control.js')
 
+
 export class LeafletLegendControlModel extends control.LeafletControlModel {
 	defaults(){
 		return{
 			...super.defaults(),
-			_model_name : 'LegendModel',
-        	_view_name : 'LegendView',
-        	_model_module : 'ipyleaflet-legend',
-        	_view_module : 'ipyleaflet-legend',
-        	_model_module_version : '0.1.0',
-        	_view_module_version : '0.1.0',
-			title: "",
-			legend : {},
+			_view_name : 'LeafletLegendControlView',
+			_model_name : 'LeafletLegendControlModel',
+			title: "Legend",
+			legend : {
+        "value 1": "#AAF",
+        "value 2": "#55A",
+        "value 3": "#005"},
 			position: 'bottomright'
 		}
 	}
@@ -32,9 +32,9 @@ export class LeafletLegendControlView extends control.LeafletControlView{
 
 	render(){
 		this.changed();
-        this.model.on('change:title', this.changed, this);
-        this.model.on('change:position', this.changed, this);
-        this.model.on('change:legend', this.changed, this);
+		this.model.on('change:title', this.changed, this);
+		this.model.on('change:position', this.changed, this);
+		this.model.on('change:legend', this.changed, this);
 	}
 
 	addLegend(title, positionning, legend){
@@ -45,7 +45,7 @@ export class LeafletLegendControlView extends control.LeafletControlView{
 			let jsLegendName="leaflet-control-legend"
 			let container = L.DomUtil.create('div', jsLegendName)
 			let titleContainer = document.createElement('h4')
-			titleContainer.textContent =  title
+			titleContainer.textContent = title
 			container.appendChild(titleContainer)
 
 			for ( let legendElement in legend ){

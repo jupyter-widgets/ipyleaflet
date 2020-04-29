@@ -45,7 +45,6 @@ export class LeafletLegendControlView extends control.LeafletControlView{
 		}
 
 		this.obj = jsLegend
-		this.obj.addTo(this.map_view.obj)
 	}
 
 	legendChanged(){

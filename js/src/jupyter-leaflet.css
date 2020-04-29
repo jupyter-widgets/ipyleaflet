@@ -128,11 +128,13 @@
 }
 /* Legend Control */
 div.leaflet-control-legend {
-	color: #555;
+    color: var(--jp-ui-font-color1);
    	line-height: 18px;
    	width: auto;
-   	background-color: #fff;
-   	border-radius: 5px;
+    background-color: var(--jp-layout-color1);
+    border-width: var(--jp-border-width);
+    border-color: var(--jp-border-color1);
+  	border-radius: 4.5px;
    	box-shadow: 0 1px 5px rgba(0,0,0,0.4);
    	padding: 6px 10px 6px 6px;
 }

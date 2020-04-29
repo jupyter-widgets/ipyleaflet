@@ -936,7 +936,6 @@ class LegendControl(Control):
     @name.setter
     def name(self, title):
         self.title = title
-        self.send_state()
 
     @property
     def legends(self):
@@ -945,7 +944,6 @@ class LegendControl(Control):
     @legends.setter
     def legends(self, legends):
         self.legend = legends
-        self.send_state()
 
     @property
     def positionning(self):
@@ -954,7 +952,6 @@ class LegendControl(Control):
     @positionning.setter
     def positionning(self, position):
         self.position = position
-        self.send_state()
 
     def add_legend_element(self, key, value):
         self.legend[key] = value

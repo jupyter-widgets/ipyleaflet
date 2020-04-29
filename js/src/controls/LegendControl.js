@@ -10,9 +10,10 @@ export class LeafletLegendControlModel extends control.LeafletControlModel {
 			_model_name : 'LeafletLegendControlModel',
 			title: "Legend",
 			legend : {
-        "value 1": "#AAF",
-        "value 2": "#55A",
-        "value 3": "#005"},
+				"value 1": "#AAF",
+				"value 2": "#55A",
+				"value 3": "#005"
+			},
 			position: 'bottomright'
 		}
 	}
@@ -26,8 +27,32 @@ export class LeafletLegendControlView extends control.LeafletControlView{
 		this.map_view = this.options.map_view;
 	}
 
-	changed(){
-		this.addLegend(this.model.get('title'), this.model.get('position'), this.model.get('legend'))
+	render(){
+		this.create_obj()
+		this.model.on('change:title', this.titleChanged, this);
+		this.model.on('change:position', this.positionChanged, this);
+		this.model.on('change:legend', this.legendChanged, this);
+	}
+
+	create_obj(title, positionning, legend){
+		let jsLegend = L.control({position: this.model.get('position')})
+
+		jsLegend.onAdd = (map) => {
+			let jsLegendName="leaflet-control-legend"
+			let container = L.DomUtil.create('div', jsLegendName)
+			this.addContent(container)
+			return container
+		}
+
+		this.obj = jsLegend
+		this.obj.addTo(this.map_view.obj)
+	}
+
+	legendChanged(){
+		let container = this.obj.getContainer()
+		L.DomUtil.empty(container)
+		this.addContent(container)
+
 	}
 
 	positionChanged(){
@@ -39,64 +64,17 @@ export class LeafletLegendControlView extends control.LeafletControlView{
 		let titleContainer = container.getElementsByTagName('h4')[0] 
 		titleContainer.textContent = this.model.get('title')
 	}
-
-	render(){
-		//this.changed();
-		this.create_obj(this.model.get('title'), this.model.get('position'), this.model.get('legend'))
-		this.model.on('change:title', this.titleChanged, this);
-		this.model.on('change:position', this.positionChanged, this);
-		this.model.on('change:legend', this.changed, this);
-	}
-
-	create_obj(title, positionning, legend){
-		let jsLegend = L.control({position: positionning})
-
-		jsLegend.onAdd = (map) => {
-			let jsLegendName="leaflet-control-legend"
-			let container = L.DomUtil.create('div', jsLegendName)
-			let titleContainer = document.createElement('h4')
-			titleContainer.textContent = title
-			container.appendChild(titleContainer)
-
-			for ( let legendElement in legend ){
-				let icon = document.createElement("i")
-				icon.style = `background-color: ${legend[legendElement]}`
-				container.appendChild(icon)
-				container.innerHTML += `<p>${legendElement} </p></br>`
-			}
-			return container
+		
+	addContent(container){
+		let titleContainer = document.createElement('h4')
+		titleContainer.textContent = this.model.get('title') 
+		container.appendChild(titleContainer)
+		let legend = this.model.get('legend')
+		for ( let legendElement in legend ){
+			let icon = document.createElement("i")
+			icon.style = `background-color: ${legend[legendElement]}`
+			container.appendChild(icon)
+			container.innerHTML += `<p>${legendElement} </p></br>`
 		}
-		this.obj = jsLegend
-		this.obj.addTo(this.map_view.obj)
 	}
-
-	remove(){
-		if(this.obj) this.obj.remove()
-	}
-
- /*
-	addLegend(title, positionning, legend){
-		if(this.obj) this.obj.remove()
-		let jsLegend = L.control({position: positionning})
-
-		jsLegend.onAdd = function(map){
-			let jsLegendName="leaflet-control-legend"
-			let container = L.DomUtil.create('div', jsLegendName)
-			let titleContainer = document.createElement('h4')
-			titleContainer.textContent = title
-			container.appendChild(titleContainer)
-
-			for ( let legendElement in legend ){
-				let icon = document.createElement("i")
-				icon.style = `background-color: ${legend[legendElement]}`
-				container.appendChild(icon)
-				container.innerHTML += `<p>${legendElement} </p></br>`
-
-			}
-			return container
-		}
-
-		this.obj = jsLegend
-		this.obj.addTo(this.map_view.obj)
-	}*/
-}
+ }

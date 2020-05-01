@@ -397,10 +397,6 @@ class VectorTileLayer(Layer):
 
     vector_tile_layer_styles = Dict().tag(sync=True, o=True)
 
-    def __init__(self, **kwargs):
-        super(VectorTileLayer, self).__init__(**kwargs)
-        self.on_msg(self._handle_leaflet_event)
-
     def redraw(self):
         self.send({'msg': 'redraw'})
 

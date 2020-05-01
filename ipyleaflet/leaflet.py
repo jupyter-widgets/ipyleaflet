@@ -571,16 +571,16 @@ class GeoJSON(FeatureGroup):
     def _get_data(self):
         if self.style_callback:
             if self.data['type'] == 'Feature':
-                self.data['properties']['style'] = self.style_callback(self.data)
+                self.data['properties']['style'].update(self.style_callback(self.data))
             elif self.data['type'] == 'FeatureCollection':
                 for feature in self.data['features']:
-                    feature['properties']['style'] = self.style_callback(feature)
-        else:
+                    feature['properties']['style'].update(self.style_callback(feature))
+        elif self.style:
             if self.data['type'] == 'Feature':
-                self.data['properties']['style'] = self.style
+                self.data['properties']['style'].update(self.style)
             elif self.data['type'] == 'FeatureCollection':
                 for feature in self.data['features']:
-                    feature['properties']['style'] = self.style
+                    feature['properties']['style'].update(self.style)
         return self.data
 
     def __init__(self, **kwargs):

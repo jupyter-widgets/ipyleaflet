@@ -915,6 +915,53 @@ class AttributionControl(Control):
     prefix = Unicode('Leaflet').tag(sync=True, o=True)
 
 
+class LegendControl(Control):
+    _view_name = Unicode('LeafletLegendControlView').tag(sync=True)
+    _model_name = Unicode('LeafletLegendControlModel').tag(sync=True)
+    title = Unicode('Legend').tag(sync=True)
+    legend = Dict(default_value={
+        "value 1": "#AAF",
+        "value 2": "#55A",
+        "value 3": "#005"}).tag(sync=True)
+
+    def __init__(self, legend, *args, name="Legend", **kwargs):
+        super().__init__(*args, **kwargs)
+        self.title = name
+        self.legend = legend
+
+    @property
+    def name(self):
+        return self.title
+
+    @name.setter
+    def name(self, title):
+        self.title = title
+
+    @property
+    def legends(self):
+        return self.legend
+
+    @legends.setter
+    def legends(self, legends):
+        self.legend = legends
+
+    @property
+    def positionning(self):
+        return self.position
+
+    @positionning.setter
+    def positionning(self, position):
+        self.position = position
+
+    def add_legend_element(self, key, value):
+        self.legend[key] = value
+        self.send_state()
+
+    def remove_legend_element(self, key):
+        del self.legend[key]
+        self.send_state()
+
+
 class MapStyle(Style, Widget):
     """ Map Style Widget """
     _model_name = Unicode('LeafletMapStyleModel').tag(sync=True)

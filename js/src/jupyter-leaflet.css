@@ -126,3 +126,32 @@
     color: var(--jp-ui-font-color1);
     font-size: 11px;
 }
+/* Legend Control */
+div.leaflet-control-legend {
+    color: var(--jp-ui-font-color1);
+   	line-height: 18px;
+   	width: auto;
+    background-color: var(--jp-layout-color1);
+    border-width: var(--jp-border-width);
+    border-color: var(--jp-border-color1);
+  	border-radius: 4.5px;
+   	box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+   	padding: 6px 10px 6px 6px;
+}
+
+div.leaflet-control-legend > h4 {
+	padding: 0;
+   	margin: 0; 
+	margin-bottom: 5px;
+}
+
+div.leaflet-control-legend > i {
+	width: 18px;
+   	height: 18px;
+   	float: left;
+   	margin-right: 8px;
+}
+
+div.leaflet-control-legend > p {
+	display: inline-block;
+}

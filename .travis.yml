@@ -27,4 +27,4 @@ script:
   - test -d $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet
   - test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet/extension.js
   - test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet/index.js
-  - flake8 ipyleaflet --ignore=E501
+  - flake8 ipyleaflet --ignore=E501,E731

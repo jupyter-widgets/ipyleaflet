@@ -571,16 +571,28 @@ class GeoJSON(FeatureGroup):
     def _get_data(self):
         if self.style_callback:
             if self.data['type'] == 'Feature':
-                self.data['properties']['style'].update(self.style_callback(self.data))
+                if 'style' in self.data['properties']:
+                    self.data['properties']['style'].update(self.style_callback(self.data))
+                else:
+                    self.data['properties']['style'] = self.style_callback(self.data)
             elif self.data['type'] == 'FeatureCollection':
                 for feature in self.data['features']:
-                    feature['properties']['style'].update(self.style_callback(feature))
+                    if 'style' in feature['properties']:
+                        feature['properties']['style'].update(self.style_callback(feature))
+                    else:
+                        feature['properties']['style'] = self.style_callback(feature)
         elif self.style:
             if self.data['type'] == 'Feature':
-                self.data['properties']['style'].update(self.style)
+                if 'style' in self.data['properties']:
+                    self.data['properties']['style'].update(self.style)
+                else:
+                    self.data['properties']['style'] = self.style
             elif self.data['type'] == 'FeatureCollection':
                 for feature in self.data['features']:
-                    feature['properties']['style'].update(self.style)
+                    if 'style' in feature['properties']:
+                        feature['properties']['style'].update(self.style)
+                    else:
+                        feature['properties']['style'] = self.style
         return self.data
 
     def __init__(self, **kwargs):

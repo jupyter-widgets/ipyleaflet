@@ -569,31 +569,38 @@ class GeoJSON(FeatureGroup):
         self.data = self._get_data()
 
     def _get_data(self):
+        if 'type' not in self.data:
+            # We can't apply a style we don't know what the data look like
+            return self.data
+
+        datatype = self.data['type']
+
+        style_callback = None
         if self.style_callback:
-            if self.data['type'] == 'Feature':
-                if 'style' in self.data['properties']:
-                    self.data['properties']['style'].update(self.style_callback(self.data))
-                else:
-                    self.data['properties']['style'] = self.style_callback(self.data)
-            elif self.data['type'] == 'FeatureCollection':
-                for feature in self.data['features']:
-                    if 'style' in feature['properties']:
-                        feature['properties']['style'].update(self.style_callback(feature))
-                    else:
-                        feature['properties']['style'] = self.style_callback(feature)
+            style_callback = self.style_callback
         elif self.style:
-            if self.data['type'] == 'Feature':
-                if 'style' in self.data['properties']:
-                    self.data['properties']['style'].update(self.style)
-                else:
-                    self.data['properties']['style'] = self.style
-            elif self.data['type'] == 'FeatureCollection':
-                for feature in self.data['features']:
-                    if 'style' in feature['properties']:
-                        feature['properties']['style'].update(self.style)
-                    else:
-                        feature['properties']['style'] = self.style
+            style_callback = lambda feature: self.style
+        else:
+            # No style to apply
+            return self.data
+
+        if datatype == 'Feature':
+            self._apply_style(self.data, style_callback)
+        elif datatype == 'FeatureCollection':
+            for feature in self.data['features']:
+                self._apply_style(feature, style_callback)
+
         return self.data
+
+    def _apply_style(self, feature, style_callback):
+        if 'properties' not in feature:
+            feature['properties'] = {}
+
+        properties = feature['properties']
+        if 'style' in properties:
+            properties['style'].update(style_callback(feature))
+        else:
+            properties['style'] = style_callback(feature)
 
     def __init__(self, **kwargs):
         super(GeoJSON, self).__init__(**kwargs)

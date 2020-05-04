@@ -12,6 +12,7 @@ from ipywidgets import (
 )
 
 from ipywidgets.widgets.trait_types import InstanceDict
+from ipywidgets.embed import embed_minimal_html
 
 from traitlets import (
     CFloat, Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
@@ -1180,6 +1181,18 @@ class Map(DOMWidget, InteractMixin):
 
     def clear_controls(self):
         self.controls = ()
+
+    def save(self, outfile, **kwargs):
+        """Save the Map to an .html file.
+
+        Parameters
+        ----------
+        outfile: str or file-like object
+            The file to write the HTML output to.
+        kwargs: keyword-arguments
+            Extra parameters to pass to the ipywidgets.embed.embed_minimal_html function.
+        """
+        embed_minimal_html(outfile, views=[self], **kwargs)
 
     def __iadd__(self, item):
         if isinstance(item, Layer):

@@ -7,29 +7,32 @@ Example
 .. jupyter-execute::
 
     from ipyleaflet import Map, LegendControl
-    mymap = Map(center=(-10,-45), zoom=4)
-    a_legend = LegendControl({"low":"#FAA", "medium":"#A55", "High":"#500"}, name="Legend", position="bottomright")
-    mymap.add_control(a_legend)
-    mymap
+
+    m = Map(center=(-10,-45), zoom=4)
+
+    legend = LegendControl({"low":"#FAA", "medium":"#A55", "High":"#500"}, name="Legend", position="bottomright")
+    m.add_control(legend)
+
+    m
 
 .. jupyter-execute::
 
-    # manipulate the legend
+    # Manipulate the legend
 
-    # legend title
-    a_legend.name = "Risk" ## set name
-    a_legend.name # get name
+    # Set/Get legend title
+    legend.name = "Risk"  # Set name
+    legend.name  # Get name
 
-    # legend content
-    a_legend.legends = {"el1":"#FAA", "el2":"#A55", "el3":"#500"} #set content
-    a_legend.legends # get content
-    a_legend.add_legend_element("el5","#000") # add a legend element
-    a_legend.remove_legend_element("el5") # remove a legend element
+    # Set/Get legend content
+    legend.legends = {"el1":"#FAA", "el2":"#A55", "el3":"#500"}  # Set content
+    legend.legends  # Get content
 
+    legend.add_legend_element("el5","#000")  # Add a legend element
+    legend.remove_legend_element("el5")  # Remove a legend element
 
     # legend position
-    a_legend.positionning ="topright" 
-    a_legend.positionning # get current positionning
+    legend.position = "topright"  # Set position
+    legend.position  # Get current position
 
 Attributes
 ----------
@@ -38,6 +41,6 @@ Attributes
 Attribute           Default Value      Doc
 ================    ================   ===
 position            'topleft'          Position of the control, can be 'bottomleft', 'bottomright', 'topleft', or 'topright'
-legend              None               a dictionnary that represents the legend
-title               "Legend"           LegendControl name
+legend              None               A dictionary containing the name->color mapping that represents the legend
+title               'Legend'           Legend name
 ================    ================   ===

@@ -1,6 +1,7 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
+const widgets = require('@jupyter-widgets/base');
 const L = require('../leaflet.js');
 const control = require('./Control.js');
 
@@ -17,19 +18,30 @@ export class LeafletSearchControlModel extends control.LeafletControlModel {
       auto_collapse: false,
       zoom:10,
       animate_location:false,
-      marker: L.circleMarker([0,0],{radius:30}),
+      marker: null,
     };
   }
 }
 
+LeafletSearchControlModel.serializers = {
+  ...control.LeafletControlModel.serializers,
+  marker: { deserialize: widgets.unpack_models }
+};
 
-export class LeafletSearchControlView extends control.LeafletControlView{
-  initialize(parameters) {
-    super.initialize(parameters);
-    this.map_view = this.options.map_view;
-  }
 
-  create_obj() {
-    this.obj = L.control.search(this.get_options());
-  }
+
+export class LeafletSearchControlView extends control.LeafletControlView {
+    initialize(parameters) {
+        super.initialize(parameters);
+        this.map_view = this.options.map_view;
+    }
+
+    create_obj() {
+        this.create_child_view(this.model.get('marker')).then((view) => {
+            let options = this.get_options();
+            options.marker = view;
+            this.obj = L.control.search(options);
+        });
+
+    }
 }

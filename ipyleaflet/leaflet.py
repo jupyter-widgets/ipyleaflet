@@ -989,7 +989,7 @@ class SearchControl(Control):
     auto_type = Bool(False).tag(sync=True, o=True)
     auto_collapse = Bool(False).tag(sync=True, o=True)
     animate_location = Bool(False).tag(sync=True, o=True)
-    marker = Instance(Marker).tag(sync=True, **widget_serialization)
+    marker = Instance(Marker).tag(sync=True, o=True, **widget_serialization)
 
 
 class MapStyle(Style, Widget):

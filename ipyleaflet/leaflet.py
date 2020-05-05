@@ -329,6 +329,15 @@ class VideoOverlay(RasterLayer):
 
 
 class Velocity(Layer):
+    try:
+        import xarray
+    except ModuleNotFoundError:
+        raise ImportError(
+            'The `xarray` module (required for use of the Velocity layer) is'
+            'not installed. Run "$ pip install xarray" to install the latest'
+            'version.'
+        )
+
     _view_name = Unicode('LeafletVelocityView').tag(sync=True)
     _model_name = Unicode('LeafletVelocityModel').tag(sync=True)
 

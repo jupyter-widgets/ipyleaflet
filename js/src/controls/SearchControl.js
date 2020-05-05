@@ -10,13 +10,13 @@ export class LeafletSearchControlModel extends control.LeafletControlModel {
       _view_name: 'LeafletSearchControlView',
       _model_name: 'LeafletSearchControlModel',
       url: null,
-      jsonpParam: 'json_callback',
-      propertyName: 'display_name',
-      propertyLoc: ['lat','lon'],
-      autoType: false,
-      autoCollapse: false,
+      jsonp_param: 'json_callback',
+      property_name: 'display_name',
+      property_loc: ['lat','lon'],
+      auto_type: false,
+      auto_collapse: false,
       zoom:10,
-      animateLocation:false,
+      animate_location:false,
       marker: L.circleMarker([0,0],{radius:30}),
     };
   }
@@ -31,19 +31,5 @@ export class LeafletSearchControlView extends control.LeafletControlView{
 
   create_obj() {
     this.obj = L.control.search(this.get_options());
-  }
-
-  get_options() {
-    const options = super.get_options();
-    options['url'] = this.model.get('url');
-    options['zoom'] = this.model.get('zoom');
-    options['jsonpParam'] = this.model.get('jsonpParam');
-    options['propertyLoc'] = this.model.get('propertyLoc');
-    options['autoType'] = this.model.get('autoType');
-    options['autoCollapse'] = this.model.get('autoCollapse');
-    options['animateLocation'] = this.model.get('animateLocation')
-    options['marker'] = this.model.get('marker');
-    options['propertyName'] = this.model.get('propertyName')
-    return options;
   }
 }

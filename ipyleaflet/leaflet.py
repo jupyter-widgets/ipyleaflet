@@ -333,7 +333,7 @@ class Velocity(Layer):
         import xarray
     except ModuleNotFoundError:
         raise ImportError(
-            'The `xarray` module (required for use of the Velocity layer) is'
+            'The `xarray` module (required for use of the Velocity layer) is '
             'not installed.'
         )
 

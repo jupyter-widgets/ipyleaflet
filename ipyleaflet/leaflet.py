@@ -334,9 +334,7 @@ class Velocity(Layer):
     except ModuleNotFoundError:
         raise ImportError(
             'The `xarray` module (required for use of the Velocity layer) is'
-            'not installed. Run "$ conda install -c conda-forge xarray dask'
-            'netCDF4 bottleneck" or "$ pip install xarray" to install the '
-            'latest version.'
+            'not installed.'
         )
 
     _view_name = Unicode('LeafletVelocityView').tag(sync=True)

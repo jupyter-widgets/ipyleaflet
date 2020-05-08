@@ -3,8 +3,9 @@
 #
 
 from traittypes import Dataset
+from traitlets import Unicode, Bool, Dict, Float, List
 
-from .leaflet import *  # noqa
+from .leaflet import Layer
 from .xarray_ds import ds_x_to_json
 
 

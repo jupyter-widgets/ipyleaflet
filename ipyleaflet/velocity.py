@@ -4,7 +4,7 @@
 
 from traittypes import Dataset
 
-from .leaflet import *  # npqa
+from .leaflet import *  # noqa
 from .xarray_ds import ds_x_to_json
 
 

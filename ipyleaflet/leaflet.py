@@ -21,10 +21,6 @@ from traitlets import (
 
 from branca.colormap import linear, ColorMap
 
-from traittypes import Dataset
-
-from .xarray_ds import ds_x_to_json
-
 from ._version import EXTENSION_VERSION
 
 def_loc = [0.0, 0.0]

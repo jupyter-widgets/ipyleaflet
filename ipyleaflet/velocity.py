@@ -2,7 +2,10 @@
 # Distributed under the terms of the Modified BSD License.
 #
 
-from .leaflet import *
+from traittypes import Dataset
+
+from .leaflet import *  # npqa
+from .xarray_ds import ds_x_to_json
 
 
 class Velocity(Layer):

@@ -39,7 +39,7 @@ export class LeafletSearchControlView extends control.LeafletControlView {
     create_obj() {
         return this.create_child_view(this.model.get('marker')).then((view) => {
             let options = this.get_options();
-            options.marker = view;
+            options.marker = view.obj;
             this.obj = L.control.search(options);
         });
 

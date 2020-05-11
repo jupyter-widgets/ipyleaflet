@@ -58,3 +58,4 @@ ipyleaflet: Interactive maps in the Jupyter notebook
     api_reference/draw_control
     api_reference/widget_control
     api_reference/legend_control
+    api_reference/search_control

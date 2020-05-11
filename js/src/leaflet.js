@@ -1,4 +1,6 @@
 const L = require('leaflet');
+require('proj4');
+require('proj4leaflet');
 require('leaflet-defaulticon-compatibility');
 require('leaflet.vectorgrid');
 require('leaflet-splitmap');
@@ -60,5 +62,18 @@ L.tileLayer.wms = function(url, options) {
   L.patchGridLayer(obj);
   return obj;
 }
+
+// L.getProjectedBounds = function (zoom) {
+//         if (this.infinite) { return null; }
+
+//         var b = this.projection.bounds, // <-- projection does not have bounds property
+//                 // Thus it generates Uncaught TypeError: Cannot read property 'min' of undefined
+//             s = this.scale(zoom),
+//             min = this.transformation.transform(b.min, s),
+//             max = this.transformation.transform(b.max, s);
+
+//         return L.bounds(min, max);
+//     };
+
 
 module.exports = L;

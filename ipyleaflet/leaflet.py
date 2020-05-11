@@ -27,7 +27,8 @@ from .xarray_ds import ds_x_to_json
 from ._version import EXTENSION_VERSION
 
 def_loc = [0.0, 0.0]
-allowed_crs = ['Earth', 'EPSG3395', 'EPSG3857', 'EPSG4326', 'Base', 'Simple']
+allowed_crs = ['Earth', 'EPSG3395', 'EPSG3857', 'EPSG4326', 'Base', 'Simple',
+               'EPSG3413', 'EPSG3031']
 allowed_cursor = ['alias', 'cell', 'grab', 'move', 'crosshair', 'context-menu',
                   'n-resize', 'ne-resize', 'e-resize', 'se-resize', 's-resize',
                   'sw-resize', 'w-resize', 'nw-resize', 'nesw-resize',
@@ -1010,8 +1011,8 @@ class Map(DOMWidget, InteractMixin):
 
         return (basemap,)
 
-    bounds = Tuple(read_only=True)
-    bounds_polygon = Tuple(read_only=True)
+    bounds = Tuple(read_only=False)
+    bounds_polygon = Tuple(read_only=False)
 
     @observe('south', 'north', 'east', 'west')
     def _observe_bounds(self, change):

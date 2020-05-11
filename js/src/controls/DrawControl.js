@@ -78,6 +78,7 @@ export class LeafletDrawControlView extends control.LeafletControlView {
     });
     this.map_view.obj.on('draw:created', e => {
       var layer = e.layer;
+      console.log(layer.getLatLng());
       var geo_json = layer.toGeoJSON();
       geo_json.properties.style = layer.options;
       this.send({

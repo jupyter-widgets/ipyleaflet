@@ -4,8 +4,11 @@
 const widgets = require('@jupyter-widgets/base');
 const L = require('./leaflet.js');
 const utils = require('./utils.js');
+const pr = require('./projections.js');
 
 const DEFAULT_LOCATION = [0.0, 0.0];
+
+
 
 export class LeafletMapStyleModel extends widgets.StyleModel {
   defaults() {
@@ -33,8 +36,8 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       _model_name: 'LeafletMapModel',
       _model_module: 'jupyter-leaflet',
       _view_module: 'jupyter-leaflet',
-
       center: DEFAULT_LOCATION,
+      continuousWorld: false,
       zoom_start: 12,
       zoom: 12,
       max_zoom: 18,
@@ -60,10 +63,10 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       // zoom_animation : bool(?),
       zoom_animation_threshold: 4,
       // marker_zoom_animation : bool(?),
-      south: DEFAULT_LOCATION[0],
-      north: DEFAULT_LOCATION[0],
-      east: DEFAULT_LOCATION[1],
-      west: DEFAULT_LOCATION[1],
+      // south: DEFAULT_LOCATION[0],
+      // north: DEFAULT_LOCATION[0],
+      // east: DEFAULT_LOCATION[1],
+      // west: DEFAULT_LOCATION[1],
       options: [],
       layers: [],
       controls: [],
@@ -87,8 +90,8 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
   update_bounds() {
     return widgets.resolvePromisesDict(this.views).then(views => {
       var bounds = {
-        north: -90,
-        south: 90,
+        north: 90,
+        south: 38,
         east: -180,
         west: 180
       };
@@ -96,11 +99,13 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
         var obj = views[key].obj;
         if (obj) {
           var view_bounds = obj.getBounds();
+          // console.log(view_bounds);
           bnds.north = Math.max(bnds.north, view_bounds.getNorth());
           bnds.south = Math.min(bnds.south, view_bounds.getSouth());
           bnds.east = Math.max(bnds.east, view_bounds.getEast());
           bnds.west = Math.min(bnds.west, view_bounds.getWest());
         }
+        // console.log(bnds);
         return bnds;
       }, bounds);
       this.set('north', bounds.north);
@@ -123,6 +128,7 @@ LeafletMapModel.serializers = {
 export class LeafletMapView extends utils.LeafletDOMWidgetView {
   initialize(options) {
     super.initialize(options);
+    console.log(this, options);
     // The dirty flag is used to prevent sub-pixel center changes
     // computed by leaflet to be applied to the model.
     this.dirty = false;
@@ -199,6 +205,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       this.model.update_bounds().then(() => {
         this.touch();
       });
+
       return this;
     });
   }
@@ -207,7 +214,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     return this.layoutPromise.then(views => {
       var options = {
         ...this.get_options(),
-        crs: L.CRS[this.model.get('crs')],
+        crs: pr.LeaftProj[this.model.get('crs')],
         zoomControl: false,
         attributionControl: false
       };

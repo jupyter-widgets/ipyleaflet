@@ -3,6 +3,7 @@
 
 const L = require('../leaflet.js');
 const tilelayer = require('./TileLayer.js');
+const pr = require('../projections.js');
 
 export class LeafletWMSLayerModel extends tilelayer.LeafletTileLayerModel {
   defaults() {
@@ -18,6 +19,7 @@ export class LeafletWMSLayerModel extends tilelayer.LeafletTileLayerModel {
       transparent: false,
       version: '1.1.1',
       crs: null,
+      noWrap: true,
       uppercase: false
     };
   }
@@ -27,7 +29,9 @@ export class LeafletWMSLayerView extends tilelayer.LeafletTileLayerView {
   create_obj() {
     this.obj = L.tileLayer.wms(this.model.get('url'), {
       ...this.get_options(),
-      crs: L.CRS[this.model.get('crs')]
+      crs: pr.LeaftProj[this.model.get('crs')],
+      bounds:  L.latLngBounds(L.latLng(70, 0), L.latLng(90, 180))
+      // crs: L.CRS[this.model.get('crs')]
     });
   }
 

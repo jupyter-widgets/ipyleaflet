@@ -927,6 +927,7 @@ class LegendControl(Control):
 class SearchControl(Control):
     _view_name = Unicode('LeafletSearchControlView').tag(sync=True)
     _model_name = Unicode('LeafletSearchControlModel').tag(sync=True)
+
     url = Unicode().tag(sync=True, o=True)
     zoom = Int(10).tag(sync=True, o=True)
     property_name = Unicode('display_name').tag(sync=True, o=True)
@@ -935,7 +936,8 @@ class SearchControl(Control):
     auto_type = Bool(False).tag(sync=True, o=True)
     auto_collapse = Bool(False).tag(sync=True, o=True)
     animate_location = Bool(False).tag(sync=True, o=True)
-    marker = Instance(Marker).tag(sync=True, o=True, **widget_serialization)
+
+    marker = Instance(Marker).tag(sync=True, **widget_serialization)
 
 
 class MapStyle(Style, Widget):

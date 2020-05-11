@@ -34,6 +34,7 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       _model_module: 'jupyter-leaflet',
       _view_module: 'jupyter-leaflet',
 
+      window_url: '',
       center: DEFAULT_LOCATION,
       zoom_start: 12,
       zoom: 12,
@@ -107,6 +108,7 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       this.set('south', bounds.south);
       this.set('east', bounds.east);
       this.set('west', bounds.west);
+      this.set('window_url', window.location.href);
     });
   }
 }

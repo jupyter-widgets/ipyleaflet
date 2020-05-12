@@ -34,7 +34,6 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       _model_module: 'jupyter-leaflet',
       _view_module: 'jupyter-leaflet',
 
-      window_url: '',
       center: DEFAULT_LOCATION,
       zoom_start: 12,
       zoom: 12,
@@ -76,6 +75,11 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
     };
   }
 
+  initialize(attributes, options) {
+    super.initialize(attributes, options);
+    this.set('window_url', window.location.href);
+  }
+
   update_style() {
     if (!this.get('_dragging')) {
       var new_style = this.get('default_style');
@@ -108,7 +112,6 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       this.set('south', bounds.south);
       this.set('east', bounds.east);
       this.set('west', bounds.west);
-      this.set('window_url', window.location.href);
     });
   }
 }

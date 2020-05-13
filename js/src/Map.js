@@ -75,6 +75,11 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
     };
   }
 
+  initialize(attributes, options) {
+    super.initialize(attributes, options);
+    this.set('window_url', window.location.href);
+  }
+
   update_style() {
     if (!this.get('_dragging')) {
       var new_style = this.get('default_style');

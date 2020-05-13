@@ -959,6 +959,9 @@ class Map(DOMWidget, InteractMixin):
     _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
 
+    # URL of the window where the map is displayed
+    window_url = Unicode(read_only=True).tag(sync=True)
+
     # Map options
     center = List(def_loc).tag(sync=True, o=True)
     zoom_start = CFloat(12).tag(sync=True, o=True)

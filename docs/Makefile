@@ -55,7 +55,6 @@ clean:
 
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
-	sed -i 's/div.jupyter_container \*/div.jupyter_container/g' $(BUILDDIR)/html/_static/jupyter-sphinx.css
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 

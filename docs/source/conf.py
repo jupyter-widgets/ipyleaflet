@@ -2,14 +2,14 @@
 import sphinx_rtd_theme
 
 extensions = [
-    'jupyter_sphinx.execute',
+    'jupyter_sphinx',
 ]
 
 templates_path = ['_templates']
 
 
 def setup(app):
-    app.add_stylesheet("main_stylesheet.css")
+    app.add_css_file("main_stylesheet.css")
 
 master_doc = 'index'
 source_suffix = '.rst'

@@ -1,33 +1,26 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-var widgets = require('@jupyter-widgets/base');
-var _ = require('underscore');
-var L = require('../leaflet.js');
-var control = require('./Control.js');
-var LeafletControlView = control.LeafletControlView;
-var LeafletControlModel = control.LeafletControlModel;
+const L = require('../leaflet.js');
+const control = require('./Control.js');
 
-var LeafletAttributionControlModel = LeafletControlModel.extend({
-    defaults: _.extend({}, LeafletControlModel.prototype.defaults, {
-        _view_name: 'LeafletAttributionControlView',
-        _model_name: 'LeafletAttributionControlModel',
+export class LeafletAttributionControlModel extends control.LeafletControlModel {
+  defaults() {
+    return {
+      ...super.defaults(),
+      _view_name: 'LeafletAttributionControlView',
+      _model_name: 'LeafletAttributionControlModel'
+    };
+  }
+}
 
-    })
-});
+export class LeafletAttributionControlView extends control.LeafletControlView {
+  initialize(parameters) {
+    super.initialize(parameters);
+    this.map_view = this.options.map_view;
+  }
 
-var LeafletAttributionControlView = LeafletControlView.extend({
-    initialize: function (parameters) {
-        LeafletAttributionControlView.__super__.initialize.apply(this, arguments);
-        this.map_view = this.options.map_view;
-    },
-
-    create_obj: function () {
-        this.obj = L.control.attribution(this.get_options());
-    },
-});
-
-module.exports = {
-    LeafletAttributionControlView : LeafletAttributionControlView,
-    LeafletAttributionControlModel : LeafletAttributionControlModel,
-};
+  create_obj() {
+    this.obj = L.control.attribution(this.get_options());
+  }
+}

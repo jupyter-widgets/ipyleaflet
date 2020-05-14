@@ -1,13 +1,10 @@
-.. raw:: html
-    :file: embed_widgets/choropleth.html
-
 Choropleth
 ==========
 
 Example
 -------
 
-.. code::
+.. jupyter-execute::
 
       import ipyleaflet
       import json
@@ -17,12 +14,12 @@ Example
       from ipywidgets import link, FloatSlider
       from branca.colormap import linear
 
-      def load_data(url, nom_fichier, type_fichier):
+      def load_data(url, filename, file_type):
           r = requests.get(url)
-          with open(nom_fichier, 'w') as f:
+          with open(filename, 'w') as f:
               f.write(r.content.decode("utf-8"))
-          with open(nom_fichier, 'r') as f:
-              return type_fichier(f)
+          with open(filename, 'r') as f:
+              return file_type(f)
 
       geo_json_data = load_data(
           'https://raw.githubusercontent.com/jupyter-widgets/ipyleaflet/master/examples/us-states.json',
@@ -47,20 +44,9 @@ Example
       m.add_layer(layer)
       m
 
-.. raw:: html
 
-  <script type="application/vnd.jupyter.widget-view+json">
-  {
-  "version_major": 2,
-  "version_minor": 0,
-  "model_id": "fddc6f2fbe9e46f6bfc2b3a5daa96c20"
-  }
-  </script>
-  <div style ="height:30px;"> </div>
-
-
-Information
------------
+Usage
+-----
 
 The ``Choropleth`` takes ``geo_data`` and ``choro_data`` as arguments.
 
@@ -83,7 +69,7 @@ The ``geo_data`` is a `GeoJSON
         }]
     }
 
-The ``choro_data`` is a dictionary that takes ``'id'`` from ``'features'`` as key and float as value, in order to build the colormap :
+The ``choro_data`` is a dictionary that maps an key to a float value, in order to build the colormap :
 
 .. code::
 
@@ -91,15 +77,30 @@ The ``choro_data`` is a dictionary that takes ``'id'`` from ``'features'`` as ke
      'AK': 6.8}
 
 
+The ``Choropleth`` layer is then created specifying on which key the colormap is applied:
+
+.. code::
+
+    Choropleth(
+        geo_data=geo_data,
+        choro_data=choro_data,
+        key_on='id'
+    )
+
+
 Attributes
 ----------
 
-============   ==========================  ===========
-Attribute      Doc                         Description
-============   ==========================  ===========
-geo_data       Data dictionary             GeoJSON dictionary
-choro_data     Choropleth data dictionary  Dictionary id/float
-value_min      Color scale minimum value
-value_max      Color scale maximum value
-colormap       Map of color from branca
-============   ==========================  ===========
+==============   ==========================  ===========
+Attribute        Default                     Doc
+==============   ==========================  ===========
+geo_data         {}                          Data dictionary
+choro_data       {}                          Mapping key -> float data for constructing the colormap
+key_on           'id'                        Key used for the colormap construction
+value_min                                    Color scale minimum value
+value_max                                    Color scale maximum value
+colormap         OrRd_06                     Map of color from branca
+style                                        Style dictionary
+hover_style                                  Hover style dictionary
+style_callback                               Styling function that is called for each feature, and should return the feature style. This styling function takes the feature, the colormap function and the key data as arguments.
+==============   ==========================  ===========

@@ -1,31 +1,23 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-var widgets = require('@jupyter-widgets/base');
-var _ = require('underscore');
-var L = require('../leaflet.js');
-var tilelayer = require('./TileLayer.js');
-var LeafletTileLayerView = tilelayer.LeafletTileLayerView;
-var LeafletTileLayerModel = tilelayer.LeafletTileLayerModel;
+const tilelayer = require('./TileLayer.js');
 
-var LeafletLocalTileLayerModel = LeafletTileLayerModel.extend({
-    defaults: _.extend({}, LeafletTileLayerModel.prototype.defaults, {
-        _view_name : 'LeafletLocalTileLayerView',
-        _model_name : 'LeafletLocalTileLayerModel',
+export class LeafletLocalTileLayerModel extends tilelayer.LeafletTileLayerModel {
+  defaults() {
+    return {
+      ...super.defaults(),
+      _view_name: 'LeafletLocalTileLayerView',
+      _model_name: 'LeafletLocalTileLayerModel',
+      path: ''
+    };
+  }
+}
 
-        path : ''
-    })
-});
-
-var LeafletLocalTileLayerView = LeafletTileLayerView.extend({
-    create_obj: function () {
-        this.model.set('url', this.model.get('path'));
-        this.model.save_changes();
-        LeafletLocalTileLayerView.__super__.create_obj.apply(this, arguments);
-    }
-});
-
-module.exports = {
-  LeafletLocalTileLayerView : LeafletLocalTileLayerView,
-  LeafletLocalTileLayerModel : LeafletLocalTileLayerModel,
-};
+export class LeafletLocalTileLayerView extends tilelayer.LeafletTileLayerView {
+  create_obj() {
+    this.model.set('url', this.model.get('path'));
+    this.model.save_changes();
+    super.create_obj();
+  }
+}

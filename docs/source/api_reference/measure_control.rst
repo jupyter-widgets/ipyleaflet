@@ -1,15 +1,12 @@
-.. raw:: html
-    :file: embed_widgets/measure_control.html
-
 Measure Control
 ===============
 
 Example
 -------
 
-.. code::
+.. jupyter-execute::
 
-    from ipyleaflet import Map, MeasureControl
+    from ipyleaflet import Map, MeasureControl, basemaps
 
     m = Map(center=(43.0327, 6.0232), zoom=9, basemap=basemaps.Hydda.Full)
 
@@ -30,15 +27,6 @@ Example
 
     m
 
-.. raw:: html
-
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-        "version_major": 2,
-        "version_minor": 0,
-        "model_id": "1e7e09c56a554f1188f38b321f083728"
-    }
-    </script>
 
 Attributes
 ----------

@@ -1,33 +1,51 @@
-.. raw:: html
-    :file: embed_widgets/map.html
-
 Map
 ===
 
-Example
--------
+Usage
+-----
 
-.. code::
+.. jupyter-execute::
 
     from ipyleaflet import Map, basemaps, basemap_to_tiles
 
     m = Map(
-        layers=(basemap_to_tiles(basemaps.NASAGIBS.ModisTerraTrueColorCR, "2017-04-08"), ),
+        basemap=basemap_to_tiles(basemaps.NASAGIBS.ModisTerraTrueColorCR, "2017-04-08"),
         center=(52.204793, 360.121558),
         zoom=4
     )
 
     m
 
-.. raw:: html
+You can find the list of available basemaps in the :ref:`basemaps-section` page.
 
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-    "model_id": "ab2369332a024dda83800361d0a1343e",
-    "version_major": 2,
-    "version_minor": 0
-    }
-    </script>
+You can add multiple layers and controls to the map, using the ``add_layer``/``add_control`` methods. All those layers and controls are widgets themselves. So you can dynamically update their attributes from Python or by interacting with the map on the page (see :ref:`usage-section`)
+
+.. jupyter-execute::
+
+    from ipyleaflet import Map, Marker, basemaps, basemap_to_tiles
+
+    m = Map(
+        basemap=basemap_to_tiles(basemaps.NASAGIBS.ModisTerraTrueColorCR, "2017-04-08"),
+        center=(52.204793, 360.121558),
+        zoom=4
+    )
+
+    m.add_layer(Marker(location=(52.204793, 360.121558)))
+
+    m
+
+Save to HTML
+------------
+
+You can save the ``Map`` and all its layers and controls to an HTML page using the ``save`` method:
+
+.. code::
+
+    m.save('my_map.html', title='My Map')
+
+.. note::
+    The saved file is a static HTML page, so there is no possible interaction with Python anymore. This means that all the Python callbacks you defined (`e.g.` on marker move) cannot be executed. If you want to serve the ``Map`` widget to an HTML page while keeping a Python kernel alive on the server, you might want to look at `Voilà <https://voila.readthedocs.io>`_.
+
 
 Attributes
 ----------
@@ -71,9 +89,11 @@ Method             Arguments                                 Doc
 ================   =====================================     ===
 add_layer          Layer instance                            Add a new layer to the map
 remove_layer       Layer instance                            Remove a layer from the map
+substitute_layer   Layer instance                            Substitute a layer with a new layer
 clear_layers                                                 Remove all layers from the map
 add_control        Control instance                          Add a new control to the map
 remove_control     Control instance                          Remove a control from the map
 clear_controls                                               Remove all controls from the map
 on_interaction     callable object                           Add a callback on interaction
+save               output file                               Save the map to an HTML file
 ================   =====================================     ===

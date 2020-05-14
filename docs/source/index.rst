@@ -17,6 +17,7 @@ ipyleaflet: Interactive maps in the Jupyter notebook
     :maxdepth: 2
 
     api_reference/map
+    api_reference/basemaps
 
 .. toctree::
     :caption: Layers
@@ -48,9 +49,19 @@ ipyleaflet: Interactive maps in the Jupyter notebook
     :caption: Controls
     :maxdepth: 2
 
+    api_reference/zoom_control
+    api_reference/scale_control
     api_reference/layers_control
     api_reference/fullscreen_control
     api_reference/measure_control
     api_reference/split_map_control
     api_reference/draw_control
     api_reference/widget_control
+    api_reference/legend_control
+    api_reference/search_control
+
+.. toctree::
+    :caption: ipyleaflet related projects
+    :maxdepth: 2
+
+    related_projects

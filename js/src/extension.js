@@ -3,13 +3,13 @@
 
 // Configure requirejs
 if (window.require) {
-    window.require.config({
-        map: {
-            "*" : {
-                "jupyter-leaflet": "nbextensions/jupyter-leaflet/index",
-            }
-        }
-    });
+  window.require.config({
+    map: {
+      "*" : {
+        "jupyter-leaflet": "nbextensions/jupyter-leaflet/index",
+      }
+    }
+  });
 }
 
 // Export the required load_ipython_extention

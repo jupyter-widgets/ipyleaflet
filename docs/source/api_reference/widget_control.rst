@@ -1,13 +1,10 @@
-.. raw:: html
-    :file: embed_widgets/widget_control.html
-
 Widget Control
 ==============
 
 Example
 -------
 
-.. code::
+.. jupyter-execute::
 
     from ipyleaflet import Map, basemaps, WidgetControl
     from ipywidgets import IntSlider, ColorPicker, jslink
@@ -23,26 +20,17 @@ Example
     m.add_control(widget_control2)
     m
 
-.. raw:: html
-
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-        "version_major": 2,
-        "version_minor": 0,
-        "model_id": "6fa0bd5f965f4887b8fff4cea0bfea71"
-    }
-    </script>
-
 
 Attributes
 ----------
 
-=====================   ========================================
-Attribute               Doc
-=====================   ========================================
-widget                  Widget content
-min_width               Min width of the widget
-max_width               Min width of the widget
-min_height              Min height of the widget
-max_height              Min height of the widget
-=====================   ========================================
+================    ================   ===
+Attribute           Default Value      Doc
+================    ================   ===
+position            'topleft'          Position of the control, can be 'bottomleft', 'bottomright', 'topleft', or 'topright'
+widget              None               Widget content
+min_width           None               Min width of the widget (in pixels), if None it will respect the content size
+max_width           None               Max width of the widget (in pixels), if None it will respect the content size
+min_height          None               Min height of the widget (in pixels), if None it will respect the content size
+max_height          None               Max height of the widget (in pixels), if None it will respect the content size
+================    ================   ===

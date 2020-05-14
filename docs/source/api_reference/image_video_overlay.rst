@@ -1,13 +1,29 @@
-.. raw:: html
-    :file: embed_widgets/image_video_overlay.html
-
 Image overlay and Video overlay
 ===============================
 
-Example
--------
+Example ImageOverlay
+--------------------
 
-.. code::
+.. jupyter-execute::
+
+    from ipyleaflet import Map, ImageOverlay
+
+    m = Map(center=(25, -115), zoom=4)
+
+    image = ImageOverlay(
+        url="https://i.imgur.com/06Q1fSz.png",
+        # url='../06Q1fSz.png',
+        bounds=((13, -130), (32, -100))
+    )
+
+    m.add_layer(image);
+    m
+
+
+Example VideoOverlay
+--------------------
+
+.. jupyter-execute::
 
     from ipyleaflet import Map, VideoOverlay
 
@@ -21,15 +37,6 @@ Example
     m.add_layer(video);
     m
 
-.. raw:: html
-
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-    "model_id": "87d4292e2f214b97913a846cd527e8e5",
-    "version_major": 2,
-    "version_minor": 0
-    }
-    </script>
 
 Attributes
 ----------
@@ -37,6 +44,6 @@ Attributes
 ===========    ========================   ===
 Attribute      Default Value              Doc
 ===========    ========================   ===
-url            ""                         Url to the footage
+url            ""                         An http url to the footage or a relative path to a local file (image/video). Note that absolute local paths are not supported. 
 bounds         ((0.0, 0.0), (0.0, 0.0))   SW and NE corners of the image
 ===========    ========================   ===

@@ -12,19 +12,14 @@ from ipywidgets import (
 )
 
 from ipywidgets.widgets.trait_types import InstanceDict
+from ipywidgets.embed import embed_minimal_html
 
 from traitlets import (
-    Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
-    link, observe, default, validate, TraitError, Union
+    CFloat, Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
+    link, observe, default, validate, TraitError, Union, Any
 )
 
 from branca.colormap import linear, ColorMap
-
-from traittypes import Dataset
-
-from .xarray_ds import ds_x_to_json
-
-from .basemaps import basemaps
 
 from ._version import EXTENSION_VERSION
 
@@ -38,21 +33,24 @@ allowed_cursor = ['alias', 'cell', 'grab', 'move', 'crosshair', 'context-menu',
                   'progress', 'text', 'wait', 'zoom-in', 'zoom-out']
 
 
-def basemap_to_tiles(bm, day='yesterday', **kwargs):
+def basemap_to_tiles(basemap, day='yesterday', **kwargs):
     # Format the URL with modisdate
     from datetime import date, timedelta
+
     if day == 'yesterday':
         yesterday = date.today() - timedelta(1)
         day = yesterday.strftime('%Y-%m-%d')
-    url = bm.get('url', '')
+
+    url = basemap.get('url', '')
     if url.count('%'):
         url = url % day
+
     return TileLayer(
         url=url,
-        max_zoom=bm.get('max_zoom', 19),
-        min_zoom=bm.get('min_zoom', 1),
-        attribution=bm.get('attribution', ''),
-        name=bm.get('name', ''),
+        max_zoom=basemap.get('max_zoom', 19),
+        min_zoom=basemap.get('min_zoom', 1),
+        attribution=basemap.get('attribution', ''),
+        name=basemap.get('name', ''),
         **kwargs
     )
 
@@ -169,7 +167,9 @@ class AwesomeIcon(UILayer):
 
     name = Unicode('home').tag(sync=True)
     marker_color = Enum(
-        values=['white', 'red', 'darkred', 'lightred', 'orange', 'beige', 'green', 'darkgreen', 'lightgreen', 'blue', 'darkblue', 'lightblue', 'purple', 'darkpurple', 'pink', 'cadetblue', 'white', 'gray', 'lightgray', 'black'],
+        values=['white', 'red', 'darkred', 'lightred', 'orange', 'beige', 'green', 'darkgreen', 'lightgreen', 'blue',
+                'darkblue', 'lightblue', 'purple', 'darkpurple', 'pink', 'cadetblue', 'white', 'gray', 'lightgray',
+                'black'],
         default_value='blue'
     ).tag(sync=True)
     icon_color = Color('white').tag(sync=True)
@@ -183,7 +183,8 @@ class Marker(UILayer):
     location = List(def_loc).tag(sync=True)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True)
     visible = Bool(True).tag(sync=True)
-    icon = Union((Instance(Icon), Instance(AwesomeIcon)), allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
+    icon = Union((Instance(Icon), Instance(AwesomeIcon)), allow_none=True, default_value=None).tag(sync=True,
+                                                                                                   **widget_serialization)
 
     # Options
     z_index_offset = Int(0).tag(sync=True, o=True)
@@ -253,7 +254,8 @@ class TileLayer(RasterLayer):
     min_native_zoom = Int(0).tag(sync=True, o=True)
     max_native_zoom = Int(18).tag(sync=True, o=True)
     tile_size = Int(256).tag(sync=True, o=True)
-    attribution = Unicode('Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors').tag(sync=True, o=True)
+    attribution = Unicode('Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors').tag(
+        sync=True, o=True)
     detect_retina = Bool(False).tag(sync=True, o=True)
     no_wrap = Bool(False).tag(sync=True, o=True)
     tms = Bool(False).tag(sync=True, o=True)
@@ -274,7 +276,8 @@ class TileLayer(RasterLayer):
         self._load_callbacks.register_callback(callback, remove=remove)
 
     def redraw(self):
-        self.send({'msg':'redraw'})
+        self.send({'msg': 'redraw'})
+
 
 class LocalTileLayer(TileLayer):
     _view_name = Unicode('LeafletLocalTileLayerView').tag(sync=True)
@@ -322,51 +325,6 @@ class VideoOverlay(RasterLayer):
     attribution = Unicode().tag(sync=True, o=True)
 
 
-class Velocity(Layer):
-    _view_name = Unicode('LeafletVelocityView').tag(sync=True)
-    _model_name = Unicode('LeafletVelocityModel').tag(sync=True)
-
-    zonal_speed = Unicode('', help='Name of the zonal speed in the dataset')
-    meridional_speed = Unicode('', help='Name of the meridional speed in the dataset')
-    latitude_dimension = Unicode('latitude', help='Name of the latitude dimension in the dataset')
-    longitude_dimension = Unicode('longitude', help='Name of the longitude dimension in the dataset')
-    units = Unicode(None, allow_none=True)
-
-    data = Dataset().tag(dtype=None, sync=True, to_json=ds_x_to_json)
-
-    # Options
-    display_values = Bool(True).tag(sync=True, o=True)
-    display_options = Dict({
-        'velocityType': 'Global Wind',
-        'position': 'bottomleft',
-        'emptyString': 'No velocity data',
-        'angleConvention': 'bearingCW',
-        'displayPosition': 'bottomleft',
-        'displayEmptyString': 'No velocity data',
-        'speedUnit': 'kt'
-        }).tag(sync=True)
-    min_velocity = Float(0).tag(sync=True,o=True)
-    max_velocity = Float(10).tag(sync=True, o=True)
-    velocity_scale = Float(0.005).tag(sync=True, o=True)
-    color_scale = List([
-        "rgb(36,104, 180)",
-        "rgb(60,157, 194)",
-        "rgb(128,205,193)",
-        "rgb(151,218,168)",
-        "rgb(198,231,181)",
-        "rgb(238,247,217)",
-        "rgb(255,238,159)",
-        "rgb(252,217,125)",
-        "rgb(255,182,100)",
-        "rgb(252,150,75)",
-        "rgb(250,112,52)",
-        "rgb(245,64,32)",
-        "rgb(237,45,28)",
-        "rgb(220,24,32)",
-        "rgb(180,0,35)"
-        ]).tag(sync=True, o=True)
-
-
 class Heatmap(RasterLayer):
     _view_name = Unicode('LeafletHeatmapView').tag(sync=True)
     _model_name = Unicode('LeafletHeatmapModel').tag(sync=True)
@@ -380,6 +338,19 @@ class Heatmap(RasterLayer):
     radius = Float(25.0).tag(sync=True, o=True)
     blur = Float(15.0).tag(sync=True, o=True)
     gradient = Dict({0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}).tag(sync=True, o=True)
+
+
+class VectorTileLayer(Layer):
+    _view_name = Unicode('LeafletVectorTileLayerView').tag(sync=True)
+    _model_name = Unicode('LeafletVectorTileLayerModel').tag(sync=True)
+
+    url = Unicode().tag(sync=True, o=True)
+    attribution = Unicode().tag(sync=True, o=True)
+
+    vector_tile_layer_styles = Dict().tag(sync=True, o=True)
+
+    def redraw(self):
+        self.send({'msg': 'redraw'})
 
 
 class VectorLayer(Layer):
@@ -396,7 +367,7 @@ class Path(VectorLayer):
     color = Color('#0033FF').tag(sync=True, o=True)
     weight = Int(5).tag(sync=True, o=True)
     fill = Bool(True).tag(sync=True, o=True)
-    fill_color = Color('#0033FF').tag(sync=True, o=True)
+    fill_color = Color(None, allow_none=True).tag(sync=True, o=True)
     fill_opacity = Float(0.2).tag(sync=True, o=True)
     dash_array = Unicode(allow_none=True, default_value=None).tag(sync=True, o=True)
     line_cap = Unicode('round').tag(sync=True, o=True)
@@ -534,13 +505,59 @@ class GeoJSON(FeatureGroup):
     style = Dict().tag(sync=True)
     hover_style = Dict().tag(sync=True)
     point_style = Dict().tag(sync=True)
+    style_callback = Any()
 
     _click_callbacks = Instance(CallbackDispatcher, ())
     _hover_callbacks = Instance(CallbackDispatcher, ())
 
+    @validate('style_callback')
+    def _validate_style_callback(self, proposal):
+        if not callable(proposal.value):
+            raise TraitError('style_callback should be callable (functor/function/lambda)')
+        return proposal.value
+
+    @observe('data', 'style', 'style_callback')
+    def _update_data(self, change):
+        self.data = self._get_data()
+
+    def _get_data(self):
+        if 'type' not in self.data:
+            # We can't apply a style we don't know what the data look like
+            return self.data
+
+        datatype = self.data['type']
+
+        style_callback = None
+        if self.style_callback:
+            style_callback = self.style_callback
+        elif self.style:
+            style_callback = lambda feature: self.style
+        else:
+            # No style to apply
+            return self.data
+
+        if datatype == 'Feature':
+            self._apply_style(self.data, style_callback)
+        elif datatype == 'FeatureCollection':
+            for feature in self.data['features']:
+                self._apply_style(feature, style_callback)
+
+        return self.data
+
+    def _apply_style(self, feature, style_callback):
+        if 'properties' not in feature:
+            feature['properties'] = {}
+
+        properties = feature['properties']
+        if 'style' in properties:
+            properties['style'].update(style_callback(feature))
+        else:
+            properties['style'] = style_callback(feature)
+
     def __init__(self, **kwargs):
         super(GeoJSON, self).__init__(**kwargs)
         self.on_msg(self._handle_m_msg)
+        self.data = self._get_data()
 
     def _handle_m_msg(self, _, content, buffers):
         if content.get('event', '') == 'click':
@@ -562,14 +579,13 @@ class GeoJSON(FeatureGroup):
 
 
 class GeoData(GeoJSON):
-
     geo_dataframe = Instance('geopandas.GeoDataFrame')
 
     def __init__(self, **kwargs):
         super(GeoData, self).__init__(**kwargs)
         self.data = self._get_data()
 
-    @observe('geo_dataframe')
+    @observe('geo_dataframe', 'style', 'style_callback')
     def _update_data(self, change):
         self.data = self._get_data()
 
@@ -578,26 +594,31 @@ class GeoData(GeoJSON):
 
 
 class Choropleth(GeoJSON):
-
     geo_data = Dict()
     choro_data = Dict()
-    value_min = Float(None, allow_none=True)
-    value_max = Float(None, allow_none=True)
+    value_min = CFloat(None, allow_none=True)
+    value_max = CFloat(None, allow_none=True)
     colormap = Instance(ColorMap)
-    border_color = Color('black')
+    key_on = Unicode('id')
 
-    @observe('choro_data')
-    def _update_bounds(self, change):
-        self.value_min = min(self.choro_data.items(), key=lambda x: x[1])[1]
-        self.value_max = max(self.choro_data.items(), key=lambda x: x[1])[1]
-
-    @observe('value_min', 'value_max', 'geo_data', 'choro_data', 'colormap', 'border_color')
+    @observe('style', 'style_callback', 'value_min', 'value_max', 'geo_data', 'choro_data', 'colormap')
     def _update_data(self, change):
         self.data = self._get_data()
 
     @default('colormap')
     def _default_colormap(self):
         return linear.OrRd_06
+
+    @default('style_callback')
+    def _default_style_callback(self):
+        def compute_style(feature, colormap, choro_data):
+            return dict(
+                fillColor=colormap(choro_data),
+                color='black',
+                weight=0.9
+            )
+
+        return compute_style
 
     def _get_data(self):
         if not self.geo_data:
@@ -609,13 +630,12 @@ class Choropleth(GeoJSON):
             self.value_max = max(self.choro_data.items(), key=lambda x: x[1])[1]
 
         colormap = self.colormap.scale(self.value_min, self.value_max)
-        color_dict = {key: colormap(self.choro_data[key]) for key in self.choro_data.keys()}
-
         data = copy.deepcopy(self.geo_data)
+
         for feature in data['features']:
-            feature['properties']['style'] = dict(fillColor=color_dict[feature['id']],
-                                                  color=self.border_color,
-                                                  weight=0.9)
+            feature['properties']['style'] = self.style_callback(feature, colormap,
+                                                                 self.choro_data[feature[self.key_on]])
+
         return data
 
     def __init__(self, **kwargs):
@@ -715,8 +735,8 @@ class MeasureControl(Control):
     completed_color = Color('#C8F2BE').tag(sync=True, o=True)
 
     popup_options = Dict({
-      'className': 'leaflet-measure-resultpopup',
-      'autoPanPadding': [10, 10]
+        'className': 'leaflet-measure-resultpopup',
+        'autoPanPadding': [10, 10]
     }).tag(sync=True, o=True)
 
     capture_z_index = Int(10000).tag(sync=True, o=True)
@@ -840,11 +860,84 @@ class ZoomControl(Control):
     zoom_out_title = Unicode('Zoom out').tag(sync=True, o=True)
 
 
+class ScaleControl(Control):
+    _view_name = Unicode('LeafletScaleControlView').tag(sync=True)
+    _model_name = Unicode('LeafletScaleControlModel').tag(sync=True)
+
+    max_width = Int(100).tag(sync=True, o=True)
+    metric = Bool(True).tag(sync=True, o=True)
+    imperial = Bool(True).tag(sync=True, o=True)
+    update_when_idle = Bool(False).tag(sync=True, o=True)
+
+
 class AttributionControl(Control):
     _view_name = Unicode('LeafletAttributionControlView').tag(sync=True)
     _model_name = Unicode('LeafletAttributionControlModel').tag(sync=True)
 
     prefix = Unicode('Leaflet').tag(sync=True, o=True)
+
+
+class LegendControl(Control):
+    _view_name = Unicode('LeafletLegendControlView').tag(sync=True)
+    _model_name = Unicode('LeafletLegendControlModel').tag(sync=True)
+    title = Unicode('Legend').tag(sync=True)
+    legend = Dict(default_value={
+        "value 1": "#AAF",
+        "value 2": "#55A",
+        "value 3": "#005"}).tag(sync=True)
+
+    def __init__(self, legend, *args, name="Legend", **kwargs):
+        super().__init__(*args, **kwargs)
+        self.title = name
+        self.legend = legend
+
+    @property
+    def name(self):
+        return self.title
+
+    @name.setter
+    def name(self, title):
+        self.title = title
+
+    @property
+    def legends(self):
+        return self.legend
+
+    @legends.setter
+    def legends(self, legends):
+        self.legend = legends
+
+    @property
+    def positionning(self):
+        return self.position
+
+    @positionning.setter
+    def positionning(self, position):
+        self.position = position
+
+    def add_legend_element(self, key, value):
+        self.legend[key] = value
+        self.send_state()
+
+    def remove_legend_element(self, key):
+        del self.legend[key]
+        self.send_state()
+
+
+class SearchControl(Control):
+    _view_name = Unicode('LeafletSearchControlView').tag(sync=True)
+    _model_name = Unicode('LeafletSearchControlModel').tag(sync=True)
+
+    url = Unicode().tag(sync=True, o=True)
+    zoom = Int(10).tag(sync=True, o=True)
+    property_name = Unicode('display_name').tag(sync=True, o=True)
+    property_loc = List(['lat', 'lon']).tag(sync=True, o=True)
+    jsonp_param = Unicode('json_callback').tag(sync=True, o=True)
+    auto_type = Bool(False).tag(sync=True, o=True)
+    auto_collapse = Bool(False).tag(sync=True, o=True)
+    animate_location = Bool(False).tag(sync=True, o=True)
+
+    marker = Instance(Marker).tag(sync=True, **widget_serialization)
 
 
 class MapStyle(Style, Widget):
@@ -866,21 +959,26 @@ class Map(DOMWidget, InteractMixin):
     _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
 
+    # URL of the window where the map is displayed
+    window_url = Unicode(read_only=True).tag(sync=True)
+
     # Map options
     center = List(def_loc).tag(sync=True, o=True)
-    zoom_start = Int(12).tag(sync=True, o=True)
-    zoom = Int(12).tag(sync=True, o=True)
-    max_zoom = Int(18).tag(sync=True, o=True)
-    min_zoom = Int(1).tag(sync=True, o=True)
+    zoom_start = CFloat(12).tag(sync=True, o=True)
+    zoom = CFloat(12).tag(sync=True, o=True)
+    max_zoom = CFloat(18).tag(sync=True, o=True)
+    min_zoom = CFloat(1).tag(sync=True, o=True)
     interpolation = Unicode('bilinear').tag(sync=True, o=True)
     crs = Enum(values=allowed_crs, default_value='EPSG3857').tag(sync=True)
 
     # Specification of the basemap
-    basemap = Dict(default_value=dict(
+    basemap = Union(
+        (Dict(), Instance(TileLayer)),
+        default_value=dict(
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             max_zoom=19,
             attribution='Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
-        )).tag(sync=True, o=True)
+        ))
     modisdate = Unicode('yesterday').tag(sync=True)
 
     # Interaction options
@@ -914,10 +1012,7 @@ class Map(DOMWidget, InteractMixin):
     dragging_style = InstanceDict(MapStyle).tag(sync=True, **widget_serialization)
 
     zoom_control = Bool(True)
-    zoom_control_instance = ZoomControl()
-
     attribution_control = Bool(True)
-    attribution_control_instance = AttributionControl(position='bottomright')
 
     @default('dragging_style')
     def _default_dragging_style(self):
@@ -936,7 +1031,12 @@ class Map(DOMWidget, InteractMixin):
 
     @default('layers')
     def _default_layers(self):
-        return (basemap_to_tiles(self.basemap, self.modisdate, base=True),)
+        basemap = self.basemap if isinstance(self.basemap, TileLayer) else basemap_to_tiles(self.basemap,
+                                                                                            self.modisdate)
+
+        basemap.base = True
+
+        return (basemap,)
 
     bounds = Tuple(read_only=True)
     bounds_polygon = Tuple(read_only=True)
@@ -951,29 +1051,36 @@ class Map(DOMWidget, InteractMixin):
                                           (self.south, self.west)))
 
     def __init__(self, **kwargs):
+        self.zoom_control_instance = None
+        self.attribution_control_instance = None
+
         super(Map, self).__init__(**kwargs)
         self.on_msg(self._handle_leaflet_event)
 
         if self.zoom_control:
+            self.zoom_control_instance = ZoomControl()
             self.add_control(self.zoom_control_instance)
 
         if self.attribution_control:
+            self.attribution_control_instance = AttributionControl(position='bottomright')
             self.add_control(self.attribution_control_instance)
 
     @observe('zoom_control')
     def observe_zoom_control(self, change):
         if change['new']:
+            self.zoom_control_instance = ZoomControl()
             self.add_control(self.zoom_control_instance)
         else:
-            if self.zoom_control_instance in self.controls:
+            if self.zoom_control_instance is not None and self.zoom_control_instance in self.controls:
                 self.remove_control(self.zoom_control_instance)
 
     @observe('attribution_control')
     def observe_attribution_control(self, change):
         if change['new']:
+            self.attribution_control_instance = AttributionControl(position='bottomright')
             self.add_control(self.attribution_control_instance)
         else:
-            if self.attribution_control_instance in self.controls:
+            if self.attribution_control_instance is not None and self.attribution_control_instance in self.controls:
                 self.remove_control(self.attribution_control_instance)
 
     _layer_ids = List()
@@ -1039,6 +1146,18 @@ class Map(DOMWidget, InteractMixin):
 
     def clear_controls(self):
         self.controls = ()
+
+    def save(self, outfile, **kwargs):
+        """Save the Map to an .html file.
+
+        Parameters
+        ----------
+        outfile: str or file-like object
+            The file to write the HTML output to.
+        kwargs: keyword-arguments
+            Extra parameters to pass to the ipywidgets.embed.embed_minimal_html function.
+        """
+        embed_minimal_html(outfile, views=[self], **kwargs)
 
     def __iadd__(self, item):
         if isinstance(item, Layer):

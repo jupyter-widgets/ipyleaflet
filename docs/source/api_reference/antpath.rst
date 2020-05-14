@@ -1,13 +1,10 @@
-.. raw:: html
-    :file: embed_widgets/antpath.html
-
 AntPath
 =======
 
 Example
 -------
 
-.. code::
+.. jupyter-execute::
 
     from ipyleaflet import Map, AntPath
 
@@ -39,16 +36,6 @@ Example
     m.add_layer(ant_path)
 
     m
-
-.. raw:: html
-
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-        "version_major": 2,
-        "version_minor": 0,
-        "model_id": "a8ffc13273c24f8b8a8e95569618a1a5"
-    }
-    </script>
 
 
 Interactions

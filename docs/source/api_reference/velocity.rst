@@ -1,15 +1,13 @@
-.. raw:: html
-    :file: embed_widgets/velocity.html
-
 Velocity
 ========
 
 Example
 -------
 
-.. code::
+.. jupyter-execute::
 
-    from ipyleaflet import Map, Velocity, TileLayer, basemaps
+    from ipyleaflet import Map, TileLayer, basemaps
+    from ipyleaflet.velocity import Velocity
     import xarray as xr
     import os
 
@@ -43,15 +41,6 @@ Example
 
     m
 
-.. raw:: html
-
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-        "version_major": 2,
-        "version_minor": 0,
-        "model_id": "af27d37e7ba1467aa55ad523f5f5032e"
-    }
-    </script>
 
 Attributes
 ----------

@@ -1,0 +1,30 @@
+language: generic
+os:
+  - linux
+  - osx
+env:
+ matrix:
+  - PYTHON_VERSION=3.6
+  - PYTHON_VERSION=3.7
+  - PYTHON_VERSION=3.8
+before_install:
+  - if [[ $TRAVIS_OS_NAME == linux ]]; then sudo apt-get update; fi
+  - if [[ $TRAVIS_OS_NAME == linux ]]; then wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh; fi
+  - if [[ $TRAVIS_OS_NAME == osx ]]; then wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh; fi
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda info -a
+  - conda create -q -n test-environment python=$PYTHON_VERSION ipywidgets nodejs flake8
+  - source activate test-environment
+  - if [[ $TRAVIS_OS_NAME == linux ]]; then conda install -c conda-forge jupyterlab; fi
+install:
+  - pip install .
+  - if [[ $TRAVIS_OS_NAME == linux && $PYTHON_VERSION != 2.7 ]]; pushd js; then jupyter labextension install .; popd; fi
+script:
+  - test -d $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet
+  - test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet/extension.js
+  - test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet/index.js
+  - flake8 ipyleaflet --ignore=E501,E731

@@ -1,29 +1,22 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-var widgets = require('@jupyter-widgets/base');
-var _ = require('underscore');
-var L = require('../leaflet.js');
-var polygon = require('./Polygon.js');
+const L = require('../leaflet.js');
+const polygon = require('./Polygon.js');
 
-var LeafletRectangleModel = polygon.LeafletPolygonModel.extend({
-    defaults: _.extend({}, polygon.LeafletPolygonModel.prototype.defaults, {
-        _view_name : 'LeafletRectangleView',
-        _model_name : 'LeafletRectangleModel',
-        bounds : []
-    })
-});
+export class LeafletRectangleModel extends polygon.LeafletPolygonModel {
+  defaults() {
+    return {
+      ...super.defaults(),
+      _view_name: 'LeafletRectangleView',
+      _model_name: 'LeafletRectangleModel',
+      bounds: []
+    };
+  }
+}
 
-var LeafletRectangleView = polygon.LeafletPolygonView.extend({
-    create_obj: function () {
-        this.obj = L.rectangle(
-            this.model.get('bounds'),
-            this.get_options()
-        );
-    },
-});
-
-module.exports = {
-  LeafletRectangleView : LeafletRectangleView,
-  LeafletRectangleModel : LeafletRectangleModel,
-};
+export class LeafletRectangleView extends polygon.LeafletPolygonView {
+  create_obj() {
+    this.obj = L.rectangle(this.model.get('bounds'), this.get_options());
+  }
+}

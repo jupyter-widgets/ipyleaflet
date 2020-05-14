@@ -1,13 +1,10 @@
-.. raw:: html
-    :file: embed_widgets/marker.html
-
 Marker
 ======
 
 Example
 -------
 
-.. code::
+.. jupyter-execute::
 
     from ipyleaflet import Map, Marker
 
@@ -20,15 +17,6 @@ Example
 
     m
 
-.. raw:: html
-
-    <script type="application/vnd.jupyter.widget-view+json">
-    {
-        "model_id": "218e8c0f43da4f0fa6616ee0ace2b2b6",
-        "version_major": 2,
-        "version_minor": 0
-    }
-    </script>
 
 Attributes
 ----------

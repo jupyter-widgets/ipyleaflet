@@ -1,37 +1,30 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-var widgets = require('@jupyter-widgets/base');
-var _ = require('underscore');
-var L = require('../leaflet.js');
-var control = require('./Control.js');
-var LeafletControlView = control.LeafletControlView;
-var LeafletControlModel = control.LeafletControlModel;
+const L = require('../leaflet.js');
+const control = require('./Control.js');
 
-var LeafletZoomControlModel = LeafletControlModel.extend({
-    defaults: _.extend({}, LeafletControlModel.prototype.defaults, {
-        _view_name: 'LeafletZoomControlView',
-        _model_name: 'LeafletZoomControlModel',
+export class LeafletZoomControlModel extends control.LeafletControlModel {
+  defaults() {
+    return {
+      ...super.defaults(),
+      _view_name: 'LeafletZoomControlView',
+      _model_name: 'LeafletZoomControlModel',
+      zoom_in_text: '+',
+      zoom_in_title: 'Zoom in',
+      zoom_out_text: '-',
+      zoom_out_title: 'Zoom out'
+    };
+  }
+}
 
-        zoom_in_text: '+',
-        zoom_in_title: 'Zoom in',
-        zoom_out_text: '-',
-        zoom_out_title: 'Zoom out',
-    })
-});
+export class LeafletZoomControlView extends control.LeafletControlView {
+  initialize(parameters) {
+    super.initialize(parameters);
+    this.map_view = this.options.map_view;
+  }
 
-var LeafletZoomControlView = LeafletControlView.extend({
-    initialize: function (parameters) {
-        LeafletZoomControlView.__super__.initialize.apply(this, arguments);
-        this.map_view = this.options.map_view;
-    },
-
-    create_obj: function () {
-        this.obj = L.control.zoom(this.get_options());
-    },
-});
-
-module.exports = {
-    LeafletZoomControlView : LeafletZoomControlView,
-    LeafletZoomControlModel : LeafletZoomControlModel,
-};
+  create_obj() {
+    this.obj = L.control.zoom(this.get_options());
+  }
+}

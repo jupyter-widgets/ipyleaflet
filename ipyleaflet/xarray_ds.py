@@ -2,15 +2,17 @@
 # Distributed under the terms of the Modified BSD License.
 #
 
+
 def ds_x_to_json(ds, widget):
     return ds2json(
-            ds,
-            widget.zonal_speed,
-            widget.meridional_speed,
-            widget.latitude_dimension,
-            widget.longitude_dimension,
-            widget.units
-            )
+        ds,
+        widget.zonal_speed,
+        widget.meridional_speed,
+        widget.latitude_dimension,
+        widget.longitude_dimension,
+        widget.units
+    )
+
 
 def ds2json(ds, u_var, v_var, lat_dim='latitude', lon_dim='longitude', units=None):
     """
@@ -103,7 +105,7 @@ def ds2json(ds, u_var, v_var, lat_dim='latitude', lon_dim='longitude', units=Non
                 "ny": ny,
                 "refTime": "2017-02-01 23:00:00",
                 "lo1": lon_left
-                },
+            },
             "data": ds[var_name].values.flatten().tolist()
         })
 

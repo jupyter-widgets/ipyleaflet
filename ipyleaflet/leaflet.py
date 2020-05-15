@@ -300,7 +300,7 @@ class WMSLayer(TileLayer):
     styles = Unicode().tag(sync=True, o=True)
     format = Unicode('image/jpeg').tag(sync=True, o=True)
     transparent = Bool(False).tag(sync=True, o=True)
-    crs = Dict(default_value=projections.EPSG3857).tag(sync=True,o=True)
+    crs = Dict(default_value=projections.EPSG3857).tag(sync=True, o=True)
     uppercase = Bool(False).tag(sync=True, o=True)
 
 
@@ -970,7 +970,7 @@ class Map(DOMWidget, InteractMixin):
     max_zoom = CFloat(18).tag(sync=True, o=True)
     min_zoom = CFloat(1).tag(sync=True, o=True)
     interpolation = Unicode('bilinear').tag(sync=True, o=True)
-    crs = Dict(default_value=projections.EPSG3857).tag(sync=True,o=True)
+    crs = Dict(default_value=projections.EPSG3857).tag(sync=True, o=True)
 
     # Specification of the basemap
     basemap = Union(

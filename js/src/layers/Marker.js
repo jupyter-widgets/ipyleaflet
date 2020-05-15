@@ -47,7 +47,6 @@ export class LeafletMarkerView extends layer.LeafletUILayerView {
     this.obj.on('dragend', event => {
       var marker = event.target;
       var position = marker.getLatLng();
-      console.log(position);
       this.model.set('location', [position.lat, position.lng]);
       this.touch();
     });

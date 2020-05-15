@@ -113,7 +113,6 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
           bnds.east = Math.max(bnds.east, view_bounds.getEast());
           bnds.west = Math.min(bnds.west, view_bounds.getWest());
         }
-        // console.log(bnds);
         return bnds;
       }, bounds);
       this.set('north', bounds.north);
@@ -136,7 +135,6 @@ LeafletMapModel.serializers = {
 export class LeafletMapView extends utils.LeafletDOMWidgetView {
   initialize(options) {
     super.initialize(options);
-    console.log(this, options);
     // The dirty flag is used to prevent sub-pixel center changes
     // computed by leaflet to be applied to the model.
     this.dirty = false;

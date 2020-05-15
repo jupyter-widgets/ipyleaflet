@@ -30,7 +30,6 @@ export class LeafletWMSLayerView extends tilelayer.LeafletTileLayerView {
     this.obj = L.tileLayer.wms(this.model.get('url'), {
       ...this.get_options(),
       crs: proj.getProjection(this.model.get('crs')),
-      bounds:  L.latLngBounds(L.latLng(70, 0), L.latLng(90, 180))
     });
   }
 

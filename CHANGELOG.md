@@ -1,3 +1,10 @@
+## UNRELEASED
+
+Improvements:
+
+* add custom map and wms projections #70
+* add changelog
+* add notebook to show how to use map projections
 
 ## v0.12.6
 

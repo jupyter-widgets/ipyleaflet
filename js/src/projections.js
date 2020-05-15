@@ -1,13 +1,17 @@
-require('proj4leaflet');
+const L = require('./leaflet.js');
 
-function getProjection(proj) {
+export function getProjection(proj) {
   if (proj.custom === false) {
     return L.CRS[proj.name]
   } else {
     return new L.Proj.CRS(
     proj.name,
     proj.proj4def,
-    proj.options
+    {
+     origin: proj.origin,
+     resolutions: proj.resolutions,
+     bounds: L.Bounds(proj.bounds)
+    }
     )
   }
 }

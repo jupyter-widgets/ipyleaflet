@@ -26,9 +26,9 @@ from .xarray_ds import ds_x_to_json
 
 from ._version import EXTENSION_VERSION
 
+from .projections import projections
+
 def_loc = [0.0, 0.0]
-allowed_crs = ['Earth', 'EPSG3395', 'EPSG3857', 'EPSG4326', 'Base', 'Simple',
-               'EPSG3413', 'EPSG3031']
 allowed_cursor = ['alias', 'cell', 'grab', 'move', 'crosshair', 'context-menu',
                   'n-resize', 'ne-resize', 'e-resize', 'se-resize', 's-resize',
                   'sw-resize', 'w-resize', 'nw-resize', 'nesw-resize',
@@ -303,7 +303,7 @@ class WMSLayer(TileLayer):
     styles = Unicode().tag(sync=True, o=True)
     format = Unicode('image/jpeg').tag(sync=True, o=True)
     transparent = Bool(False).tag(sync=True, o=True)
-    crs = Enum(values=allowed_crs, default_value='EPSG3857').tag(sync=True)
+    crs = Dict(default_value=projections.EPSG3857).tag(sync=True,o=True)
     uppercase = Bool(False).tag(sync=True, o=True)
 
 
@@ -942,7 +942,7 @@ class Map(DOMWidget, InteractMixin):
     max_zoom = CFloat(18).tag(sync=True, o=True)
     min_zoom = CFloat(1).tag(sync=True, o=True)
     interpolation = Unicode('bilinear').tag(sync=True, o=True)
-    crs = Enum(values=allowed_crs, default_value='EPSG3857').tag(sync=True)
+    crs = Dict(default_value=projections.EPSG3857).tag(sync=True,o=True)
 
     # Specification of the basemap
     basemap = Union(

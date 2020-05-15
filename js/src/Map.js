@@ -4,7 +4,7 @@
 const widgets = require('@jupyter-widgets/base');
 const L = require('./leaflet.js');
 const utils = require('./utils.js');
-const pr = require('./projections.js');
+const proj = require('./projections.js');
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
@@ -70,7 +70,10 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       options: [],
       layers: [],
       controls: [],
-      crs: 'EPSG3857',
+      crs: {
+        name: 'EPSG3857',
+        custom: false
+      },
       style: null,
       default_style: null,
       dragging_style: null,
@@ -89,6 +92,7 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
 
   update_bounds() {
     return widgets.resolvePromisesDict(this.views).then(views => {
+    // default bounds if the projection is latlon
       var bounds = {
         north: 90,
         south: 38,
@@ -99,7 +103,6 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
         var obj = views[key].obj;
         if (obj) {
           var view_bounds = obj.getBounds();
-          // console.log(view_bounds);
           bnds.north = Math.max(bnds.north, view_bounds.getNorth());
           bnds.south = Math.min(bnds.south, view_bounds.getSouth());
           bnds.east = Math.max(bnds.east, view_bounds.getEast());
@@ -214,7 +217,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     return this.layoutPromise.then(views => {
       var options = {
         ...this.get_options(),
-        crs: pr.LeaftProj[this.model.get('crs')],
+        crs: proj.getProjection(this.model.get('crs')),
         zoomControl: false,
         attributionControl: false
       };

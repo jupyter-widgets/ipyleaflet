@@ -63,10 +63,10 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       // zoom_animation : bool(?),
       zoom_animation_threshold: 4,
       // marker_zoom_animation : bool(?),
-      // south: DEFAULT_LOCATION[0],
-      // north: DEFAULT_LOCATION[0],
-      // east: DEFAULT_LOCATION[1],
-      // west: DEFAULT_LOCATION[1],
+      south: DEFAULT_LOCATION[0],
+      north: DEFAULT_LOCATION[0],
+      east: DEFAULT_LOCATION[1],
+      west: DEFAULT_LOCATION[1],
       options: [],
       layers: [],
       controls: [],
@@ -99,8 +99,8 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
     return widgets.resolvePromisesDict(this.views).then(views => {
     // default bounds if the projection is latlon
       var bounds = {
-        north: 90,
-        south: 38,
+        north: -90,
+        south: 90,
         east: -180,
         west: 180
       };

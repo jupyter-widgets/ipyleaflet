@@ -12,6 +12,7 @@ from ipywidgets import (
 )
 
 from ipywidgets.widgets.trait_types import InstanceDict
+from ipywidgets.embed import embed_minimal_html
 
 from traitlets import (
     CFloat, Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
@@ -19,10 +20,6 @@ from traitlets import (
 )
 
 from branca.colormap import linear, ColorMap
-
-from traittypes import Dataset
-
-from .xarray_ds import ds_x_to_json
 
 from ._version import EXTENSION_VERSION
 
@@ -329,51 +326,6 @@ class VideoOverlay(RasterLayer):
     attribution = Unicode().tag(sync=True, o=True)
 
 
-class Velocity(Layer):
-    _view_name = Unicode('LeafletVelocityView').tag(sync=True)
-    _model_name = Unicode('LeafletVelocityModel').tag(sync=True)
-
-    zonal_speed = Unicode('', help='Name of the zonal speed in the dataset')
-    meridional_speed = Unicode('', help='Name of the meridional speed in the dataset')
-    latitude_dimension = Unicode('latitude', help='Name of the latitude dimension in the dataset')
-    longitude_dimension = Unicode('longitude', help='Name of the longitude dimension in the dataset')
-    units = Unicode(None, allow_none=True)
-
-    data = Dataset().tag(dtype=None, sync=True, to_json=ds_x_to_json)
-
-    # Options
-    display_values = Bool(True).tag(sync=True, o=True)
-    display_options = Dict({
-        'velocityType': 'Global Wind',
-        'position': 'bottomleft',
-        'emptyString': 'No velocity data',
-        'angleConvention': 'bearingCW',
-        'displayPosition': 'bottomleft',
-        'displayEmptyString': 'No velocity data',
-        'speedUnit': 'kt'
-    }).tag(sync=True)
-    min_velocity = Float(0).tag(sync=True, o=True)
-    max_velocity = Float(10).tag(sync=True, o=True)
-    velocity_scale = Float(0.005).tag(sync=True, o=True)
-    color_scale = List([
-        "rgb(36,104, 180)",
-        "rgb(60,157, 194)",
-        "rgb(128,205,193)",
-        "rgb(151,218,168)",
-        "rgb(198,231,181)",
-        "rgb(238,247,217)",
-        "rgb(255,238,159)",
-        "rgb(252,217,125)",
-        "rgb(255,182,100)",
-        "rgb(252,150,75)",
-        "rgb(250,112,52)",
-        "rgb(245,64,32)",
-        "rgb(237,45,28)",
-        "rgb(220,24,32)",
-        "rgb(180,0,35)"
-    ]).tag(sync=True, o=True)
-
-
 class Heatmap(RasterLayer):
     _view_name = Unicode('LeafletHeatmapView').tag(sync=True)
     _model_name = Unicode('LeafletHeatmapModel').tag(sync=True)
@@ -397,10 +349,6 @@ class VectorTileLayer(Layer):
     attribution = Unicode().tag(sync=True, o=True)
 
     vector_tile_layer_styles = Dict().tag(sync=True, o=True)
-
-    def __init__(self, **kwargs):
-        super(VectorTileLayer, self).__init__(**kwargs)
-        self.on_msg(self._handle_leaflet_event)
 
     def redraw(self):
         self.send({'msg': 'redraw'})
@@ -574,19 +522,38 @@ class GeoJSON(FeatureGroup):
         self.data = self._get_data()
 
     def _get_data(self):
+        if 'type' not in self.data:
+            # We can't apply a style we don't know what the data look like
+            return self.data
+
+        datatype = self.data['type']
+
+        style_callback = None
         if self.style_callback:
-            if self.data['type'] == 'Feature':
-                self.data['properties']['style'] = self.style_callback(self.data)
-            elif self.data['type'] == 'FeatureCollection':
-                for feature in self.data['features']:
-                    feature['properties']['style'] = self.style_callback(feature)
+            style_callback = self.style_callback
+        elif self.style:
+            style_callback = lambda feature: self.style
         else:
-            if self.data['type'] == 'Feature':
-                self.data['properties']['style'] = self.style
-            elif self.data['type'] == 'FeatureCollection':
-                for feature in self.data['features']:
-                    feature['properties']['style'] = self.style
+            # No style to apply
+            return self.data
+
+        if datatype == 'Feature':
+            self._apply_style(self.data, style_callback)
+        elif datatype == 'FeatureCollection':
+            for feature in self.data['features']:
+                self._apply_style(feature, style_callback)
+
         return self.data
+
+    def _apply_style(self, feature, style_callback):
+        if 'properties' not in feature:
+            feature['properties'] = {}
+
+        properties = feature['properties']
+        if 'style' in properties:
+            properties['style'].update(style_callback(feature))
+        else:
+            properties['style'] = style_callback(feature)
 
     def __init__(self, **kwargs):
         super(GeoJSON, self).__init__(**kwargs)
@@ -634,11 +601,6 @@ class Choropleth(GeoJSON):
     value_max = CFloat(None, allow_none=True)
     colormap = Instance(ColorMap)
     key_on = Unicode('id')
-
-    @observe('choro_data')
-    def _update_bounds(self, change):
-        self.value_min = min(self.choro_data.items(), key=lambda x: x[1])[1]
-        self.value_max = max(self.choro_data.items(), key=lambda x: x[1])[1]
 
     @observe('style', 'style_callback', 'value_min', 'value_max', 'geo_data', 'choro_data', 'colormap')
     def _update_data(self, change):
@@ -916,6 +878,69 @@ class AttributionControl(Control):
     prefix = Unicode('Leaflet').tag(sync=True, o=True)
 
 
+class LegendControl(Control):
+    _view_name = Unicode('LeafletLegendControlView').tag(sync=True)
+    _model_name = Unicode('LeafletLegendControlModel').tag(sync=True)
+    title = Unicode('Legend').tag(sync=True)
+    legend = Dict(default_value={
+        "value 1": "#AAF",
+        "value 2": "#55A",
+        "value 3": "#005"}).tag(sync=True)
+
+    def __init__(self, legend, *args, name="Legend", **kwargs):
+        super().__init__(*args, **kwargs)
+        self.title = name
+        self.legend = legend
+
+    @property
+    def name(self):
+        return self.title
+
+    @name.setter
+    def name(self, title):
+        self.title = title
+
+    @property
+    def legends(self):
+        return self.legend
+
+    @legends.setter
+    def legends(self, legends):
+        self.legend = legends
+
+    @property
+    def positionning(self):
+        return self.position
+
+    @positionning.setter
+    def positionning(self, position):
+        self.position = position
+
+    def add_legend_element(self, key, value):
+        self.legend[key] = value
+        self.send_state()
+
+    def remove_legend_element(self, key):
+        del self.legend[key]
+        self.send_state()
+
+
+class SearchControl(Control):
+    _view_name = Unicode('LeafletSearchControlView').tag(sync=True)
+    _model_name = Unicode('LeafletSearchControlModel').tag(sync=True)
+
+    url = Unicode().tag(sync=True, o=True)
+    zoom = Int(10).tag(sync=True, o=True)
+    property_name = Unicode('display_name').tag(sync=True, o=True)
+    property_loc = List(['lat', 'lon']).tag(sync=True, o=True)
+    jsonp_param = Unicode('json_callback').tag(sync=True, o=True)
+    auto_type = Bool(False).tag(sync=True, o=True)
+    auto_collapse = Bool(False).tag(sync=True, o=True)
+    animate_location = Bool(False).tag(sync=True, o=True)
+
+    marker = Instance(Marker).tag(sync=True, **widget_serialization)
+
+
 class MapStyle(Style, Widget):
     """ Map Style Widget """
     _model_name = Unicode('LeafletMapStyleModel').tag(sync=True)
@@ -934,6 +959,9 @@ class Map(DOMWidget, InteractMixin):
 
     _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
+
+    # URL of the window where the map is displayed
+    window_url = Unicode(read_only=True).tag(sync=True)
 
     # Map options
     center = List(def_loc).tag(sync=True, o=True)
@@ -1119,6 +1147,18 @@ class Map(DOMWidget, InteractMixin):
 
     def clear_controls(self):
         self.controls = ()
+
+    def save(self, outfile, **kwargs):
+        """Save the Map to an .html file.
+
+        Parameters
+        ----------
+        outfile: str or file-like object
+            The file to write the HTML output to.
+        kwargs: keyword-arguments
+            Extra parameters to pass to the ipywidgets.embed.embed_minimal_html function.
+        """
+        embed_minimal_html(outfile, views=[self], **kwargs)
 
     def __iadd__(self, item):
         if isinstance(item, Layer):

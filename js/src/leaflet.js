@@ -13,6 +13,7 @@ require('leaflet-rotatedmarker');
 require('leaflet-fullscreen');
 require('leaflet-transform');
 require('leaflet.awesome-markers');
+require('leaflet-search');
 
 // Monkey patch GridLayer for smoother URL updates
 L.patchGridLayer = function(layer) {

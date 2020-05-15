@@ -1,3 +1,5 @@
+.. _basemaps-section:
+
 Basemaps
 ========
 

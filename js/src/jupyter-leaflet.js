@@ -40,6 +40,8 @@ var fullscreencontrol = require('./controls/FullScreenControl.js');
 var widgetcontrol = require('./controls/WidgetControl.js')
 var zoomcontrol = require('./controls/ZoomControl.js')
 var scalecontrol = require('./controls/ScaleControl.js')
+var legendcontrol = require('./controls/LegendControl.js')
+var searchcontrol = require('./controls/SearchControl.js');
 
 //Map
 var map = require('./Map.js');
@@ -55,6 +57,7 @@ require('leaflet-fullscreen/dist/leaflet.fullscreen.css');
 require('leaflet.awesome-markers/dist/leaflet.awesome-markers.css');
 require('spin.js/spin.css');
 require('./jupyter-leaflet.css');
+require('leaflet-search/dist/leaflet-search.src.css');
 
 
 //Exports
@@ -98,6 +101,8 @@ module.exports = {
     LeafletZoomControlView : zoomcontrol.LeafletZoomControlView,
     LeafletScaleControlView : scalecontrol.LeafletScaleControlView,
     LeafletMapView : map.LeafletMapView,
+    LeafletLegendControlView : legendcontrol.LeafletLegendControlView,
+    LeafletSearchControlView: searchcontrol.LeafletSearchControlView,
 
     // models
     LeafletLayerModel : layer.LeafletLayerModel,
@@ -139,4 +144,6 @@ module.exports = {
     LeafletScaleControlModel : scalecontrol.LeafletScaleControlModel,
     LeafletMapModel : map.LeafletMapModel,
     LeafletMapStyleModel : map.LeafletMapStyleModel,
+    LeafletLegendControlModel : legendcontrol.LeafletLegendControlModel,
+    LeafletSearchControlModel: searchcontrol.LeafletSearchControlModel,
 };

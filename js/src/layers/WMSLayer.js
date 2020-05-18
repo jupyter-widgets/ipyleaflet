@@ -19,7 +19,6 @@ export class LeafletWMSLayerModel extends tilelayer.LeafletTileLayerModel {
       transparent: false,
       version: '1.1.1',
       crs: null,
-      noWrap: true,
       uppercase: false
     };
   }

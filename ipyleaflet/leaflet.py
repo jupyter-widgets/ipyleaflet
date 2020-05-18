@@ -970,7 +970,7 @@ class Map(DOMWidget, InteractMixin):
     max_zoom = CFloat(18).tag(sync=True, o=True)
     min_zoom = CFloat(1).tag(sync=True, o=True)
     interpolation = Unicode('bilinear').tag(sync=True, o=True)
-    crs = Dict(default_value=projections.EPSG3857).tag(sync=True, o=True)
+    crs = Dict(default_value=projections.EPSG3857).tag(sync=True)
 
     # Specification of the basemap
     basemap = Union(
@@ -1039,8 +1039,8 @@ class Map(DOMWidget, InteractMixin):
 
         return (basemap,)
 
-    bounds = Tuple(read_only=False)
-    bounds_polygon = Tuple(read_only=False)
+    bounds = Tuple(read_only=True)
+    bounds_polygon = Tuple(read_only=True)
 
     @observe('south', 'north', 'east', 'west')
     def _observe_bounds(self, change):

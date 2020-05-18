@@ -5,13 +5,13 @@ export function getProjection(proj) {
     return L.CRS[proj.name]
   } else {
     return new L.Proj.CRS(
-    proj.name,
-    proj.proj4def,
-    {
-     origin: proj.origin,
-     resolutions: proj.resolutions,
-     bounds: L.Bounds(proj.bounds)
-    }
+      proj.name,
+      proj.proj4def,
+      {
+        origin: proj.origin,
+        resolutions: proj.resolutions,
+        bounds: L.Bounds(proj.bounds)
+      }
     )
   }
 }

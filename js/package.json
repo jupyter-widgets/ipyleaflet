@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "css-loader": "^3.4.2",
+    "eslint": "^7.0.0",
     "file-loader": "^5.0.2",
     "install": "^0.13.0",
     "npm": "^6.14.5",

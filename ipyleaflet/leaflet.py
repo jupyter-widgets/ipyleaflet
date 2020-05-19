@@ -300,7 +300,7 @@ class WMSLayer(TileLayer):
     styles = Unicode().tag(sync=True, o=True)
     format = Unicode('image/jpeg').tag(sync=True, o=True)
     transparent = Bool(False).tag(sync=True, o=True)
-    crs = Dict(default_value=projections.EPSG3857).tag(sync=True, o=True)
+    crs = Dict(default_value=projections.EPSG3857).tag(sync=True)
     uppercase = Bool(False).tag(sync=True, o=True)
 
 

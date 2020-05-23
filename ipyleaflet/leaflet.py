@@ -551,7 +551,9 @@ class GeoJSON(FeatureGroup):
 
         properties = feature['properties']
         if 'style' in properties:
-            properties['style'].update(style_callback(feature))
+            style = properties['style'].copy()
+            style.update(style_callback(feature))
+            properties['style'] = style
         else:
             properties['style'] = style_callback(feature)
 

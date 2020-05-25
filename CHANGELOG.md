@@ -1,10 +1,19 @@
-## UNRELEASED
+## v0.13.0
 
 Improvements:
 
-* add custom map and wms projections #70
-* add changelog
-* add notebook to show how to use map projections
+* Add support for custom map and WMS projections #598
+* Add SearchControl feature #576
+* Add SearchControl documentation #584
+* Add window_url attribute to Map #587
+* Add Vector tile docs #590
+
+Fixes:
+
+* Fix missing dependency in documentation #581
+* Fix overwriting of colormap ranges for Choropleth #577
+* Prevent updating dictionary in GeoJSON style_callback #600
+
 
 ## v0.12.6
 

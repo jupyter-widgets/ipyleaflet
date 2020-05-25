@@ -50,9 +50,9 @@ You can save the ``Map`` and all its layers and controls to an HTML page using t
 Attributes
 ----------
 
-========================    ===============                     ===
+========================    =====================               ===
 Attribute                   Default Value                       Doc
-========================    ===============                     ===
+========================    =====================               ===
 layers                      (default_layer)                     Tuple of layers
 controls                    ()                                  Tuple of controls
 center                      (0.0, 0.0)                          Initial geographic center of the map
@@ -79,7 +79,7 @@ inertia_max_speed           1500                                Max speed of the
 zoom_control                True
 attribution_control         True
 zoom_animation_threshold    4
-========================    ===============                     ===
+========================    =====================               ===
 
 Methods
 -------

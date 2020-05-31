@@ -971,6 +971,8 @@ class Map(DOMWidget, InteractMixin):
     zoom = CFloat(12).tag(sync=True, o=True)
     max_zoom = CFloat(18).tag(sync=True, o=True)
     min_zoom = CFloat(1).tag(sync=True, o=True)
+    zoom_delta = CFloat(1).tag(sync=True, o=True)
+    zoom_snap = CFloat(1).tag(sync=True, o=True)
     interpolation = Unicode('bilinear').tag(sync=True, o=True)
     crs = Dict(default_value=projections.EPSG3857).tag(sync=True)
 

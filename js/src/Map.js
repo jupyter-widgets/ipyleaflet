@@ -43,6 +43,8 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       min_zoom: 1,
       dragging: true,
       touch_zoom: true,
+      zoom_delta: 1,
+      zoom_snap: 1,
       scroll_wheel_zoom: false,
       double_click_zoom: true,
       box_zoom: true,

@@ -465,7 +465,7 @@ class LayerGroup(Layer):
         Makes sure only one instance of any given layer can exist in the
         layers list.
         '''
-        self._layer_ids = [l.model_id for l in proposal.value]
+        self._layer_ids = [layer.model_id for layer in proposal.value]
         if len(set(self._layer_ids)) != len(self._layer_ids):
             raise LayerException('duplicate layer detected, only use each layer once')
         return proposal.value
@@ -475,19 +475,19 @@ class LayerGroup(Layer):
             layer = basemap_to_tiles(layer)
         if layer.model_id in self._layer_ids:
             raise LayerException('layer already in layergroup: %r' % layer)
-        self.layers = tuple([l for l in self.layers] + [layer])
+        self.layers = tuple([layer for layer in self.layers] + [layer])
 
     def remove_layer(self, layer):
         if layer.model_id not in self._layer_ids:
             raise LayerException('layer not on in layergroup: %r' % layer)
-        self.layers = tuple([l for l in self.layers if l.model_id != layer.model_id])
+        self.layers = tuple([layer for layer in self.layers if layer.model_id != layer.model_id])
 
     def substitute_layer(self, old, new):
         if isinstance(new, dict):
             new = basemap_to_tiles(new)
         if old.model_id not in self._layer_ids:
             raise LayerException('Could not substitute layer: layer not in layergroup.')
-        self.layers = tuple([new if l.model_id == old.model_id else l for l in self.layers])
+        self.layers = tuple([new if layer.model_id == old.model_id else layer for layer in self.layers])
 
     def clear_layers(self):
         self.layers = ()
@@ -1097,7 +1097,7 @@ class Map(DOMWidget, InteractMixin):
         Makes sure only one instance of any given layer can exist in the
         layers list.
         '''
-        self._layer_ids = [l.model_id for l in proposal.value]
+        self._layer_ids = [layer.model_id for layer in proposal.value]
         if len(set(self._layer_ids)) != len(self._layer_ids):
             raise LayerException('duplicate layer detected, only use each layer once')
         return proposal.value
@@ -1107,19 +1107,19 @@ class Map(DOMWidget, InteractMixin):
             layer = basemap_to_tiles(layer)
         if layer.model_id in self._layer_ids:
             raise LayerException('layer already on map: %r' % layer)
-        self.layers = tuple([l for l in self.layers] + [layer])
+        self.layers = tuple([layer for layer in self.layers] + [layer])
 
     def remove_layer(self, layer):
         if layer.model_id not in self._layer_ids:
             raise LayerException('layer not on map: %r' % layer)
-        self.layers = tuple([l for l in self.layers if l.model_id != layer.model_id])
+        self.layers = tuple([layer for layer in self.layers if layer.model_id != layer.model_id])
 
     def substitute_layer(self, old, new):
         if isinstance(new, dict):
             new = basemap_to_tiles(new)
         if old.model_id not in self._layer_ids:
             raise LayerException('Could not substitute layer: layer not on map.')
-        self.layers = tuple([new if l.model_id == old.model_id else l for l in self.layers])
+        self.layers = tuple([new if layer.model_id == old.model_id else layer for layer in self.layers])
 
     def clear_layers(self):
         self.layers = ()

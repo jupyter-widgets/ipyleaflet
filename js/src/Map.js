@@ -280,6 +280,19 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
   }
 
   model_events() {
+    var key;
+    var o = this.model.get('options');
+    for (var i = 0; i < o.length; i++) {
+      key = o[i];
+      this.listenTo(
+        this.model,
+        'change:' + key,
+        function() {
+          L.setOptions(this.obj, this.get_options());
+        },
+        this
+      );
+    }
     this.listenTo(this.model, 'msg:custom', this.handle_msg, this);
     this.listenTo(
       this.model,

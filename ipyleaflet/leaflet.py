@@ -1032,6 +1032,11 @@ class Map(DOMWidget, InteractMixin):
     east = Float(def_loc[1], read_only=True).tag(sync=True)
     west = Float(def_loc[1], read_only=True).tag(sync=True)
 
+    bottom = Int(0, read_only=True).tag(sync=True)
+    top = Int(9007199254740991, read_only=True).tag(sync=True)
+    right = Int(0, read_only=True).tag(sync=True)
+    left = Int(9007199254740991, read_only=True).tag(sync=True)
+
     layers = Tuple().tag(trait=Instance(Layer), sync=True, **widget_serialization)
 
     @default('layers')
@@ -1045,6 +1050,7 @@ class Map(DOMWidget, InteractMixin):
 
     bounds = Tuple(read_only=True)
     bounds_polygon = Tuple(read_only=True)
+    pixel_bounds = Tuple(read_only=True)
 
     @observe('south', 'north', 'east', 'west')
     def _observe_bounds(self, change):
@@ -1054,6 +1060,11 @@ class Map(DOMWidget, InteractMixin):
                                           (self.north, self.east),
                                           (self.south, self.east),
                                           (self.south, self.west)))
+
+    @observe('bottom', 'top', 'right', 'left')
+    def _observe_pixel_bounds(self, change):
+        self.set_trait('pixel_bounds', ((self.left, self.top),
+                                        (self.right, self.bottom)))
 
     def __init__(self, **kwargs):
         self.zoom_control_instance = None

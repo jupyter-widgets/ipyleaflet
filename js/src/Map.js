@@ -68,6 +68,10 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       north: DEFAULT_LOCATION[0],
       east: DEFAULT_LOCATION[1],
       west: DEFAULT_LOCATION[1],
+      bottom: 0,
+      top: 9007199254740991,
+      right: 0,
+      left: 9007199254740991,
       options: [],
       layers: [],
       controls: [],
@@ -106,7 +110,15 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
         east: -180,
         west: 180
       };
-      Object.keys(views).reduce(function (bnds, key) {
+      var pixel_bounds = {
+        top: 9007199254740991,
+        bottom: 0,
+        right: 0,
+        left: 9007199254740991
+      };
+      Object.keys(views).reduce(function (bnds_pixbnds, key) {
+        var bnds = bnds_pixbnds[0];
+        var pixbnds = bnds_pixbnds[1];
         var obj = views[key].obj;
         if (obj) {
           var view_bounds = obj.getBounds();
@@ -114,13 +126,24 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
           bnds.south = Math.min(bnds.south, view_bounds.getSouth());
           bnds.east = Math.max(bnds.east, view_bounds.getEast());
           bnds.west = Math.min(bnds.west, view_bounds.getWest());
+          var view_pixel_bounds = obj.getPixelBounds();
+          var top_left = view_pixel_bounds.getTopLeft();
+          var bottom_right = view_pixel_bounds.getBottomRight();
+          pixbnds.top = Math.min(pixbnds.top, top_left.y);
+          pixbnds.bottom = Math.max(pixbnds.bottom, bottom_right.y);
+          pixbnds.right = Math.max(pixbnds.right, bottom_right.x);
+          pixbnds.left = Math.min(pixbnds.left, top_left.x);
         }
-        return bnds;
-      }, bounds);
+        return [bnds, pixbnds];
+      }, [bounds, pixel_bounds]);
       this.set('north', bounds.north);
       this.set('south', bounds.south);
       this.set('east', bounds.east);
       this.set('west', bounds.west);
+      this.set('top', pixel_bounds.top);
+      this.set('bottom', pixel_bounds.bottom);
+      this.set('right', pixel_bounds.right);
+      this.set('left', pixel_bounds.left);
     });
   }
 }

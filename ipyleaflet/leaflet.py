@@ -545,6 +545,16 @@ class GeoJSON(FeatureGroup):
 
         return self.data
 
+    @property
+    def __geo_interface__(self):
+        """
+        Return a dict whose structure aligns to the GeoJSON format
+        For more information about the ``__geo_interface__``, see
+        https://gist.github.com/sgillies/2217756
+        """
+
+        return self.data
+
     def _apply_style(self, feature, style_callback):
         if 'properties' not in feature:
             feature['properties'] = {}
@@ -595,6 +605,9 @@ class GeoData(GeoJSON):
     def _get_data(self):
         return json.loads(self.geo_dataframe.to_json())
 
+    @property
+    def __geo_interface__(self):
+        return self.geo_dataframe.__geo_interface__
 
 class Choropleth(GeoJSON):
     geo_data = Dict()

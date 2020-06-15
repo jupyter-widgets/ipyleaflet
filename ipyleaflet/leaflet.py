@@ -607,7 +607,14 @@ class GeoData(GeoJSON):
 
     @property
     def __geo_interface__(self):
+        """
+        Return a dict whose structure aligns to the GeoJSON format
+        For more information about the ``__geo_interface__``, see
+        https://gist.github.com/sgillies/2217756
+        """
+
         return self.geo_dataframe.__geo_interface__
+
 
 class Choropleth(GeoJSON):
     geo_data = Dict()

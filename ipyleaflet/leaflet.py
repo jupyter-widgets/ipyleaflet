@@ -477,10 +477,10 @@ class LayerGroup(Layer):
             raise LayerException('layer already in layergroup: %r' % layer)
         self.layers = tuple([layer for layer in self.layers] + [layer])
 
-    def remove_layer(self, layer):
-        if layer.model_id not in self._layer_ids:
-            raise LayerException('layer not on in layergroup: %r' % layer)
-        self.layers = tuple([layer for layer in self.layers if layer.model_id != layer.model_id])
+    def remove_layer(self, rm_layer):
+        if rm_layer.model_id not in self._layer_ids:
+            raise LayerException('layer not on in layergroup: %r' % rm_layer)
+        self.layers = tuple([layer for layer in self.layers if layer.model_id != rm_layer.model_id])
 
     def substitute_layer(self, old, new):
         if isinstance(new, dict):
@@ -1120,10 +1120,10 @@ class Map(DOMWidget, InteractMixin):
             raise LayerException('layer already on map: %r' % layer)
         self.layers = tuple([layer for layer in self.layers] + [layer])
 
-    def remove_layer(self, layer):
-        if layer.model_id not in self._layer_ids:
-            raise LayerException('layer not on map: %r' % layer)
-        self.layers = tuple([layer for layer in self.layers if layer.model_id != layer.model_id])
+    def remove_layer(self, rm_layer):
+        if rm_layer.model_id not in self._layer_ids:
+            raise LayerException('layer not on map: %r' % rm_layer)
+        self.layers = tuple([layer for layer in self.layers if layer.model_id != rm_layer.model_id])
 
     def substitute_layer(self, old, new):
         if isinstance(new, dict):

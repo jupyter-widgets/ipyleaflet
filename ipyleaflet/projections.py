@@ -51,9 +51,10 @@ projections = Bunch(
         custom=True,
         proj4def="""+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0
                  +ellps=WGS84 +datum=WGS84 +units=m +no_defs""",
-        # origin and bounds for 500m resolution
-        origin=[-4194304 / 2, 4194304 / 2],
+        # origin and bounds for 250m resolution
+        origin=[-4194304, 4194304],
         resolutions=[
+            16384.0,
             8192.0,
             4096.0,
             2048.0,
@@ -62,8 +63,8 @@ projections = Bunch(
             256.0
         ],
         bounds=[
-            [-4194304 / 2, -4194304 / 2],
-            [4194304 / 2, 4194304 / 2]
+            [-4194304, -4194304],
+            [4194304, 4194304]
         ]
     )
 )

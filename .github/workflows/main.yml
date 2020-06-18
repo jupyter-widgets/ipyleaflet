@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
         python-version: [3.6, 3.7, 3.8]
 
     steps:
@@ -35,7 +35,8 @@ jobs:
       shell: bash -l {0}
       run: pip install .
 
-    - name: Install JupyterLab extension
+    - name: Install JupyterLab extension (Only on Linux for saving time)
+      if: matrix.os == 'ubuntu-latest'
       shell: bash -l {0}
       run: jupyter labextension install js
 

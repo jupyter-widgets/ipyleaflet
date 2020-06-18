@@ -1,0 +1,55 @@
+name: Tests
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  run:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: [3.6, 3.7, 3.8]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup conda
+      uses: goanpeca/setup-miniconda@v1
+      with:
+        mamba-version: "*"
+        channels: conda-forge
+
+    - name: Conda install dependencies
+      shell: bash -l {0}
+      run: mamba install python=${{ matrix.python-version }} pip nodejs ipywidgets jupyter jupyterlab flake8
+
+    - name: Install ipyleaflet
+      shell: bash -l {0}
+      run: pip install .
+
+    - name: Install JupyterLab extension
+      shell: bash -l {0}
+      run: jupyter labextension install js
+
+    - name: Check installation files
+      shell: bash -l {0}
+      run: |
+        test -d $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet
+        test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet/extension.js
+        test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet/index.js
+
+    - name: Flake8 check
+      shell: bash -l {0}
+      run: flake8 ipyleaflet --ignore=E501,E731
+
+    - name: Import check
+      shell: bash -l {0}
+      run: python -c 'import ipyleaflet'

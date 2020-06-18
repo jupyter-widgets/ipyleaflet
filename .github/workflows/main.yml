@@ -35,7 +35,8 @@ jobs:
       shell: bash -l {0}
       run: pip install .
 
-    - name: Install JupyterLab extension
+    - name: Install JupyterLab extension (Only on Linux for saving time)
+      if: matrix.os == 'ubuntu-latest'
       shell: bash -l {0}
       run: jupyter labextension install js
 

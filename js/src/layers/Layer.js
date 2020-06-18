@@ -93,6 +93,19 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
   }
 
   model_events() {
+    var key;
+    var o = this.model.get('options');
+    for (var i = 0; i < o.length; i++) {
+      key = o[i];
+      this.listenTo(
+        this.model,
+        'change:' + key,
+        function() {
+          L.setOptions(this.obj, this.get_options());
+        },
+        this
+      );
+    }
     this.model.on_some_change(
       ['popup_min_width', 'popup_max_width', 'popup_max_height'],
       this.update_popup,

@@ -1253,10 +1253,10 @@ class Map(DOMWidget, InteractMixin):
     east = Float(def_loc[1], read_only=True).tag(sync=True)
     west = Float(def_loc[1], read_only=True).tag(sync=True)
 
-    bottom = Int(0, read_only=True).tag(sync=True)
-    top = Int(9007199254740991, read_only=True).tag(sync=True)
-    right = Int(0, read_only=True).tag(sync=True)
-    left = Int(9007199254740991, read_only=True).tag(sync=True)
+    bottom = Float(0, read_only=True).tag(sync=True)
+    top = Float(9007199254740991, read_only=True).tag(sync=True)
+    right = Float(0, read_only=True).tag(sync=True)
+    left = Float(9007199254740991, read_only=True).tag(sync=True)
 
     layers = Tuple().tag(trait=Instance(Layer), sync=True, **widget_serialization)
 

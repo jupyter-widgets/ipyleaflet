@@ -446,6 +446,32 @@ class RasterLayer(Layer):
 
 
 class TileLayer(RasterLayer):
+    """TileLayer class.
+
+    Tile service layer.
+
+    Attributes
+    ----------
+    url: string, default "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        Url to the tiles service.
+    min_zoom: int, default 0
+        Minimum zoom for this tile service.
+    max_zoom: int, default 18
+        Maximum zoom for this tile service.
+    tile_size int, default 256
+        Tile sizes for this tile service.
+    attribution string, default "Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors"
+        Tiles service attribution.
+    no_wrap boolean, default False
+        Whether the layer is wrapped around the antimeridian.
+    tms: boolean, default False
+        If true, inverses Y axis numbering for tiles (turn this on for TMS services).
+    show_loading: boolean, default False
+        Whether to show a spinner when tiles are loading.
+    loading: boolean, default False
+        Whether the tiles are currently loading.
+    """
+
     _view_name = Unicode('LeafletTileLayerView').tag(sync=True)
     _model_name = Unicode('LeafletTileLayerModel').tag(sync=True)
 
@@ -475,13 +501,39 @@ class TileLayer(RasterLayer):
             self._load_callbacks(**content)
 
     def on_load(self, callback, remove=False):
+        """Add a load event listener.
+
+        Parameters
+        ----------
+        callback : callable
+            Callback function that will be called when the tiles have finished loading.
+        remove: boolean
+            Whether to remove this callback or not. Defaults to False.
+        """
         self._load_callbacks.register_callback(callback, remove=remove)
 
     def redraw(self):
+        """Force redrawing the tiles.
+
+        This is especially useful when you are sure the server updated the tiles and you
+        need to refresh the layer.
+        """
         self.send({'msg': 'redraw'})
 
 
 class LocalTileLayer(TileLayer):
+    """LocalTileLayer class.
+
+    Custom tile layer using local tile files.
+
+    Attributes
+    ----------
+    path: string, default ""
+        Path to your local tiles. In the classic Jupyter Notebook, the path is relative to
+        the Notebook you are working on. In JupyterLab, the path is relative to the server
+        (where you started JupyterLab) and you need to prefix the path with “files/”.
+    """
+
     _view_name = Unicode('LeafletLocalTileLayerView').tag(sync=True)
     _model_name = Unicode('LeafletLocalTileLayerModel').tag(sync=True)
 
@@ -489,12 +541,24 @@ class LocalTileLayer(TileLayer):
 
 
 class WMSLayer(TileLayer):
+    """WMSLayer class.
+
+    Attributes
+    ----------
+    layers: string, default ""
+        Comma-separated list of WMS layers to show.
+    styles: string, default ""
+        Comma-separated list of WMS styles
+    format: string, default "image/jpeg"
+        WMS image format (use `'image/png'` for layers with transparency).
+    transparent: boolean, default False
+        If true, the WMS service will return images with transparency.
+    crs: dict, default ipyleaflet.projections.EPSG3857
+        Projection used for this WMS service.
+    """
+
     _view_name = Unicode('LeafletWMSLayerView').tag(sync=True)
     _model_name = Unicode('LeafletWMSLayerModel').tag(sync=True)
-
-    service = Unicode('WMS').tag(sync=True)
-    request = Unicode('GetMap').tag(sync=True)
-    version = Unicode('1.1.1').tag(sync=True)
 
     # Options
     layers = Unicode().tag(sync=True, o=True)
@@ -506,6 +570,20 @@ class WMSLayer(TileLayer):
 
 
 class ImageOverlay(RasterLayer):
+    """ImageOverlay class.
+
+    Image layer from a local or remote image file.
+
+    Attributes
+    ----------
+    url: string, default ""
+        Url to the local or remote image file.
+    bounds: list, default [0., 0]
+        SW and NE corners of the image.
+    attribution: string, default ""
+        Image attribution.
+    """
+
     _view_name = Unicode('LeafletImageOverlayView').tag(sync=True)
     _model_name = Unicode('LeafletImageOverlayModel').tag(sync=True)
 
@@ -517,6 +595,20 @@ class ImageOverlay(RasterLayer):
 
 
 class VideoOverlay(RasterLayer):
+    """VideoOverlay class.
+
+    Video layer from a local or remote video file.
+
+    Attributes
+    ----------
+    url: string, default ""
+        Url to the local or remote video file.
+    bounds: list, default [0., 0]
+        SW and NE corners of the video.
+    attribution: string, default ""
+        Video attribution.
+    """
+
     _view_name = Unicode('LeafletVideoOverlayView').tag(sync=True)
     _model_name = Unicode('LeafletVideoOverlayModel').tag(sync=True)
 
@@ -528,6 +620,22 @@ class VideoOverlay(RasterLayer):
 
 
 class Heatmap(RasterLayer):
+    """Heatmap class.
+
+    Heatmap layer.
+
+    Attributes
+    ----------
+    locations: list, default []
+        List of data points locations for generating the heatmap.
+    radius: float, default 25.
+        Radius of the data points.
+    blur: float, default 15.
+        Blurring intensity.
+    gradient: dict, default {0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}
+        Colors used for the color-mapping from low to high heatmap intensity.
+    """
+
     _view_name = Unicode('LeafletHeatmapView').tag(sync=True)
     _model_name = Unicode('LeafletHeatmapModel').tag(sync=True)
 
@@ -543,6 +651,20 @@ class Heatmap(RasterLayer):
 
 
 class VectorTileLayer(Layer):
+    """VectorTileLayer class.
+
+    Vector tile layer.
+
+    Attributes
+    ----------
+    url: string, default ""
+        Url to the vector tile service.
+    attribution: string, default ""
+        Vector tile service attribution.
+    vector_tile_layer_styles: dict, default {}
+        CSS Styles to apply to the vector data.
+    """
+
     _view_name = Unicode('LeafletVectorTileLayerView').tag(sync=True)
     _model_name = Unicode('LeafletVectorTileLayerModel').tag(sync=True)
 
@@ -552,15 +674,49 @@ class VectorTileLayer(Layer):
     vector_tile_layer_styles = Dict().tag(sync=True, o=True)
 
     def redraw(self):
+        """Force redrawing the tiles.
+
+        This is especially useful when you are sure the server updated the tiles and you
+        need to refresh the layer.
+        """
         self.send({'msg': 'redraw'})
 
 
 class VectorLayer(Layer):
+    """VectorLayer abstract class."""
+
     _view_name = Unicode('LeafletVectorLayerView').tag(sync=True)
     _model_name = Unicode('LeafletVectorLayerModel').tag(sync=True)
 
 
 class Path(VectorLayer):
+    """Path abstract class.
+
+    Path layer.
+
+    Attributes
+    ----------
+    stroke: boolean, default True
+        Whether to draw a stroke.
+    color: CSS color, default '#0033FF'
+        CSS color.
+    weight: int, default 5
+        Weight of the stroke.
+    fill: boolean, default True
+        Whether to fill the path with a flat color.
+    fill_color: CSS color, default None
+        Color used for filling the path shape. If None, the color attribute
+        value is used.
+    fill_opacity: float, default 0.2
+        Opacity used for filling the path shape.
+    line_cap: string, default "round"
+        A string that defines shape to be used at the end of the stroke.
+        Possible values are 'round', 'butt' or 'square'.
+    line_join: string, default "round"
+        A string that defines shape to be used at the corners of the stroke.
+        Possible values are 'arcs', 'bevel', 'miter', 'miter-clip' or 'round'.
+    """
+
     _view_name = Unicode('LeafletPathView').tag(sync=True)
     _model_name = Unicode('LeafletPathModel').tag(sync=True)
 
@@ -572,14 +728,24 @@ class Path(VectorLayer):
     fill_color = Color(None, allow_none=True).tag(sync=True, o=True)
     fill_opacity = Float(0.2).tag(sync=True, o=True)
     dash_array = Unicode(allow_none=True, default_value=None).tag(sync=True, o=True)
-    line_cap = Unicode('round').tag(sync=True, o=True)
-    line_join = Unicode('round').tag(sync=True, o=True)
+    line_cap = Enum(values=['round', 'butt', 'square'], default_value='round').tag(sync=True, o=True)
+    line_join = Enum(values=['arcs', 'bevel', 'miter', 'miter-clip', 'round'], default_value='round').tag(sync=True, o=True)
     pointer_events = Unicode('').tag(sync=True, o=True)
     class_name = Unicode('').tag(sync=True, o=True)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True, o=True)
 
 
 class AntPath(VectorLayer):
+    """AntPath class.
+
+    AntPath layer.
+
+    Attributes
+    ----------
+    locations: list, default []
+        Locations through which the ant-path is going.
+    """
+
     _view_name = Unicode('LeafletAntPathView').tag(sync=True)
     _model_name = Unicode('LeafletAntPathModel').tag(sync=True)
 

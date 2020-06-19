@@ -744,6 +744,25 @@ class AntPath(VectorLayer):
     ----------
     locations: list, default []
         Locations through which the ant-path is going.
+    use: string, default 'polyline'
+        Type of shape to use for the ant-path. Possible values are 'polyline', 'polygon',
+        'rectangle' and 'circle'.
+    delay: int, default 400
+        Add a delay to the animation flux.
+    weight: int, default 5
+        Weight of the ant-path.
+    dash_array: list, default [10, 20]
+        The sizes of the animated dashes.
+    color: CSS color, default '#0000FF'
+        The color of the primary dashes.
+    pulse_color: CSS color, default '#FFFFFF'
+        The color of the secondary dashes.
+    paused: boolean, default False
+        Whether the animation is running or not.
+    reverse: boolean, default False
+        Whether the animation is going backwards or not.
+    hardware_accelerated: boolean, default False
+        Whether the ant-path uses hardware acceleration.
     """
 
     _view_name = Unicode('LeafletAntPathView').tag(sync=True)
@@ -765,6 +784,26 @@ class AntPath(VectorLayer):
 
 
 class Polyline(Path):
+    """Polyline abstract class.
+
+    Attributes
+    ----------
+    locations: list, default []
+        Locations defining the shape.
+    scaling: boolean, default True
+        Whether you can edit the scale of the shape or not.
+    rotation: boolean, default True
+        Whether you can rotate the shape or not.
+    uniform_scaling: boolean, default False
+        Whether to keep the size ratio when changing the shape scale.
+    smooth_factor: float, default 1.
+        Smoothing intensity.
+    transform: boolean, default False
+        Whether the shape is editable or not.
+    draggable: boolean, default False
+        Whether you can drag the shape on the map or not.
+    """
+
     _view_name = Unicode('LeafletPolylineView').tag(sync=True)
     _model_name = Unicode('LeafletPolylineModel').tag(sync=True)
 
@@ -781,11 +820,26 @@ class Polyline(Path):
 
 
 class Polygon(Polyline):
+    """Polygon class.
+
+    Polygon layer.
+    """
+
     _view_name = Unicode('LeafletPolygonView').tag(sync=True)
     _model_name = Unicode('LeafletPolygonModel').tag(sync=True)
 
 
 class Rectangle(Polygon):
+    """Rectangle class.
+
+    Rectangle layer.
+
+    Attributes
+    ----------
+    bounds: list, default []
+        List of SW and NE location tuples. e.g. [(50, 75), (75, 120)].
+    """
+
     _view_name = Unicode('LeafletRectangleView').tag(sync=True)
     _model_name = Unicode('LeafletRectangleModel').tag(sync=True)
 
@@ -793,6 +847,18 @@ class Rectangle(Polygon):
 
 
 class CircleMarker(Path):
+    """CircleMarker class.
+
+    CircleMarker layer.
+
+    Attributes
+    ----------
+    location: list, default [0, 0]
+        Location of the marker (lat, long).
+    radius: int, default 10
+        Radius of the circle marker in pixels.
+    """
+
     _view_name = Unicode('LeafletCircleMarkerView').tag(sync=True)
     _model_name = Unicode('LeafletCircleMarkerModel').tag(sync=True)
 
@@ -803,6 +869,16 @@ class CircleMarker(Path):
 
 
 class Circle(CircleMarker):
+    """Circle class.
+
+    Circle layer.
+
+    Attributes
+    ----------
+    radius: int, default 1000
+        Radius of the circle marker in meters.
+    """
+
     _view_name = Unicode('LeafletCircleView').tag(sync=True)
     _model_name = Unicode('LeafletCircleModel').tag(sync=True)
 
@@ -811,6 +887,16 @@ class Circle(CircleMarker):
 
 
 class MarkerCluster(Layer):
+    """MarkerCluster class.
+
+    A cluster of markers that you can put on the map like other layers.
+
+    Attributes
+    ----------
+    markers: list, default []
+        List of markers to include in the cluster.
+    """
+
     _view_name = Unicode('LeafletMarkerClusterView').tag(sync=True)
     _model_name = Unicode('LeafletMarkerClusterModel').tag(sync=True)
 
@@ -818,6 +904,16 @@ class MarkerCluster(Layer):
 
 
 class LayerGroup(Layer):
+    """LayerGroup class.
+
+    A group of layers that you can put on the map like other layers.
+
+    Attributes
+    ----------
+    layers: list, default []
+        List of layers to include in the group.
+    """
+
     _view_name = Unicode('LeafletLayerGroupView').tag(sync=True)
     _model_name = Unicode('LeafletLayerGroupModel').tag(sync=True)
 
@@ -838,6 +934,13 @@ class LayerGroup(Layer):
         return proposal.value
 
     def add_layer(self, layer):
+        """Add a new layer to the group.
+
+        Parameters
+        ----------
+        layer: layer instance
+            The new layer to include in the group.
+        """
         if isinstance(layer, dict):
             layer = basemap_to_tiles(layer)
         if layer.model_id in self._layer_ids:
@@ -845,11 +948,27 @@ class LayerGroup(Layer):
         self.layers = tuple([layer for layer in self.layers] + [layer])
 
     def remove_layer(self, rm_layer):
+        """Remove a layer from the group.
+
+        Parameters
+        ----------
+        layer: layer instance
+            The layer to remove from the group.
+        """
         if rm_layer.model_id not in self._layer_ids:
             raise LayerException('layer not on in layergroup: %r' % rm_layer)
         self.layers = tuple([layer for layer in self.layers if layer.model_id != rm_layer.model_id])
 
     def substitute_layer(self, old, new):
+        """Substitute a layer with another one in the group.
+
+        Parameters
+        ----------
+        old: layer instance
+            The layer to remove from the group.
+        new: layer instance
+            The new layer to include in the group.
+        """
         if isinstance(new, dict):
             new = basemap_to_tiles(new)
         if old.model_id not in self._layer_ids:
@@ -857,15 +976,37 @@ class LayerGroup(Layer):
         self.layers = tuple([new if layer.model_id == old.model_id else layer for layer in self.layers])
 
     def clear_layers(self):
+        """Remove all layers from the group."""
         self.layers = ()
 
 
 class FeatureGroup(LayerGroup):
+    """FeatureGroup abstract class."""
+
     _view_name = Unicode('LeafletFeatureGroupView').tag(sync=True)
     _model_name = Unicode('LeafletFeatureGroupModel').tag(sync=True)
 
 
 class GeoJSON(FeatureGroup):
+    """GeoJSON class.
+
+    Layer created from a GeoJSON data structure.
+
+    Attributes
+    ----------
+    data: dict, default {}
+        The JSON data structure.
+    style: dict, default {}
+        Extra style to apply to the features.
+    hover_style: dict, default {}
+        Style that will be applied to a feature when the mouse is over this feature.
+    point_style: dict, default {}
+        Extra style to apply to the point features.
+    style_callback: callable, default None
+        Function that will be called for each feature, should take the feature as
+        input and return the feature style.
+    """
+
     _view_name = Unicode('LeafletGeoJSONView').tag(sync=True)
     _model_name = Unicode('LeafletGeoJSONModel').tag(sync=True)
 
@@ -945,19 +1086,43 @@ class GeoJSON(FeatureGroup):
             self._hover_callbacks(**content)
 
     def on_click(self, callback, remove=False):
-        '''
-        The click callback takes an unpacked set of keyword arguments.
-        '''
+        """Add a feature click event listener.
+
+        Parameters
+        ----------
+        callback : callable
+            Callback function that will be called on click event on a feature, this function
+            should take the event and the feature as inputs.
+        remove: boolean
+            Whether to remove this callback or not. Defaults to False.
+        """
         self._click_callbacks.register_callback(callback, remove=remove)
 
     def on_hover(self, callback, remove=False):
-        '''
-        The hover callback takes an unpacked set of keyword arguments.
-        '''
+        """Add a feature hover event listener.
+
+        Parameters
+        ----------
+        callback : callable
+            Callback function that will be called when the mouse is over a feature, this function
+            should take the event and the feature as inputs.
+        remove: boolean
+            Whether to remove this callback or not. Defaults to False.
+        """
         self._hover_callbacks.register_callback(callback, remove=remove)
 
 
 class GeoData(GeoJSON):
+    """GeoData class.
+
+    Layer created from a GeoPandas dataframe.
+
+    Attributes
+    ----------
+    geo_dataframe: geopandas.GeoDataFrame instance, default None
+        The GeoPandas dataframe to use.
+    """
+
     geo_dataframe = Instance('geopandas.GeoDataFrame')
 
     def __init__(self, **kwargs):
@@ -983,6 +1148,26 @@ class GeoData(GeoJSON):
 
 
 class Choropleth(GeoJSON):
+    """Choropleth class.
+
+    Layer showing a Choropleth effect on a GeoJSON structure.
+
+    Attributes
+    ----------
+    geo_data: dict, default None
+        The GeoJSON structure on which to apply the Choropleth effect.
+    choro_data: dict, default None
+        Data used for building the Choropleth effect.
+    value_min: float, default None
+        Minimum data value for the color mapping.
+    value_max: float, default None
+        Maximum data value for the color mapping.
+    colormap: branca.colormap.ColorMap instance, default None
+        The colormap used for the effect.
+    key_on: string, default "id"
+        The feature key to use for the colormap effect.
+    """
+
     geo_data = Dict()
     choro_data = Dict()
     value_min = CFloat(None, allow_none=True)
@@ -1037,6 +1222,8 @@ class ControlException(TraitError):
 
 
 class Control(Widget):
+    """Control abstract class."""
+
     _view_name = Unicode('LeafletControlView').tag(sync=True)
     _model_name = Unicode('LeafletControlModel').tag(sync=True)
     _view_module = Unicode('jupyter-leaflet').tag(sync=True)

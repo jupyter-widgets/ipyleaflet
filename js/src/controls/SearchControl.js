@@ -33,20 +33,19 @@ LeafletSearchControlModel.serializers = {
 
 export class LeafletSearchControlView extends control.LeafletControlView {
   create_obj() {
-    if (this.model.get('layer') !== null) {
-        return this.create_child_view(this.model.get('layer')).then((layer_view) => {
-            let options = this.get_options();
-            options.layer = layer_view.obj;
-            options.marker = false;
-            this.obj = L.control.search(options);
-        });
-    } else {
-        return this.create_child_view(this.model.get('marker')).then((view) => {
-            let options = this.get_options();
-            options.marker = view.obj;
-            this.obj = L.control.search(options);
-        });
-    }
+    const layer = this.model.get('layer');
+    const marker = this.model.get('marker');
+    const layer_promise = layer !== null ? this.create_child_view(layer) : Promise.resolve(null);
+    const marker_promise = marker !== null ? this.create_child_view(marker) : Promise.resolve(null);
+
+    return Promise.all([layer_promise, marker_promise]).then(result => {
+      const layer_view = result[0];
+      const marker_view = result[1];
+      const options = this.get_options();
+      options.layer = layer_view !== null ? layer_view.obj : null;
+      options.marker = marker_view !== null ? marker_view.obj : false;
+      this.obj = L.control.search(options);
+    });
   }
 
   leaflet_events() {

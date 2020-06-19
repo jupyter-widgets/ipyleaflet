@@ -35,7 +35,18 @@ allowed_cursor = ['alias', 'cell', 'grab', 'move', 'crosshair', 'context-menu',
 
 
 def basemap_to_tiles(basemap, day='yesterday', **kwargs):
-    # Format the URL with modisdate
+    """Turn a basemap into a TileLayer object.
+
+    Parameters
+    ----------
+    basemap : dict
+        Basemap description coming from ipyleaflet.basemaps.
+    day: string
+        If relevant for the chosen basemap, you can specify the day for
+        the tiles in the "%Y-%m-%d" format. Defaults to "yesterday".
+    kwargs: key-word arguments
+        Extra key-word arguments to pass to the TileLayer constructor.
+    """
     from datetime import date, timedelta
 
     if day == 'yesterday':
@@ -76,6 +87,18 @@ class InteractMixin(object):
 
 
 class Layer(Widget, InteractMixin):
+    """Abstract Layer class.
+
+    Base class for all layers in ipyleaflet.
+
+    Attributes
+    ----------
+    name : string
+        Custom name for the layer, which will be used by the LayersControl.
+    popup: object
+        Interactive widget that will be shown in a Popup when clicking on the layer.
+    """
+
     _view_name = Unicode('LeafletLayerView').tag(sync=True)
     _model_name = Unicode('LeafletLayerModel').tag(sync=True)
     _view_module = Unicode('jupyter-leaflet').tag(sync=True)
@@ -126,43 +149,142 @@ class Layer(Widget, InteractMixin):
             self._mouseout_callbacks(**content)
 
     def on_click(self, callback, remove=False):
+        """Add a click event listener.
+
+        Parameters
+        ----------
+        callback : callable
+            Callback function that will be called on click event.
+        remove: boolean
+            Whether to remove this callback or not. Defaults to False.
+        """
         self._click_callbacks.register_callback(callback, remove=remove)
 
     def on_dblclick(self, callback, remove=False):
+        """Add a double-click event listener.
+
+        Parameters
+        ----------
+        callback : callable
+            Callback function that will be called on double-click event.
+        remove: boolean
+            Whether to remove this callback or not. Defaults to False.
+        """
         self._dblclick_callbacks.register_callback(callback, remove=remove)
 
     def on_mousedown(self, callback, remove=False):
+        """Add a mouse-down event listener.
+
+        Parameters
+        ----------
+        callback : callable
+            Callback function that will be called on mouse-down event.
+        remove: boolean
+            Whether to remove this callback or not. Defaults to False.
+        """
         self._mousedown_callbacks.register_callback(callback, remove=remove)
 
     def on_mouseup(self, callback, remove=False):
+        """Add a mouse-up event listener.
+
+        Parameters
+        ----------
+        callback : callable
+            Callback function that will be called on mouse-up event.
+        remove: boolean
+            Whether to remove this callback or not. Defaults to False.
+        """
         self._mouseup_callbacks.register_callback(callback, remove=remove)
 
     def on_mouseover(self, callback, remove=False):
+        """Add a mouse-over event listener.
+
+        Parameters
+        ----------
+        callback : callable
+            Callback function that will be called on mouse-over event.
+        remove: boolean
+            Whether to remove this callback or not. Defaults to False.
+        """
         self._mouseover_callbacks.register_callback(callback, remove=remove)
 
     def on_mouseout(self, callback, remove=False):
+        """Add a mouse-out event listener.
+
+        Parameters
+        ----------
+        callback : callable
+            Callback function that will be called on mouse-out event.
+        remove: boolean
+            Whether to remove this callback or not. Defaults to False.
+        """
         self._mouseout_callbacks.register_callback(callback, remove=remove)
 
 
 class UILayer(Layer):
+    """Abstract UILayer class."""
+
     _view_name = Unicode('LeafletUILayerView').tag(sync=True)
     _model_name = Unicode('LeafletUILayerModel').tag(sync=True)
 
 
 class Icon(UILayer):
+    """Icon class.
+
+    Custom icon used for markers.
+
+    Attributes
+    ----------
+    icon_url : string
+        The url to the image used for the icon.
+    shadow_url: string, default None
+        The url to the image used for the icon shadow.
+    icon_size: tuple, default None
+        The size of the icon, in pixels.
+    shadow_size: tuple, default None
+        The size of the icon shadow, in pixels.
+    icon_anchor: tuple, default None
+        The coordinates of the "tip" of the icon (relative to its top left corner).
+        The icon will be aligned so that this point is at the marker's geographical
+        location. Centered by default if icon_size is specified.
+    shadow_anchor: tuple, default None
+        The coordinates of the "tip" of the shadow (relative to its top left corner).
+        The same as icon_anchor if None.
+    popup_anchor: tuple, default None
+        The coordinates of the point from which popups will "open", relative to the
+        icon anchor.
+    """
+
     _view_name = Unicode('LeafletIconView').tag(sync=True)
     _model_name = Unicode('LeafletIconModel').tag(sync=True)
 
     icon_url = Unicode('').tag(sync=True, o=True)
     shadow_url = Unicode(None, allow_none=True).tag(sync=True, o=True)
-    icon_size = Tuple((10, 10), allow_none=True).tag(sync=True, o=True)
-    shadow_size = Tuple((10, 10), allow_none=True).tag(sync=True, o=True)
-    icon_anchor = Tuple((0, 0), allow_none=True).tag(sync=True, o=True)
-    shadow_anchor = Tuple((0, 0), allow_none=True).tag(sync=True, o=True)
-    popup_anchor = Tuple((0, 0), allow_none=True).tag(sync=True, o=True)
+    icon_size = List(None, allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
+    shadow_size = List(None, allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
+    icon_anchor = List(None, allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
+    shadow_anchor = List(None, allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
+    popup_anchor = List(None, allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
 
 
 class AwesomeIcon(UILayer):
+    """AwesomeIcon class.
+
+    FontAwesome icon used for markers.
+
+    Attributes
+    ----------
+    name : string, default "home"
+        The name of the FontAwesome icon to use.
+        See https://fontawesome.com/v4.7.0/icons for available icons.
+    marker_color: string, default "blue"
+        Color used for the icon background.
+    icon_color: string, default "white"
+        CSS color used for the FontAwesome icon.
+    spin: boolean, default False
+        Whether the icon is spinning or not.
+    """
+
     _view_name = Unicode('LeafletAwesomeIconView').tag(sync=True)
     _model_name = Unicode('LeafletAwesomeIconModel').tag(sync=True)
 
@@ -178,6 +300,35 @@ class AwesomeIcon(UILayer):
 
 
 class Marker(UILayer):
+    """Marker class.
+
+    Clickable/Draggable marker on the map.
+
+    Attributes
+    ----------
+    location: tuple, default (0, 0)
+        The tuple containing the latitude/longitude of the marker.
+    opacity: float, default 1.
+        Opacity of the marker between 0. (fully transparent) and 1. (fully opaque).
+    visible: boolean, default True
+        Whether the marker is visible or not.
+    icon: object, default None
+        Icon used for the marker, it can be an Icon or an AwesomeIcon instance.
+        By default it will use a blue icon.
+    draggable: boolean, default True
+        Whether the marker is draggable with the mouse or not.
+    keyboard: boolean, default True
+        Whether the marker can be tabbed to with a keyboard and clicked by pressing enter.
+    title: string, default ''
+        Text for the browser tooltip that appear on marker hover (no tooltip by default).
+    alt: string, default ''
+        Text for the alt attribute of the icon image (useful for accessibility).
+    rotation_angle: float, default 0.
+        The rotation angle of the marker in degrees.
+    rotation_origin: string, default ''
+        The rotation origin of the marker.
+    """
+
     _view_name = Unicode('LeafletMarkerView').tag(sync=True)
     _model_name = Unicode('LeafletMarkerModel').tag(sync=True)
 
@@ -209,10 +360,50 @@ class Marker(UILayer):
             self._move_callbacks(**content)
 
     def on_move(self, callback, remove=False):
+        """Add a move event listener.
+
+        Parameters
+        ----------
+        callback : callable
+            Callback function that will be called on move event.
+        remove: boolean
+            Whether to remove this callback or not. Defaults to False.
+        """
         self._move_callbacks.register_callback(callback, remove=remove)
 
 
 class Popup(UILayer):
+    """Popup class.
+
+    Popup element that can be placed on the map.
+
+    Attributes
+    ----------
+    location: tuple, default (0, 0)
+        The tuple containing the latitude/longitude of the popup.
+    child: object, default None
+        Child widget that the Popup will contain.
+    min_width: int, default 50
+        Minimum width of the Popup.
+    max_width: int, default 300
+        Maximum width of the Popup.
+    max_height: int, default None
+        Maximum height of the Popup.
+    auto_pan: boolean, default True
+        Set it to False if you don’t want the map to do panning
+        animation to fit the opened popup.
+    keep_in_view: boolean, default False
+        Set it to True if you want to prevent users from panning
+        the popup off of the screen while it is open.
+    close_button: boolean, default True
+        Whether to show a close button or not.
+    auto_close: boolean, default True
+        Whether to automatically close the popup when interacting
+        with another element of the map or not.
+    close_on_escape_key: boolean, default True
+        Whether to close the popup when clicking the escape key or not.
+    """
+
     _view_name = Unicode('LeafletPopupView').tag(sync=True)
     _model_name = Unicode('LeafletPopupModel').tag(sync=True)
 
@@ -237,6 +428,16 @@ class Popup(UILayer):
 
 
 class RasterLayer(Layer):
+    """Abstract RasterLayer class.
+
+    Attributes
+    ----------
+    opacity: float, default 1.
+        Opacity of the layer between 0. (fully transparent) and 1. (fully opaque).
+    visible: boolean, default True
+        Whether the layer is visible or not.
+    """
+
     _view_name = Unicode('LeafletRasterLayerView').tag(sync=True)
     _model_name = Unicode('LeafletRasterLayerModel').tag(sync=True)
 
@@ -545,6 +746,16 @@ class GeoJSON(FeatureGroup):
 
         return self.data
 
+    @property
+    def __geo_interface__(self):
+        """
+        Return a dict whose structure aligns to the GeoJSON format
+        For more information about the ``__geo_interface__``, see
+        https://gist.github.com/sgillies/2217756
+        """
+
+        return self.data
+
     def _apply_style(self, feature, style_callback):
         if 'properties' not in feature:
             feature['properties'] = {}
@@ -594,6 +805,16 @@ class GeoData(GeoJSON):
 
     def _get_data(self):
         return json.loads(self.geo_dataframe.to_json())
+
+    @property
+    def __geo_interface__(self):
+        """
+        Return a dict whose structure aligns to the GeoJSON format
+        For more information about the ``__geo_interface__``, see
+        https://gist.github.com/sgillies/2217756
+        """
+
+        return self.geo_dataframe.__geo_interface__
 
 
 class Choropleth(GeoJSON):
@@ -1033,10 +1254,10 @@ class Map(DOMWidget, InteractMixin):
     east = Float(def_loc[1], read_only=True).tag(sync=True)
     west = Float(def_loc[1], read_only=True).tag(sync=True)
 
-    bottom = Int(0, read_only=True).tag(sync=True)
-    top = Int(9007199254740991, read_only=True).tag(sync=True)
-    right = Int(0, read_only=True).tag(sync=True)
-    left = Int(9007199254740991, read_only=True).tag(sync=True)
+    bottom = Float(0, read_only=True).tag(sync=True)
+    top = Float(9007199254740991, read_only=True).tag(sync=True)
+    right = Float(0, read_only=True).tag(sync=True)
+    left = Float(9007199254740991, read_only=True).tag(sync=True)
 
     layers = Tuple().tag(trait=Instance(Layer), sync=True, **widget_serialization)
 

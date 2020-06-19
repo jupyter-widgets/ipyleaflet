@@ -48,22 +48,8 @@ export class LeafletVelocityView extends layer.LeafletLayerView {
       },
       this
     );
-    var key;
-    var o = this.model.get('options');
-    for (var i = 0; i < o.length; i++) {
-      key = o[i];
-      this.listenTo(
-        this.model,
-        'change:' + key,
-        function() {
-          var options = this.get_options();
-          L.setOptions(this.obj, options);
-        },
-        this
-      );
-    }
     // Separate display_options from the options to perform a shallow copy.
-    key = 'display_options';
+    var key = 'display_options';
     this.listenTo(
       this.model,
       'change:' + key,

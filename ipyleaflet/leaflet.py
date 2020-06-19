@@ -936,10 +936,9 @@ class GeoJSON(FeatureGroup):
 
     def __init__(self, **kwargs):
         super(GeoJSON, self).__init__(**kwargs)
-        self.on_msg(self._handle_m_msg)
         self.data = self._get_data()
 
-    def _handle_m_msg(self, _, content, buffers):
+    def _handle_mouse_events(self, _, content, buffers):
         if content.get('event', '') == 'click':
             self._click_callbacks(**content)
         if content.get('event', '') == 'mouseover':

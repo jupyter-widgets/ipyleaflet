@@ -11,13 +11,10 @@ export class LeafletWMSLayerModel extends tilelayer.LeafletTileLayerModel {
       ...super.defaults(),
       _view_name: 'LeafletWMSLayerView',
       _model_name: 'LeafletWMSLayerModel',
-      service: 'WMS',
-      request: 'GetMap',
       layers: '',
       styles: '',
       format: 'image/jpeg',
       transparent: false,
-      version: '1.1.1',
       crs: null,
       uppercase: false
     };

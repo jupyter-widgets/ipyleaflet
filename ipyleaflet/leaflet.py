@@ -446,6 +446,32 @@ class RasterLayer(Layer):
 
 
 class TileLayer(RasterLayer):
+    """TileLayer class.
+
+    Tile service layer.
+
+    Attributes
+    ----------
+    url: string, default "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        Url to the tiles service.
+    min_zoom: int, default 0
+        Minimum zoom for this tile service.
+    max_zoom: int, default 18
+        Maximum zoom for this tile service.
+    tile_size int, default 256
+        Tile sizes for this tile service.
+    attribution string, default "Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors"
+        Tiles service attribution.
+    no_wrap boolean, default False
+        Whether the layer is wrapped around the antimeridian.
+    tms: boolean, default False
+        If true, inverses Y axis numbering for tiles (turn this on for TMS services).
+    show_loading: boolean, default False
+        Whether to show a spinner when tiles are loading.
+    loading: boolean, default False
+        Whether the tiles are currently loading.
+    """
+
     _view_name = Unicode('LeafletTileLayerView').tag(sync=True)
     _model_name = Unicode('LeafletTileLayerModel').tag(sync=True)
 
@@ -475,13 +501,39 @@ class TileLayer(RasterLayer):
             self._load_callbacks(**content)
 
     def on_load(self, callback, remove=False):
+        """Add a load event listener.
+
+        Parameters
+        ----------
+        callback : callable
+            Callback function that will be called when the tiles have finished loading.
+        remove: boolean
+            Whether to remove this callback or not. Defaults to False.
+        """
         self._load_callbacks.register_callback(callback, remove=remove)
 
     def redraw(self):
+        """Force redrawing the tiles.
+
+        This is especially useful when you are sure the server updated the tiles and you
+        need to refresh the layer.
+        """
         self.send({'msg': 'redraw'})
 
 
 class LocalTileLayer(TileLayer):
+    """LocalTileLayer class.
+
+    Custom tile layer using local tile files.
+
+    Attributes
+    ----------
+    path: string, default ""
+        Path to your local tiles. In the classic Jupyter Notebook, the path is relative to
+        the Notebook you are working on. In JupyterLab, the path is relative to the server
+        (where you started JupyterLab) and you need to prefix the path with “files/”.
+    """
+
     _view_name = Unicode('LeafletLocalTileLayerView').tag(sync=True)
     _model_name = Unicode('LeafletLocalTileLayerModel').tag(sync=True)
 
@@ -489,12 +541,24 @@ class LocalTileLayer(TileLayer):
 
 
 class WMSLayer(TileLayer):
+    """WMSLayer class.
+
+    Attributes
+    ----------
+    layers: string, default ""
+        Comma-separated list of WMS layers to show.
+    styles: string, default ""
+        Comma-separated list of WMS styles
+    format: string, default "image/jpeg"
+        WMS image format (use `'image/png'` for layers with transparency).
+    transparent: boolean, default False
+        If true, the WMS service will return images with transparency.
+    crs: dict, default ipyleaflet.projections.EPSG3857
+        Projection used for this WMS service.
+    """
+
     _view_name = Unicode('LeafletWMSLayerView').tag(sync=True)
     _model_name = Unicode('LeafletWMSLayerModel').tag(sync=True)
-
-    service = Unicode('WMS').tag(sync=True)
-    request = Unicode('GetMap').tag(sync=True)
-    version = Unicode('1.1.1').tag(sync=True)
 
     # Options
     layers = Unicode().tag(sync=True, o=True)
@@ -506,6 +570,20 @@ class WMSLayer(TileLayer):
 
 
 class ImageOverlay(RasterLayer):
+    """ImageOverlay class.
+
+    Image layer from a local or remote image file.
+
+    Attributes
+    ----------
+    url: string, default ""
+        Url to the local or remote image file.
+    bounds: list, default [0., 0]
+        SW and NE corners of the image.
+    attribution: string, default ""
+        Image attribution.
+    """
+
     _view_name = Unicode('LeafletImageOverlayView').tag(sync=True)
     _model_name = Unicode('LeafletImageOverlayModel').tag(sync=True)
 
@@ -517,6 +595,20 @@ class ImageOverlay(RasterLayer):
 
 
 class VideoOverlay(RasterLayer):
+    """VideoOverlay class.
+
+    Video layer from a local or remote video file.
+
+    Attributes
+    ----------
+    url: string, default ""
+        Url to the local or remote video file.
+    bounds: list, default [0., 0]
+        SW and NE corners of the video.
+    attribution: string, default ""
+        Video attribution.
+    """
+
     _view_name = Unicode('LeafletVideoOverlayView').tag(sync=True)
     _model_name = Unicode('LeafletVideoOverlayModel').tag(sync=True)
 
@@ -528,6 +620,22 @@ class VideoOverlay(RasterLayer):
 
 
 class Heatmap(RasterLayer):
+    """Heatmap class.
+
+    Heatmap layer.
+
+    Attributes
+    ----------
+    locations: list, default []
+        List of data points locations for generating the heatmap.
+    radius: float, default 25.
+        Radius of the data points.
+    blur: float, default 15.
+        Blurring intensity.
+    gradient: dict, default {0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}
+        Colors used for the color-mapping from low to high heatmap intensity.
+    """
+
     _view_name = Unicode('LeafletHeatmapView').tag(sync=True)
     _model_name = Unicode('LeafletHeatmapModel').tag(sync=True)
 
@@ -543,6 +651,20 @@ class Heatmap(RasterLayer):
 
 
 class VectorTileLayer(Layer):
+    """VectorTileLayer class.
+
+    Vector tile layer.
+
+    Attributes
+    ----------
+    url: string, default ""
+        Url to the vector tile service.
+    attribution: string, default ""
+        Vector tile service attribution.
+    vector_tile_layer_styles: dict, default {}
+        CSS Styles to apply to the vector data.
+    """
+
     _view_name = Unicode('LeafletVectorTileLayerView').tag(sync=True)
     _model_name = Unicode('LeafletVectorTileLayerModel').tag(sync=True)
 
@@ -552,15 +674,49 @@ class VectorTileLayer(Layer):
     vector_tile_layer_styles = Dict().tag(sync=True, o=True)
 
     def redraw(self):
+        """Force redrawing the tiles.
+
+        This is especially useful when you are sure the server updated the tiles and you
+        need to refresh the layer.
+        """
         self.send({'msg': 'redraw'})
 
 
 class VectorLayer(Layer):
+    """VectorLayer abstract class."""
+
     _view_name = Unicode('LeafletVectorLayerView').tag(sync=True)
     _model_name = Unicode('LeafletVectorLayerModel').tag(sync=True)
 
 
 class Path(VectorLayer):
+    """Path abstract class.
+
+    Path layer.
+
+    Attributes
+    ----------
+    stroke: boolean, default True
+        Whether to draw a stroke.
+    color: CSS color, default '#0033FF'
+        CSS color.
+    weight: int, default 5
+        Weight of the stroke.
+    fill: boolean, default True
+        Whether to fill the path with a flat color.
+    fill_color: CSS color, default None
+        Color used for filling the path shape. If None, the color attribute
+        value is used.
+    fill_opacity: float, default 0.2
+        Opacity used for filling the path shape.
+    line_cap: string, default "round"
+        A string that defines shape to be used at the end of the stroke.
+        Possible values are 'round', 'butt' or 'square'.
+    line_join: string, default "round"
+        A string that defines shape to be used at the corners of the stroke.
+        Possible values are 'arcs', 'bevel', 'miter', 'miter-clip' or 'round'.
+    """
+
     _view_name = Unicode('LeafletPathView').tag(sync=True)
     _model_name = Unicode('LeafletPathModel').tag(sync=True)
 
@@ -572,14 +728,43 @@ class Path(VectorLayer):
     fill_color = Color(None, allow_none=True).tag(sync=True, o=True)
     fill_opacity = Float(0.2).tag(sync=True, o=True)
     dash_array = Unicode(allow_none=True, default_value=None).tag(sync=True, o=True)
-    line_cap = Unicode('round').tag(sync=True, o=True)
-    line_join = Unicode('round').tag(sync=True, o=True)
+    line_cap = Enum(values=['round', 'butt', 'square'], default_value='round').tag(sync=True, o=True)
+    line_join = Enum(values=['arcs', 'bevel', 'miter', 'miter-clip', 'round'], default_value='round').tag(sync=True, o=True)
     pointer_events = Unicode('').tag(sync=True, o=True)
     class_name = Unicode('').tag(sync=True, o=True)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True, o=True)
 
 
 class AntPath(VectorLayer):
+    """AntPath class.
+
+    AntPath layer.
+
+    Attributes
+    ----------
+    locations: list, default []
+        Locations through which the ant-path is going.
+    use: string, default 'polyline'
+        Type of shape to use for the ant-path. Possible values are 'polyline', 'polygon',
+        'rectangle' and 'circle'.
+    delay: int, default 400
+        Add a delay to the animation flux.
+    weight: int, default 5
+        Weight of the ant-path.
+    dash_array: list, default [10, 20]
+        The sizes of the animated dashes.
+    color: CSS color, default '#0000FF'
+        The color of the primary dashes.
+    pulse_color: CSS color, default '#FFFFFF'
+        The color of the secondary dashes.
+    paused: boolean, default False
+        Whether the animation is running or not.
+    reverse: boolean, default False
+        Whether the animation is going backwards or not.
+    hardware_accelerated: boolean, default False
+        Whether the ant-path uses hardware acceleration.
+    """
+
     _view_name = Unicode('LeafletAntPathView').tag(sync=True)
     _model_name = Unicode('LeafletAntPathModel').tag(sync=True)
 
@@ -599,6 +784,26 @@ class AntPath(VectorLayer):
 
 
 class Polyline(Path):
+    """Polyline abstract class.
+
+    Attributes
+    ----------
+    locations: list, default []
+        Locations defining the shape.
+    scaling: boolean, default True
+        Whether you can edit the scale of the shape or not.
+    rotation: boolean, default True
+        Whether you can rotate the shape or not.
+    uniform_scaling: boolean, default False
+        Whether to keep the size ratio when changing the shape scale.
+    smooth_factor: float, default 1.
+        Smoothing intensity.
+    transform: boolean, default False
+        Whether the shape is editable or not.
+    draggable: boolean, default False
+        Whether you can drag the shape on the map or not.
+    """
+
     _view_name = Unicode('LeafletPolylineView').tag(sync=True)
     _model_name = Unicode('LeafletPolylineModel').tag(sync=True)
 
@@ -615,11 +820,26 @@ class Polyline(Path):
 
 
 class Polygon(Polyline):
+    """Polygon class.
+
+    Polygon layer.
+    """
+
     _view_name = Unicode('LeafletPolygonView').tag(sync=True)
     _model_name = Unicode('LeafletPolygonModel').tag(sync=True)
 
 
 class Rectangle(Polygon):
+    """Rectangle class.
+
+    Rectangle layer.
+
+    Attributes
+    ----------
+    bounds: list, default []
+        List of SW and NE location tuples. e.g. [(50, 75), (75, 120)].
+    """
+
     _view_name = Unicode('LeafletRectangleView').tag(sync=True)
     _model_name = Unicode('LeafletRectangleModel').tag(sync=True)
 
@@ -627,6 +847,18 @@ class Rectangle(Polygon):
 
 
 class CircleMarker(Path):
+    """CircleMarker class.
+
+    CircleMarker layer.
+
+    Attributes
+    ----------
+    location: list, default [0, 0]
+        Location of the marker (lat, long).
+    radius: int, default 10
+        Radius of the circle marker in pixels.
+    """
+
     _view_name = Unicode('LeafletCircleMarkerView').tag(sync=True)
     _model_name = Unicode('LeafletCircleMarkerModel').tag(sync=True)
 
@@ -637,6 +869,16 @@ class CircleMarker(Path):
 
 
 class Circle(CircleMarker):
+    """Circle class.
+
+    Circle layer.
+
+    Attributes
+    ----------
+    radius: int, default 1000
+        Radius of the circle marker in meters.
+    """
+
     _view_name = Unicode('LeafletCircleView').tag(sync=True)
     _model_name = Unicode('LeafletCircleModel').tag(sync=True)
 
@@ -645,6 +887,16 @@ class Circle(CircleMarker):
 
 
 class MarkerCluster(Layer):
+    """MarkerCluster class.
+
+    A cluster of markers that you can put on the map like other layers.
+
+    Attributes
+    ----------
+    markers: list, default []
+        List of markers to include in the cluster.
+    """
+
     _view_name = Unicode('LeafletMarkerClusterView').tag(sync=True)
     _model_name = Unicode('LeafletMarkerClusterModel').tag(sync=True)
 
@@ -652,6 +904,16 @@ class MarkerCluster(Layer):
 
 
 class LayerGroup(Layer):
+    """LayerGroup class.
+
+    A group of layers that you can put on the map like other layers.
+
+    Attributes
+    ----------
+    layers: list, default []
+        List of layers to include in the group.
+    """
+
     _view_name = Unicode('LeafletLayerGroupView').tag(sync=True)
     _model_name = Unicode('LeafletLayerGroupModel').tag(sync=True)
 
@@ -672,6 +934,13 @@ class LayerGroup(Layer):
         return proposal.value
 
     def add_layer(self, layer):
+        """Add a new layer to the group.
+
+        Parameters
+        ----------
+        layer: layer instance
+            The new layer to include in the group.
+        """
         if isinstance(layer, dict):
             layer = basemap_to_tiles(layer)
         if layer.model_id in self._layer_ids:
@@ -679,11 +948,27 @@ class LayerGroup(Layer):
         self.layers = tuple([layer for layer in self.layers] + [layer])
 
     def remove_layer(self, rm_layer):
+        """Remove a layer from the group.
+
+        Parameters
+        ----------
+        layer: layer instance
+            The layer to remove from the group.
+        """
         if rm_layer.model_id not in self._layer_ids:
             raise LayerException('layer not on in layergroup: %r' % rm_layer)
         self.layers = tuple([layer for layer in self.layers if layer.model_id != rm_layer.model_id])
 
     def substitute_layer(self, old, new):
+        """Substitute a layer with another one in the group.
+
+        Parameters
+        ----------
+        old: layer instance
+            The layer to remove from the group.
+        new: layer instance
+            The new layer to include in the group.
+        """
         if isinstance(new, dict):
             new = basemap_to_tiles(new)
         if old.model_id not in self._layer_ids:
@@ -691,15 +976,37 @@ class LayerGroup(Layer):
         self.layers = tuple([new if layer.model_id == old.model_id else layer for layer in self.layers])
 
     def clear_layers(self):
+        """Remove all layers from the group."""
         self.layers = ()
 
 
 class FeatureGroup(LayerGroup):
+    """FeatureGroup abstract class."""
+
     _view_name = Unicode('LeafletFeatureGroupView').tag(sync=True)
     _model_name = Unicode('LeafletFeatureGroupModel').tag(sync=True)
 
 
 class GeoJSON(FeatureGroup):
+    """GeoJSON class.
+
+    Layer created from a GeoJSON data structure.
+
+    Attributes
+    ----------
+    data: dict, default {}
+        The JSON data structure.
+    style: dict, default {}
+        Extra style to apply to the features.
+    hover_style: dict, default {}
+        Style that will be applied to a feature when the mouse is over this feature.
+    point_style: dict, default {}
+        Extra style to apply to the point features.
+    style_callback: callable, default None
+        Function that will be called for each feature, should take the feature as
+        input and return the feature style.
+    """
+
     _view_name = Unicode('LeafletGeoJSONView').tag(sync=True)
     _model_name = Unicode('LeafletGeoJSONModel').tag(sync=True)
 
@@ -770,29 +1077,52 @@ class GeoJSON(FeatureGroup):
 
     def __init__(self, **kwargs):
         super(GeoJSON, self).__init__(**kwargs)
-        self.on_msg(self._handle_m_msg)
         self.data = self._get_data()
 
-    def _handle_m_msg(self, _, content, buffers):
+    def _handle_mouse_events(self, _, content, buffers):
         if content.get('event', '') == 'click':
             self._click_callbacks(**content)
         if content.get('event', '') == 'mouseover':
             self._hover_callbacks(**content)
 
     def on_click(self, callback, remove=False):
-        '''
-        The click callback takes an unpacked set of keyword arguments.
-        '''
+        """Add a feature click event listener.
+
+        Parameters
+        ----------
+        callback : callable
+            Callback function that will be called on click event on a feature, this function
+            should take the event and the feature as inputs.
+        remove: boolean
+            Whether to remove this callback or not. Defaults to False.
+        """
         self._click_callbacks.register_callback(callback, remove=remove)
 
     def on_hover(self, callback, remove=False):
-        '''
-        The hover callback takes an unpacked set of keyword arguments.
-        '''
+        """Add a feature hover event listener.
+
+        Parameters
+        ----------
+        callback : callable
+            Callback function that will be called when the mouse is over a feature, this function
+            should take the event and the feature as inputs.
+        remove: boolean
+            Whether to remove this callback or not. Defaults to False.
+        """
         self._hover_callbacks.register_callback(callback, remove=remove)
 
 
 class GeoData(GeoJSON):
+    """GeoData class.
+
+    Layer created from a GeoPandas dataframe.
+
+    Attributes
+    ----------
+    geo_dataframe: geopandas.GeoDataFrame instance, default None
+        The GeoPandas dataframe to use.
+    """
+
     geo_dataframe = Instance('geopandas.GeoDataFrame')
 
     def __init__(self, **kwargs):
@@ -818,6 +1148,26 @@ class GeoData(GeoJSON):
 
 
 class Choropleth(GeoJSON):
+    """Choropleth class.
+
+    Layer showing a Choropleth effect on a GeoJSON structure.
+
+    Attributes
+    ----------
+    geo_data: dict, default None
+        The GeoJSON structure on which to apply the Choropleth effect.
+    choro_data: dict, default None
+        Data used for building the Choropleth effect.
+    value_min: float, default None
+        Minimum data value for the color mapping.
+    value_max: float, default None
+        Maximum data value for the color mapping.
+    colormap: branca.colormap.ColorMap instance, default None
+        The colormap used for the effect.
+    key_on: string, default "id"
+        The feature key to use for the colormap effect.
+    """
+
     geo_data = Dict()
     choro_data = Dict()
     value_min = CFloat(None, allow_none=True)
@@ -872,6 +1222,8 @@ class ControlException(TraitError):
 
 
 class Control(Widget):
+    """Control abstract class."""
+
     _view_name = Unicode('LeafletControlView').tag(sync=True)
     _model_name = Unicode('LeafletControlModel').tag(sync=True)
     _view_module = Unicode('jupyter-leaflet').tag(sync=True)

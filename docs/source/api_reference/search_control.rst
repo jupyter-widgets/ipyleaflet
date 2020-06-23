@@ -26,23 +26,33 @@ You can also search features from GeoJSON layers.
 .. jupyter-execute::
 
     import json
+    import os
+    import requests
 
-    from ipyleaflet import Map, LayerGroup SearchControl
+    from ipyleaflet import AwesomeIcon, GeoJSON, Map, Marker, LayerGroup, SearchControl
 
     m = Map(zoom=3, center=[19.1646, 72.8493])
 
-    with open("countries.geo.json") as f:
+    if not os.path.exists('europe_110.geo.json'):
+          url = 'https://github.com/jupyter-widgets/ipyleaflet/raw/master/examples/europe_110.geo.json'
+          r = requests.get(url)
+          with open('europe_110.geo.json', 'w') as f:
+            f.write(r.content.decode("utf-8"))
+
+    with open("europe_110.geo.json") as f:
         data = json.load(f)
 
-    countries = GeoJSON(data=data)
+    europe = GeoJSON(data=data)
 
-    layer_group = LayerGroup(layers=(countries,))
+    layer_group = LayerGroup(layers=(europe,))
+    marker = Marker(icon=AwesomeIcon(name="check", marker_color='green', icon_color='darkred'))
 
     m.add_control(SearchControl(
       position="topleft",
       layer=layer_group,
       zoom=4,
-      property_name='name'
+      property_name='name',
+      marker=marker
     ))
 
     m

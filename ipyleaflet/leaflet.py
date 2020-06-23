@@ -1513,7 +1513,8 @@ class SearchControl(Control):
     auto_collapse = Bool(False).tag(sync=True, o=True)
     animate_location = Bool(False).tag(sync=True, o=True)
 
-    marker = Instance(Marker).tag(sync=True, **widget_serialization)
+    marker = Instance(Marker, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
+    layer = Instance(LayerGroup, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
 
 
 class MapStyle(Style, Widget):

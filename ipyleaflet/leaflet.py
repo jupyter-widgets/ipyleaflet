@@ -260,11 +260,11 @@ class Icon(UILayer):
 
     icon_url = Unicode('').tag(sync=True, o=True)
     shadow_url = Unicode(None, allow_none=True).tag(sync=True, o=True)
-    icon_size = List(None, allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
-    shadow_size = List(None, allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
-    icon_anchor = List(None, allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
-    shadow_anchor = List(None, allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
-    popup_anchor = List(None, allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
+    icon_size = List(None, default_value=[0, 0], allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
+    shadow_size = List(None, default_value=[0, 0], allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
+    icon_anchor = List(None, default_value=[0, 0], allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
+    shadow_anchor = List(None, default_value=[0, 0], allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
+    popup_anchor = List(None, default_value=[0, 0], allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
 
 
 class AwesomeIcon(UILayer):

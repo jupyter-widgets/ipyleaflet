@@ -271,7 +271,7 @@ class Icon(UILayer):
         value = proposal['value']
 
         # Workaround Traitlets which does not respect the None default value
-        if len(value) == 0:
+        if value is None or len(value) == 0:
             return None
 
         if len(value) != 2:

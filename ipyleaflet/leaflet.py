@@ -260,11 +260,24 @@ class Icon(UILayer):
 
     icon_url = Unicode('').tag(sync=True, o=True)
     shadow_url = Unicode(None, allow_none=True).tag(sync=True, o=True)
-    icon_size = List(None, default_value=[0, 0], allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
-    shadow_size = List(None, default_value=[0, 0], allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
-    icon_anchor = List(None, default_value=[0, 0], allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
-    shadow_anchor = List(None, default_value=[0, 0], allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
-    popup_anchor = List(None, default_value=[0, 0], allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
+    icon_size = List(default_value=None, allow_none=True).tag(sync=True, o=True)
+    shadow_size = List(default_value=None, allow_none=True).tag(sync=True, o=True)
+    icon_anchor = List(default_value=None, allow_none=True).tag(sync=True, o=True)
+    shadow_anchor = List(default_value=None, allow_none=True).tag(sync=True, o=True)
+    popup_anchor = List([0, 0], allow_none=True).tag(sync=True, o=True)
+
+    @validate('icon_size', 'shadow_size', 'icon_anchor', 'shadow_anchor', 'popup_anchor')
+    def _validate_attr(self, proposal):
+        value = proposal['value']
+
+        # Workaround Traitlets which does not respect the None default value
+        if len(value) == 0:
+            return None
+
+        if len(value) != 2:
+            raise TraitError('The value should be of size 2, but {} was given'.format(value))
+
+        return value
 
 
 class AwesomeIcon(UILayer):

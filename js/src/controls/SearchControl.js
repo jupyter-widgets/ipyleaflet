@@ -53,13 +53,9 @@ export class LeafletSearchControlView extends control.LeafletControlView {
     if (this.model.get('layer') !== null) {
         var found_style = this.model.get('found_style');
         this.obj.on('search:locationfound', function(e) {
-            if (Object.keys(found_style).length != 0) {
-                e.layer.setStyle(found_style);
-            } else {
-               e.layer.setStyle({fillColor: '#3f0', color: '#0f0'});
-            }
-            if(e.layer._popup)
-                e.layer.openPopup();
+           e.layer.setStyle(found_style);
+           if(e.layer._popup)
+              e.layer.openPopup();
         });
     }
   }

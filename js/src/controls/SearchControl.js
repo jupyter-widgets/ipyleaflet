@@ -18,6 +18,7 @@ export class LeafletSearchControlModel extends control.LeafletControlModel {
       auto_collapse: false,
       zoom:10,
       animate_location:false,
+      found_style: {fillColor: "#3f0", color: "#0f0"},
       marker: null,
       layer: null,
     };
@@ -50,10 +51,11 @@ export class LeafletSearchControlView extends control.LeafletControlView {
 
   leaflet_events() {
     if (this.model.get('layer') !== null) {
+        var found_style = this.model.get('found_style');
         this.obj.on('search:locationfound', function(e) {
-            e.layer.setStyle({fillColor: '#3f0', color: '#0f0'});
-            if(e.layer._popup)
-                e.layer.openPopup();
+           e.layer.setStyle(found_style);
+           if(e.layer._popup)
+              e.layer.openPopup();
         });
     }
   }

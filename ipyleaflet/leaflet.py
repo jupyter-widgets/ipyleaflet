@@ -1648,6 +1648,7 @@ class LegendControl(Control):
 
 
 class SearchControl(Control):
+    """ SearchControl Widget """
     _view_name = Unicode('LeafletSearchControlView').tag(sync=True)
     _model_name = Unicode('LeafletSearchControlModel').tag(sync=True)
 
@@ -1659,6 +1660,7 @@ class SearchControl(Control):
     auto_type = Bool(False).tag(sync=True, o=True)
     auto_collapse = Bool(False).tag(sync=True, o=True)
     animate_location = Bool(False).tag(sync=True, o=True)
+    found_style = Dict(default_value={"fillColor": "#3f0", "color": "#0f0"}).tag(sync=True, o=True)
 
     marker = Instance(Marker, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
     layer = Instance(LayerGroup, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)

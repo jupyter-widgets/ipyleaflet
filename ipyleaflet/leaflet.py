@@ -1471,6 +1471,11 @@ class SplitMapControl(Control):
 
 
 class DrawControl(Control):
+    """DrawControl class.
+
+    Drawing tools for drawing on the map.
+    """
+
     _view_name = Unicode('LeafletDrawControlView').tag(sync=True)
     _model_name = Unicode('LeafletDrawControlModel').tag(sync=True)
 
@@ -1513,27 +1518,43 @@ class DrawControl(Control):
             self._draw_callbacks(self, action=action, geo_json=self.last_draw)
 
     def on_draw(self, callback, remove=False):
+        """Add a draw event listener.
+
+        Parameters
+        ----------
+        callback : callable
+            Callback function that will be called on draw event.
+        remove: boolean
+            Whether to remove this callback or not. Defaults to False.
+        """
         self._draw_callbacks.register_callback(callback, remove=remove)
 
     def clear(self):
+        """Clear all drawings."""
         self.send({'msg': 'clear'})
 
     def clear_polylines(self):
+        """Clear all polylines."""
         self.send({'msg': 'clear_polylines'})
 
     def clear_polygons(self):
+        """Clear all polygons."""
         self.send({'msg': 'clear_polygons'})
 
     def clear_circles(self):
+        """Clear all circles."""
         self.send({'msg': 'clear_circles'})
 
     def clear_circle_markers(self):
+        """Clear all circle markers."""
         self.send({'msg': 'clear_circle_markers'})
 
     def clear_rectangles(self):
+        """Clear all rectangles."""
         self.send({'msg': 'clear_rectangles'})
 
     def clear_markers(self):
+        """Clear all markers."""
         self.send({'msg': 'clear_markers'})
 
 
@@ -1592,7 +1613,8 @@ class ScaleControl(Control):
 class AttributionControl(Control):
     """AttributionControl class.
 
-    A control which contains the layers attribution."""
+    A control which contains the layers attribution.
+    """
 
     _view_name = Unicode('LeafletAttributionControlView').tag(sync=True)
     _model_name = Unicode('LeafletAttributionControlModel').tag(sync=True)
@@ -1601,8 +1623,21 @@ class AttributionControl(Control):
 
 
 class LegendControl(Control):
+    """LegendControl class.
+
+    A control which contains a legend.
+
+    Attributes
+    ----------
+    title: str, default 'Legend'
+        The title of the legend.
+    legend: dict, default 'Legend'
+        A dictionary containing names as keys and CSS colors as values.
+    """
+
     _view_name = Unicode('LeafletLegendControlView').tag(sync=True)
     _model_name = Unicode('LeafletLegendControlModel').tag(sync=True)
+
     title = Unicode('Legend').tag(sync=True)
     legend = Dict(default_value={
         "value 1": "#AAF",
@@ -1639,10 +1674,26 @@ class LegendControl(Control):
         self.position = position
 
     def add_legend_element(self, key, value):
+        """Add a new legend element.
+
+        Parameters
+        ----------
+        key: str
+            The key for the legend element.
+        value: CSS Color
+            The value for the legend element.
+        """
         self.legend[key] = value
         self.send_state()
 
     def remove_legend_element(self, key):
+        """Remove a legend element.
+
+        Parameters
+        ----------
+        key: str
+            The element to remove.
+        """
         del self.legend[key]
         self.send_state()
 
@@ -1665,7 +1716,17 @@ class SearchControl(Control):
 
 
 class MapStyle(Style, Widget):
-    """ Map Style Widget """
+    """Map Style Widget
+
+    Custom map style.
+
+    Attributes
+    ----------
+    cursor: str, default 'grab'
+        The cursor to use for the mouse when it's on the map. Should be a valid CSS
+        cursor value.
+    """
+
     _model_name = Unicode('LeafletMapStyleModel').tag(sync=True)
     _model_module = Unicode("jupyter-leaflet").tag(sync=True)
 
@@ -1675,6 +1736,30 @@ class MapStyle(Style, Widget):
 
 
 class Map(DOMWidget, InteractMixin):
+    """Map class.
+
+    The Map class is the main widget in ipyleaflet.
+
+    Attributes
+    ----------
+    layers: list of Layer instances
+        The list of layers that are currently on the map.
+    controls: list of Control instances
+        The list of controls that are currently on the map.
+    center: list, default [0, 0]
+        The current center of the map.
+    zoom: float, default 12
+        The current zoom value of the map.
+    zoom_snap: float, default 1
+        Forces the map’s zoom level to always be a multiple of this..
+    zoom_delta: float, default 1
+        Controls how much the map’s zoom level will change after
+        pressing + or - on the keyboard, or using the zoom controls.
+    crs: projection, default projections.EPSG3857
+        Coordinate reference system, which can be ‘Earth’, ‘EPSG3395’, ‘EPSG3857’,
+        ‘EPSG4326’, ‘Base’, ‘Simple’ or user defined projection.
+    """
+
     _view_name = Unicode('LeafletMapView').tag(sync=True)
     _model_name = Unicode('LeafletMapModel').tag(sync=True)
     _view_module = Unicode('jupyter-leaflet').tag(sync=True)
@@ -1835,6 +1920,13 @@ class Map(DOMWidget, InteractMixin):
         return proposal.value
 
     def add_layer(self, layer):
+        """Add a layer on the map.
+
+        Parameters
+        ----------
+        layer: Layer instance
+            The new layer to add.
+        """
         if isinstance(layer, dict):
             layer = basemap_to_tiles(layer)
         if layer.model_id in self._layer_ids:
@@ -1842,11 +1934,27 @@ class Map(DOMWidget, InteractMixin):
         self.layers = tuple([layer for layer in self.layers] + [layer])
 
     def remove_layer(self, rm_layer):
+        """Remove a layer from the map.
+
+        Parameters
+        ----------
+        layer: Layer instance
+            The layer to remove.
+        """
         if rm_layer.model_id not in self._layer_ids:
             raise LayerException('layer not on map: %r' % rm_layer)
         self.layers = tuple([layer for layer in self.layers if layer.model_id != rm_layer.model_id])
 
     def substitute_layer(self, old, new):
+        """Replace a layer with another one on the map.
+
+        Parameters
+        ----------
+        old: Layer instance
+            The old layer to remove.
+        new: Layer instance
+            The new layer to add.
+        """
         if isinstance(new, dict):
             new = basemap_to_tiles(new)
         if old.model_id not in self._layer_ids:
@@ -1854,6 +1962,7 @@ class Map(DOMWidget, InteractMixin):
         self.layers = tuple([new if layer.model_id == old.model_id else layer for layer in self.layers])
 
     def clear_layers(self):
+        """Remove all layers from the map."""
         self.layers = ()
 
     controls = Tuple().tag(trait=Instance(Control), sync=True, **widget_serialization)
@@ -1872,16 +1981,31 @@ class Map(DOMWidget, InteractMixin):
         return proposal.value
 
     def add_control(self, control):
+        """Add a control on the map.
+
+        Parameters
+        ----------
+        control: Control instance
+            The new control to add.
+        """
         if control.model_id in self._control_ids:
             raise ControlException('control already on map: %r' % control)
         self.controls = tuple([c for c in self.controls] + [control])
 
     def remove_control(self, control):
+        """Remove a control from the map.
+
+        Parameters
+        ----------
+        control: Control instance
+            The control to remove.
+        """
         if control.model_id not in self._control_ids:
             raise ControlException('control not on map: %r' % control)
         self.controls = tuple([c for c in self.controls if c.model_id != control.model_id])
 
     def clear_controls(self):
+        """Remove all controls from the map."""
         self.controls = ()
 
     def save(self, outfile, **kwargs):

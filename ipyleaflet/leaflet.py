@@ -68,10 +68,12 @@ def basemap_to_tiles(basemap, day='yesterday', **kwargs):
 
 
 class LayerException(TraitError):
+    """Custom LayerException class."""
     pass
 
 
 class InteractMixin(object):
+    """Abstract InteractMixin class."""
 
     def interact(self, **kwargs):
         c = []
@@ -1231,11 +1233,22 @@ class Choropleth(GeoJSON):
 
 
 class ControlException(TraitError):
+    """Custom LayerException class."""
     pass
 
 
 class Control(Widget):
-    """Control abstract class."""
+    """Control abstract class.
+
+    This is the base class for all ipyleaflet controls. A control is additional
+    UI components on top of the Map.
+
+    Attributes
+    ----------
+    position: str, default 'topleft'
+        The position of the control. Possible values are 'topright',
+        'topleft', 'bottomright' and 'bottomleft'.
+    """
 
     _view_name = Unicode('LeafletControlView').tag(sync=True)
     _model_name = Unicode('LeafletControlModel').tag(sync=True)
@@ -1260,6 +1273,17 @@ class Control(Widget):
 
 
 class WidgetControl(Control):
+    """WidgetControl class.
+
+    A control that contain any DOMWidget instance.
+
+    Attributes
+    ----------
+    widget: DOMWidget
+        The widget to put inside of the control. It can be any widget, even coming from
+        a third-party library like bqplot.
+    """
+
     _view_name = Unicode('LeafletWidgetControlView').tag(sync=True)
     _model_name = Unicode('LeafletWidgetControlModel').tag(sync=True)
 
@@ -1272,16 +1296,51 @@ class WidgetControl(Control):
 
 
 class FullScreenControl(Control):
+    """FullScreenControl class.
+
+    A control which contains a button that will put the Map in
+    full-screen when clicked.
+    """
+
     _view_name = Unicode('LeafletFullScreenControlView').tag(sync=True)
     _model_name = Unicode('LeafletFullScreenControlModel').tag(sync=True)
 
 
 class LayersControl(Control):
+    """LayersControl class.
+
+    A control which allows hiding/showing different layers on the Map.
+    """
+
     _view_name = Unicode('LeafletLayersControlView').tag(sync=True)
     _model_name = Unicode('LeafletLayersControlModel').tag(sync=True)
 
 
 class MeasureControl(Control):
+    """MeasureControl class.
+
+    A control which allows making measurements on the Map.
+
+    Attributes
+    ----------
+    primary_length_unit: str, default 'feet'
+        Possible values are 'feet', 'meters', 'miles', 'kilometers' or any user
+        defined unit.
+    secondary_length_unit: str, default None
+        Possible values are 'feet', 'meters', 'miles', 'kilometers' or any user
+        defined unit.
+    primary_area_unit: str, default 'acres'
+        Possible values are 'acres', 'hectares', 'sqfeet', 'sqmeters', 'sqmiles'
+        or any user defined unit.
+    secondary_area_unit: str, default None
+        Possible values are 'acres', 'hectares', 'sqfeet', 'sqmeters', 'sqmiles'
+        or any user defined unit.
+    active_color: CSS Color, default '#ABE67E'
+        The color used for current measurements.
+    completed_color: CSS Color, default '#C8F2BE'
+        The color used for the completed measurements.
+    """
+
     _view_name = Unicode('LeafletMeasureControlView').tag(sync=True)
     _model_name = Unicode('LeafletMeasureControlModel').tag(sync=True)
 
@@ -1331,10 +1390,34 @@ class MeasureControl(Control):
     capture_z_index = Int(10000).tag(sync=True, o=True)
 
     def add_length_unit(self, name, factor, decimals=0):
+        """Add a custom length unit.
+
+        Parameters
+        ----------
+        name: str
+            The name for your custom unit.
+        factor: float
+            Factor to apply when converting to this unit. Length in meters
+            will be multiplied by this factor.
+        decimals: int, default 0
+            Number of decimals to round results when using this unit.
+        """
         self._length_units.append(name)
         self._add_unit(name, factor, decimals)
 
     def add_area_unit(self, name, factor, decimals=0):
+        """Add a custom area unit.
+
+        Parameters
+        ----------
+        name: str
+            The name for your custom unit.
+        factor: float
+            Factor to apply when converting to this unit. Area in sqmeters
+            will be multiplied by this factor.
+        decimals: int, default 0
+            Number of decimals to round results when using this unit.
+        """
         self._area_units.append(name)
         self._add_unit(name, factor, decimals)
 
@@ -1348,6 +1431,18 @@ class MeasureControl(Control):
 
 
 class SplitMapControl(Control):
+    """SplitMapControl class.
+
+    A control which allows comparing layers by splitting the map in two.
+
+    Attributes
+    ----------
+    left_layer: Layer or list of Layers
+        The left layer(s) for comparison.
+    right_layer: Layer or list of Layers
+        The right layer(s) for comparison.
+    """
+
     _view_name = Unicode('LeafletSplitMapControlView').tag(sync=True)
     _model_name = Unicode('LeafletSplitMapControlModel').tag(sync=True)
 
@@ -1356,10 +1451,12 @@ class SplitMapControl(Control):
 
     @default('left_layer')
     def _default_left_layer(self):
+        # TODO: Shouldn't this be None?
         return TileLayer()
 
     @default('right_layer')
     def _default_right_layer(self):
+        # TODO: Shouldn't this be None?
         return TileLayer()
 
     def __init__(self, **kwargs):
@@ -1369,6 +1466,7 @@ class SplitMapControl(Control):
     def _handle_leaflet_event(self, _, content, buffers):
         if content.get('event', '') == 'dividermove':
             event = content.get('event')
+            # TODO: Add x trait?
             self.x = event.x
 
 
@@ -1440,6 +1538,24 @@ class DrawControl(Control):
 
 
 class ZoomControl(Control):
+    """ZoomControl class.
+
+    A control which contains buttons for zooming in/out the Map.
+
+    Attributes
+    ----------
+    zoom_in_text: str, default '+'
+        Text to put in the zoom-in button.
+    zoom_in_title: str, default 'Zoom in'
+        Title to put in the zoom-in button, this is shown when the mouse
+        is over the button.
+    zoom_out_text: str, default '-'
+        Text to put in the zoom-out button.
+    zoom_out_title: str, default 'Zoom out'
+        Title to put in the zoom-out button, this is shown when the mouse
+        is over the button.
+    """
+
     _view_name = Unicode('LeafletZoomControlView').tag(sync=True)
     _model_name = Unicode('LeafletZoomControlModel').tag(sync=True)
 
@@ -1450,6 +1566,20 @@ class ZoomControl(Control):
 
 
 class ScaleControl(Control):
+    """ScaleControl class.
+
+    A control which shows the Map scale.
+
+    Attributes
+    ----------
+    max_width: int, default 100
+        Max width of the control, in pixels.
+    metric: bool, default True
+        Whether to show metric units.
+    imperial: bool, default True
+        Whether to show imperial units.
+    """
+
     _view_name = Unicode('LeafletScaleControlView').tag(sync=True)
     _model_name = Unicode('LeafletScaleControlModel').tag(sync=True)
 
@@ -1460,10 +1590,14 @@ class ScaleControl(Control):
 
 
 class AttributionControl(Control):
+    """AttributionControl class.
+
+    A control which contains the layers attribution."""
+
     _view_name = Unicode('LeafletAttributionControlView').tag(sync=True)
     _model_name = Unicode('LeafletAttributionControlModel').tag(sync=True)
 
-    prefix = Unicode('Leaflet').tag(sync=True, o=True)
+    prefix = Unicode('ipyleaflet').tag(sync=True, o=True)
 
 
 class LegendControl(Control):

@@ -18,7 +18,7 @@ export class LeafletSearchControlModel extends control.LeafletControlModel {
       auto_collapse: false,
       zoom:10,
       animate_location:false,
-      found_style: {},
+      found_style: {fillColor: "#3f0", color: "#0f0"},
       marker: null,
       layer: null,
     };

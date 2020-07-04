@@ -68,10 +68,12 @@ def basemap_to_tiles(basemap, day='yesterday', **kwargs):
 
 
 class LayerException(TraitError):
+    """Custom LayerException class."""
     pass
 
 
 class InteractMixin(object):
+    """Abstract InteractMixin class."""
 
     def interact(self, **kwargs):
         c = []
@@ -260,11 +262,24 @@ class Icon(UILayer):
 
     icon_url = Unicode('').tag(sync=True, o=True)
     shadow_url = Unicode(None, allow_none=True).tag(sync=True, o=True)
-    icon_size = List(None, allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
-    shadow_size = List(None, allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
-    icon_anchor = List(None, allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
-    shadow_anchor = List(None, allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
-    popup_anchor = List(None, allow_none=True, minlen=2, maxlen=2).tag(sync=True, o=True)
+    icon_size = List(default_value=None, allow_none=True).tag(sync=True, o=True)
+    shadow_size = List(default_value=None, allow_none=True).tag(sync=True, o=True)
+    icon_anchor = List(default_value=None, allow_none=True).tag(sync=True, o=True)
+    shadow_anchor = List(default_value=None, allow_none=True).tag(sync=True, o=True)
+    popup_anchor = List([0, 0], allow_none=True).tag(sync=True, o=True)
+
+    @validate('icon_size', 'shadow_size', 'icon_anchor', 'shadow_anchor', 'popup_anchor')
+    def _validate_attr(self, proposal):
+        value = proposal['value']
+
+        # Workaround Traitlets which does not respect the None default value
+        if value is None or len(value) == 0:
+            return None
+
+        if len(value) != 2:
+            raise TraitError('The value should be of size 2, but {} was given'.format(value))
+
+        return value
 
 
 class AwesomeIcon(UILayer):
@@ -1218,11 +1233,22 @@ class Choropleth(GeoJSON):
 
 
 class ControlException(TraitError):
+    """Custom LayerException class."""
     pass
 
 
 class Control(Widget):
-    """Control abstract class."""
+    """Control abstract class.
+
+    This is the base class for all ipyleaflet controls. A control is additional
+    UI components on top of the Map.
+
+    Attributes
+    ----------
+    position: str, default 'topleft'
+        The position of the control. Possible values are 'topright',
+        'topleft', 'bottomright' and 'bottomleft'.
+    """
 
     _view_name = Unicode('LeafletControlView').tag(sync=True)
     _model_name = Unicode('LeafletControlModel').tag(sync=True)
@@ -1247,6 +1273,17 @@ class Control(Widget):
 
 
 class WidgetControl(Control):
+    """WidgetControl class.
+
+    A control that contain any DOMWidget instance.
+
+    Attributes
+    ----------
+    widget: DOMWidget
+        The widget to put inside of the control. It can be any widget, even coming from
+        a third-party library like bqplot.
+    """
+
     _view_name = Unicode('LeafletWidgetControlView').tag(sync=True)
     _model_name = Unicode('LeafletWidgetControlModel').tag(sync=True)
 
@@ -1259,16 +1296,51 @@ class WidgetControl(Control):
 
 
 class FullScreenControl(Control):
+    """FullScreenControl class.
+
+    A control which contains a button that will put the Map in
+    full-screen when clicked.
+    """
+
     _view_name = Unicode('LeafletFullScreenControlView').tag(sync=True)
     _model_name = Unicode('LeafletFullScreenControlModel').tag(sync=True)
 
 
 class LayersControl(Control):
+    """LayersControl class.
+
+    A control which allows hiding/showing different layers on the Map.
+    """
+
     _view_name = Unicode('LeafletLayersControlView').tag(sync=True)
     _model_name = Unicode('LeafletLayersControlModel').tag(sync=True)
 
 
 class MeasureControl(Control):
+    """MeasureControl class.
+
+    A control which allows making measurements on the Map.
+
+    Attributes
+    ----------
+    primary_length_unit: str, default 'feet'
+        Possible values are 'feet', 'meters', 'miles', 'kilometers' or any user
+        defined unit.
+    secondary_length_unit: str, default None
+        Possible values are 'feet', 'meters', 'miles', 'kilometers' or any user
+        defined unit.
+    primary_area_unit: str, default 'acres'
+        Possible values are 'acres', 'hectares', 'sqfeet', 'sqmeters', 'sqmiles'
+        or any user defined unit.
+    secondary_area_unit: str, default None
+        Possible values are 'acres', 'hectares', 'sqfeet', 'sqmeters', 'sqmiles'
+        or any user defined unit.
+    active_color: CSS Color, default '#ABE67E'
+        The color used for current measurements.
+    completed_color: CSS Color, default '#C8F2BE'
+        The color used for the completed measurements.
+    """
+
     _view_name = Unicode('LeafletMeasureControlView').tag(sync=True)
     _model_name = Unicode('LeafletMeasureControlModel').tag(sync=True)
 
@@ -1318,10 +1390,34 @@ class MeasureControl(Control):
     capture_z_index = Int(10000).tag(sync=True, o=True)
 
     def add_length_unit(self, name, factor, decimals=0):
+        """Add a custom length unit.
+
+        Parameters
+        ----------
+        name: str
+            The name for your custom unit.
+        factor: float
+            Factor to apply when converting to this unit. Length in meters
+            will be multiplied by this factor.
+        decimals: int, default 0
+            Number of decimals to round results when using this unit.
+        """
         self._length_units.append(name)
         self._add_unit(name, factor, decimals)
 
     def add_area_unit(self, name, factor, decimals=0):
+        """Add a custom area unit.
+
+        Parameters
+        ----------
+        name: str
+            The name for your custom unit.
+        factor: float
+            Factor to apply when converting to this unit. Area in sqmeters
+            will be multiplied by this factor.
+        decimals: int, default 0
+            Number of decimals to round results when using this unit.
+        """
         self._area_units.append(name)
         self._add_unit(name, factor, decimals)
 
@@ -1335,6 +1431,18 @@ class MeasureControl(Control):
 
 
 class SplitMapControl(Control):
+    """SplitMapControl class.
+
+    A control which allows comparing layers by splitting the map in two.
+
+    Attributes
+    ----------
+    left_layer: Layer or list of Layers
+        The left layer(s) for comparison.
+    right_layer: Layer or list of Layers
+        The right layer(s) for comparison.
+    """
+
     _view_name = Unicode('LeafletSplitMapControlView').tag(sync=True)
     _model_name = Unicode('LeafletSplitMapControlModel').tag(sync=True)
 
@@ -1343,10 +1451,12 @@ class SplitMapControl(Control):
 
     @default('left_layer')
     def _default_left_layer(self):
+        # TODO: Shouldn't this be None?
         return TileLayer()
 
     @default('right_layer')
     def _default_right_layer(self):
+        # TODO: Shouldn't this be None?
         return TileLayer()
 
     def __init__(self, **kwargs):
@@ -1356,10 +1466,16 @@ class SplitMapControl(Control):
     def _handle_leaflet_event(self, _, content, buffers):
         if content.get('event', '') == 'dividermove':
             event = content.get('event')
+            # TODO: Add x trait?
             self.x = event.x
 
 
 class DrawControl(Control):
+    """DrawControl class.
+
+    Drawing tools for drawing on the map.
+    """
+
     _view_name = Unicode('LeafletDrawControlView').tag(sync=True)
     _model_name = Unicode('LeafletDrawControlModel').tag(sync=True)
 
@@ -1402,31 +1518,65 @@ class DrawControl(Control):
             self._draw_callbacks(self, action=action, geo_json=self.last_draw)
 
     def on_draw(self, callback, remove=False):
+        """Add a draw event listener.
+
+        Parameters
+        ----------
+        callback : callable
+            Callback function that will be called on draw event.
+        remove: boolean
+            Whether to remove this callback or not. Defaults to False.
+        """
         self._draw_callbacks.register_callback(callback, remove=remove)
 
     def clear(self):
+        """Clear all drawings."""
         self.send({'msg': 'clear'})
 
     def clear_polylines(self):
+        """Clear all polylines."""
         self.send({'msg': 'clear_polylines'})
 
     def clear_polygons(self):
+        """Clear all polygons."""
         self.send({'msg': 'clear_polygons'})
 
     def clear_circles(self):
+        """Clear all circles."""
         self.send({'msg': 'clear_circles'})
 
     def clear_circle_markers(self):
+        """Clear all circle markers."""
         self.send({'msg': 'clear_circle_markers'})
 
     def clear_rectangles(self):
+        """Clear all rectangles."""
         self.send({'msg': 'clear_rectangles'})
 
     def clear_markers(self):
+        """Clear all markers."""
         self.send({'msg': 'clear_markers'})
 
 
 class ZoomControl(Control):
+    """ZoomControl class.
+
+    A control which contains buttons for zooming in/out the Map.
+
+    Attributes
+    ----------
+    zoom_in_text: str, default '+'
+        Text to put in the zoom-in button.
+    zoom_in_title: str, default 'Zoom in'
+        Title to put in the zoom-in button, this is shown when the mouse
+        is over the button.
+    zoom_out_text: str, default '-'
+        Text to put in the zoom-out button.
+    zoom_out_title: str, default 'Zoom out'
+        Title to put in the zoom-out button, this is shown when the mouse
+        is over the button.
+    """
+
     _view_name = Unicode('LeafletZoomControlView').tag(sync=True)
     _model_name = Unicode('LeafletZoomControlModel').tag(sync=True)
 
@@ -1437,6 +1587,20 @@ class ZoomControl(Control):
 
 
 class ScaleControl(Control):
+    """ScaleControl class.
+
+    A control which shows the Map scale.
+
+    Attributes
+    ----------
+    max_width: int, default 100
+        Max width of the control, in pixels.
+    metric: bool, default True
+        Whether to show metric units.
+    imperial: bool, default True
+        Whether to show imperial units.
+    """
+
     _view_name = Unicode('LeafletScaleControlView').tag(sync=True)
     _model_name = Unicode('LeafletScaleControlModel').tag(sync=True)
 
@@ -1447,15 +1611,33 @@ class ScaleControl(Control):
 
 
 class AttributionControl(Control):
+    """AttributionControl class.
+
+    A control which contains the layers attribution.
+    """
+
     _view_name = Unicode('LeafletAttributionControlView').tag(sync=True)
     _model_name = Unicode('LeafletAttributionControlModel').tag(sync=True)
 
-    prefix = Unicode('Leaflet').tag(sync=True, o=True)
+    prefix = Unicode('ipyleaflet').tag(sync=True, o=True)
 
 
 class LegendControl(Control):
+    """LegendControl class.
+
+    A control which contains a legend.
+
+    Attributes
+    ----------
+    title: str, default 'Legend'
+        The title of the legend.
+    legend: dict, default 'Legend'
+        A dictionary containing names as keys and CSS colors as values.
+    """
+
     _view_name = Unicode('LeafletLegendControlView').tag(sync=True)
     _model_name = Unicode('LeafletLegendControlModel').tag(sync=True)
+
     title = Unicode('Legend').tag(sync=True)
     legend = Dict(default_value={
         "value 1": "#AAF",
@@ -1492,15 +1674,32 @@ class LegendControl(Control):
         self.position = position
 
     def add_legend_element(self, key, value):
+        """Add a new legend element.
+
+        Parameters
+        ----------
+        key: str
+            The key for the legend element.
+        value: CSS Color
+            The value for the legend element.
+        """
         self.legend[key] = value
         self.send_state()
 
     def remove_legend_element(self, key):
+        """Remove a legend element.
+
+        Parameters
+        ----------
+        key: str
+            The element to remove.
+        """
         del self.legend[key]
         self.send_state()
 
 
 class SearchControl(Control):
+    """ SearchControl Widget """
     _view_name = Unicode('LeafletSearchControlView').tag(sync=True)
     _model_name = Unicode('LeafletSearchControlModel').tag(sync=True)
 
@@ -1512,13 +1711,24 @@ class SearchControl(Control):
     auto_type = Bool(False).tag(sync=True, o=True)
     auto_collapse = Bool(False).tag(sync=True, o=True)
     animate_location = Bool(False).tag(sync=True, o=True)
+    found_style = Dict(default_value={"fillColor": "#3f0", "color": "#0f0"}).tag(sync=True, o=True)
 
     marker = Instance(Marker, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
     layer = Instance(LayerGroup, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
 
 
 class MapStyle(Style, Widget):
-    """ Map Style Widget """
+    """Map Style Widget
+
+    Custom map style.
+
+    Attributes
+    ----------
+    cursor: str, default 'grab'
+        The cursor to use for the mouse when it's on the map. Should be a valid CSS
+        cursor value.
+    """
+
     _model_name = Unicode('LeafletMapStyleModel').tag(sync=True)
     _model_module = Unicode("jupyter-leaflet").tag(sync=True)
 
@@ -1528,6 +1738,30 @@ class MapStyle(Style, Widget):
 
 
 class Map(DOMWidget, InteractMixin):
+    """Map class.
+
+    The Map class is the main widget in ipyleaflet.
+
+    Attributes
+    ----------
+    layers: list of Layer instances
+        The list of layers that are currently on the map.
+    controls: list of Control instances
+        The list of controls that are currently on the map.
+    center: list, default [0, 0]
+        The current center of the map.
+    zoom: float, default 12
+        The current zoom value of the map.
+    zoom_snap: float, default 1
+        Forces the map’s zoom level to always be a multiple of this..
+    zoom_delta: float, default 1
+        Controls how much the map’s zoom level will change after
+        pressing + or - on the keyboard, or using the zoom controls.
+    crs: projection, default projections.EPSG3857
+        Coordinate reference system, which can be ‘Earth’, ‘EPSG3395’, ‘EPSG3857’,
+        ‘EPSG4326’, ‘Base’, ‘Simple’ or user defined projection.
+    """
+
     _view_name = Unicode('LeafletMapView').tag(sync=True)
     _model_name = Unicode('LeafletMapModel').tag(sync=True)
     _view_module = Unicode('jupyter-leaflet').tag(sync=True)
@@ -1688,6 +1922,13 @@ class Map(DOMWidget, InteractMixin):
         return proposal.value
 
     def add_layer(self, layer):
+        """Add a layer on the map.
+
+        Parameters
+        ----------
+        layer: Layer instance
+            The new layer to add.
+        """
         if isinstance(layer, dict):
             layer = basemap_to_tiles(layer)
         if layer.model_id in self._layer_ids:
@@ -1695,11 +1936,27 @@ class Map(DOMWidget, InteractMixin):
         self.layers = tuple([layer for layer in self.layers] + [layer])
 
     def remove_layer(self, rm_layer):
+        """Remove a layer from the map.
+
+        Parameters
+        ----------
+        layer: Layer instance
+            The layer to remove.
+        """
         if rm_layer.model_id not in self._layer_ids:
             raise LayerException('layer not on map: %r' % rm_layer)
         self.layers = tuple([layer for layer in self.layers if layer.model_id != rm_layer.model_id])
 
     def substitute_layer(self, old, new):
+        """Replace a layer with another one on the map.
+
+        Parameters
+        ----------
+        old: Layer instance
+            The old layer to remove.
+        new: Layer instance
+            The new layer to add.
+        """
         if isinstance(new, dict):
             new = basemap_to_tiles(new)
         if old.model_id not in self._layer_ids:
@@ -1707,6 +1964,7 @@ class Map(DOMWidget, InteractMixin):
         self.layers = tuple([new if layer.model_id == old.model_id else layer for layer in self.layers])
 
     def clear_layers(self):
+        """Remove all layers from the map."""
         self.layers = ()
 
     controls = Tuple().tag(trait=Instance(Control), sync=True, **widget_serialization)
@@ -1725,16 +1983,31 @@ class Map(DOMWidget, InteractMixin):
         return proposal.value
 
     def add_control(self, control):
+        """Add a control on the map.
+
+        Parameters
+        ----------
+        control: Control instance
+            The new control to add.
+        """
         if control.model_id in self._control_ids:
             raise ControlException('control already on map: %r' % control)
         self.controls = tuple([c for c in self.controls] + [control])
 
     def remove_control(self, control):
+        """Remove a control from the map.
+
+        Parameters
+        ----------
+        control: Control instance
+            The control to remove.
+        """
         if control.model_id not in self._control_ids:
             raise ControlException('control not on map: %r' % control)
         self.controls = tuple([c for c in self.controls if c.model_id != control.model_id])
 
     def clear_controls(self):
+        """Remove all controls from the map."""
         self.controls = ()
 
     def save(self, outfile, **kwargs):

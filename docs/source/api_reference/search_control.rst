@@ -33,18 +33,18 @@ You can also search features from GeoJSON layers.
 
     m = Map(zoom=3, center=[19.1646, 72.8493])
 
-    if not os.path.exists('europe_110.geo.json'):
-          url = 'https://github.com/jupyter-widgets/ipyleaflet/raw/master/examples/europe_110.geo.json'
+    if not os.path.exists('countries.geo.json'):
+          url = 'https://raw.githubusercontent.com/jupyter-widgets/ipyleaflet/master/examples/countries.geo.json'
           r = requests.get(url)
-          with open('europe_110.geo.json', 'w') as f:
+          with open('countries.geo.json', 'w') as f:
             f.write(r.content.decode("utf-8"))
 
-    with open("europe_110.geo.json") as f:
+    with open("countries.geo.json") as f:
         data = json.load(f)
 
-    europe = GeoJSON(data=data)
+    countries = GeoJSON(data=data)
 
-    layer_group = LayerGroup(layers=(europe,))
+    layer_group = LayerGroup(layers=(countries,))
     marker = Marker(icon=AwesomeIcon(name="check", marker_color='green', icon_color='darkred'))
 
     m.add_control(SearchControl(
@@ -60,12 +60,13 @@ You can also search features from GeoJSON layers.
 Attributes
 ----------
 
-================    ================   ===
-Attribute           Default Value      Doc
-================    ================   ===
-position            'topleft'          Position of the control, can be 'bottomleft', 'bottomright', 'topleft', or 'topright'
-url                 ''                 The url used for the search queries.
-layer               None               The LayerGroup used for search queries.
-zoom                10                 Default zoom level for move to location
-marker              Marker()           The marker used by the control.
-================    ================   ===
+================    ======================================  ===
+Attribute           Default Value                           Doc
+================    ======================================  ===
+position            'topleft'                               Position of the control, can be 'bottomleft', 'bottomright', 'topleft', or 'topright'
+url                 ''                                      The url used for the search queries.
+layer               None                                    The LayerGroup used for search queries.
+zoom                10                                      Default zoom level for move to location
+marker              Marker()                                The marker used by the control.
+found_style         {'fillColor': '#3f0', 'color': '#0f0'}  Style for searched feature when searching in LayerGroup.
+================    ======================================  ===

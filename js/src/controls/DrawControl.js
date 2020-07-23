@@ -62,6 +62,7 @@ export class LeafletDrawControlView extends control.LeafletControlView {
       marker = false;
     }
     this.obj = new L.Control.Draw({
+      position: this.model.get('position'),
       edit: {
         featureGroup: this.feature_group,
         edit: this.model.get('edit'),

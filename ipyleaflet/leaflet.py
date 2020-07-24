@@ -1060,13 +1060,16 @@ class GeoJSON(FeatureGroup):
             # No style to apply
             return self.data
 
+        # We need to make a deep copy for ipywidgets to see the change
+        data = copy.deepcopy(self.data)
+
         if datatype == 'Feature':
-            self._apply_style(self.data, style_callback)
+            self._apply_style(data, style_callback)
         elif datatype == 'FeatureCollection':
-            for feature in self.data['features']:
+            for feature in data['features']:
                 self._apply_style(feature, style_callback)
 
-        return self.data
+        return data
 
     @property
     def __geo_interface__(self):

@@ -1,3 +1,14 @@
+## v0.13.2
+
+Improvements:
+
+* Add found_style property to SearchControl #640
+
+Fixes:
+
+* Fix DrawControl position #656
+* Fix GeoJSON style update #658
+
 ## v0.13.1
 
 Improvements:

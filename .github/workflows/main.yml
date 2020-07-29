@@ -54,3 +54,11 @@ jobs:
     - name: Import check
       shell: bash -l {0}
       run: python -c 'import ipyleaflet'
+
+    - name: Build docs
+      shell: bash -l {0}
+      run: |
+        mamba install sphinx sphinx_rtd_theme
+        pip install -r docs/requirements.txt
+        cd docs
+        make html

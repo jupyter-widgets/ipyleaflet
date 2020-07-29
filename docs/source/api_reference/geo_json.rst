@@ -14,13 +14,13 @@ Example
     from ipyleaflet import Map, GeoJSON
 
     if not os.path.exists('europe_110.geo.json'):
-      url = 'https://github.com/jupyter-widgets/ipyleaflet/raw/master/examples/europe_110.geo.json'
-      r = requests.get(url)
-      with open('europe_110.geo.json', 'w') as f:
-        f.write(r.content.decode("utf-8"))
+        url = 'https://github.com/jupyter-widgets/ipyleaflet/raw/master/examples/europe_110.geo.json'
+        r = requests.get(url)
+        with open('europe_110.geo.json', 'w') as f:
+            f.write(r.content.decode("utf-8"))
 
     with open('europe_110.geo.json', 'r') as f:
-      data = json.load(f)
+        data = json.load(f)
 
     def random_color(feature):
         return {

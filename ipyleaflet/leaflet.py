@@ -1034,6 +1034,14 @@ class GeoJSON(FeatureGroup):
     _click_callbacks = Instance(CallbackDispatcher, ())
     _hover_callbacks = Instance(CallbackDispatcher, ())
 
+    def __init__(self, **kwargs):
+        self.updating = True
+
+        super(GeoJSON, self).__init__(**kwargs)
+
+        self.data = self._get_data()
+        self.updating = False
+
     @validate('style_callback')
     def _validate_style_callback(self, proposal):
         if not callable(proposal.value):
@@ -1042,7 +1050,12 @@ class GeoJSON(FeatureGroup):
 
     @observe('data', 'style', 'style_callback')
     def _update_data(self, change):
+        if self.updating:
+            return
+
+        self.updating = True
         self.data = self._get_data()
+        self.updating = False
 
     def _get_data(self):
         if 'type' not in self.data:
@@ -1092,10 +1105,6 @@ class GeoJSON(FeatureGroup):
             properties['style'] = style
         else:
             properties['style'] = style_callback(feature)
-
-    def __init__(self, **kwargs):
-        super(GeoJSON, self).__init__(**kwargs)
-        self.data = self._get_data()
 
     def _handle_mouse_events(self, _, content, buffers):
         if content.get('event', '') == 'click':

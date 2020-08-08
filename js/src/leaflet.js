@@ -14,6 +14,7 @@ require('leaflet-fullscreen');
 require('leaflet-transform');
 require('leaflet.awesome-markers');
 require('leaflet-search');
+require('@mapbox/leaflet-omnivore');
 
 // Monkey patch GridLayer for smoother URL updates
 L.patchGridLayer = function (layer) {

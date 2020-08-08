@@ -1244,6 +1244,28 @@ class Choropleth(GeoJSON):
         self.data = self._get_data()
 
 
+class WKT(FeatureGroup):
+    """WKT class.
+
+    Layer created from WKT (Well-known text) data.
+
+    Attributes
+    ----------
+    url: string, default ''
+        The WKT file url.
+    wkt_string: string, default ''
+        The WKT string.
+    style: dict, default {}
+        Extra style to apply to the features.
+    """
+    _view_name = Unicode('LeafletWKTView').tag(sync=True)
+    _model_name = Unicode('LeafletWKTModel').tag(sync=True)
+
+    url = Unicode().tag(sync=True)
+    wkt_string = Unicode().tag(sync=True)
+    style = Dict().tag(sync=True)
+
+
 class ControlException(TraitError):
     """Custom LayerException class."""
     pass

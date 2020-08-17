@@ -50,8 +50,9 @@ export class LeafletMarkerView extends layer.LeafletUILayerView {
       this.model.set('location', [position.lat, position.lng]);
       this.touch();
     });
-    if (this.model.get('title')) {
-      this.obj.bindPopup(this.model.get('title'));
+    var title = this.model.get('title');
+    if (title) {
+      this.obj.bindPopup(title);
       this.obj.on('mouseover', event => {
         this.obj.openPopup();
       });

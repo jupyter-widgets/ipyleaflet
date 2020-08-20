@@ -1281,10 +1281,8 @@ class WKTLayer(GeoJSON):
 
         geo = geometry.mapping(parsed_wkt)
         if geo["type"] == "GeometryCollection":
-            feature_collection = {"type": "FeatureCollection", "features": []}
-            for g in geo["geometries"]:
-                feature = {"geometry": g, "properties": {}, "type": "Feature"}
-                feature_collection["features"].append(feature)
+            features = [{"geometry": g, "properties": {}, "type": "Feature"} for g in geo["geometries"]]
+            feature_collection = {"type": "FeatureCollection", "features": features}
             return feature_collection
         else:
             feature = {"geometry": geo, "properties": {}, "type": "Feature"}

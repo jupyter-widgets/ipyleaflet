@@ -1253,15 +1253,17 @@ class WKTLayer(GeoJSON):
 
     Attributes
     ----------
-    path: file path of local WKT file.
-    wkt_string: WKT string.
+    path: string, default ""
+      file path of local WKT file.
+    wkt_string: string, default ""
+      WKT string.
     """
 
     path = Unicode('')
     wkt_string = Unicode('')
 
     def __init__(self, **kwargs):
-        super(WKTLayer, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.data = self._get_data()
 
     @observe('path', 'wkt_string', 'style', 'style_callback')
@@ -1271,8 +1273,7 @@ class WKTLayer(GeoJSON):
     def _get_data(self):
         if self.path:
             with open(self.path) as f:
-                wkt_data = f.read()
-                parsed_wkt = wkt.loads(wkt_data)
+                parsed_wkt = wkt.load(f)
         elif self.wkt_string:
             parsed_wkt = wkt.loads(self.wkt_string)
         else:

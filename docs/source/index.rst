@@ -45,6 +45,7 @@ ipyleaflet: Interactive maps in the Jupyter notebook
     api_reference/geodata
     api_reference/choropleth
     api_reference/vector_tile.rst
+    api_reference/wkt_layer
 
 .. toctree::
     :caption: Controls

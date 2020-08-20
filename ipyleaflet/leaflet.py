@@ -20,10 +20,12 @@ from traitlets import (
 )
 
 from branca.colormap import linear, ColorMap
+from shapely import geometry, wkt
 
 from ._version import EXTENSION_VERSION
 
 from .projections import projections
+
 
 def_loc = [0.0, 0.0]
 allowed_cursor = ['alias', 'cell', 'grab', 'move', 'crosshair', 'context-menu',
@@ -1242,6 +1244,49 @@ class Choropleth(GeoJSON):
     def __init__(self, **kwargs):
         super(Choropleth, self).__init__(**kwargs)
         self.data = self._get_data()
+
+
+class WKTLayer(GeoJSON):
+    """WKTLayer class.
+
+    Layer created from a local WKT file or WKT string input.
+
+    Attributes
+    ----------
+    path: string, default ""
+      file path of local WKT file.
+    wkt_string: string, default ""
+      WKT string.
+    """
+
+    path = Unicode('')
+    wkt_string = Unicode('')
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.data = self._get_data()
+
+    @observe('path', 'wkt_string', 'style', 'style_callback')
+    def _update_data(self, change):
+        self.data = self._get_data()
+
+    def _get_data(self):
+        if self.path:
+            with open(self.path) as f:
+                parsed_wkt = wkt.load(f)
+        elif self.wkt_string:
+            parsed_wkt = wkt.loads(self.wkt_string)
+        else:
+            raise ValueError("Please provide either WKT file path or WKT string")
+
+        geo = geometry.mapping(parsed_wkt)
+        if geo["type"] == "GeometryCollection":
+            features = [{"geometry": g, "properties": {}, "type": "Feature"} for g in geo["geometries"]]
+            feature_collection = {"type": "FeatureCollection", "features": features}
+            return feature_collection
+        else:
+            feature = {"geometry": geo, "properties": {}, "type": "Feature"}
+            return feature
 
 
 class ControlException(TraitError):

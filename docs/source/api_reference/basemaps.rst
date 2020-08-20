@@ -40,6 +40,14 @@ your own ``TileLayer`` layer.
 
     Map(basemap=basemaps.OpenTopoMap, center=center, zoom=zoom)
 
+.. jupyter-execute::
+
+    Map(basemap=basemaps.Gaode.Normal, center=center, zoom=zoom)
+
+.. jupyter-execute::
+
+    Map(basemap=basemaps.Gaode.Satellite, center=center, zoom=zoom)
+
 
 .. jupyter-execute::
 

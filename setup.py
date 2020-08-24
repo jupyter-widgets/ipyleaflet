@@ -141,6 +141,7 @@ setup_args = dict(
         'ipywidgets>=7.5.0,<8',
         'traittypes>=0.2.1,<3',
         'branca>=0.3.1,<0.5',
+        'shapely',
     ],
     packages=find_packages(),
     zip_safe=False,

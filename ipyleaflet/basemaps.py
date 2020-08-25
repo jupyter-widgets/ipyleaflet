@@ -41,6 +41,18 @@ basemaps = Bunch(
             name='OpenStreetMap.HOT'
         )
     ),
+    Gaode=Bunch(
+        Normal=dict(
+            url='http://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}',
+            max_zoom=19,
+            name='Gaode.Normal'
+        ),
+        Satellite=dict(
+            url='http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+            max_zoom=19,
+            name='Gaode.Satellite'
+        ),
+    ),
     OpenTopoMap=dict(
         url='https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
         max_zoom=17,

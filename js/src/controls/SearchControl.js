@@ -16,7 +16,7 @@ export class LeafletSearchControlModel extends control.LeafletControlModel {
       property_loc: ['lat','lon'],
       auto_type: false,
       auto_collapse: false,
-      zoom:10,
+      zoom:null,
       animate_location:false,
       found_style: {fillColor: "#3f0", color: "#0f0"},
       marker: null,

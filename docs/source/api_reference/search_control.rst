@@ -66,7 +66,7 @@ Attribute           Default Value                           Doc
 position            'topleft'                               Position of the control, can be 'bottomleft', 'bottomright', 'topleft', or 'topright'
 url                 ''                                      The url used for the search queries.
 layer               None                                    The LayerGroup used for search queries.
-zoom                10                                      Default zoom level for move to location
+zoom                None                                    The zoom level after moving to searched location, by default zoom level will not change.
 marker              Marker()                                The marker used by the control.
 found_style         {'fillColor': '#3f0', 'color': '#0f0'}  Style for searched feature when searching in LayerGroup.
 ================    ======================================  ===

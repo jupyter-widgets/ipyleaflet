@@ -1761,7 +1761,7 @@ class SearchControl(Control):
     _model_name = Unicode('LeafletSearchControlModel').tag(sync=True)
 
     url = Unicode().tag(sync=True, o=True)
-    zoom = Int(10).tag(sync=True, o=True)
+    zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)
     property_name = Unicode('display_name').tag(sync=True, o=True)
     property_loc = List(['lat', 'lon']).tag(sync=True, o=True)
     jsonp_param = Unicode('json_callback').tag(sync=True, o=True)

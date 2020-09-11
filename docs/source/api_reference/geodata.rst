@@ -2,7 +2,7 @@ GeoData
 =======
 
 ``GeoData`` is an ``ipyleaflet`` class that allows you to visualize a `GeoDataFrame
-<http://geopandas.org/data_structures.html>`_  of polygons, liness, and points on the Map.
+<http://geopandas.org/data_structures.html>`_  of polygons, lines, and points on the Map.
 
 
 Examples

@@ -37,6 +37,8 @@ Examples
 
 Points example:
 
+.. jupyter-execute::
+
     from ipyleaflet import Map, GeoJSON, GeoData
     import geopandas, pandas as pd, numpy as np
     

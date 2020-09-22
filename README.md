@@ -124,7 +124,7 @@ The `ipyleaflet` repository includes the `jupyter-leaflet` npm package, which
 is a front-end component, and the `ipyleaflet` python package which is the
 backend for the Python Jupyter kernel.
 
-Similarly, the [`xleaflet`](https://github.com/QuantStack/xleaflet/) project
+Similarly, the [`xleaflet`](https://github.com/jupyter-xeus/xleaflet/) project
 provides a backend to `jupyter-leaflet` for the "xeus-cling" C++ Jupyter
 kernel.
 

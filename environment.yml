@@ -2,6 +2,7 @@ name: ipyleaflet
 channels:
   - conda-forge
 dependencies:
+  - nodejs=14.11
   - ipyleaflet=0.13.3
   - scipy
   - bqplot

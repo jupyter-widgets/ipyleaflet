@@ -1784,12 +1784,12 @@ class SearchControl(Control):
             self._feature_found_callbacks(**content)
 
     def on_feature_found(self, callback, remove=False):
-        """Add a found feature event listener.
+        """Add a found feature event listener for searching in GeoJSON layer.
 
         Parameters
         ----------
         callback : callable
-            Callback function that will be called on found event.
+            Callback function that will be called on found event when searching in GeoJSON layer.
         remove: boolean
             Whether to remove this callback or not. Defaults to False.
         """

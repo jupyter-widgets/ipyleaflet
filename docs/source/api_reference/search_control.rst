@@ -70,3 +70,12 @@ zoom                None                                    The zoom level after
 marker              Marker()                                The marker used by the control.
 found_style         {'fillColor': '#3f0', 'color': '#0f0'}  Style for searched feature when searching in LayerGroup.
 ================    ======================================  ===
+
+Methods
+-------
+
+=========            =====================================     ===
+Method               Arguments                                 Doc
+=========            =====================================     ===
+on_feature_found     Callable object                           Adds a callback on found event
+=========            =====================================     ===

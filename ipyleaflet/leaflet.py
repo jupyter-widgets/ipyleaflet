@@ -1773,6 +1773,28 @@ class SearchControl(Control):
     marker = Instance(Marker, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
     layer = Instance(LayerGroup, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
 
+    _feature_found_callbacks = Instance(CallbackDispatcher, ())
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.on_msg(self._handle_leaflet_event)
+
+    def _handle_leaflet_event(self, _, content, buffers):
+        if content.get('event', '') == 'found':
+            self._feature_found_callbacks(**content)
+
+    def on_feature_found(self, callback, remove=False):
+        """Add a found feature event listener for searching in GeoJSON layer.
+
+        Parameters
+        ----------
+        callback : callable
+            Callback function that will be called on found event when searching in GeoJSON layer.
+        remove: boolean
+            Whether to remove this callback or not. Defaults to False.
+        """
+        self._feature_found_callbacks.register_callback(callback, remove=remove)
+
 
 class MapStyle(Style, Widget):
     """Map Style Widget

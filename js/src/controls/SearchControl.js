@@ -52,10 +52,14 @@ export class LeafletSearchControlView extends control.LeafletControlView {
   leaflet_events() {
     if (this.model.get('layer') !== null) {
         var found_style = this.model.get('found_style');
-        this.obj.on('search:locationfound', function(e) {
+        this.obj.on('search:locationfound', (e) => {
            e.layer.setStyle(found_style);
            if(e.layer._popup)
               e.layer.openPopup();
+           this.send({
+             event: 'found',
+             feature: e.layer.feature
+           });
         });
     }
   }

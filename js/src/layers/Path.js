@@ -13,7 +13,7 @@ export class LeafletPathModel extends vectorlayer.LeafletVectorLayerModel {
       color: '#0033FF',
       weight: 5,
       fill: true,
-      fill_color: '#0033FF',
+      fill_color: null,
       fill_opacity: 0.2,
       dash_array: null,
       line_cap: 'round',
@@ -40,6 +40,5 @@ export class LeafletPathView extends vectorlayer.LeafletVectorLayerView {
         this
       );
     }
-    this.obj.setStyle(this.get_options());
   }
 }

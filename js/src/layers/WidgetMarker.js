@@ -49,12 +49,15 @@ export class LeafletWidgetMarkerView extends marker.LeafletMarkerView {
     if (value) {
       this.icon_promise = this.icon_promise.then(() => {
         return this.create_child_view(value).then(view => {
-          view.el.style.top = '50%';
-          view.el.style.left = '50%';
-          view.el.style.transform = 'translate(-50%, -50%)';
-          view.el.style.position = 'absolute';
+          const container = document.createElement('div');
+          container.appendChild(view.el);
+          container.classList.add('leaflet-widgetcontrol');
+          container.style.top = '50%';
+          container.style.left = '50%';
+          container.style.transform = 'translate(-50%, -50%)';
+          container.style.position = 'absolute';
 
-          this.obj.setIcon(L.divIcon({html: view.el}));
+          this.obj.setIcon(L.divIcon({html: container}));
           this.icon = view;
         });
       });

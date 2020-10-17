@@ -99,12 +99,9 @@ attribution       "Map data (c) <a href=\'https://openstreetmap.org\'>OpenStreet
 detect_retina     False
 opacity           1.0
 visible           True
-service           "WMS"
-request           "GetMap"
 layers            ""                                                                                    Comma-separated list of WMS layers to show
 styles            ""                                                                                    Comma-separated list of WMS styles
 format            "image/jpeg"                                                                          WMS image format (use `'image/png'` for layers with transparency)
 transparent       False                                                                                 If `True`, the WMS service will return images with transparency
-version           "1.1.1"                                                                               Version of the WMS service to use
-crs               ""
+crs               ipyleaflet.projections.EPSG3857                                                       Projection used for this service.
 ===============   ===================================================================================   ===

@@ -35,11 +35,7 @@ export class LeafletImageOverlayView extends rasterlayer.LeafletRasterLayerView 
       'change:url',
       function() {
         const url = this.model.get('url');
-        const bounds = this.model.get('bounds');
-        const options = this.get_options();
-        this.map_view.obj.removeLayer(this.obj);
-        this.obj = L.imageOverlay(url, bounds, options);
-        this.map_view.obj.addLayer(this.obj);
+        this.obj.setUrl(url);
       },
       this
     );
@@ -48,12 +44,8 @@ export class LeafletImageOverlayView extends rasterlayer.LeafletRasterLayerView 
       this.model,
       'change:bounds',
       function() {
-        const url = this.model.get('url');
         const bounds = this.model.get('bounds');
-        const options = this.get_options();
-        this.map_view.obj.removeLayer(this.obj);
-        this.obj = L.imageOverlay(url, bounds, options);
-        this.map_view.obj.addLayer(this.obj);
+        this.obj.setBounds(bounds);
       },
       this
     );

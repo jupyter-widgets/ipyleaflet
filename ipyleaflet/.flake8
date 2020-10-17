@@ -1,0 +1,8 @@
+ignore = E501,E731
+exclude =
+    .git,
+    __pycache__,
+    build,
+    dist
+max-complexity = 10
+

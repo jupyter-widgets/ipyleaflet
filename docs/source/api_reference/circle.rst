@@ -36,7 +36,7 @@ color             "#0033FF"          Stroke color
 opacity           1.0                Stroke opacity
 weight            5                  Stroke width in pixels
 fill              True               Whether to fill the circle or not
-fill_color        "#0033FF"
+fill_color        None
 fill_opacity      0.2
 dash_array
 line_cap          "round"

@@ -4,6 +4,10 @@
 
 from traitlets.utils.bunch import Bunch
 
+gibs_attribution = """
+Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.
+"""
+
 basemaps = Bunch(
     OpenStreetMap=Bunch(
         Mapnik=dict(
@@ -36,6 +40,18 @@ basemaps = Bunch(
             attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>',
             name='OpenStreetMap.HOT'
         )
+    ),
+    Gaode=Bunch(
+        Normal=dict(
+            url='http://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}',
+            max_zoom=19,
+            name='Gaode.Normal'
+        ),
+        Satellite=dict(
+            url='http://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+            max_zoom=19,
+            name='Gaode.Satellite'
+        ),
     ),
     OpenTopoMap=dict(
         url='https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
@@ -122,44 +138,62 @@ basemaps = Bunch(
         ModisTerraTrueColorCR=dict(
             url='https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/%s/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
             max_zoom=9,
-            attribution='Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
+            attribution=gibs_attribution,
             name='NASAGIBS.ModisTerraTrueColorCR'
         ),
         ModisTerraBands367CR=dict(
             url='https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_Bands367/default/%s/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
             max_zoom=9,
-            attribution='Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
+            attribution=gibs_attribution,
             name='NASAGIBS.ModisTerraBands367CR'
         ),
         ModisTerraBands721CR=dict(
             url='https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_Bands721/default/%s/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
             max_zoom=9,
-            attribution='Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
-            name='NASAGIBS.MidsTerraBands721CR'
+            attribution=gibs_attribution,
+            name='NASAGIBS.ModisTerraBands721CR'
         ),
         ModisAquaTrueColorCR=dict(
             url='https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Aqua_CorrectedReflectance_TrueColor/default/%s/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
             max_zoom=9,
-            attribution='Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
+            attribution=gibs_attribution,
             name='NASAGIBS.ModisAquaTrueColorCR'
         ),
         ModisAquaBands721CR=dict(
             url='https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Aqua_CorrectedReflectance_Bands721/default/%s/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
             max_zoom=9,
-            attribution='Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
+            attribution=gibs_attribution,
             name='NASAGIBS.ModisAquaBands721CR'
         ),
         ViirsTrueColorCR=dict(
             url='https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_SNPP_CorrectedReflectance_TrueColor/default/%s/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg',
             max_zoom=9,
-            attribution='Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
+            attribution=gibs_attribution,
             name='NASAGIBS.ViirsTrueColorCR'
         ),
         ViirsEarthAtNight2012=dict(
             url='http://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_Black_Marble/default/2012-01-01/GoogleMapsCompatible_Level8/{z}/{y}/{x}.png',
             max_zoom=8,
-            attribution='Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science Data and Information System (<a href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.',
+            attribution=gibs_attribution,
             name='NASAGIBS.ViirsEarthAtNight2012'
+        ),
+        BlueMarble3413=dict(
+            url='https://gibs.earthdata.nasa.gov/wmts/epsg3413/best/BlueMarble_NextGeneration/default/EPSG3413_500m/{z}/{y}/{x}.jpeg',
+            max_zoom=5,
+            attribution=gibs_attribution,
+            name='NASAGIBS.BlueMarble3413'
+        ),
+        BlueMarble3031=dict(
+            url='https://gibs.earthdata.nasa.gov/wmts/epsg3031/best/BlueMarble_NextGeneration/default/EPSG3031_500m/{z}/{y}/{x}.jpeg',
+            max_zoom=5,
+            attribution=gibs_attribution,
+            name='NASAGIBS.BlueMarble3031'
+        ),
+        BlueMarble=dict(
+            url='https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_NextGeneration/default/EPSG3857_500m/{z}/{y}/{x}.jpeg',
+            max_zoom=8,
+            attribution=gibs_attribution,
+            name='NASAGIBS.BlueMarble'
         )
     ),
     Strava=Bunch(

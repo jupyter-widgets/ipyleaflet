@@ -5,7 +5,7 @@ const widgets = require('@jupyter-widgets/base');
 
 function camel_case(input) {
   // Convert from foo_bar to fooBar
-  return input.toLowerCase().replace(/_(.)/g, function(match, group1) {
+  return input.toLowerCase().replace(/_(.)/g, function (match, group1) {
     return group1.toUpperCase();
   });
 }
@@ -18,7 +18,7 @@ class leafletViewCommon {
     var o = this.model.get('options');
     var options = {};
     var key;
-    for (var i=0; i<o.length; i++) {
+    for (var i = 0; i < o.length; i++) {
       key = o[i];
       // Convert from foo_bar to fooBar that Leaflet.js uses
       options[camel_case(key)] = this.model.get(key);

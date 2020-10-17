@@ -1,35 +1,67 @@
 Map
 ===
 
-Example
--------
+Usage
+-----
 
 .. jupyter-execute::
 
     from ipyleaflet import Map, basemaps, basemap_to_tiles
 
     m = Map(
-        layers=(basemap_to_tiles(basemaps.NASAGIBS.ModisTerraTrueColorCR, "2017-04-08"), ),
+        basemap=basemap_to_tiles(basemaps.NASAGIBS.ModisTerraTrueColorCR, "2017-04-08"),
         center=(52.204793, 360.121558),
         zoom=4
     )
 
     m
 
+You can find the list of available basemaps in the :ref:`basemaps-section` page.
+
+You can add multiple layers and controls to the map, using the ``add_layer``/``add_control`` methods. All those layers and controls are widgets themselves. So you can dynamically update their attributes from Python or by interacting with the map on the page (see :ref:`usage-section`)
+
+.. jupyter-execute::
+
+    from ipyleaflet import Map, Marker, basemaps, basemap_to_tiles
+
+    m = Map(
+        basemap=basemap_to_tiles(basemaps.NASAGIBS.ModisTerraTrueColorCR, "2017-04-08"),
+        center=(52.204793, 360.121558),
+        zoom=4
+    )
+
+    m.add_layer(Marker(location=(52.204793, 360.121558)))
+
+    m
+
+Save to HTML
+------------
+
+You can save the ``Map`` and all its layers and controls to an HTML page using the ``save`` method:
+
+.. code::
+
+    m.save('my_map.html', title='My Map')
+
+.. note::
+    The saved file is a static HTML page, so there is no possible interaction with Python anymore. This means that all the Python callbacks you defined (`e.g.` on marker move) cannot be executed. If you want to serve the ``Map`` widget to an HTML page while keeping a Python kernel alive on the server, you might want to look at `Voilà <https://voila.readthedocs.io>`_.
+
 
 Attributes
 ----------
 
-========================    ===============                     ===
+========================    =====================               ===
 Attribute                   Default Value                       Doc
-========================    ===============                     ===
+========================    =====================               ===
 layers                      (default_layer)                     Tuple of layers
 controls                    ()                                  Tuple of controls
 center                      (0.0, 0.0)                          Initial geographic center of the map
 zoom                        12                                  Initial map zoom level
 max_zoom                    18
 min_zoom                    1
-crs                         'EPSG3857'                          Coordinate reference system, which can be 'Earth', 'EPSG3395', 'EPSG3857', 'EPSG4326', 'Base', or 'Simple'
+zoom_snap                   1                                   Forces the map's zoom level to always be a multiple of this
+zoom_delta                  1                                   Controls how much the map's zoom level will change after pressing + or - on the keyboard, or using the zoom controls
+crs                         projections.EPSG3857                Coordinate reference system, which can be 'Earth', 'EPSG3395', 'EPSG3857', 'EPSG4326', 'Base', 'Simple' or you can define your own projection. (See CustomProjections notebook)
 dragging                    True                                Whether the map be draggable with mouse/touch or not
 touch_zoom                  True                                Whether the map can be zoomed by touch-dragging with two fingers on mobile
 scroll_wheel_zoom           False                               Whether the map can be zoomed by using the mouse wheel
@@ -49,7 +81,7 @@ inertia_max_speed           1500                                Max speed of the
 zoom_control                True
 attribution_control         True
 zoom_animation_threshold    4
-========================    ===============                     ===
+========================    =====================               ===
 
 Methods
 -------
@@ -59,9 +91,11 @@ Method             Arguments                                 Doc
 ================   =====================================     ===
 add_layer          Layer instance                            Add a new layer to the map
 remove_layer       Layer instance                            Remove a layer from the map
+substitute_layer   Layer instance                            Substitute a layer with a new layer
 clear_layers                                                 Remove all layers from the map
 add_control        Control instance                          Add a new control to the map
 remove_control     Control instance                          Remove a control from the map
 clear_controls                                               Remove all controls from the map
 on_interaction     callable object                           Add a callback on interaction
+save               output file                               Save the map to an HTML file
 ================   =====================================     ===

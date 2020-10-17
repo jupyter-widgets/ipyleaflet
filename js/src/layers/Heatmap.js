@@ -44,18 +44,5 @@ export class LeafletHeatmapView extends layer.LeafletLayerView {
       },
       this
     );
-    var key;
-    var o = this.model.get('options');
-    for (var i = 0; i < o.length; i++) {
-      key = o[i];
-      this.listenTo(
-        this.model,
-        'change:' + key,
-        function() {
-          this.obj.setOptions(this.get_options());
-        },
-        this
-      );
-    }
   }
 }

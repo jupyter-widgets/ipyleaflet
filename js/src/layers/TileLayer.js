@@ -19,6 +19,7 @@ export class LeafletTileLayerModel extends rasterlayer.LeafletRasterLayerModel {
       attribution:
         'Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
       detect_retina: false,
+      no_wrap: false,
       tms: false,
       show_loading: false,
       loading: false
@@ -58,7 +59,7 @@ export class LeafletTileLayerView extends rasterlayer.LeafletRasterLayerView {
     this.listenTo(
       this.model,
       'change:url',
-      function() {
+      function () {
         this.obj.setUrl(this.model.get('url'), true);
         this.obj.refresh();
       },

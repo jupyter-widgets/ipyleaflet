@@ -77,9 +77,8 @@ export class LeafletGeoJSONView extends featuregroup.LeafletFeatureGroupView {
       this.model,
       'change:data',
       function() {
-        this.map_view.obj.removeLayer(this.obj);
-        this.create_obj();
-        this.map_view.obj.addLayer(this.obj);
+        this.obj.clearLayers();
+        this.obj.addData(this.model.get('data'));
       },
       this
     );

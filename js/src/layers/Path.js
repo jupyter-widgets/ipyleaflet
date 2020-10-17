@@ -18,8 +18,7 @@ export class LeafletPathModel extends vectorlayer.LeafletVectorLayerModel {
       dash_array: null,
       line_cap: 'round',
       line_join: 'round',
-      pointer_events: '',
-      class_name: ''
+      pointer_events: ''
     };
   }
 }

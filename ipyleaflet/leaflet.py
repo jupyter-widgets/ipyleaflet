@@ -441,7 +441,6 @@ class Popup(UILayer):
     close_button = Bool(True).tag(sync=True, o=True)
     auto_close = Bool(True).tag(sync=True, o=True)
     close_on_escape_key = Bool(True).tag(sync=True, o=True)
-    class_name = Unicode('').tag(sync=True, o=True)
 
 
 class RasterLayer(Layer):
@@ -748,7 +747,6 @@ class Path(VectorLayer):
     line_cap = Enum(values=['round', 'butt', 'square'], default_value='round').tag(sync=True, o=True)
     line_join = Enum(values=['arcs', 'bevel', 'miter', 'miter-clip', 'round'], default_value='round').tag(sync=True, o=True)
     pointer_events = Unicode('').tag(sync=True, o=True)
-    class_name = Unicode('').tag(sync=True, o=True)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True, o=True)
 
 

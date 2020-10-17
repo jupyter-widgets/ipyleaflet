@@ -56,5 +56,4 @@ auto_pan_padding         (5, 5)
 keep_in_view             False                   Set it to `True` if you want to prevent users from panning the popup off of the screen while it is open
 close_button             True                    Controls the presence of a close button in the popup
 close_on_escape_key      True                    Set it to `False` if you want to override the default behavior of the ESC key for closing of the popup
-class_name               ""                      A custom CSS class name to assign to the popup
 =====================    =====================   ===

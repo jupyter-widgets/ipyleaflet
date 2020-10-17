@@ -9,6 +9,7 @@ require('leaflet.markercluster');
 require('leaflet-velocity');
 require('leaflet-measure');
 require('./leaflet-heat.js');
+require('./leaflet-magnifyingglass.js');
 require('leaflet-rotatedmarker');
 require('leaflet-fullscreen');
 require('leaflet-transform');

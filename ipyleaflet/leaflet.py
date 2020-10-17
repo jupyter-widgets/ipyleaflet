@@ -586,6 +586,37 @@ class WMSLayer(TileLayer):
     uppercase = Bool(False).tag(sync=True, o=True)
 
 
+class MagnifyingGlass(RasterLayer):
+    """MagnifyingGlass class.
+
+    Attributes
+    ----------
+    layers: list, default []
+        List of layers to show in the magnifying glass.
+        Don't re-use layer objects already in use by the main map!
+    """
+
+    _view_name = Unicode('LeafletMagnifyingGlassView').tag(sync=True)
+    _model_name = Unicode('LeafletMagnifyingGlassModel').tag(sync=True)
+
+    # Options
+    layers = Tuple().tag(trait=Instance(Layer), sync=True, **widget_serialization)
+
+    _layer_ids = List()
+
+    @validate('layers')
+    def _validate_layers(self, proposal):
+        '''Validate layers list.
+
+        Makes sure only one instance of any given layer can exist in the
+        layers list.
+        '''
+        self._layer_ids = [layer.model_id for layer in proposal.value]
+        if len(set(self._layer_ids)) != len(self._layer_ids):
+            raise LayerException('duplicate layer detected, only use each layer once')
+        return proposal.value
+
+
 class ImageOverlay(RasterLayer):
     """ImageOverlay class.
 

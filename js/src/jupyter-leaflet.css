@@ -126,6 +126,7 @@
     color: var(--jp-ui-font-color1);
     font-size: 11px;
 }
+
 /* Legend Control */
 div.leaflet-control-legend {
     color: var(--jp-ui-font-color1);
@@ -154,4 +155,27 @@ div.leaflet-control-legend > i {
 
 div.leaflet-control-legend > p {
 	display: inline-block;
+}
+
+/* Magnifying Glass */
+.leaflet-magnifying-glass {
+  border-radius: 50%;
+  border: 1px solid gray;
+  box-shadow: 0 0 5px gray;
+  position: absolute;
+  overflow: hidden;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.leaflet-magnifying-glass > .leaflet-container {
+  height: 	100%;
+  width: 	100%;
+}
+
+/* Webkit-only workaround for the border-radius clipping bug,
+applied to the map container */
+.leaflet-magnifying-glass-webkit {
+  border-radius: 50%;
+  -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
 }

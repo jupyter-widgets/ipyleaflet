@@ -33,4 +33,5 @@ min_width           None               Min width of the widget (in pixels), if N
 max_width           None               Max width of the widget (in pixels), if None it will respect the content size
 min_height          None               Min height of the widget (in pixels), if None it will respect the content size
 max_height          None               Max height of the widget (in pixels), if None it will respect the content size
+transparent_bg      False              If set to True will make the widget background transparent
 ================    ================   ===

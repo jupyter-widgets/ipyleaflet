@@ -44,7 +44,6 @@ export class LeafletMagnifyingGlassView extends layer.LeafletLayerView {
       this.remove_layer_view,
       this
     );
-    console.log(this.get_options());
     var layers = this.get_options().layers;
     return this.layer_views.update(layers).then(layers => {
       var options = this.get_options();
@@ -55,5 +54,21 @@ export class LeafletMagnifyingGlassView extends layer.LeafletLayerView {
 
   model_events() {
     super.model_events();
+    var key;
+    var o = this.model.get('options');
+    for (var i = 0; i < o.length; i++) {
+      key = o[i];
+      this.listenTo(
+        this.model,
+        'change:' + key,
+        function() {
+          this.map_view.obj.removeLayer(this.obj);
+          this.create_obj().then(() => {
+            this.map_view.obj.addLayer(this.obj);
+          });
+        },
+        this
+      );
+    }
   }
 }

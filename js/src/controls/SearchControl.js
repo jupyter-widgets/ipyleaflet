@@ -16,25 +16,51 @@ export class LeafletSearchControlModel extends control.LeafletControlModel {
       property_loc: ['lat','lon'],
       auto_type: false,
       auto_collapse: false,
-      zoom:10,
+      zoom:null,
       animate_location:false,
+      found_style: {fillColor: "#3f0", color: "#0f0"},
       marker: null,
+      layer: null,
     };
   }
 }
 
 LeafletSearchControlModel.serializers = {
   ...control.LeafletControlModel.serializers,
-  marker: { deserialize: widgets.unpack_models }
+  marker: { deserialize: widgets.unpack_models },
+  layer: { deserialize: widgets.unpack_models },
 };
 
 
 export class LeafletSearchControlView extends control.LeafletControlView {
   create_obj() {
-    return this.create_child_view(this.model.get('marker')).then((view) => {
-      let options = this.get_options();
-      options.marker = view.obj;
+    const layer = this.model.get('layer');
+    const marker = this.model.get('marker');
+    const layer_promise = layer !== null ? this.create_child_view(layer) : Promise.resolve(null);
+    const marker_promise = marker !== null ? this.create_child_view(marker) : Promise.resolve(null);
+
+    return Promise.all([layer_promise, marker_promise]).then(result => {
+      const layer_view = result[0];
+      const marker_view = result[1];
+      const options = this.get_options();
+      options.layer = layer_view !== null ? layer_view.obj : null;
+      options.marker = marker_view !== null ? marker_view.obj : false;
       this.obj = L.control.search(options);
     });
+  }
+
+  leaflet_events() {
+    if (this.model.get('layer') !== null) {
+        var found_style = this.model.get('found_style');
+        this.obj.on('search:locationfound', (e) => {
+           e.layer.setStyle(found_style);
+           if(e.layer._popup)
+              e.layer.openPopup();
+           this.send({
+             event: 'found',
+             feature: e.layer.feature
+           });
+        });
+    }
   }
 }

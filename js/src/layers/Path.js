@@ -40,6 +40,5 @@ export class LeafletPathView extends vectorlayer.LeafletVectorLayerView {
         this
       );
     }
-    this.obj.setStyle(this.get_options());
   }
 }

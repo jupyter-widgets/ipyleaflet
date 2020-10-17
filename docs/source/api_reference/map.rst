@@ -59,6 +59,8 @@ center                      (0.0, 0.0)                          Initial geograph
 zoom                        12                                  Initial map zoom level
 max_zoom                    18
 min_zoom                    1
+zoom_snap                   1                                   Forces the map's zoom level to always be a multiple of this
+zoom_delta                  1                                   Controls how much the map's zoom level will change after pressing + or - on the keyboard, or using the zoom controls
 crs                         projections.EPSG3857                Coordinate reference system, which can be 'Earth', 'EPSG3395', 'EPSG3857', 'EPSG4326', 'Base', 'Simple' or you can define your own projection. (See CustomProjections notebook)
 dragging                    True                                Whether the map be draggable with mouse/touch or not
 touch_zoom                  True                                Whether the map can be zoomed by touch-dragging with two fingers on mobile

@@ -33,7 +33,10 @@ class WidgetControl extends L.Control {
   }
 
   onAdd(map) {
-    this._container = L.DomUtil.create('div', 'leaflet-widgetcontrol');
+    if(this.options.transparentBg)
+      this._container = L.DomUtil.create('div');
+    else
+      this._container = L.DomUtil.create('div', 'leaflet-widgetcontrol');
 
     L.DomEvent.disableClickPropagation(this._container);
     L.DomEvent.disableScrollPropagation(this._container);
@@ -57,7 +60,8 @@ export class LeafletWidgetControlModel extends control.LeafletControlModel {
       max_width: null,
       min_width: null,
       max_height: null,
-      min_height: null
+      min_height: null,
+      transparent_bg: false,
     };
   }
 }

@@ -1395,6 +1395,8 @@ class WidgetControl(Control):
     max_height = Int(default_value=None, allow_none=True).tag(sync=True)
     min_height = Int(default_value=None, allow_none=True).tag(sync=True)
 
+    transparent_bg = Bool(False).tag(sync=True, o=True)
+
 
 class FullScreenControl(Control):
     """FullScreenControl class.

@@ -17,3 +17,6 @@ js/jupyter-leaflet-*.tgz
 docs/*.csv
 docs/*.json
 docs/*.nc
+
+# Untitled Notebooks
+*Untitled*.ipynb

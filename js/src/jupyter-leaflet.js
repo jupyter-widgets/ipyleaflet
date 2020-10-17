@@ -4,6 +4,7 @@
 // Layers
 export * from './layers/Layer.js';
 export * from './layers/Marker.js';
+export * from './layers/WidgetMarker.js';
 export * from './layers/Icon.js';
 export * from './layers/AwesomeIcon.js';
 export * from './layers/Popup.js';

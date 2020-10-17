@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: [3.6, 3.7, 3.8]
+        python-version: [3.8]
 
     steps:
     - uses: actions/checkout@v2
@@ -55,7 +55,8 @@ jobs:
       shell: bash -l {0}
       run: python -c 'import ipyleaflet'
 
-    - name: Build docs
+    - name: Build docs (Only on Linux for saving time)
+      if: matrix.os == 'ubuntu-latest'
       shell: bash -l {0}
       run: |
         mamba install sphinx sphinx_rtd_theme

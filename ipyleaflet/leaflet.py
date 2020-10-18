@@ -3,7 +3,7 @@
 #
 
 import copy
-
+import asyncio
 import json
 
 from ipywidgets import (
@@ -67,6 +67,17 @@ def basemap_to_tiles(basemap, day='yesterday', **kwargs):
         name=basemap.get('name', ''),
         **kwargs
     )
+
+
+def wait_for_change(widget, value):
+    future = asyncio.Future()
+
+    def get_value(change):
+        future.set_result(change.new)
+        widget.unobserve(get_value, value)
+
+    widget.observe(get_value, value)
+    return future
 
 
 class LayerException(TraitError):
@@ -2177,3 +2188,44 @@ class Map(DOMWidget, InteractMixin):
 
     def on_interaction(self, callback, remove=False):
         self._interaction_callbacks.register_callback(callback, remove=remove)
+
+    def fit_bounds(self, bounds):
+        """Sets a map view that contains the given geographical bounds
+        with the maximum zoom level possible.
+
+        Parameters
+        ----------
+        bounds: list of lists
+            The lat/lon bounds in the form [[south, east], [north, west]].
+        """
+        asyncio.ensure_future(self._fit_bounds(bounds))
+
+    async def _fit_bounds(self, bounds):
+        (b_south, b_west), (b_north, b_east) = bounds
+        center = b_south + (b_north - b_south) / 2, b_west + (b_east - b_west) / 2
+        if center != self.center:
+            self.center = center
+            await wait_for_change(self, 'bounds')
+        zoomed_out = False
+        # zoom out
+        while True:
+            if self.zoom <= 1:
+                break
+            (south, west), (north, east) = self.bounds
+            if south > b_south or north < b_north or west > b_west or east < b_east:
+                self.zoom -= 1
+                await wait_for_change(self, 'bounds')
+                zoomed_out = True
+            else:
+                break
+        if not zoomed_out:
+            # zoom in
+            while True:
+                (south, west), (north, east) = self.bounds
+                if south < b_south and north > b_north and west < b_west and east > b_east:
+                    self.zoom += 1
+                    await wait_for_change(self, 'bounds')
+                else:
+                    self.zoom -= 1
+                    await wait_for_change(self, 'bounds')
+                    break

@@ -12,6 +12,7 @@ export * from './layers/TileLayer.js';
 export * from './layers/VectorTileLayer.js';
 export * from './layers/LocalTileLayer.js';
 export * from './layers/WMSLayer.js';
+export * from './layers/MagnifyingGlass.js';
 export * from './layers/ImageOverlay.js';
 export * from './layers/VideoOverlay.js';
 export * from './layers/Velocity.js';

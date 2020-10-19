@@ -96,6 +96,7 @@ clear_layers                                                 Remove all layers f
 add_control        Control instance                          Add a new control to the map
 remove_control     Control instance                          Remove a control from the map
 clear_controls                                               Remove all controls from the map
-on_interaction     callable object                           Add a callback on interaction
-save               output file                               Save the map to an HTML file
+on_interaction     Callable object                           Add a callback on interaction
+save               Output file                               Save the map to an HTML file
+fit_bounds         Bounds                                    Set the map so that it contains the given bounds with the maximum zoom level.
 ================   =====================================     ===

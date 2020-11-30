@@ -30,6 +30,8 @@ export class LeafletWMSLayerView extends tilelayer.LeafletTileLayerView {
   }
 
   model_events() {
+    super.model_events();
+
     for (var option in this.get_options()) {
       this.model.on('change:' + option, () => {
         this.obj.setParams(this.get_options(), true);

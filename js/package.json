@@ -42,7 +42,7 @@
     "proj4": "^2.6.0",
     "proj4leaflet": "^1.0.1",
     "spin.js": "^4.1.0",
-    "leaflet-search": "^2.9.8"
+    "leaflet-search": "2.9.8"
   },
   "devDependencies": {
     "css-loader": "^3.4.2",

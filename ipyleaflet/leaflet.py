@@ -446,6 +446,17 @@ class Marker(UILayer):
         self._move_callbacks.register_callback(callback, remove=remove)
 
 
+class WidgetMarker(Marker):
+    _view_name = Unicode('LeafletWidgetMarkerView').tag(sync=True)
+    _model_name = Unicode('LeafletWidgetMarkerModel').tag(sync=True)
+
+    child = Instance(DOMWidget).tag(sync=True, **widget_serialization)
+    icon = None
+
+    def __init__(self, child, **kwargs):
+        super(WidgetMarker, self).__init__(child=child, **kwargs)
+
+
 class Popup(UILayer):
     """Popup class.
 

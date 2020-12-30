@@ -1,3 +1,36 @@
+## v0.13.4
+
+Improvements:
+
+* Improve GeoJSON data update #668
+* Add support for WKT layer #679
+* Add Gaode basemap #681
+* Change SearchControl zoom trait to None #688
+* Add example notebooks for KML and GPX file formats #691
+* Update GeoData API documentation to add point_stype attribute #695
+* Add a callback on found event for searching in GeoJSON layer #707
+* Add custom tile server GIF to example notebook #724
+* Add support for DivIcon #727
+* Support for transparent WidgetControl #732
+* Update LeafletJS from 1.3.0 to 1.7.1 #734
+* Add Map.fit_bounds(bounds) #737
+* Add MagnifyingGlass layer #733
+
+Fixes:
+
+* Add Shapely as a dependency #683
+* Add nodejs dependency to Binder environment #700
+* Set --minimize=False on Binder #704
+* Remove class_name #729
+* Change license to MIT #736
+* Fix WMS layer options #755
+
+## v0.13.3
+
+Fixes:
+
+* Fix recursion error on GeoJSON #661
+
 ## v0.13.2
 
 Improvements:

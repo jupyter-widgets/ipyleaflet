@@ -6,7 +6,9 @@ build/
 node_modules/
 
 # Compiled javascript
-ipyleaflet/static/
+ipyleaflet/nbextension/
+ipyleaflet/labextension/
+js/dist/
 
 # OS X
 .DS_Store

@@ -14,10 +14,17 @@ except ImportError:
     pass
 
 
+def _jupyter_labextension_paths():
+    return [{
+        'src': 'labextension',
+        'dest': 'jupyter-leaflet'
+    }]
+
+
 def _jupyter_nbextension_paths():
     return [{
         'section': 'notebook',
-        'src': 'static',
+        'src': 'nbextension',
         'dest': 'jupyter-leaflet',
         'require': 'jupyter-leaflet/extension'
     }]

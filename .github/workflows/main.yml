@@ -27,18 +27,17 @@ jobs:
         mamba-version: "*"
         channels: conda-forge
 
-    - name: Conda install dependencies
+    - name: Mamba install dependencies
       shell: bash -l {0}
-      run: mamba install python=${{ matrix.python-version }} pip nodejs ipywidgets jupyter jupyterlab flake8
+      run: mamba install python=${{ matrix.python-version }} pip nodejs flake8
+
+    - name: Mamba install JupyterLab 3
+      shell: bash -l {0}
+      run: mamba install jupyterlab=3 ipywidgets=7.6
 
     - name: Install ipyleaflet
       shell: bash -l {0}
       run: pip install .
-
-    - name: Install JupyterLab extension (Only on Linux for saving time)
-      if: matrix.os == 'ubuntu-latest'
-      shell: bash -l {0}
-      run: jupyter labextension install js
 
     - name: Check installation files
       shell: bash -l {0}
@@ -46,6 +45,8 @@ jobs:
         test -d $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet
         test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet/extension.js
         test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet/index.js
+        test -d $CONDA_PREFIX/share/jupyter/labextensions/jupyter-leaflet
+        test -f $CONDA_PREFIX/share/jupyter/labextensions/jupyter-leaflet/package.json
 
     - name: Flake8 check
       shell: bash -l {0}

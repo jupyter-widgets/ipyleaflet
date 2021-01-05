@@ -1,4 +1,11 @@
-recursive-include ipyleaflet/static *.*
+recursive-include ipyleaflet/nbextension *.*
+recursive-include ipyleaflet/labextension *.*
+
 include jupyter-leaflet.json
-include js/*tgz
+graft js/src
 include js/package.json
+include js/webpack.config.js
+
+include LICENSE
+include setup.py
+include pyproject.toml

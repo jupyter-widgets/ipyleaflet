@@ -4,8 +4,8 @@
 const widgets = require('@jupyter-widgets/base');
 const L = require('../leaflet.js');
 const layer = require('./Layer.js');
-const PMessaging = require('@phosphor/messaging');
-const PWidgets = require('@phosphor/widgets');
+const PMessaging = require('@lumino/messaging');
+const PWidgets = require('@lumino/widgets');
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 

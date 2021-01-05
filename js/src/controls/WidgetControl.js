@@ -4,8 +4,8 @@
 const widgets = require('@jupyter-widgets/base');
 const L = require('../leaflet.js');
 const control = require('./Control.js');
-const PMessaging = require('@phosphor/messaging');
-const PWidgets = require('@phosphor/widgets');
+const PMessaging = require('@lumino/messaging');
+const PWidgets = require('@lumino/widgets');
 
 class WidgetControl extends L.Control {
   updateLayout(options) {

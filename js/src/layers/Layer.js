@@ -2,8 +2,8 @@
 // Distributed under the terms of the Modified BSD License.
 
 const widgets = require('@jupyter-widgets/base');
-const PMessaging = require('@phosphor/messaging');
-const PWidgets = require('@phosphor/widgets');
+const PMessaging = require('@lumino/messaging');
+const PWidgets = require('@lumino/widgets');
 const L = require('../leaflet.js');
 const utils = require('../utils.js');
 

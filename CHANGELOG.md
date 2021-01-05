@@ -1,3 +1,9 @@
+## v0.13.5
+
+Improvements:
+
+* Add support for JupyterLab 3 #714
+
 ## v0.13.4
 
 Improvements:
@@ -130,5 +136,3 @@ Improvements:
 * ScaleControl #492
 * Documentation improvements #484 #485
 * WMSLayer: Listen for dynamic changes on parameters #494
-
-

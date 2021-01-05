@@ -3,7 +3,8 @@ channels:
   - conda-forge
 dependencies:
   - nodejs=14.11
-  - ipyleaflet=0.13.4
+  - ipyleaflet=0.13.5
+  - jupyterlab=3
   - scipy
   - bqplot
   - rasterio

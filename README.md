@@ -57,7 +57,7 @@ If you are using the classic Jupyter Notebook < 5.3 you need to run this extra c
 jupyter nbextension enable --py --sys-prefix ipyleaflet
 ```
 
-If you are using JupyterLab, you will need to install the JupyterLab extension:
+If you are using JupyterLab <=2, you will need to install the JupyterLab extension:
 
 ```
 jupyter labextension install @jupyter-widgets/jupyterlab-manager jupyter-leaflet

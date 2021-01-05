@@ -18,7 +18,7 @@ Using conda
 JupyterLab extension
 ====================
 
-If you have JupyterLab, you will also need to install the JupyterLab extension:
+If you have JupyterLab <=2, you will also need to install the JupyterLab extension:
 
 .. code:: bash
 

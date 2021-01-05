@@ -1,3 +1,10 @@
+## v0.13.6
+
+Fixes:
+
+* Fix support for Jupyter Notebook
+* Change imports from Phosphor to Lumino
+
 ## v0.13.5
 
 Improvements:

@@ -1,7 +1,7 @@
 # ipyleaflet
 
 [![Documentation](http://readthedocs.org/projects/ipyleaflet/badge/?version=latest)](https://ipyleaflet.readthedocs.io/en/latest/?badge=latest)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jupyter-widgets/ipyleaflet/stable?filepath=examples)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jupyter-widgets/ipyleaflet/stable?urlpath=lab%2Ftree%2Fexamples)
 [![Join the Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jupyter-widgets/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Downloads](https://pepy.tech/badge/ipyleaflet/month)](https://pepy.tech/project/ipyleaflet/month)
 
@@ -57,7 +57,7 @@ If you are using the classic Jupyter Notebook < 5.3 you need to run this extra c
 jupyter nbextension enable --py --sys-prefix ipyleaflet
 ```
 
-If you are using JupyterLab, you will need to install the JupyterLab extension:
+If you are using JupyterLab <=2, you will need to install the JupyterLab extension:
 
 ```
 jupyter labextension install @jupyter-widgets/jupyterlab-manager jupyter-leaflet

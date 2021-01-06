@@ -42,7 +42,8 @@ module.exports = [
         output: {
             filename: 'index.js',
             path: path.resolve(__dirname, '..', 'ipyleaflet', 'nbextension'),
-            libraryTarget: 'amd'
+            libraryTarget: 'amd',
+            publicPath: '',
         },
         devtool: 'source-map',
         module: {

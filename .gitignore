@@ -4,6 +4,7 @@ dist/
 build/
 *.py[cod]
 node_modules/
+*package-lock.json
 
 # Compiled javascript
 ipyleaflet/nbextension/

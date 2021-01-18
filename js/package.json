@@ -16,8 +16,8 @@
   "author": "Project Jupyter",
   "main": "src/index.js",
   "scripts": {
-    "build": "webpack && npm run build:labextension",
-    "build:labextension": "jupyter labextension build .",
+    "build": "webpack",
+    "build:extensions": "webpack && jupyter labextension build .",
     "clean": "rimraf dist/ && rimraf ../ipyleaflet/labextension/ && rimraf ../ipyleaflet/nbextension",
     "prepublish": "npm run clean && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",

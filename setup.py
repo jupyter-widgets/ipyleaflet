@@ -10,6 +10,7 @@ from jupyter_packaging import (
     ensure_targets,
     combine_commands,
     get_version,
+    skip_if_exists
 )
 
 # the name of the package
@@ -29,7 +30,8 @@ js_dir = os.path.join(here, 'js')
 
 # Representative files that should exist after a successful build
 jstargets = [
-    os.path.join(js_dir, 'dist', 'index.js'),
+    os.path.join('ipyleaflet/nbextension', 'index.js'),
+    os.path.join('ipyleaflet/labextension', 'package.json'),
 ]
 
 data_files_spec = [
@@ -39,10 +41,15 @@ data_files_spec = [
 ]
 
 cmdclass = create_cmdclass('jsdeps', data_files_spec=data_files_spec)
-cmdclass['jsdeps'] = combine_commands(
-    install_npm(js_dir, build_cmd='build'), ensure_targets(jstargets),
+js_command = combine_commands(
+    install_npm(js_dir, npm=["yarn"], build_cmd='build:extensions'), ensure_targets(jstargets),
 )
 
+is_repo = os.path.exists(os.path.join(here, '.git'))
+if is_repo:
+    cmdclass['jsdeps'] = js_command
+else:
+    cmdclass['jsdeps'] = skip_if_exists(jstargets, js_command)
 
 setup_args = dict(
     name=name,

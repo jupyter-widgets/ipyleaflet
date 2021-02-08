@@ -34,7 +34,7 @@
     "leaflet-fullscreen": "^1.0.2",
     "leaflet-measure": "^3.1.0",
     "leaflet-rotatedmarker": "^0.2.0",
-    "leaflet-search": "^2.9.8",
+    "leaflet-search": "2.9.8",
     "leaflet-splitmap": "^1.0.1",
     "leaflet-transform": "^1.0.3",
     "leaflet-velocity": "^1.2.4",

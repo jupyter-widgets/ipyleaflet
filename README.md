@@ -9,31 +9,31 @@ A Jupyter / Leaflet bridge enabling interactive maps in the Jupyter notebook.
 
 ## Usage
 
-**Selecting a basemap for a leaflet map:**
+### Selecting a basemap for a leaflet map:
 
 ![Basemap Screencast](basemap.gif)
 
-**Loading a geojson map:**
+### Loading a geojson map:
 
 ![GeoJSON Screencast](geojson.gif)
 
-**Making use of leafletjs primitives:**
+### Making use of leafletjs primitives:
 
 ![Primitives Screencast](primitives.gif)
 
-**Using the splitmap control:**
+### Using the splitmap control:
 
 ![Splitmap Screencast](splitmap.gif)
 
-**Displaying velocity data on the top of a map:**
+### Displaying velocity data on the top of a map:
 
 ![Velocity Screencast](velocity.gif)
 
-**Choropleth layer:**
+### Choropleth layer:
 
 ![Choropleth Screencast](choropleth.gif)
 
-**Widget control**
+### Widget control
 
 ![Widget Control](widget_control.gif)
 

@@ -44,6 +44,6 @@ Attributes
 ===========    ========================   ===
 Attribute      Default Value              Doc
 ===========    ========================   ===
-url            ""                         An http url to the footage or a relative path to a local file (image/video). Note that absolute local paths are not supported. 
+url            ""                         An http url to the footage or a relative path to a local file (image/video, e.g. ‘image.png’ or ‘files/working_dir/image.png’ in JupyterLab). Note that absolute local paths are not supported. 
 bounds         ((0.0, 0.0), (0.0, 0.0))   SW and NE corners of the image
 ===========    ========================   ===

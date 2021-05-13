@@ -4,6 +4,7 @@
 const widgets = require('@jupyter-widgets/base');
 const L = require('../leaflet.js');
 const layer = require('./Layer.js');
+const utils = require('../utils');
 
 export class LeafletMarkerClusterModel extends layer.LeafletLayerModel {
   defaults() {
@@ -11,7 +12,8 @@ export class LeafletMarkerClusterModel extends layer.LeafletLayerModel {
       ...super.defaults(),
       _view_name: 'LeafletMarkerClusterView',
       _model_name: 'LeafletMarkerClusterModel',
-      markers: []
+      markers: [],	
+      disableClusteringAtZoom: 18,
     };
   }
 }
@@ -63,6 +65,10 @@ export class LeafletMarkerClusterView extends layer.LeafletLayerView {
   }
 
   create_obj() {
-    this.obj = L.markerClusterGroup();
+    var options = this.get_options();
+    options.data = this.model.get('data');
+    this.obj = L.markerClusterGroup(options);
+
   }
 }
+

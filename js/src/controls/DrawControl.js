@@ -17,6 +17,7 @@ export class LeafletDrawControlModel extends control.LeafletControlModel {
       circlemarker: {},
       rectangle: {},
       marker: {},
+      data: [],
       edit: true,
       remove: true
     };
@@ -35,7 +36,12 @@ export class LeafletDrawControlView extends control.LeafletControlView {
   }
 
   create_obj() {
-    this.feature_group = L.featureGroup();
+    this.feature_group = L.geoJson([],{
+      style: function (feature) {
+        return feature.properties.style;
+      }
+    });
+    this.data_to_layers();
     this.map_view.obj.addLayer(this.feature_group);
     var polyline = this.model.get('polyline');
     if (!Object.keys(polyline).length) {
@@ -86,6 +92,7 @@ export class LeafletDrawControlView extends control.LeafletControlView {
         geo_json: geo_json
       });
       this.feature_group.addLayer(layer);
+      this.layers_to_data();
     });
     this.map_view.obj.on('draw:edited', e => {
       var layers = e.layers;
@@ -97,6 +104,7 @@ export class LeafletDrawControlView extends control.LeafletControlView {
           geo_json: geo_json
         });
       });
+      this.layers_to_data();
     });
     this.map_view.obj.on('draw:deleted', e => {
       var layers = e.layers;
@@ -108,8 +116,27 @@ export class LeafletDrawControlView extends control.LeafletControlView {
           geo_json: geo_json
         });
       });
+      this.layers_to_data();
     });
     this.model.on('msg:custom', this.handle_message.bind(this));
+    this.model.on('change:data', this.data_to_layers.bind(this));
+  }
+
+  data_to_layers() {
+    const data = this.model.get('data');
+    this.feature_group.clearLayers();
+    this.feature_group.addData(data);
+  }
+
+  layers_to_data() {
+    let newData = [];
+    this.feature_group.eachLayer(layer => {
+      const geoJson = layer.toGeoJSON();
+      geoJson.properties.style = layer.options;
+      newData.push(geoJson);
+    });
+    this.model.set('data', newData);
+    this.model.save_changes();
   }
 
   handle_message(content) {

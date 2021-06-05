@@ -2245,7 +2245,7 @@ class Map(DOMWidget, InteractMixin):
         Parameters
         ----------
         bounds: list of lists
-            The lat/lon bounds in the form [[south, east], [north, west]].
+            The lat/lon bounds in the form [[south, west], [north, east]].
         """
         asyncio.ensure_future(self._fit_bounds(bounds))
 

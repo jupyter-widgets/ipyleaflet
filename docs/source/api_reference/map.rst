@@ -98,5 +98,5 @@ remove_control     Control instance                          Remove a control fr
 clear_controls                                               Remove all controls from the map
 on_interaction     Callable object                           Add a callback on interaction
 save               Output file                               Save the map to an HTML file
-fit_bounds         Bounds                                    Set the map so that it contains the given bounds with the maximum zoom level.
+fit_bounds         Bounds                                    Set the map so that it contains the given bounds in the form [[south, west], [north, east]] with the maximum zoom level.
 ================   =====================================     ===

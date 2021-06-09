@@ -1661,6 +1661,9 @@ class DrawControl(Control):
     edit = Bool(True).tag(sync=True)
     remove = Bool(True).tag(sync=True)
 
+    # Layer data
+    data = List().tag(sync=True)
+
     last_draw = Dict({
         'type': 'Feature',
         'geometry': None

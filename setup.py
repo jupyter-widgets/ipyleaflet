@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-from distutils import log
 from setuptools import setup, find_packages
 
 from jupyter_packaging import (
@@ -18,10 +17,6 @@ name = 'ipyleaflet'
 long_description = 'A Jupyter widget for dynamic Leaflet maps'
 
 here = os.path.dirname(os.path.abspath(__file__))
-
-log.set_verbosity(log.DEBUG)
-log.info('setup.py entered')
-log.info('$PATH=%s' % os.environ['PATH'])
 
 # Get ipyleaflet version
 version = get_version(os.path.join(name, '_version.py'))

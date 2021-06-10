@@ -66,7 +66,6 @@ export class LeafletMarkerClusterView extends layer.LeafletLayerView {
 
   create_obj() {
     var options = this.get_options();
-    options.data = this.model.get('data');
     this.obj = L.markerClusterGroup(options);
 
   }

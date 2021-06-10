@@ -88,7 +88,7 @@ Note for developers:
 For developing with JupyterLab:
 
 ```
-jupyter labextension develop ipyleaflet
+jupyter labextension develop --overwrite ipyleaflet
 ```
 
 ## Documentation

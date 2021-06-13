@@ -1024,8 +1024,8 @@ class MarkerCluster(Layer):
     markers = Tuple().tag(trait=Instance(Marker), sync=True, **widget_serialization)
     # Options
     disable_clustering_at_zoom = Int(18).tag(sync=True, o=True)
-    
-    
+
+
 class LayerGroup(Layer):
     """LayerGroup class.
 

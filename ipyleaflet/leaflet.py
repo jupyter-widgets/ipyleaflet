@@ -19,9 +19,6 @@ from traitlets import (
     link, observe, default, validate, TraitError, Union, Any
 )
 
-from branca.colormap import linear, ColorMap
-from shapely import geometry, wkt
-
 from ._version import EXTENSION_VERSION
 
 from .projections import projections
@@ -1307,7 +1304,7 @@ class Choropleth(GeoJSON):
     choro_data = Dict()
     value_min = CFloat(None, allow_none=True)
     value_max = CFloat(None, allow_none=True)
-    colormap = Instance(ColorMap)
+    colormap = Any()
     key_on = Unicode('id')
 
     @observe('style', 'style_callback', 'value_min', 'value_max', 'geo_data', 'choro_data', 'colormap')
@@ -1316,6 +1313,10 @@ class Choropleth(GeoJSON):
 
     @default('colormap')
     def _default_colormap(self):
+        try:
+            from branca.colormap import linear
+        except ImportError:
+            raise RuntimeError("The Choropleth needs branca to be installed, please run `pip install branca`")
         return linear.OrRd_06
 
     @default('style_callback')
@@ -1377,6 +1378,11 @@ class WKTLayer(GeoJSON):
         self.data = self._get_data()
 
     def _get_data(self):
+        try:
+            from shapely import geometry, wkt
+        except ImportError:
+            raise RuntimeError("The WKTLayer needs shapely to be installed, please run `pip install shapely`")
+
         if self.path:
             with open(self.path) as f:
                 parsed_wkt = wkt.load(f)

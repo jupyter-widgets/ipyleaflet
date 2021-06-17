@@ -55,9 +55,7 @@ setup_args = dict(
     include_package_data=True,
     install_requires=[
         'ipywidgets>=7.6.0,<8',
-        'traittypes>=0.2.1,<3',
-        'branca>=0.3.1,<0.5',
-        'shapely',
+        'traittypes>=0.2.1,<3'
     ],
     packages=find_packages(),
     zip_safe=False,

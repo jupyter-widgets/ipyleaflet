@@ -4,3 +4,5 @@ scipy
 netcdf4
 geopandas
 xarray
+branca
+shapely

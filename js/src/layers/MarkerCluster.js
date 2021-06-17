@@ -14,6 +14,7 @@ export class LeafletMarkerClusterModel extends layer.LeafletLayerModel {
       _model_name: 'LeafletMarkerClusterModel',
       markers: [],	
       disableClusteringAtZoom: 18,
+      maxClusterRadius: 80,
     };
   }
 }

@@ -1,3 +1,10 @@
+## v0.14.0
+
+Improvements:
+
+* Remove Shapely and branca dependencies (for support in JupyterLite)
+* Add new options to marker cluster
+
 ## v0.13.6
 
 Fixes:

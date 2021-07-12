@@ -1980,6 +1980,7 @@ class Map(DOMWidget, InteractMixin):
     zoom_snap = CFloat(1).tag(sync=True, o=True)
     interpolation = Unicode('bilinear').tag(sync=True, o=True)
     crs = Dict(default_value=projections.EPSG3857).tag(sync=True)
+    prefer_canvas = Bool(False).tag(sync=True, o=True)
 
     # Specification of the basemap
     basemap = Union(

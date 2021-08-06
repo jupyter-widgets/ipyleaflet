@@ -1841,6 +1841,14 @@ class LegendControl(Control):
         self.legend = legends
 
     @property
+    def positioning(self):
+        return self.position
+
+    @positioning.setter
+    def positioning(self, position):
+        self.position = position
+
+    @property
     def positionning(self):
         return self.position
 

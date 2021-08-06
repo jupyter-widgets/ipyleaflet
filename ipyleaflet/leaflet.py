@@ -1848,6 +1848,14 @@ class LegendControl(Control):
     def positioning(self, position):
         self.position = position
 
+    @property
+    def positionning(self):
+        return self.position
+
+    @positionning.setter
+    def positionning(self, position):
+        self.position = position
+
     def add_legend_element(self, key, value):
         """Add a new legend element.
 

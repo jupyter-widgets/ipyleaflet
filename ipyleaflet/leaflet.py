@@ -1990,7 +1990,8 @@ class Map(DOMWidget, InteractMixin):
         (Dict(), Instance(xyzservices.lib.TileProvider), Instance(TileLayer)),
         default_value=xyzservices.providers.OpenStreetMap.Mapnik)
     modisdate = Unicode((date.today() - timedelta(days=1)).strftime("%Y-%m-%d")).tag(sync=True)
-
+    # extra arguments for basemap such as apiKey based on tile provider.
+    basemap_args = Dict(default_value={}).tag(sync=True)
     # Interaction options
     dragging = Bool(True).tag(sync=True, o=True)
     touch_zoom = Bool(True).tag(sync=True, o=True)
@@ -2047,7 +2048,8 @@ class Map(DOMWidget, InteractMixin):
     @default('layers')
     def _default_layers(self):
         basemap = self.basemap if isinstance(self.basemap, TileLayer) else basemap_to_tiles(self.basemap,
-                                                                                            self.modisdate)
+                                                                                            day=self.modisdate,
+                                                                                            **self.basemap_args)
 
         basemap.base = True
 

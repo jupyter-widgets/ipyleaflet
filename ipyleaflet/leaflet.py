@@ -1990,8 +1990,6 @@ class Map(DOMWidget, InteractMixin):
         (Dict(), Instance(xyzservices.lib.TileProvider), Instance(TileLayer)),
         default_value=xyzservices.providers.OpenStreetMap.Mapnik)
     modisdate = Unicode((date.today() - timedelta(days=1)).strftime("%Y-%m-%d")).tag(sync=True)
-    # extra arguments for basemap such as apiKey based on tile provider.
-    basemap_args = Dict(default_value={}).tag(sync=True)
     # Interaction options
     dragging = Bool(True).tag(sync=True, o=True)
     touch_zoom = Bool(True).tag(sync=True, o=True)
@@ -2048,8 +2046,7 @@ class Map(DOMWidget, InteractMixin):
     @default('layers')
     def _default_layers(self):
         basemap = self.basemap if isinstance(self.basemap, TileLayer) else basemap_to_tiles(self.basemap,
-                                                                                            day=self.modisdate,
-                                                                                            **self.basemap_args)
+                                                                                            day=self.modisdate)
 
         basemap.base = True
 
@@ -2128,7 +2125,7 @@ class Map(DOMWidget, InteractMixin):
         layer: Layer instance
             The new layer to add.
         """
-        if isinstance(layer, (dict, xyzservices.lib.TileProvider)):
+        if isinstance(layer, dict):
             layer = basemap_to_tiles(layer)
         if layer.model_id in self._layer_ids:
             raise LayerException('layer already on map: %r' % layer)
@@ -2156,7 +2153,7 @@ class Map(DOMWidget, InteractMixin):
         new: Layer instance
             The new layer to add.
         """
-        if isinstance(new, (dict, xyzservices.lib.TileProvider)):
+        if isinstance(new, dict):
             new = basemap_to_tiles(new)
         if old.model_id not in self._layer_ids:
             raise LayerException('Could not substitute layer: layer not on map.')

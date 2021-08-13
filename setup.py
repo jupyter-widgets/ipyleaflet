@@ -56,7 +56,7 @@ setup_args = dict(
     install_requires=[
         'ipywidgets>=7.6.0,<8',
         'traittypes>=0.2.1,<3',
-        'xyzservices>=2021.8.0'
+        'xyzservices>=2021.8.1'
     ],
     packages=find_packages(),
     zip_safe=False,

@@ -198,31 +198,31 @@ basemaps = Bunch(
     ),
     Strava=Bunch(
         All=dict(
-            url='https://heatmap-external-a.strava.com//tiles/all/hot/{z}/{x}/{y}.png?v=19',
+            url='https://heatmap-external-a.strava.com/tiles/all/hot/{z}/{x}/{y}.png?v=19',
             max_zoom=15,
             attribution='Map tiles by <a href="https://labs.strava.com/heatmap">Strava 2017</a>',
             name='Strava.All'
         ),
         Ride=dict(
-            url='https://heatmap-external-a.strava.com//tiles/ride/hot/{z}/{x}/{y}.png?v=19',
+            url='https://heatmap-external-a.strava.com/tiles/ride/hot/{z}/{x}/{y}.png?v=19',
             max_zoom=15,
             attribution='Map tiles <a href="https://labs.strava.com/heatmap">Strava 2017</a>',
             name='Strava.Ride'
         ),
         Run=dict(
-            url='https://heatmap-external-a.strava.com//tiles/run/bluered/{z}/{x}/{y}.png?v=19',
+            url='https://heatmap-external-a.strava.com/tiles/run/bluered/{z}/{x}/{y}.png?v=19',
             max_zoom=15,
             attribution='Map tiles by <a href="https://labs.strava.com/heatmap">Strava 2017</a>',
             name='Strava.Run'
         ),
         Water=dict(
-            url='https://heatmap-external-a.strava.com//tiles/water/blue/{z}/{x}/{y}.png?v=19',
+            url='https://heatmap-external-a.strava.com/tiles/water/blue/{z}/{x}/{y}.png?v=19',
             max_zoom=15,
             attribution='Map tiles by <a href="https://labs.strava.com/heatmap">Strava 2017</a>',
             name='Strava.Water'
         ),
         Winter=dict(
-            url='https://heatmap-external-a.strava.com//tiles/winter/hot/{z}/{x}/{y}.png?v=19',
+            url='https://heatmap-external-a.strava.com/tiles/winter/hot/{z}/{x}/{y}.png?v=19',
             max_zoom=15,
             attribution='Map tiles by <a href="https://labs.strava.com/heatmap">Strava 2017</a>',
             name='Strava.Winter'

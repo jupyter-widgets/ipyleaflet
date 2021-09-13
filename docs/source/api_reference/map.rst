@@ -34,6 +34,24 @@ You can add multiple layers and controls to the map, using the ``add_layer``/``a
 
     m
 
+As a Jupyter interactive widget, the layout of the ``Map`` object is specified by a Layout attribute. See `Layout and Styling of Jupyter widgets <https://ipywidgets.readthedocs.io/en/latest/examples/Widget%20Styling.html/>`_ for details.
+
+.. jupyter-execute::
+
+    from ipyleaflet import Map, basemaps, basemap_to_tiles
+    from ipywidgets import Layout
+
+    m = Map(
+        basemap=basemap_to_tiles(basemaps.NASAGIBS.ModisTerraTrueColorCR, "2017-04-08"),
+        center=(52.204793, 360.121558),
+        zoom=4,
+        layout=Layout(width='80%', height='500px')
+    )
+
+    m.add_layer(Marker(location=(52.204793, 360.121558)))
+
+    m
+
 Save to HTML
 ------------
 

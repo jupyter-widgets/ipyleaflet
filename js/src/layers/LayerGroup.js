@@ -10,6 +10,8 @@ export class LeafletLayerGroupModel extends layer.LeafletLayerModel {
     return {
       _view_name: 'LeafletLayerGroupView',
       _model_name: 'LeafletLayerGroupModel',
+      _view_module: 'jupyter-leaflet',
+      _model_module: 'jupyter-leaflet',
       layers: []
     };
   }

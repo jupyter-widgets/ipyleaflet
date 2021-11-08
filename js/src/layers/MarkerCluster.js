@@ -25,33 +25,6 @@ LeafletMarkerClusterModel.serializers = {
 };
 
 export class LeafletMarkerClusterView extends layer.LeafletLayerView {
-  render() {
-    super.render();
-    this.update_markers(this.model.get('markers'), []);
-  }
-
-  update_markers(newMarkers, oldMarkers) {
-    // Shortcut the case of appending markers
-    var appendOnly =
-      oldMarkers.length <= newMarkers.length &&
-      oldMarkers === newMarkers.slice(0, oldMarkers.length);
-    var markers;
-    if (appendOnly) {
-      markers = newMarkers.slice(oldMarkers.length);
-    } else {
-      this.obj.clearLayers();
-      markers = newMarkers;
-    }
-    var markerViews = markers.map(m => {
-      return this.create_child_view(m, { map_view: this.map_view });
-    });
-    return Promise.all(markerViews).then(mViews => {
-      var leafletMarkers = mViews.map(function(mv) {
-        return mv.obj;
-      });
-      this.obj.addLayers(leafletMarkers);
-    });
-  }
 
   model_events() {
     super.model_events();
@@ -59,16 +32,35 @@ export class LeafletMarkerClusterView extends layer.LeafletLayerView {
       this.model,
       'change:markers',
       function(model, value) {
-        this.update_markers(model.get('markers'), model.previous('markers'));
+        this.marker_views.update(model.get('markers'));
       },
       this
     );
   }
 
+  remove_layer_view(child_view) {
+    this.obj.removeLayer(child_view.obj);
+    child_view.remove();
+  }
+
+  add_layer_model(child_model) {
+    console.log(this.model.get('markers'));
+    console.log(child_model);
+    return this.create_child_view(child_model, { map_view: this.map_view }).then(child_view => {
+      this.obj.addLayer(child_view.obj);
+      return child_view;
+    });
+  }
+
   create_obj() {
     var options = this.get_options();
     this.obj = L.markerClusterGroup(options);
-
+    this.marker_views = new widgets.ViewList(
+      this.add_layer_model,
+      this.remove_layer_view,
+      this
+    );
+    this.marker_views.update(this.model.get('markers'));
   }
 }
 

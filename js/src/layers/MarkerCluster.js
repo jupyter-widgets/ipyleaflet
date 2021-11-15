@@ -44,8 +44,6 @@ export class LeafletMarkerClusterView extends layer.LeafletLayerView {
   }
 
   add_layer_model(child_model) {
-    console.log(this.model.get('markers'));
-    console.log(child_model);
     return this.create_child_view(child_model, { map_view: this.map_view }).then(child_view => {
       this.obj.addLayer(child_view.obj);
       return child_view;

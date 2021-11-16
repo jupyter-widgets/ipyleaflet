@@ -5,6 +5,8 @@
 import copy
 import asyncio
 import json
+import xyzservices
+from datetime import date, timedelta
 
 from ipywidgets import (
     Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
@@ -32,35 +34,28 @@ allowed_cursor = ['alias', 'cell', 'grab', 'move', 'crosshair', 'context-menu',
                   'grabbing', 'help', 'no-drop', 'not-allowed', 'pointer',
                   'progress', 'text', 'wait', 'zoom-in', 'zoom-out']
 
+yesterday = (date.today() - timedelta(days=1)).strftime("%Y-%m-%d")
 
-def basemap_to_tiles(basemap, day='yesterday', **kwargs):
+
+def basemap_to_tiles(basemap, day=yesterday, **kwargs):
     """Turn a basemap into a TileLayer object.
 
     Parameters
     ----------
-    basemap : dict
+    basemap : class:`xyzservices.lib.TileProvider`
         Basemap description coming from ipyleaflet.basemaps.
     day: string
         If relevant for the chosen basemap, you can specify the day for
-        the tiles in the "%Y-%m-%d" format. Defaults to "yesterday".
+        the tiles in the "%Y-%m-%d" format. Defaults to yesterday's date.
     kwargs: key-word arguments
         Extra key-word arguments to pass to the TileLayer constructor.
     """
-    from datetime import date, timedelta
-
-    if day == 'yesterday':
-        yesterday = date.today() - timedelta(1)
-        day = yesterday.strftime('%Y-%m-%d')
-
-    url = basemap.get('url', '')
-    if url.count('%'):
-        url = url % day
-
+    url = basemap.build_url(time=day, **kwargs)
     return TileLayer(
         url=url,
         max_zoom=basemap.get('max_zoom', 19),
         min_zoom=basemap.get('min_zoom', 1),
-        attribution=basemap.get('attribution', ''),
+        attribution=basemap.get('html_attribution', ''),
         name=basemap.get('name', ''),
         **kwargs
     )
@@ -1018,7 +1013,7 @@ class MarkerCluster(Layer):
     _view_name = Unicode('LeafletMarkerClusterView').tag(sync=True)
     _model_name = Unicode('LeafletMarkerClusterModel').tag(sync=True)
 
-    markers = Tuple().tag(trait=Instance(Marker), sync=True, **widget_serialization)
+    markers = Tuple().tag(trait=Instance(Layer), sync=True, **widget_serialization)
     # Options
     disable_clustering_at_zoom = Int(18).tag(sync=True, o=True)
     max_cluster_radius = Int(80).tag(sync=True, o=True)
@@ -1992,14 +1987,9 @@ class Map(DOMWidget, InteractMixin):
 
     # Specification of the basemap
     basemap = Union(
-        (Dict(), Instance(TileLayer)),
-        default_value=dict(
-            url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            max_zoom=19,
-            attribution='Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
-        ))
-    modisdate = Unicode('yesterday').tag(sync=True)
-
+        (Dict(), Instance(xyzservices.lib.TileProvider), Instance(TileLayer)),
+        default_value=xyzservices.providers.OpenStreetMap.Mapnik)
+    modisdate = Unicode((date.today() - timedelta(days=1)).strftime("%Y-%m-%d")).tag(sync=True)
     # Interaction options
     dragging = Bool(True).tag(sync=True, o=True)
     touch_zoom = Bool(True).tag(sync=True, o=True)
@@ -2056,7 +2046,7 @@ class Map(DOMWidget, InteractMixin):
     @default('layers')
     def _default_layers(self):
         basemap = self.basemap if isinstance(self.basemap, TileLayer) else basemap_to_tiles(self.basemap,
-                                                                                            self.modisdate)
+                                                                                            day=self.modisdate)
 
         basemap.base = True
 

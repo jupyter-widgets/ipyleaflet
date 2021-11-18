@@ -6,7 +6,7 @@ Example
 
 .. jupyter-execute::
 
-    from ipyleaflet import Map, TileLayer, basemaps
+    from ipyleaflet import Map, basemaps
     from ipyleaflet.velocity import Velocity
     import xarray as xr
     import os

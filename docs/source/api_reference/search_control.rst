@@ -21,6 +21,27 @@ Example
 
     m
 
+You can add a callback that will be run when on search found:
+
+.. jupyter-execute::
+
+    m = Map(center=[47, 2], zoom=5)
+
+    search = SearchControl(
+        position="topleft",
+        url='https://cartoradon.irsn.fr/commune.py/communes/search/FR/{s}?',
+        zoom=5
+    )
+    m.add_control(search)
+
+    def on_found(**kwargs):
+        # Print the result of the search (text, location etc)
+        print(kwargs)
+
+    search.on_location_found(on_found)
+
+    m
+
 You can also search features from GeoJSON layers.
 
 .. jupyter-execute::
@@ -77,5 +98,6 @@ Methods
 ================     =====================================     ===
 Method               Arguments                                 Doc
 ================     =====================================     ===
+on_location_found    Callable object                           Adds a callback on location found event.
 on_feature_found     Callable object                           Adds a callback on found event for searching in GeoJSON layer.
 ================     =====================================     ===

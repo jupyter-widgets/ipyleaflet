@@ -1895,7 +1895,6 @@ class SearchControl(Control):
     layer = Instance(LayerGroup, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
 
     _location_found_callbacks = Instance(CallbackDispatcher, ())
-    _feature_found_callbacks = Instance(CallbackDispatcher, ())
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1903,10 +1902,7 @@ class SearchControl(Control):
 
     def _handle_leaflet_event(self, _, content, buffers):
         if content.get('event', '') == 'locationfound':
-            if content.get('feature', None) is not None:
-                self._feature_found_callbacks(**content)
-            else:
-                self._location_found_callbacks(**content)
+            self._location_found_callbacks(**content)
 
     def on_feature_found(self, callback, remove=False):
         """Add a found feature event listener for searching in GeoJSON layer.
@@ -1918,7 +1914,7 @@ class SearchControl(Control):
         remove: boolean
             Whether to remove this callback or not. Defaults to False.
         """
-        self._feature_found_callbacks.register_callback(callback, remove=remove)
+        self._location_found_callbacks.register_callback(callback, remove=remove)
 
     def on_location_found(self, callback, remove=False):
         """Add a found location event listener. The callback will be called when a search result has been found.

@@ -8,6 +8,7 @@ const layer = require('./Layer.js');
 export class LeafletLayerGroupModel extends layer.LeafletLayerModel {
   defaults() {
     return {
+      ...super.defaults(),
       _view_name: 'LeafletLayerGroupView',
       _model_name: 'LeafletLayerGroupModel',
       layers: []

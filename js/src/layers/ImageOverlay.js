@@ -9,6 +9,7 @@ const DEFAULT_LOCATION = [0.0, 0.0];
 export class LeafletImageOverlayModel extends rasterlayer.LeafletRasterLayerModel {
   defaults() {
     return {
+      ...super.defaults(),
       _view_name: 'LeafletImageOverlayView',
       _model_name: 'LeafletImageOverlayModel',
       url: '',

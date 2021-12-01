@@ -8,6 +8,7 @@ const control = require('./Control.js');
 export class LeafletSearchControlModel extends control.LeafletControlModel {
   defaults(){
     return{
+      ...super.defaults(),
       _view_name: 'LeafletSearchControlView',
       _model_name: 'LeafletSearchControlModel',
       url: null,

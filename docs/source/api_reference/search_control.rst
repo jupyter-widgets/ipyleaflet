@@ -95,9 +95,9 @@ found_style         {'fillColor': '#3f0', 'color': '#0f0'}  Style for searched f
 Methods
 -------
 
-================     =====================================     ===
-Method               Arguments                                 Doc
-================     =====================================     ===
-on_location_found    Callable object                           Adds a callback on location found event.
-on_feature_found     Callable object                           Adds a callback on found event for searching in GeoJSON layer.
-================     =====================================     ===
+==================     =====================================     ===
+Method                 Arguments                                 Doc
+==================     =====================================     ===
+on_location_found      Callable object                           Adds a callback on location found event.
+on_feature_found       Callable object                           Adds a callback on found event for searching in GeoJSON layer.
+==================     =====================================     ===

@@ -1,3 +1,13 @@
+## v0.15.0
+
+Improvements:
+
+* Add `prefer_canvas` option to the `Map` class
+* Use `xyzservices` for base maps
+* Add Colab support by default
+* Support any layer type in `MarkerCluster`
+* Add `location_found` event to the `SearchControl`
+
 ## v0.14.0
 
 Improvements:

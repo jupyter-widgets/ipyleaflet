@@ -50,9 +50,9 @@ def basemap_to_tiles(basemap, day=yesterday, **kwargs):
     kwargs: key-word arguments
         Extra key-word arguments to pass to the TileLayer constructor.
     """
-    if type(basemap) == xyzservices.lib.TileProvider:
+    if isinstance(basemap, xyzservices.lib.TileProvider):
         url = basemap.build_url(time=day)
-    elif type(basemap) == dict:
+    elif isinstance(basemap, dict):
         url = basemap.get("url", "")
     else:
         raise ValueError("Invalid basemap type")

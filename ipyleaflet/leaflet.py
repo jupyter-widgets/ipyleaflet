@@ -42,7 +42,7 @@ def basemap_to_tiles(basemap, day=yesterday, **kwargs):
 
     Parameters
     ----------
-    basemap : class:`xyzservices.lib.TileProvider`
+    basemap : class:`xyzservices.lib.TileProvider` or Dict
         Basemap description coming from ipyleaflet.basemaps.
     day: string
         If relevant for the chosen basemap, you can specify the day for
@@ -50,12 +50,18 @@ def basemap_to_tiles(basemap, day=yesterday, **kwargs):
     kwargs: key-word arguments
         Extra key-word arguments to pass to the TileLayer constructor.
     """
-    url = basemap.build_url(time=day, **kwargs)
+    if type(basemap) == xyzservices.lib.TileProvider:
+        url = basemap.build_url(time=day)
+    elif type(basemap) == dict:
+        url = basemap.get("url", "")
+    else:
+        raise ValueError("Invalid basemap type")
+
     return TileLayer(
         url=url,
         max_zoom=basemap.get('max_zoom', 19),
         min_zoom=basemap.get('min_zoom', 1),
-        attribution=basemap.get('html_attribution', ''),
+        attribution=basemap.get('html_attribution', '') or basemap.get('attribution', ''),
         name=basemap.get('name', ''),
         **kwargs
     )

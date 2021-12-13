@@ -52,6 +52,11 @@ export class LeafletTileLayerView extends rasterlayer.LeafletRasterLayerView {
         this.spinner.stop();
       }
     });
+    this.obj.on("remove", event => {
+      if (this.model.get('show_loading')) {
+        this.spinner.stop();
+      }
+    })
   }
 
   model_events() {

@@ -35,7 +35,7 @@ jobs:
       run: mamba install python=${{ matrix.python-version }} pip nodejs flake8
 
     - name: Mamba install JupyterLab 3
-      run: mamba install jupyterlab=3 ipywidgets=7.6
+      run: mamba install jupyterlab=3 ipywidgets=7.6 openssl=1.1.1l
 
     - name: Install ipyleaflet
       run: pip install .

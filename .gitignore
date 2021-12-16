@@ -24,3 +24,7 @@ docs/*.nc
 
 # Untitled Notebooks
 *Untitled*.ipynb
+
+#Galata 
+ui-test/playwright-report
+ui-test/test-results

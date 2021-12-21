@@ -529,6 +529,8 @@ class TileLayer(RasterLayer):
         Minimum zoom for this tile service.
     max_zoom: int, default 18
         Maximum zoom for this tile service.
+    bounds: list or None, default None
+        List of SW and NE location tuples. e.g. [(50, 75), (75, 120)].
     tile_size int, default 256
         Tile sizes for this tile service.
     attribution string, default "Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors"
@@ -552,6 +554,7 @@ class TileLayer(RasterLayer):
     max_zoom = Int(18).tag(sync=True, o=True)
     min_native_zoom = Int(0).tag(sync=True, o=True)
     max_native_zoom = Int(18).tag(sync=True, o=True)
+    bounds = List(default_value=None, allow_none=True, help='list of SW and NE location tuples').tag(sync=True, o=True)
     tile_size = Int(256).tag(sync=True, o=True)
     attribution = Unicode('Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors').tag(
         sync=True, o=True)

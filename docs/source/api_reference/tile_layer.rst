@@ -42,6 +42,7 @@ min_zoom           0
 max_zoom           18
 min_native_zoom    0
 max_native_zoom    18
+bounds             None
 tile_size          256
 attribution        "Map data (c) <a href=\'https://openstreetmap.org\'>OpenStreetMap</a> contributors"
 detect_retina      False

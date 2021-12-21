@@ -15,6 +15,7 @@ export class LeafletTileLayerModel extends rasterlayer.LeafletRasterLayerModel {
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       min_zoom: 0,
       max_zoom: 18,
+      bounds: null,
       tile_size: 256,
       attribution:
         'Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',

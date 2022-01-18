@@ -95,7 +95,7 @@ export class LeafletPopupView extends layer.LeafletUILayerView {
       this.set_child(this.model.get('child'));
     });
     this.model.on_some_change(
-      ['min_width', 'max_width', 'max_height', 'location'],
+      ['min_width', 'max_width', 'max_height'],
       this.update_popup,
       this
     );

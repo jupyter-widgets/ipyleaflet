@@ -497,6 +497,11 @@ class Popup(UILayer):
     auto_close = Bool(True).tag(sync=True, o=True)
     close_on_escape_key = Bool(True).tag(sync=True, o=True)
 
+    def open_popup(self, location=def_loc):
+        self.send({'msg': 'open', 'location': location})
+
+    def close_popup(self):
+        self.send({'msg': 'close'})
 
 class RasterLayer(Layer):
     """Abstract RasterLayer class.

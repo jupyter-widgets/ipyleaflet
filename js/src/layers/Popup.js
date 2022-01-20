@@ -34,6 +34,7 @@ export class LeafletPopupView extends layer.LeafletUILayerView {
     this.obj = L.popup(this.get_options()).setLatLng(
       this.model.get('location')
     );
+    this.model.on('msg:custom', this.handle_message.bind(this));
   }
 
   initialize(parameters) {
@@ -112,6 +113,13 @@ export class LeafletPopupView extends layer.LeafletUILayerView {
       this.map_view.obj.openPopup(this.obj);
     } else {
       this.map_view.obj.openPopup(this.obj);
+      this.map_view.obj.closePopup(this.obj);
+    }
+  }
+  handle_message(content) {
+    if (content.msg == 'open') {
+      this.map_view.obj.openPopup(this.obj, content.location);
+    } else if (content.msg == 'close') {
       this.map_view.obj.closePopup(this.obj);
     }
   }

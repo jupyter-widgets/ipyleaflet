@@ -498,7 +498,7 @@ class Popup(UILayer):
     close_on_escape_key = Bool(True).tag(sync=True, o=True)
 
     def open_popup(self, location=None):
-        """ Open the popup on the bound map
+        """Open the popup on the bound map.
 
         Parameters
         ----------
@@ -511,9 +511,10 @@ class Popup(UILayer):
         self.send({'msg': 'open', 'location': self.location if location is None else location})
 
     def close_popup(self):
-        """ Close the popup on the bound map """
+        """Close the popup on the bound map."""
 
         self.send({'msg': 'close'})
+
 
 class RasterLayer(Layer):
     """Abstract RasterLayer class.

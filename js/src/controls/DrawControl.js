@@ -127,6 +127,8 @@ export class LeafletDrawControlView extends control.LeafletControlView {
     this.map_view.obj.off('draw:created');
     this.map_view.obj.off('draw:edited');
     this.map_view.obj.off('draw:deleted');
+    this.model.off('msg:custom');
+    this.model.off('change:data');
   }
 
   data_to_layers() {

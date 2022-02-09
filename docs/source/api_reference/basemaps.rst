@@ -22,12 +22,6 @@ your own ``TileLayer`` layer.
 
 .. jupyter-execute::
 
-
-    Map(basemap=basemaps.OpenStreetMap.BlackAndWhite, center=center, zoom=zoom)
-
-
-.. jupyter-execute::
-
     Map(basemap=basemaps.OpenStreetMap.France, center=center, zoom=zoom)
 
 
@@ -47,16 +41,6 @@ your own ``TileLayer`` layer.
 .. jupyter-execute::
 
     Map(basemap=basemaps.Gaode.Satellite, center=center, zoom=zoom)
-
-
-.. jupyter-execute::
-
-    Map(basemap=basemaps.Hydda.Full, center=center, zoom=zoom)
-
-
-.. jupyter-execute::
-
-    Map(basemap=basemaps.Hydda.Base, center=center, zoom=zoom)
 
 
 .. jupyter-execute::
@@ -89,9 +73,6 @@ your own ``TileLayer`` layer.
     Map(basemap=basemaps.HikeBike.HikeBike, center=center, zoom=zoom)
 
 
-.. jupyter-execute::
-
-    Map(basemap=basemaps.MtbMap, center=center, zoom=zoom)
 
 
 .. jupyter-execute::

@@ -1,3 +1,4 @@
+
 name: ipyleaflet
 channels:
   - conda-forge
@@ -15,3 +16,4 @@ dependencies:
   - geopandas
   - netcdf4
   - xarray
+  - ipyflex

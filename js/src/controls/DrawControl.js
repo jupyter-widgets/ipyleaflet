@@ -122,6 +122,15 @@ export class LeafletDrawControlView extends control.LeafletControlView {
     this.model.on('change:data', this.data_to_layers.bind(this));
   }
 
+  remove() {
+    this.map_view.obj.removeLayer(this.feature_group);
+    this.map_view.obj.off('draw:created');
+    this.map_view.obj.off('draw:edited');
+    this.map_view.obj.off('draw:deleted');
+    this.model.off('msg:custom');
+    this.model.off('change:data');
+  }
+
   data_to_layers() {
     const data = this.model.get('data');
     this.feature_group.clearLayers();
@@ -181,5 +190,6 @@ export class LeafletDrawControlView extends control.LeafletControlView {
         }
       });
     }
+    this.layers_to_data()
   }
 }

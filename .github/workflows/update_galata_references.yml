@@ -45,13 +45,20 @@ jobs:
         run: mamba install jupyterlab ipywidgets openssl=1.1.1l
 
       - name: Install ipyleaflet
+        run: pip install .
+
+      - name: Install JS deps
         run: |
-          pip install .
           jlpm
           jlpm build
-          jupyter labextension develop . --overwrite
-          cd ui-tests
-          jlpm install --frozen-lockfile
+        working-directory: js
+
+      - name: Install labextension
+        run: jupyter labextension develop . --overwrite
+
+      - name: Install ui-tests
+        run: jlpm install --frozen-lockfile
+        working-directory: ui-tests
 
       - uses: jupyterlab/maintainer-tools/.github/actions/update-snapshots@main
         with:

@@ -63,5 +63,5 @@ jobs:
       - uses: jupyterlab/maintainer-tools/.github/actions/update-snapshots@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          server_url: http-get://localhost:8866/
+          server_url: http-get://localhost:8888/
           test_folder: ui-tests

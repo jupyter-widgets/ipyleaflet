@@ -4,8 +4,8 @@
   "description": "ipyleaflet UI Tests",
   "private": true,
   "scripts": {
-    "start-jlab": "jupyter lab --config ./jupyter_server_config.py",
-    "start-jlab:detached": "yarn run start-jlab&",
+    "start": "jupyter lab --config ./jupyter_server_config.py",
+    "start:detached": "yarn run start&",
     "clean": "rimraf tests/notebooks/.ipynb_checkpoints && rimraf test-output",
     "test": "yarn run clean && playwright test",
     "test:debug": "yarn run clean && PWDEBUG=1  playwright test",

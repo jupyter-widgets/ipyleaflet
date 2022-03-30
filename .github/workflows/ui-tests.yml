@@ -44,7 +44,7 @@ jobs:
         working-directory: ui-tests
 
       - name: Launch JupyterLab
-        run: jlpm start-jlab:detached > /tmp/jupyterlab_server.log 2>&1
+        run: jlpm start:detached > /tmp/jupyterlab_server.log 2>&1
         working-directory: ui-tests
 
       - name: Wait for JupyterLab

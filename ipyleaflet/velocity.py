@@ -10,6 +10,38 @@ from .xarray_ds import ds_x_to_json
 
 
 class Velocity(Layer):
+    """Velocity class, with Layer as parent class
+
+    To visualize the direction and intensity of arbitrary velocities
+
+    Attributes
+    ----------
+    data: dataset, default Empty dataset
+        Underlying dataset
+    zonal_speed: string, default ''
+        Variable name in underlying dataset for the zonal speed.
+    meridional_speed: string, default ''
+       Variable name in underlying dataset for the meridional speed.
+    latitude_dimension: string, default Empty dataset.
+        Name of the latitude dimension in underlying dataset.
+    longitude_dimension: string, default True
+        Name of the longitude dimension in underlying dataset.
+    units: string, default None
+        Whether to show imperial units.
+    display_values: bool, default True
+        Display velocity data on mouse hover.
+    display_options: dict, default {}
+        Display options.
+    min_velocity: float, default 0
+        Used to align color scale
+    max_velocity: float, default 10.0
+        Used to align color scale.
+    velocity_scale: float, 0.005
+        To be modified for particle animations.
+    color_scale: array, default []
+        Array of hex/rgb colors for user-specified color scale.
+    """
+
     _view_name = Unicode('LeafletVelocityView').tag(sync=True)
     _model_name = Unicode('LeafletVelocityModel').tag(sync=True)
 

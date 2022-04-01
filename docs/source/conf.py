@@ -2,10 +2,11 @@
 import sphinx_rtd_theme
 
 extensions = [
-    'jupyter_sphinx',
+    'jupyter_sphinx', 'sphinx.ext.autodoc', 'sphinx.ext.coverage', 'sphinx.ext.napoleon','sphinx.ext.todo', 'sphinx.ext.viewcode'
 ]
 
 templates_path = ['_templates']
+
 
 
 def setup(app):

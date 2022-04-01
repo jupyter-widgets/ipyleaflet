@@ -248,7 +248,7 @@ class Icon(UILayer):
 
     Attributes
     ----------
-    icon_url : string
+    icon_url : string, default ""
         The url to the image used for the icon.
     shadow_url: string, default None
         The url to the image used for the icon shadow.
@@ -400,6 +400,10 @@ class Marker(UILayer):
         The rotation angle of the marker in degrees.
     rotation_origin: string, default ''
         The rotation origin of the marker.
+    z_index_offset: int, default 0
+    opacity: float, default	1.0
+    rise_offset: int, default 250
+        The z-index offset used for the rise_on_hover feature
     """
 
     _view_name = Unicode('LeafletMarkerView').tag(sync=True)
@@ -464,6 +468,7 @@ class Popup(UILayer):
     auto_pan: boolean, default True
         Set it to False if you don’t want the map to do panning
         animation to fit the opened popup.
+    auto_pan_padding: tuple, default (5, 5)
     keep_in_view: boolean, default False
         Set it to True if you want to prevent users from panning
         the popup off of the screen while it is open.
@@ -547,20 +552,25 @@ class TileLayer(RasterLayer):
         Minimum zoom for this tile service.
     max_zoom: int, default 18
         Maximum zoom for this tile service.
+    min_native_zoom: int, default 0
+    max_native_zoom: int, default 18
     bounds: list or None, default None
         List of SW and NE location tuples. e.g. [(50, 75), (75, 120)].
-    tile_size int, default 256
+    tile_size: int, default 256
         Tile sizes for this tile service.
-    attribution string, default "Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors"
+    attribution: string, default "Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors"
         Tiles service attribution.
-    no_wrap boolean, default False
+    no_wrap: boolean, default False
         Whether the layer is wrapped around the antimeridian.
     tms: boolean, default False
         If true, inverses Y axis numbering for tiles (turn this on for TMS services).
     show_loading: boolean, default False
         Whether to show a spinner when tiles are loading.
-    loading: boolean, default False
+    loading: boolean, default False (dynamically updated)
         Whether the tiles are currently loading.
+    detect_retina: boolean, default	False
+    opacity: float, default 1.0
+    visible: boolean, default True
     """
 
     _view_name = Unicode('LeafletTileLayerView').tag(sync=True)
@@ -633,7 +643,7 @@ class LocalTileLayer(TileLayer):
 
 
 class WMSLayer(TileLayer):
-    """WMSLayer class.
+    """WMSLayer class, with TileLayer as a parent class.
 
     Attributes
     ----------
@@ -761,9 +771,10 @@ class VideoOverlay(RasterLayer):
 
 
 class Heatmap(RasterLayer):
-    """Heatmap class.
+    """Heatmap class, with RasterLayer as parent class.
 
     Heatmap layer.
+
 
     Attributes
     ----------
@@ -792,9 +803,10 @@ class Heatmap(RasterLayer):
 
 
 class VectorTileLayer(Layer):
-    """VectorTileLayer class.
+    """VectorTileLayer class, with Layer as parent class.
 
     Vector tile layer.
+
 
     Attributes
     ----------
@@ -876,7 +888,7 @@ class Path(VectorLayer):
 
 
 class AntPath(VectorLayer):
-    """AntPath class.
+    """AntPath class, with VectorLayer as parent class.
 
     AntPath layer.
 
@@ -903,6 +915,8 @@ class AntPath(VectorLayer):
         Whether the animation is going backwards or not.
     hardware_accelerated: boolean, default False
         Whether the ant-path uses hardware acceleration.
+    radius: int, default 10
+        Radius of the circle, if use is set to ‘circle’
     """
 
     _view_name = Unicode('LeafletAntPathView').tag(sync=True)
@@ -924,7 +938,7 @@ class AntPath(VectorLayer):
 
 
 class Polyline(Path):
-    """Polyline abstract class.
+    """Polyline abstract class, with Path as parent class.
 
     Attributes
     ----------
@@ -960,7 +974,7 @@ class Polyline(Path):
 
 
 class Polygon(Polyline):
-    """Polygon class.
+    """Polygon class, with Polyline as parent class.
 
     Polygon layer.
     """
@@ -970,7 +984,7 @@ class Polygon(Polyline):
 
 
 class Rectangle(Polygon):
-    """Rectangle class.
+    """Rectangle class, with Polygon as parent class.
 
     Rectangle layer.
 
@@ -987,7 +1001,7 @@ class Rectangle(Polygon):
 
 
 class CircleMarker(Path):
-    """CircleMarker class.
+    """CircleMarker class, with Path as parent class.
 
     CircleMarker layer.
 
@@ -1009,14 +1023,9 @@ class CircleMarker(Path):
 
 
 class Circle(CircleMarker):
-    """Circle class.
+    """Circle class, with CircleMarker as parent class.
 
     Circle layer.
-
-    Attributes
-    ----------
-    radius: int, default 1000
-        Radius of the circle marker in meters.
     """
 
     _view_name = Unicode('LeafletCircleView').tag(sync=True)
@@ -1027,7 +1036,7 @@ class Circle(CircleMarker):
 
 
 class MarkerCluster(Layer):
-    """MarkerCluster class.
+    """MarkerCluster class, with Layer as parent class.
 
     A cluster of markers that you can put on the map like other layers.
 
@@ -1051,7 +1060,7 @@ class LayerGroup(Layer):
 
     A group of layers that you can put on the map like other layers.
 
-    Attributes
+    Attributes and methods
     ----------
     layers: list, default []
         List of layers to include in the group.
@@ -1131,11 +1140,11 @@ class FeatureGroup(LayerGroup):
 
 
 class GeoJSON(FeatureGroup):
-    """GeoJSON class.
+    """GeoJSON class, with FeatureGroup as parent class.
 
     Layer created from a GeoJSON data structure.
 
-    Attributes
+    Attributes and methods
     ----------
     data: dict, default {}
         The JSON data structure.
@@ -1268,7 +1277,7 @@ class GeoJSON(FeatureGroup):
 
 
 class GeoData(GeoJSON):
-    """GeoData class.
+    """GeoData class with GeoJSON as parent class.
 
     Layer created from a GeoPandas dataframe.
 
@@ -1303,7 +1312,7 @@ class GeoData(GeoJSON):
 
 
 class Choropleth(GeoJSON):
-    """Choropleth class.
+    """Choropleth class, with GeoJSON as parent class.
 
     Layer showing a Choropleth effect on a GeoJSON structure.
 
@@ -1465,9 +1474,9 @@ class Control(Widget):
 
 
 class WidgetControl(Control):
-    """WidgetControl class.
+    """WidgetControl class, with Control as parent class.
 
-    A control that contain any DOMWidget instance.
+    A control that contains any DOMWidget instance.
 
     Attributes
     ----------
@@ -1490,7 +1499,7 @@ class WidgetControl(Control):
 
 
 class FullScreenControl(Control):
-    """FullScreenControl class.
+    """FullScreenControl class, with Control as parent class.
 
     A control which contains a button that will put the Map in
     full-screen when clicked.
@@ -1501,7 +1510,7 @@ class FullScreenControl(Control):
 
 
 class LayersControl(Control):
-    """LayersControl class.
+    """LayersControl class, with Control as parent class.
 
     A control which allows hiding/showing different layers on the Map.
     """
@@ -1511,11 +1520,11 @@ class LayersControl(Control):
 
 
 class MeasureControl(Control):
-    """MeasureControl class.
+    """MeasureControl class, with Control as parent class.
 
     A control which allows making measurements on the Map.
 
-    Attributes
+    Attributes and methods
     ----------
     primary_length_unit: str, default 'feet'
         Possible values are 'feet', 'meters', 'miles', 'kilometers' or any user
@@ -1625,7 +1634,7 @@ class MeasureControl(Control):
 
 
 class SplitMapControl(Control):
-    """SplitMapControl class.
+    """SplitMapControl class, with Control as parent class.
 
     A control which allows comparing layers by splitting the map in two.
 
@@ -1756,7 +1765,7 @@ class DrawControl(Control):
 
 
 class ZoomControl(Control):
-    """ZoomControl class.
+    """ZoomControl class, with Control as parent class.
 
     A control which contains buttons for zooming in/out the Map.
 
@@ -1784,7 +1793,7 @@ class ZoomControl(Control):
 
 
 class ScaleControl(Control):
-    """ScaleControl class.
+    """ScaleControl class, with Control as parent class.
 
     A control which shows the Map scale.
 
@@ -1820,7 +1829,7 @@ class AttributionControl(Control):
 
 
 class LegendControl(Control):
-    """LegendControl class.
+    """LegendControl class, with Control as parent class.
 
     A control which contains a legend.
 
@@ -1904,7 +1913,22 @@ class LegendControl(Control):
 
 
 class SearchControl(Control):
-    """ SearchControl Widget """
+    """ SearchControl class, with Control as parent class.
+
+    Attributes and methods
+    ----------
+
+    url: string, default ""
+        The url used for the search queries.
+    layer:	default None
+        The LayerGroup used for search queries.
+    zoom: int, default None
+        The zoom level after moving to searched location, by default zoom level will not change.
+    marker:	default Marker()
+        The marker used by the control.
+    found_style: default {‘fillColor’: ‘#3f0’, ‘color’: ‘#0f0’}
+        Style for searched feature when searching in LayerGroup.
+    """
     _view_name = Unicode('LeafletSearchControlView').tag(sync=True)
     _model_name = Unicode('LeafletSearchControlModel').tag(sync=True)
 
@@ -1991,14 +2015,51 @@ class Map(DOMWidget, InteractMixin):
         The current center of the map.
     zoom: float, default 12
         The current zoom value of the map.
+    max_zoom: int, default 18
+        Maximal zoom value.
+    min_zoom: int, default 1
+        Minimal zoom value.
     zoom_snap: float, default 1
-        Forces the map’s zoom level to always be a multiple of this..
+        Forces the map’s zoom level to always be a multiple of this.
     zoom_delta: float, default 1
         Controls how much the map’s zoom level will change after
         pressing + or - on the keyboard, or using the zoom controls.
     crs: projection, default projections.EPSG3857
         Coordinate reference system, which can be ‘Earth’, ‘EPSG3395’, ‘EPSG3857’,
         ‘EPSG4326’, ‘Base’, ‘Simple’ or user defined projection.
+    dragging: boolean, default True
+        Whether the map be draggable with mouse/touch or not.
+    touch_zoom: boolean, default True
+        Whether the map can be zoomed by touch-dragging with two fingers on mobile.
+    scroll_wheel_zoom: boolean,default False
+        Whether the map can be zoomed by using the mouse wheel.
+    double_click_zoom: boolean,	default True
+        Whether the map can be zoomed in by double clicking on it and zoomed out by double clicking while holding shift.
+    box_zoom: boolean, default True
+        Whether the map can be zoomed to a rectangular area specified by dragging the mouse while pressing the shift key
+    tap: boolean, default True
+        Enables mobile hacks for supporting instant taps.
+    tap_tolerance: int, default	15
+        The max number of pixels a user can shift his finger during touch for it to be considered a valid tap.
+    world_copy_jump: boolean, default False
+        With this option enabled, the map tracks when you pan to another “copy” of the world and seamlessly jumps to.
+    close_popup_on_click: boolean, default True
+        Set it to False if you don’t want popups to close when user clicks the map.
+    bounce_at_zoom_limits: boolean,	default True
+        Set it to False if you don’t want the map to zoom beyond min/max zoom and then bounce back when pinch-zooming.
+    keyboard: booelan, default True
+        Makes the map focusable and allows users to navigate the map with keyboard arrows and +/- keys.
+    keyboard_pan_offset: int, default 80
+    keyboard_zoom_offset: int, default 1
+    inertia: boolean, default True
+        If enabled, panning of the map will have an inertia effect.
+    inertia_deceleration: float, default 3000
+        The rate with which the inertial movement slows down, in pixels/second².
+    inertia_max_speed: float, default 1500
+        Max speed of the inertial movement, in pixels/second.
+    zoom_control: boolean, default True
+    attribution_control: boolean, default True
+    zoom_animation_threshold: int, default 4
     """
 
     _view_name = Unicode('LeafletMapView').tag(sync=True)

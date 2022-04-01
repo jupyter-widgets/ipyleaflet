@@ -141,10 +141,5 @@ Example
 Attributes
 ----------
 
-=========================    =================================================================================     =====================================================
-Attribute                    Default Value                                                                         Doc
-=========================    =================================================================================     =====================================================
-url                          ''                                                                                    Url for the source protobuf data.
-attribution                  'Map data (c) <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'     Attribution for the map.
-vector_tile_layer_styles     {}                                                                                    Styles for the various data layer of protobuf layers.
-=========================    =================================================================================     =====================================================
+.. autoclass:: ipyleaflet.leaflet.VectorTileLayer
+   :members:

@@ -91,16 +91,5 @@ The ``Choropleth`` layer is then created specifying on which key the colormap is
 Attributes
 ----------
 
-==============   ==========================  ===========
-Attribute        Default                     Doc
-==============   ==========================  ===========
-geo_data         {}                          Data dictionary
-choro_data       {}                          Mapping key -> float data for constructing the colormap
-key_on           'id'                        Key used for the colormap construction
-value_min                                    Color scale minimum value
-value_max                                    Color scale maximum value
-colormap         OrRd_06                     Map of color from branca
-style                                        Style dictionary
-hover_style                                  Hover style dictionary
-style_callback                               Styling function that is called for each feature, and should return the feature style. This styling function takes the feature, the colormap function and the key data as arguments.
-==============   ==========================  ===========
+.. autoclass:: ipyleaflet.leaflet.Choropleth
+   :members:

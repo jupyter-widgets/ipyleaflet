@@ -46,9 +46,5 @@ You can also provide WKT string as input.
 Attributes
 ----------
 
-============   ==========================  ===========
-Attribute      Default Value               Doc
-============   ==========================  ===========
-path           ''                          Local path of WKT file
-wkt_string     ''                          WKT string
-============   ==========================  ===========
+.. autoclass:: ipyleaflet.leaflet.WKTLayer
+   :members:

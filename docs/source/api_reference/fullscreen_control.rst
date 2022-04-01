@@ -13,9 +13,8 @@ Example
 
     m
 
+Attribute
+-------
 
-================    ================   ===
-Attribute           Default Value      Doc
-================    ================   ===
-position            'topleft'          Position of the control, can be 'bottomleft', 'bottomright', 'topleft', or 'topright'
-================    ================   ===
+.. autoclass:: ipyleaflet.leaflet.FullScreenControl
+   :members:

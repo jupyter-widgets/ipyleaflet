@@ -3,6 +3,8 @@ Draw Control
 
 The ``DrawControl`` allows one to draw shapes on the map such as ``Rectangle`` ``Circle`` or lines.
 
+Example
+-------
 .. jupyter-execute::
 
     from ipyleaflet import Map, basemaps, basemap_to_tiles, DrawControl

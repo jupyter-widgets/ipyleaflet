@@ -43,17 +43,5 @@ Example
 Attributes
 ----------
 
-=====================    =====================   ===
-Attribute                Default Value           Doc
-=====================    =====================   ===
-location                 (0.0, 0.0)
-child                                            Content of the popup
-max_width                300                     Max width of the popup, in pixels
-min_width                50                      Min width of the popup, in pixels
-max_height                                       If set, creates a scrollable container of the given height inside a popup if its content exceeds it
-auto_pan                 True                    Set it to `False` if you don't want the map to do panning animation to fit the opened popup
-auto_pan_padding         (5, 5)
-keep_in_view             False                   Set it to `True` if you want to prevent users from panning the popup off of the screen while it is open
-close_button             True                    Controls the presence of a close button in the popup
-close_on_escape_key      True                    Set it to `False` if you want to override the default behavior of the ESC key for closing of the popup
-=====================    =====================   ===
+.. autoclass:: ipyleaflet.leaflet.Popup
+   :members:

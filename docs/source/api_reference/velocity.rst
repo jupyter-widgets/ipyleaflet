@@ -45,20 +45,5 @@ Example
 Attributes
 ----------
 
-
-======================    ===================================================================    ====
-Attribute                 Default Value                                                          Doc
-======================    ===================================================================    ====
-data                      Empty dataset                                                          Underlying dataset
-zonal_speed               ''                                                                     Variable name in underlying dataset for the zonal speed
-meridional_speed          ''                                                                     Variable name in underlying dataset for the meridional speed
-latitude_dimension        'latitude'                                                             Name of the latitude dimension in underlying dataset
-longitude_dimension       'longitude'                                                            Name of the longitude dimension in underlying dataset
-units                     None                                                                   Units
-display_values            True                                                                   Display velocity data on mouse hover
-display_options           {}                                                                     Display options
-min_velocity              0.0                                                                    Used to align color scale
-max_velocity              10.0                                                                   Used to align color scale
-velocity_scale            0.005                                                                  Modifier for particle animations
-color_scale               []                                                                     Array of hex/rgb colors for user-specified color scale.
-======================    ===================================================================    ====
+.. autoclass:: ipyleaflet.velocity.Velocity
+   :members:

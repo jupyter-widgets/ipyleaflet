@@ -62,11 +62,5 @@ Points example:
 Attributes
 ----------
 
-============   ==========================  ===========
-Attribute      Doc                         Description
-============   ==========================  ===========
-geo_data       Data dictionary             GeoDataFrame
-style          Style dictionary
-hover_style    Hover style dictionary
-point_style    Point decorations           Used to represent point data on the map as CircleMarkers.  If absent, points will be represented by Markers.
-============   ==========================  ===========
+.. autoclass:: ipyleaflet.leaflet.GeoData
+   :members:

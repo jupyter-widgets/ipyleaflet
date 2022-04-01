@@ -22,9 +22,5 @@ Example
 Attributes
 ----------
 
-=====================   ========================================    ================   ===
-Attribute               Type                                        Default Value      Doc
-=====================   ========================================    ================   ===
-left_layer              Layer instance                                                 Left layer
-right_layer             Layer instance                                                 Right layer
-=====================   ========================================    ================   ===
+.. autoclass:: ipyleaflet.leaflet.SplitMapControl
+   :members:

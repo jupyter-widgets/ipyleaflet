@@ -22,8 +22,5 @@ In JupyterLab, the path is relative to the server (where you started JupyterLab)
 Attributes
 ----------
 
-===============    =================  =====
-Attribute          Default Value      Doc
-===============    =================  =====
-path               ""                 Relative URL (e.g. 'tiles/{z}/{x}/{y}.png' or 'files/tiles/{z}/{x}/{y}.png' in JupyterLab)
-===============    =================  =====
+.. autoclass:: ipyleaflet.leaflet.LocalTileLayer
+   :members:

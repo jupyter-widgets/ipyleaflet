@@ -1,5 +1,11 @@
 var path = require('path');
 var version = require('./package.json').version;
+var crypto = require('crypto');
+
+// Workaround for loaders using "md4" by default, which is not supported in FIPS-compliant OpenSSL
+var cryptoOrigCreateHash = crypto.createHash;
+crypto.createHash = (algorithm) =>
+  cryptoOrigCreateHash(algorithm == 'md4' ? 'sha256' : algorithm);
 
 var rules = [
     {

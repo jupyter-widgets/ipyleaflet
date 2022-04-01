@@ -37,10 +37,5 @@ Example
 Attributes
 ----------
 
-================    ================   ===
-Attribute           Default Value      Doc
-================    ================   ===
-position            'topleft'          Position of the control, can be 'bottomleft', 'bottomright', 'topleft', or 'topright'
-legend              None               A dictionary containing the name->color mapping that represents the legend
-title               'Legend'           Legend name
-================    ================   ===
+.. autoclass:: ipyleaflet.leaflet.LegendControl
+   :members:

@@ -26,8 +26,5 @@ Example
 Attributes
 ----------
 
-============   ================   ===
-Attribute      Default Value      Doc
-============   ================   ===
-markers        ()                 Tuple of markers
-============   ================   ===
+.. autoclass:: ipyleaflet.leaflet.MarkerCluster
+   :members:

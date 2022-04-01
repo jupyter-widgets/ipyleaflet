@@ -54,11 +54,5 @@ Unlike other widgets in ipyleaflet, the ``AwesomeIcon`` widget is not dynamic. I
 Attributes
 ----------
 
-=====================    =====================   ===
-Attribute                Default Value           Doc
-=====================    =====================   ===
-name                     'home'                  Name of the Font-Awesome icon
-marker_color             'blue'                  Marker background color
-icon_color               'white'                 Icon color
-spin                     False                   Whether the icon is spinning or not
-=====================    =====================   ===
+.. autoclass:: ipyleaflet.leaflet.AwesomeIcon
+   :members:

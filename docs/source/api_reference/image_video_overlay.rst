@@ -41,9 +41,5 @@ Example VideoOverlay
 Attributes
 ----------
 
-===========    ========================   ===
-Attribute      Default Value              Doc
-===========    ========================   ===
-url            ""                         An http url to the footage or a relative path to a local file (image/video). Note that absolute local paths are not supported. 
-bounds         ((0.0, 0.0), (0.0, 0.0))   SW and NE corners of the image
-===========    ========================   ===
+.. autoclass:: ipyleaflet.leaflet.VideoOverlay
+   :members:

@@ -1,10 +1,11 @@
 Polygon/Multipolygon
 ====================
 
-Polygon
--------
 
+Example Polygon
+------------------
 You can easily create a ``Polygon`` providing the list of vertex locations (in lat/lng).
+
 
 .. jupyter-execute::
 
@@ -23,7 +24,7 @@ You can easily create a ``Polygon`` providing the list of vertex locations (in l
 
 Because the ``Polygon`` an interactive widget, you can dynamically update the locations/color from Python, and you will see updated on the ``Map``.
 
-Polygon with holes
+Example Polygon with holes
 ------------------
 
 You can define holes in your ``Polygon`` by using nested lists of vertex locations.
@@ -47,7 +48,7 @@ You can define holes in your ``Polygon`` by using nested lists of vertex locatio
     m
 
 
-MultiPolygon
+Example MultiPolygon
 ------------
 
 .. jupyter-execute::
@@ -69,7 +70,7 @@ MultiPolygon
     m
 
 
-Editable Polygon
+Example Editable Polygon
 ----------------
 
 If ``transform`` is set to ``True``, you can dynamically edit the polygon with the mouse.
@@ -94,22 +95,5 @@ If ``transform`` is set to ``True``, you can dynamically edit the polygon with t
 Attributes
 ----------
 
-===============  ================   ===
-Attribute        Default Value      Doc
-===============  ================   ===
-locations        []                 List of points of the polygon
-stroke           True               Set it to `False` to disable borders
-color            "#0033FF"          Stroke color
-opacity          1.0                Stroke opacity
-weight           5                  Stroke width in pixels
-fill             True               Whether to fill the polygon or not
-fill_color       None               If None, it will be the same as the color value
-fill_opacity     0.2
-dash_array
-line_cap         "round"
-line_join        "round"
-transform        False              Whether the polygon is editable with the mouse or not
-scaling          True               Whether the polygon scale is editable or not, needs transform set to ``True``
-rotation         True               Whether the polygon rotation is editable or not, needs transform set to ``True``
-uniform_scaling  False              Whether to keep the scale ratio when editing the scale, needs transform set to ``True``
-===============  ================   ===
+.. autoclass:: ipyleaflet.leaflet.Polygon
+   :members:

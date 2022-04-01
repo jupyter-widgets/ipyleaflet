@@ -31,24 +31,9 @@ Sometimes one could want to specify the date of the given images, for instance w
     nasa_layer = basemap_to_tiles(basemaps.NASAGIBS.ModisTerraTrueColorCR, "2018-04-08");
     m.add_layer(nasa_layer);
 
-Attributes
+Attributes and methods
 ----------
 
-===============    ===================================================================================
-Attribute          Default Value
-===============    ===================================================================================
-url                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-min_zoom           0
-max_zoom           18
-min_native_zoom    0
-max_native_zoom    18
-bounds             None
-tile_size          256
-attribution        "Map data (c) <a href=\'https://openstreetmap.org\'>OpenStreetMap</a> contributors"
-detect_retina      False
-opacity            1.0
-visible            True
-no_wrap            False
-show_loading       False
-loading            False (dynamically updated)
-===============    ===================================================================================
+.. autoclass:: ipyleaflet.leaflet.TileLayer
+   :members:
+

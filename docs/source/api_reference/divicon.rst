@@ -21,12 +21,5 @@ Example
 Attributes
 ----------
 
-=====================    =====================   ===
-Attribute                Default Value           Doc
-=====================    =====================   ===
-html                     ''                      Custom HTML code to put inside the div element,
-bg_pos                   (0, 0)                  Optional relative position of the background, in pixels.
-icon_size                (10, 10)                size icon will be rendered
-icon_anchor              (0, 0)                  anchor point of icon
-popup_anchor             (0, 0)                  anchor point of popup
-=====================    =====================   ===
+.. autoclass:: ipyleaflet.leaflet.DivIcon
+   :members:

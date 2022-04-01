@@ -24,14 +24,5 @@ Example
 Attributes
 ----------
 
-================    ================   ===
-Attribute           Default Value      Doc
-================    ================   ===
-position            'topleft'          Position of the control, can be 'bottomleft', 'bottomright', 'topleft', or 'topright'
-widget              None               Widget content
-min_width           None               Min width of the widget (in pixels), if None it will respect the content size
-max_width           None               Max width of the widget (in pixels), if None it will respect the content size
-min_height          None               Min height of the widget (in pixels), if None it will respect the content size
-max_height          None               Max height of the widget (in pixels), if None it will respect the content size
-transparent_bg      False              If set to True will make the widget background transparent
-================    ================   ===
+.. autoclass:: ipyleaflet.leaflet.WidgetControl
+   :members:

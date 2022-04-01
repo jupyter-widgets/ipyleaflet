@@ -55,17 +55,5 @@ Like most widgets in ipyleaflet, the ``AntPath`` can be dynamically updated from
 Attributes
 ----------
 
-=====================    =====================   ===
-Attribute                Default Value           Doc
-=====================    =====================   ===
-locations                []                      List of path points as (lat, lng) couples
-color                    '#0000FF'               Background color for the path
-pulse_color              '#FFFFFF'               Color of the moving ants on the path
-paused                   False                   Whether the ants are moving or not
-reverse                  False                   Whether the ants are moving in reverse or not
-use                      'polyline'              Which shape is drawn, possible values are 'polyline', 'polygon', 'rectangle' and 'circle'
-dash_array               [10, 20]                Dash pattern for lines as a list of non-negative numbers
-weight                   5                       Lines weight
-delay                    400                     Ants speed
-radius                   10                      Radius of the circle, if ``use`` is set to 'circle'
-=====================    =====================   ===
+.. autoclass:: ipyleaflet.leaflet.AntPath
+   :members:

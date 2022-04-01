@@ -22,8 +22,8 @@ Example
 
     m
 
-Advanced usage
---------------
+Usage
+-----
 
 By default, options like ``layers``, ``format``, ``transparent`` are passed in the request URL. If your tiles provider needs
 any extra parameter, you can define your own ``WMSLayer`` class which adds new parameters. For example, the following code
@@ -88,20 +88,5 @@ Or from another widget like a slider: (Note that this example will not work in t
 Attributes
 ----------
 
-===============   ===================================================================================   ===
-Attribute         Default Value                                                                         Doc
-===============   ===================================================================================   ===
-url               "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-min_zoom          0
-max_zoom          18
-tile_size         256
-attribution       "Map data (c) <a href=\'https://openstreetmap.org\'>OpenStreetMap</a> contributors"
-detect_retina     False
-opacity           1.0
-visible           True
-layers            ""                                                                                    Comma-separated list of WMS layers to show
-styles            ""                                                                                    Comma-separated list of WMS styles
-format            "image/jpeg"                                                                          WMS image format (use `'image/png'` for layers with transparency)
-transparent       False                                                                                 If `True`, the WMS service will return images with transparency
-crs               ipyleaflet.projections.EPSG3857                                                       Projection used for this service.
-===============   ===================================================================================   ===
+.. autoclass:: ipyleaflet.leaflet.WMSLayer
+   :members:

@@ -78,26 +78,10 @@ You can also search features from GeoJSON layers.
 
     m
 
-Attributes
+Methods
 ----------
 
-================    ======================================  ===
-Attribute           Default Value                           Doc
-================    ======================================  ===
-position            'topleft'                               Position of the control, can be 'bottomleft', 'bottomright', 'topleft', or 'topright'
-url                 ''                                      The url used for the search queries.
-layer               None                                    The LayerGroup used for search queries.
-zoom                None                                    The zoom level after moving to searched location, by default zoom level will not change.
-marker              Marker()                                The marker used by the control.
-found_style         {'fillColor': '#3f0', 'color': '#0f0'}  Style for searched feature when searching in LayerGroup.
-================    ======================================  ===
+.. autoclass:: ipyleaflet.leaflet.SearchControl
+   :members:
 
-Methods
--------
 
-==================     =====================================     ===
-Method                 Arguments                                 Doc
-==================     =====================================     ===
-on_location_found      Callable object                           Adds a callback on location found event.
-on_feature_found       Callable object                           Adds a callback on found event for searching in GeoJSON layer.
-==================     =====================================     ===

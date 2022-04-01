@@ -35,19 +35,5 @@ Example
 Attributes
 ----------
 
-==============    ================   ===
-Attribute         Default Value      Doc
-==============    ================   ===
-layers            ()                 List of layers
-==============    ================   ===
-
-Methods
--------
-
-==============    =====================================     ===
-Method            Arguments                                 Doc
-==============    =====================================     ===
-add_layer         Layer instance                            Add a new layer to the group
-remove_layer      Layer instance                            Remove a layer from the group
-clear_layers                                                Remove all layers from the group
-==============    =====================================     ===
+.. autoclass:: ipyleaflet.leaflet.LayerGroup
+   :members:

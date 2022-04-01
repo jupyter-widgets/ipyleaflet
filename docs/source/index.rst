@@ -65,6 +65,12 @@ ipyleaflet: Interactive maps in the Jupyter notebook
     api_reference/search_control
 
 .. toctree::
+    :caption: API Reference
+    :maxdepth: 2
+
+    api
+
+.. toctree::
     :caption: ipyleaflet related projects
     :maxdepth: 2
 

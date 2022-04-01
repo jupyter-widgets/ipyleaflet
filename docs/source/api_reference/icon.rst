@@ -21,14 +21,5 @@ Example
 Attributes
 ----------
 
-=====================    =====================   ===
-Attribute                Default Value           Doc
-=====================    =====================   ===
-icon_url                 ''                      url for icon
-shadow_url               None                    url for icon shadow
-icon_size                (10, 10)                size icon will be rendered
-shadow_size              (10, 10)                size icon shadow will be rendered
-icon_anchor              (0, 0)                  anchor point of icon
-shadow_anchor            (0, 0)                  anchor point of shadow
-popup_anchor             (0, 0)                  anchor point of popup
-=====================    =====================   ===
+.. autoclass:: ipyleaflet.leaflet.Icon
+   :members:

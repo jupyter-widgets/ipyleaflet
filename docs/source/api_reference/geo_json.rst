@@ -56,24 +56,9 @@ The ``GeoJSON`` layer is a widget, which means that you can update the ``data`` 
     geo_json.hover_style = new_hover_style
 
 
-Attributes
-----------
+Attributes and methods
+----------------------
 
-==============   ===
-Attribute        Doc
-==============   ===
-data             Data dictionary
-style            Style dictionary
-hover_style      Hover style dictionary
-style_callback   Styling function that is called for each feature, and should return the feature style. This styling function takes the feature as argument.
-==============   ===
+.. autoclass:: ipyleaflet.leaflet.GeoJSON
+   :members:
 
-Methods
--------
-
-=========    =====================================     ===
-Method       Arguments                                 Doc
-=========    =====================================     ===
-on_click     Callable object                           Adds a callback on click event
-on_hover     Callable object                           Adds a callback on hover event
-=========    =====================================     ===

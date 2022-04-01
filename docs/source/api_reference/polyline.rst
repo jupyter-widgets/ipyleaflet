@@ -52,18 +52,5 @@ Example MultiPolyline
 Attributes
 ----------
 
-=============    ================   ===
-Attribute        Default Value      Doc
-=============    ================   ===
-locations        [[]]               List of list of points of the polygon
-stroke           True               Set it to `False` to disable borders
-color            "#0033FF"          Stroke color
-opacity          1.0                Stroke opacity
-weight           5                  Stroke width in pixels
-fill             True               Whether to fill the polyline or not
-fill_color       None
-fill_opacity     0.2
-dash_array
-line_cap         "round"
-line_join        "round"
-=============    ================   ===
+.. autoclass:: ipyleaflet.leaflet.Polyline
+   :members:

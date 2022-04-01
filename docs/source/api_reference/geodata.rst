@@ -6,7 +6,7 @@ GeoData
 
 
 Examples
--------
+--------
 
 .. jupyter-execute::
 
@@ -62,11 +62,12 @@ Points example:
 Attributes
 ----------
 
-============   ==========================  ===========
-Attribute      Doc                         Description
-============   ==========================  ===========
-geo_data       Data dictionary             GeoDataFrame
-style          Style dictionary
-hover_style    Hover style dictionary
-point_style    Point decorations           Used to represent point data on the map as CircleMarkers.  If absent, points will be represented by Markers.
-============   ==========================  ===========
+==============   ==========================  ===========
+Attribute        Doc                         Description
+==============   ==========================  ===========
+geo_data         Data dictionary             GeoDataFrame
+style            Style dictionary
+hover_style      Hover style dictionary
+point_style      Point decorations           Used to represent point data on the map as CircleMarkers.  If absent, points will be represented by Markers.
+style_callback   Callable object             Styling function that is called for each feature, and should return the feature style. This styling function takes the feature as argument.
+==============   ==========================  ===========

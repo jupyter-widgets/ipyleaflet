@@ -1283,10 +1283,16 @@ class GeoData(GeoJSON):
     def __init__(self, **kwargs):
         super(GeoData, self).__init__(**kwargs)
         self.data = self._get_data()
+        self.data = GeoJSON._get_data(self)
 
     @observe('geo_dataframe', 'style', 'style_callback')
     def _update_data(self, change):
+        if self.updating:
+            return
+        self.updating = True
         self.data = self._get_data()
+        self.data = GeoJSON._get_data(self)
+        self.updating = False
 
     def _get_data(self):
         return json.loads(self.geo_dataframe.to_json())

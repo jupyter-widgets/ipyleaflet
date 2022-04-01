@@ -61,6 +61,7 @@
   "jupyterlab": {
     "extension": "src/jupyterlab-plugin",
     "outputDir": "../ipyleaflet/labextension",
+    "webpackConfig": "webpack.lab.config.js",
     "sharedPackages": {
       "@jupyter-widgets/base": {
         "bundled": false,

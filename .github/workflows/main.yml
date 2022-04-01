@@ -53,11 +53,3 @@ jobs:
 
     - name: Import check
       run: python -c 'import ipyleaflet'
-
-    - name: Build docs (Only on Linux for saving time)
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-        mamba install sphinx sphinx_rtd_theme
-        pip install -r docs/requirements.txt
-        cd docs
-        make html

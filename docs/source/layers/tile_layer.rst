@@ -32,7 +32,7 @@ Sometimes one could want to specify the date of the given images, for instance w
     m.add_layer(nasa_layer);
 
 Attributes and methods
-----------
+----------------------
 
 .. autoclass:: ipyleaflet.leaflet.TileLayer
    :members:

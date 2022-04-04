@@ -29,7 +29,7 @@ Example
 
 
 Attributes and methods
-----------
+----------------------
 
 .. autoclass:: ipyleaflet.leaflet.MeasureControl
    :members:

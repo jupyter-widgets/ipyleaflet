@@ -2,7 +2,7 @@ Map
 ===
 
 Example
------
+-------
 
 .. jupyter-execute::
 
@@ -68,7 +68,7 @@ You can save the ``Map`` and all its layers and controls to an HTML page using t
 
 
 Attributes and methods
-----------
+----------------------
 
 .. autoclass:: ipyleaflet.Map
    :members:

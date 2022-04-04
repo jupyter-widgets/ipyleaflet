@@ -3,7 +3,7 @@ Polygon/Multipolygon
 
 
 Example Polygon
-------------------
+---------------
 You can easily create a ``Polygon`` providing the list of vertex locations (in lat/lng).
 
 
@@ -25,7 +25,7 @@ You can easily create a ``Polygon`` providing the list of vertex locations (in l
 Because the ``Polygon`` an interactive widget, you can dynamically update the locations/color from Python, and you will see updated on the ``Map``.
 
 Example Polygon with holes
-------------------
+--------------------------
 
 You can define holes in your ``Polygon`` by using nested lists of vertex locations.
 
@@ -49,7 +49,7 @@ You can define holes in your ``Polygon`` by using nested lists of vertex locatio
 
 
 Example MultiPolygon
-------------
+--------------------
 
 .. jupyter-execute::
 
@@ -71,7 +71,7 @@ Example MultiPolygon
 
 
 Example Editable Polygon
-----------------
+------------------------
 
 If ``transform`` is set to ``True``, you can dynamically edit the polygon with the mouse.
 

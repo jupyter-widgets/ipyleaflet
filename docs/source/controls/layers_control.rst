@@ -30,3 +30,8 @@ Example
 
     m
 
+Attributes
+----------
+
+.. autoclass:: ipyleaflet.leaflet.LayersControl
+   :members:

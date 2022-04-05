@@ -19,6 +19,11 @@ Example ImageOverlay
     m.add_layer(image);
     m
 
+Attributes
+----------
+
+.. autoclass:: ipyleaflet.leaflet.ImageOverlay
+   :members:
 
 Example VideoOverlay
 --------------------

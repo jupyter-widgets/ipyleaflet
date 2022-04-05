@@ -28,8 +28,8 @@ Example
     m
 
 
-Attributes and methods
-----------------------
+Attributes
+----------
 
 .. autoclass:: ipyleaflet.leaflet.MeasureControl
    :members:

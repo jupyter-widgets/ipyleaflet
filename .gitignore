@@ -21,10 +21,11 @@ js/jupyter-leaflet-*.tgz
 docs/*.csv
 docs/*.json
 docs/*.nc
+docs/test.wkt
 
 # Untitled Notebooks
 *Untitled*.ipynb
 
-#Galata 
+#Galata
 ui-test/playwright-report
 ui-test/test-results

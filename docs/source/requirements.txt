@@ -1,4 +1,0 @@
-ipyleaflet
-sphinx===4.4.0
-jupyterlite-sphinx
-pydata-sphinx-theme

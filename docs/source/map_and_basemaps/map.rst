@@ -15,7 +15,7 @@ Example
     )
 
     m
-    
+
 Usage
 -----
 You can find the list of available basemaps in the :ref:`basemaps-section` page.

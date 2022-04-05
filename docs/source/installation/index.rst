@@ -28,16 +28,20 @@ If you have JupyterLab <=2, you will also need to install the JupyterLab extensi
 Development installation
 ------------------------
 
-For a development installation (requires npm):
+For a development installation (requires yarn):
 
 .. code:: bash
 
     git clone https://github.com/jupyter-widgets/ipyleaflet.git
     cd ipyleaflet
     pip install -e .
-    jupyter nbextension install --py --symlink --sys-prefix ipyleaflet
-    jupyter nbextension enable --py --sys-prefix ipyleaflet
-    jupyter labextension install @jupyter-widgets/jupyterlab-manager js  # If you are developing on JupyterLab
+
+    # If you are developing on Jupyter Notebook
+    jupyter nbextension install --py --symlink --sys-prefix --overwrite ipyleaflet
+    jupyter nbextension enable --py --sys-prefix --overwrite ipyleaflet
+
+    # If you are developing on JupyterLab
+    jupyter labextension develop . --overwrite
 
 Note for developers:
 
@@ -48,12 +52,5 @@ Note for developers:
 
     .. code:: bash
 
-        npm run watch
+        yarn run watch
 
-    If you are on JupyterLab you also need to run the following in a separate terminal:
-
-    .. code:: bash
-
-        jupyter lab --watch
-
-    Every time a JavaScript build has terminated you need to refresh the Notebook page in order to load the JavaScript code again.

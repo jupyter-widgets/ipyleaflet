@@ -76,8 +76,8 @@ pip install -e .
 If you are using the classic Jupyter Notebook you need to install the nbextension:
 
 ```
-jupyter nbextension install --py --symlink --sys-prefix ipyleaflet
-jupyter nbextension enable --py --sys-prefix ipyleaflet
+jupyter nbextension install --py --symlink --sys-prefix --overwrite ipyleaflet
+jupyter nbextension enable --py --sys-prefix --overwrite ipyleaflet
 ```
 
 Note for developers:

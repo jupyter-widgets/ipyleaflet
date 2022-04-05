@@ -14,7 +14,8 @@ dependencies:
   - xarray
   - branca
   - shapely
+  - pydata-sphinx-theme
   - pip:
     - ..
-    
+
 

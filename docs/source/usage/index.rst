@@ -1,5 +1,3 @@
-.. _usage-section:
-
 Usage
 =====
 

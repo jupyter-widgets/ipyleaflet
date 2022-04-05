@@ -14,7 +14,7 @@ Example
     m
 
 Attribute
--------
+---------
 
 .. autoclass:: ipyleaflet.leaflet.FullScreenControl
    :members:

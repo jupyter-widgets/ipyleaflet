@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-import sphinx_rtd_theme
 
 extensions = [
-    'jupyter_sphinx', 'sphinx.ext.autodoc', 'sphinx.ext.coverage', 'sphinx.ext.napoleon','sphinx.ext.todo', 'sphinx.ext.viewcode'
+    'jupyter_sphinx','sphinx.ext.autodoc', 'sphinx.ext.coverage', 'sphinx.ext.napoleon','sphinx.ext.todo', 'sphinx.ext.viewcode'
 ]
 
 templates_path = ['_templates']
@@ -25,7 +24,7 @@ highlight_language = 'python'
 pygments_style = 'sphinx'
 
 # Output file base name for HTML help builder.
-html_theme = "sphinx_rtd_theme"
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_theme = "pydata_sphinx_theme"
+#html_theme_path = [pydata_sphinx_theme.get_html_theme_path()]
 htmlhelp_basename = 'ipyleafletdoc'
 html_static_path = ['_static']

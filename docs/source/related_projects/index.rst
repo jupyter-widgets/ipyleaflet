@@ -1,7 +1,5 @@
-.. _related_projects-section:
-
-ipyleaflet related projects
-===========================
+Related projects
+================
 
 Here is a list of existing open source projects that build functionality upon ipyleaflet.
 

@@ -6,7 +6,7 @@ GeoData
 
 
 Examples
--------
+--------
 
 .. jupyter-execute::
 

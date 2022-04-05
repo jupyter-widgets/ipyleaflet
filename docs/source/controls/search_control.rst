@@ -79,7 +79,7 @@ You can also search features from GeoJSON layers.
     m
 
 Methods
-----------
+-------
 
 .. autoclass:: ipyleaflet.leaflet.SearchControl
    :members:

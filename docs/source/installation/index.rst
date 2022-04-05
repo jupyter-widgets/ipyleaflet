@@ -1,7 +1,8 @@
-.. _installation:
+Installation
+============
 
 Using pip
-=========
+---------
 
 .. code:: bash
 
@@ -9,14 +10,14 @@ Using pip
     jupyter nbextension enable --py --sys-prefix ipyleaflet  # can be skipped for notebook 5.3 and above
 
 Using conda
-===========
+-----------
 
 .. code:: bash
 
     conda install -c conda-forge ipyleaflet
 
 JupyterLab extension
-====================
+--------------------
 
 If you have JupyterLab <=2, you will also need to install the JupyterLab extension:
 
@@ -25,7 +26,7 @@ If you have JupyterLab <=2, you will also need to install the JupyterLab extensi
     jupyter labextension install @jupyter-widgets/jupyterlab-manager jupyter-leaflet
 
 Development installation
-========================
+------------------------
 
 For a development installation (requires npm):
 

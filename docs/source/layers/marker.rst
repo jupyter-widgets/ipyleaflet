@@ -19,7 +19,7 @@ Example
 
 
 Attributes and methods
-----------
+----------------------
 
 .. autoclass:: ipyleaflet.leaflet.Marker
    :members:

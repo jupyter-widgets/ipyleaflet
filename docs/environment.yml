@@ -15,6 +15,7 @@ dependencies:
   - branca
   - shapely
   - pydata-sphinx-theme
+  - jupyterlite-sphinx
   - pip:
     - ..
 

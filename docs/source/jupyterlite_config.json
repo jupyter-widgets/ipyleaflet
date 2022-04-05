@@ -1,0 +1,25 @@
+{
+    "LiteBuildConfig": {
+      "federated_extensions": [
+        "https://github.com/conda-forge/releases/releases/download/noarch/jupyterlab_widgets-1.0.2-pyhd8ed1ab_0.tar.bz2/jupyterlab_widgets-1.0.2-pyhd8ed1ab_0.tar.bz2",
+        "https://github.com/conda-forge/releases/releases/download/noarch/ipycanvas-0.11.0-pyhd8ed1ab_0.tar.bz2/ipycanvas-0.11.0-pyhd8ed1ab_0.tar.bz2"
+      ],
+      "ignore_sys_prefix": true,
+      "piplite_urls": [
+        "https://files.pythonhosted.org/packages/py2.py3/i/ipycanvas/ipycanvas-0.11.0-py2.py3-none-any.whl",
+        "https://files.pythonhosted.org/packages/py2.py3/i/ipython-genutils/ipython_genutils-0.2.0-py2.py3-none-any.whl",
+        "https://files.pythonhosted.org/packages/py2.py3/i/ipywidgets/ipywidgets-7.6.5-py2.py3-none-any.whl",
+        "https://files.pythonhosted.org/packages/py2.py3/r/requests/requests-2.27.1-py2.py3-none-any.whl",
+        "https://files.pythonhosted.org/packages/py2.py3/t/traittypes/traittypes-0.2.1-py2.py3-none-any.whl",
+        "https://files.pythonhosted.org/packages/py2.py3/u/urllib3/urllib3-1.26.8-py2.py3-none-any.whl",
+        "https://files.pythonhosted.org/packages/py3/b/branca/branca-0.4.2-py3-none-any.whl",
+        "https://files.pythonhosted.org/packages/py3/i/ipython/ipython-8.0.1-py3-none-any.whl",
+        "https://files.pythonhosted.org/packages/py3/j/jupyter-client/jupyter_client-7.1.2-py3-none-any.whl",
+        "https://files.pythonhosted.org/packages/py3/j/jupyter-core/jupyter_core-4.9.2-py3-none-any.whl",
+        "https://files.pythonhosted.org/packages/py3/j/jupyterlab-widgets/jupyterlab_widgets-1.0.2-py3-none-any.whl",
+        "https://files.pythonhosted.org/packages/py3/n/nest-asyncio/nest_asyncio-1.5.4-py3-none-any.whl",
+        "https://files.pythonhosted.org/packages/py3/n/notebook/notebook-6.4.8-py3-none-any.whl",
+        "https://files.pythonhosted.org/packages/py3/t/traitlets/traitlets-5.1.1-py3-none-any.whl"
+      ]
+    }
+}

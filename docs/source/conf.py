@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 extensions = [
-    'jupyter_sphinx','sphinx.ext.autodoc', 'sphinx.ext.coverage', 'sphinx.ext.napoleon','sphinx.ext.todo', 'sphinx.ext.viewcode'
+    'jupyter_sphinx', 'jupyterlite_sphinx', 'sphinx.ext.autodoc', 'sphinx.ext.coverage', 'sphinx.ext.napoleon','sphinx.ext.todo', 'sphinx.ext.viewcode'
 ]
 
 templates_path = ['_templates']
 
-
+jupyterlite_config = "jupyterlite_config.json"
 
 def setup(app):
     app.add_css_file("main_stylesheet.css")

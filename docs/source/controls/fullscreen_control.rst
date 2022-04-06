@@ -13,8 +13,8 @@ Example
 
     m
 
-Attribute
----------
+Attributes
+----------
 
 .. autoclass:: ipyleaflet.leaflet.FullScreenControl
    :members:

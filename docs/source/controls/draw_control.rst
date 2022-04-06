@@ -52,8 +52,8 @@ Example
 
     m
 
-Attributes
-----------
+Methods
+-------
 
 .. autoclass:: ipyleaflet.leaflet.DrawControl
    :members:

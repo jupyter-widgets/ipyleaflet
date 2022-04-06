@@ -1060,7 +1060,7 @@ class LayerGroup(Layer):
 
     A group of layers that you can put on the map like other layers.
 
-    Attributes and methods
+    Attributes
     ----------
     layers: list, default []
         List of layers to include in the group.
@@ -1144,7 +1144,7 @@ class GeoJSON(FeatureGroup):
 
     Layer created from a GeoJSON data structure.
 
-    Attributes and methods
+    Attributes
     ----------
     data: dict, default {}
         The JSON data structure.
@@ -1524,20 +1524,16 @@ class MeasureControl(Control):
 
     A control which allows making measurements on the Map.
 
-    Attributes and methods
-    ----------
+    Attributes
+    ----------------------
     primary_length_unit: str, default 'feet'
-        Possible values are 'feet', 'meters', 'miles', 'kilometers' or any user
-        defined unit.
+        Possible values are 'feet', 'meters', 'miles', 'kilometers' or any user defined unit.
     secondary_length_unit: str, default None
-        Possible values are 'feet', 'meters', 'miles', 'kilometers' or any user
-        defined unit.
+        Possible values are 'feet', 'meters', 'miles', 'kilometers' or any user defined unit.
     primary_area_unit: str, default 'acres'
-        Possible values are 'acres', 'hectares', 'sqfeet', 'sqmeters', 'sqmiles'
-        or any user defined unit.
+        Possible values are 'acres', 'hectares', 'sqfeet', 'sqmeters', 'sqmiles' or any user defined unit.
     secondary_area_unit: str, default None
-        Possible values are 'acres', 'hectares', 'sqfeet', 'sqmeters', 'sqmiles'
-        or any user defined unit.
+        Possible values are 'acres', 'hectares', 'sqfeet', 'sqmeters', 'sqmiles' or any user defined unit.
     active_color: CSS Color, default '#ABE67E'
         The color used for current measurements.
     completed_color: CSS Color, default '#C8F2BE'
@@ -1915,7 +1911,7 @@ class LegendControl(Control):
 class SearchControl(Control):
     """ SearchControl class, with Control as parent class.
 
-    Attributes and methods
+    Attributes
     ----------
 
     url: string, default ""

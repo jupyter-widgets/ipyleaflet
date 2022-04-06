@@ -138,8 +138,8 @@ Example
     m
 
 
-Attributes
-----------
+Attributes and methods
+----------------------
 
 .. autoclass:: ipyleaflet.leaflet.VectorTileLayer
    :members:

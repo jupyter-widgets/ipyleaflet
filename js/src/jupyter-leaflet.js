@@ -44,6 +44,7 @@ export * from './controls/ZoomControl.js';
 export * from './controls/ScaleControl.js';
 export * from './controls/LegendControl.js';
 export * from './controls/SearchControl.js';
+export * from './controls/OpenCageGeosearchControl.js';
 
 //Map
 export * from './Map.js';

@@ -1979,27 +1979,6 @@ class SearchControl(Control):
         """
         self._location_found_callbacks.register_callback(callback, remove=remove)
 
-
-class MapStyle(Style, Widget):
-    """Map Style Widget
-
-    Custom map style.
-
-    Attributes
-    ----------
-    cursor: str, default 'grab'
-        The cursor to use for the mouse when it's on the map. Should be a valid CSS
-        cursor value.
-    """
-
-    _model_name = Unicode('LeafletMapStyleModel').tag(sync=True)
-    _model_module = Unicode("jupyter-leaflet").tag(sync=True)
-
-    _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
-
-    cursor = Enum(values=allowed_cursor, default_value='grab').tag(sync=True)
-
-
 class Map(DOMWidget, InteractMixin):
     """Map class.
 

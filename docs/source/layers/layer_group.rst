@@ -32,8 +32,8 @@ Example
     m
 
 
-Attributes
-----------
+Attributes and methods
+----------------------
 
 .. autoclass:: ipyleaflet.leaflet.LayerGroup
    :members:

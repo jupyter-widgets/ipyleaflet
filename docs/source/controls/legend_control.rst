@@ -34,8 +34,8 @@ Example
     legend.position = "topright"  # Set position
     legend.position  # Get current position
 
-Attributes
-----------
+Attributes and methods
+----------------------
 
 .. autoclass:: ipyleaflet.leaflet.LegendControl
    :members:

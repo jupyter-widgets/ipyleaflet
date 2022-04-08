@@ -30,6 +30,7 @@ export * from './layers/LayerGroup.js';
 export * from './layers/FeatureGroup.js';
 export * from './layers/GeoJSON.js';
 export * from './layers/DivIcon.js';
+export * from './layers/SVGOverlay.js';
 
 //Controls
 export * from './controls/AttributionControl.js';
@@ -44,7 +45,6 @@ export * from './controls/ZoomControl.js';
 export * from './controls/ScaleControl.js';
 export * from './controls/LegendControl.js';
 export * from './controls/SearchControl.js';
-export * from './controls/OpenCageGeosearchControl.js';
 
 //Map
 export * from './Map.js';

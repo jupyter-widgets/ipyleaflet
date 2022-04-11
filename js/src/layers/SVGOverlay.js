@@ -4,26 +4,29 @@
 const L = require('../leaflet.js');
 const rasterlayer = require('./ImageOverlay.js');
 
-const DEFAULT_LOCATION = [0.0, 0.0];
-
-export class LeafletSVGOverlayModel extends rasterlayer.ImageOverlayModel {
+export class LeafletSVGOverlayModel extends rasterlayer.LeafletImageOverlayModel {
   defaults() {
     return {
       ...super.defaults(),
       _view_name: 'LeafletSVGOverlayView',
       _model_name: 'LeafletSVGOverlayModel',
-      svgElement: '',
-      svgBounds: [DEFAULT_LOCATION, DEFAULT_LOCATION],
+      value: '',
+      view_box: '0 0 200 200',
       attribution: ''
     };
   }
 }
 
-export class LeafletSVGOverlayView extends rasterlayer.ImageOverlayView {
+export class LeafletSVGOverlayView extends rasterlayer.LeafletImageOverlayView {
   create_obj() {
+    const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svgElement.setAttribute('xmlns', "http://www.w3.org/2000/svg");
+    svgElement.setAttribute('viewBox', this.model.get('view_box'));
+    svgElement.innerHTML = this.model.get('value');
+
     this.obj = L.svgOverlay(
-      this.model.get('svgElement'),
-      this.model.get('svgBounds'),
+      svgElement,
+      this.model.get('bounds'),
       this.get_options()
     );
   }

@@ -744,6 +744,7 @@ class ImageOverlay(RasterLayer):
     # Options
     attribution = Unicode().tag(sync=True, o=True)
 
+
 class SVGOverlay(ImageOverlay):
     """SVGOverlay class.
 
@@ -751,14 +752,16 @@ class SVGOverlay(ImageOverlay):
 
     Attributes
     ----------
-    el: string, default ""
-        svg element.
+    value: string, default ""
+        svg value.
     """
 
     _view_name = Unicode('LeafletSVGOverlayView').tag(sync=True)
     _model_name = Unicode('LeafletSVGOverlayModel').tag(sync=True)
 
-    svgElement = Unicode().tag(sync=True)
+    value = Unicode().tag(sync=True)
+    view_box = Unicode('0 0 200 200').tag(sync=True)
+
 
 class VideoOverlay(RasterLayer):
     """VideoOverlay class.

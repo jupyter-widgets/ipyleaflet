@@ -2,11 +2,11 @@
     "LiteBuildConfig": {
       "federated_extensions": [
         "https://github.com/conda-forge/releases/releases/download/noarch/jupyterlab_widgets-1.0.2-pyhd8ed1ab_0.tar.bz2/jupyterlab_widgets-1.0.2-pyhd8ed1ab_0.tar.bz2",
-        "https://github.com/conda-forge/releases/releases/download/noarch/ipyleaflet-0.15.0-pyhd8ed1ab_3.tar.bz2/ipyleaflet-0.15.0-pyhd8ed1ab_3.tar.bz2"
+        "https://github.com/conda-forge/releases/releases/download/noarch/ipyleaflet-0.16.0-pyhd8ed1ab_3.tar.bz2/ipyleaflet-0.16.0-pyhd8ed1ab_3.tar.bz2"
       ],
       "ignore_sys_prefix": true,
       "piplite_urls": [
-        "https://files.pythonhosted.org/packages/py2.py3/i/ipyleaflet/ipyleaflet-0.15.0-py2.py3-none-any.whl",
+        "https://files.pythonhosted.org/packages/py2.py3/i/ipyleaflet/ipyleaflet-0.16.0-py2.py3-none-any.whl",
         "https://files.pythonhosted.org/packages/py2.py3/i/ipython-genutils/ipython_genutils-0.2.0-py2.py3-none-any.whl",
         "https://files.pythonhosted.org/packages/py2.py3/i/ipywidgets/ipywidgets-7.6.5-py2.py3-none-any.whl",
         "https://files.pythonhosted.org/packages/py2.py3/r/requests/requests-2.27.1-py2.py3-none-any.whl",

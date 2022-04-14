@@ -1,3 +1,51 @@
+## v0.16.0
+
+## What's Changed
+
+### New features
+
+* Add bounds attribute to TileLayer by @davidbrochart in https://github.com/jupyter-widgets/ipyleaflet/pull/907
+* Implemented open_popup and close_popup methods by @PROgram52bc in https://github.com/jupyter-widgets/ipyleaflet/pull/914
+
+### Maintainance
+
+* Stop layer loading spinner when layer is removed by @clydebw in https://github.com/jupyter-widgets/ipyleaflet/pull/903
+* Added backward compatibility for dict basemaps by @sackh in https://github.com/jupyter-widgets/ipyleaflet/pull/901
+* Pin `openssl=1.1.1l` in CI script by @trungleduc in https://github.com/jupyter-widgets/ipyleaflet/pull/906
+* Test `ipyleaflet` widgets with `galata` by @trungleduc in https://github.com/jupyter-widgets/ipyleaflet/pull/905
+* Clean up UI tests by @davidbrochart in https://github.com/jupyter-widgets/ipyleaflet/pull/908
+* Remove map callbacks when DrawControl removed from map by @clydebw in https://github.com/jupyter-widgets/ipyleaflet/pull/916
+* Add Galata bot by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/938
+* Fix CI by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/946
+* Fix Galata screenshot update CI job by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/945
+* Missing jupyter-packaging on CI by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/948
+* Fix ui-tests port by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/949
+* UI-tests: Update scripts to match bot implementation by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/950
+* Remove OpenSSL pinning by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/952
+* Update Galata screenshots by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/947
+* Update build script by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/954
+* Fix watch script in ipyleaflet by @HaudinFlorence in https://github.com/jupyter-widgets/ipyleaflet/pull/963
+
+### Docs:
+
+* Fix docs table by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/898
+* Update basemaps by @MackyDIARRA in https://github.com/jupyter-widgets/ipyleaflet/pull/924
+* Updates on ipyleaflet documentation by @HaudinFlorence in https://github.com/jupyter-widgets/ipyleaflet/pull/953
+* Change the theme to pydata-sphynx-theme  by @HaudinFlorence in https://github.com/jupyter-widgets/ipyleaflet/pull/955
+* Update installation instructions by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/956
+* Add to ipyleaflet's documentation some missing attributes sections with autodoc. by @HaudinFlorence in https://github.com/jupyter-widgets/ipyleaflet/pull/957
+* Add jupyterlite-sphinx by @HaudinFlorence in https://github.com/jupyter-widgets/ipyleaflet/pull/958
+* Fix formatting issues in the doc for attributes and methods sections using autodoc by @HaudinFlorence in https://github.com/jupyter-widgets/ipyleaflet/pull/959
+* radiation notebook updated with SearchControl object adding by @MackyDIARRA in https://github.com/jupyter-widgets/ipyleaflet/pull/899
+
+## New Contributors
+* @clydebw made their first contribution in https://github.com/jupyter-widgets/ipyleaflet/pull/903
+* @trungleduc made their first contribution in https://github.com/jupyter-widgets/ipyleaflet/pull/906
+* @PROgram52bc made their first contribution in https://github.com/jupyter-widgets/ipyleaflet/pull/914
+* @HaudinFlorence made their first contribution in https://github.com/jupyter-widgets/ipyleaflet/pull/953
+
+**Full Changelog**: https://github.com/jupyter-widgets/ipyleaflet/compare/0.15.0...master
+
 ## v0.15.0
 
 Improvements:

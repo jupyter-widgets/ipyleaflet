@@ -6,9 +6,7 @@ Basemaps
 You can find on this page the default basemaps available in ipyleaflet, of course you can use another provider creating
 your own ``TileLayer`` layer.
 
-.. note::
-
-    If one map on this page is completely grey, please report it by opening an issue: https://github.com/jupyter-widgets/ipyleaflet/issues/new
+These basemaps are coming from the `xyzservices <https://xyzservices.readthedocs.io>`_ package.
 
 .. jupyter-execute::
 

@@ -1,6 +1,7 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
+
 const widgets = require('@jupyter-widgets/base');
 const L = require('./leaflet.js');
 const utils = require('./utils.js');
@@ -36,11 +37,10 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       _model_name: 'LeafletMapModel',
       _model_module: 'jupyter-leaflet',
       _view_module: 'jupyter-leaflet',
-      center: DEFAULT_LOCATION,
-      zoom_start: 12,
-      zoom: 12,
-      max_zoom: 18,
-      min_zoom: 1,
+      center: null,
+      zoom: null,
+      max_zoom: null,
+      min_zoom: null,
       dragging: true,
       touch_zoom: true,
       zoom_delta: 1,

@@ -14,7 +14,7 @@
   "author": "ipyleaflet",
   "license": "MIT",
   "dependencies": {
-    "@jupyterlab/galata": "^4.0.2",
+    "@jupyterlab/galata": "^4.3.5",
     "rimraf": "^3.0.2"
   }
 }

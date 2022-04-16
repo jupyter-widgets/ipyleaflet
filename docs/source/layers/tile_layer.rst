@@ -33,7 +33,7 @@ Sometimes one could want to specify the date of the given images, for instance w
 
 Attributes and methods
 ----------------------
-
+Note that if you want to display a high resolution layer with a quite large zoom, you have to set ``max_zoom`` and ``max_native_zoom`` with equal value.
 .. autoclass:: ipyleaflet.leaflet.TileLayer
    :members:
 

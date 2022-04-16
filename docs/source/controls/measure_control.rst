@@ -8,7 +8,7 @@ Example
 
     from ipyleaflet import Map, MeasureControl, basemaps
 
-    m = Map(center=(43.0327, 6.0232), zoom=9, basemap=basemaps.Hydda.Full)
+    m = Map(center=(43.0327, 6.0232), zoom=9, basemap=basemaps.OpenStreetMap.Mapnik)
 
     measure = MeasureControl(
         position='bottomleft',

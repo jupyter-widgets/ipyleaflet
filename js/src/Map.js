@@ -408,8 +408,16 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     }
   }
 
+  processPhosphorMessage(msg) {
+    this._processLuminoMessage(msg, super.processPhosphorMessage);
+  }
+
   processLuminoMessage(msg) {
-    super.processLuminoMessage(msg);
+    this._processLuminoMessage(msg, super.processLuminoMessage);
+  }
+
+  _processLuminoMessage(msg, _super) {
+    _super.call(this, msg);
     switch (msg.type) {
       case 'resize':
         // We set the dirty flag to true to prevent the sub-pixel error

@@ -54,6 +54,8 @@ As a Jupyter interactive widget, the layout of the ``Map`` object is specified b
 
     m
 
+You can use multiple basemaps my manually creating ``TileLayer`` objects and passing them to the ``Map`` constructor. (see :ref:`TileLayer Usage<Tile Layer Basemap>`)
+
 Save to HTML
 ------------
 

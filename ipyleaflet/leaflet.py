@@ -7,6 +7,7 @@ import asyncio
 import json
 import xyzservices
 from datetime import date, timedelta
+from math import isnan
 
 from ipywidgets import (
     Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
@@ -1330,6 +1331,12 @@ class Choropleth(GeoJSON):
         The colormap used for the effect.
     key_on: string, default "id"
         The feature key to use for the colormap effect.
+    nan_color: string, default "black"
+        The color used for filling polygons with NaN-values data.
+    nan_opacity : float, default 0.4
+        The opacity used for NaN data polygons, between 0. (fully transparent) and 1. (fully opaque).
+    default_opacity: float, default 1.0
+        The opacity used for well-defined data (non-NaN values), between 0. (fully transparent) and 1. (fully opaque).
     """
 
     geo_data = Dict()
@@ -1338,8 +1345,11 @@ class Choropleth(GeoJSON):
     value_max = CFloat(None, allow_none=True)
     colormap = Any()
     key_on = Unicode('id')
+    nan_color = Unicode('black')
+    nan_opacity = CFloat(0.4)
+    default_opacity = CFloat(1.0)
 
-    @observe('style', 'style_callback', 'value_min', 'value_max', 'geo_data', 'choro_data', 'colormap')
+    @observe('style', 'style_callback', 'value_min', 'value_max', 'nan_color', 'nan_opacity', 'default_opacity', 'geo_data', 'choro_data', 'colormap')
     def _update_data(self, change):
         self.data = self._get_data()
 
@@ -1355,7 +1365,8 @@ class Choropleth(GeoJSON):
     def _default_style_callback(self):
         def compute_style(feature, colormap, choro_data):
             return dict(
-                fillColor=colormap(choro_data),
+                fillColor=self.nan_color if isnan(choro_data) else colormap(choro_data),
+                fillOpacity=self.nan_opacity if isnan(choro_data) else self.default_opacity,
                 color='black',
                 weight=0.9
             )
@@ -1366,12 +1377,15 @@ class Choropleth(GeoJSON):
         if not self.geo_data:
             return {}
 
+        choro_data_values_list = [x for x in self.choro_data.values() if not math.isnan(x)]
+
         if self.value_min is None:
-            self.value_min = min(self.choro_data.items(), key=lambda x: x[1])[1]
+            self.value_min = min(choro_data_values_list)
         if self.value_max is None:
-            self.value_max = max(self.choro_data.items(), key=lambda x: x[1])[1]
+            self.value_max = max(choro_data_values_list)
 
         colormap = self.colormap.scale(self.value_min, self.value_max)
+
         data = copy.deepcopy(self.geo_data)
 
         for feature in data['features']:

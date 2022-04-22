@@ -2022,9 +2022,9 @@ class Map(DOMWidget, InteractMixin):
         The list of layers that are currently on the map.
     controls: list of Control instances
         The list of controls that are currently on the map.
-    center: list, default None
+    center: list, default [0, 0]
         The current center of the map.
-    zoom: float, default None
+    zoom: float, default 12
         The current zoom value of the map.
     max_zoom: float, default None
         Maximal zoom value.
@@ -2085,7 +2085,7 @@ class Map(DOMWidget, InteractMixin):
     window_url = Unicode(read_only=True).tag(sync=True)
 
     # Map options
-    center = List(default_value=None, allow_none=True).tag(sync=True, o=True)
+    center = List(def_loc).tag(sync=True, o=True)
     zoom = CFloat(default_value=None, allow_none=True).tag(sync=True, o=True)
     max_zoom = CFloat(default_value=None, allow_none=True).tag(sync=True, o=True)
     min_zoom = CFloat(default_value=None, allow_none=True).tag(sync=True, o=True)

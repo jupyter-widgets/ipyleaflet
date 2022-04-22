@@ -21,7 +21,9 @@ class leafletViewCommon {
     for (var i = 0; i < o.length; i++) {
       key = o[i];
       // Convert from foo_bar to fooBar that Leaflet.js uses
-      options[camel_case(key)] = this.model.get(key);
+      if (this.model.get(key) !== null) {
+        options[camel_case(key)] = this.model.get(key);
+      }
     }
     return options;
   }

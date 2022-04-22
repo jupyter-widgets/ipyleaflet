@@ -5,7 +5,7 @@ ipyleaflet: Interactive maps in the Jupyter notebook
 Try it online
 -------------
 
-Directly from this page, you can make a try with ipyleaflet with clicking on `Try it on RetroLab <https://ipyleaflet.readthedocs.io/en/latest/lite/retro>`__ or
+You can give ipyleaflet a try in this documentation by clicking on `Try it on RetroLab <https://ipyleaflet.readthedocs.io/en/latest/lite/retro>`__ or
 `Try it on JupyterLab <https://ipyleaflet.readthedocs.io/en/latest/lite/lab>`__.
 
 Index

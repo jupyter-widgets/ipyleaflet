@@ -1377,7 +1377,7 @@ class Choropleth(GeoJSON):
         if not self.geo_data:
             return {}
 
-        choro_data_values_list = [x for x in self.choro_data.values() if not math.isnan(x)]
+        choro_data_values_list = [x for x in self.choro_data.values() if not isnan(x)]
 
         if self.value_min is None:
             self.value_min = min(choro_data_values_list)

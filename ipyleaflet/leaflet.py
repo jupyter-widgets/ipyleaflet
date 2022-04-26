@@ -2,17 +2,19 @@
 # Distributed under the terms of the Modified BSD License.
 #
 
+from ast import In
 import copy
 import asyncio
 import json
-from matplotlib.colors import Colormap
 import xyzservices
 from datetime import date, timedelta
 from math import isnan
+import branca.colormap as cm
+from branca.colormap import linear
 
 from ipywidgets import (
     Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
-    interactive, Style
+    interactive, Style, Output, Layout
 )
 
 from ipywidgets.widgets.trait_types import InstanceDict
@@ -1391,6 +1393,7 @@ class Choropleth(GeoJSON):
         data = copy.deepcopy(self.geo_data)
 
         for feature in data['features']:
+            #print('feature is :', feature)
             feature['properties']['style'] = self.style_callback(feature, colormap,
                                                                  self.choro_data[feature[self.key_on]])
 
@@ -1867,38 +1870,6 @@ class LegendControl(Control):
         self.title = name
         self.legend = legend
 
-    @property
-    def name(self):
-        return self.title
-
-    @name.setter
-    def name(self, title):
-        self.title = title
-
-    @property
-    def legends(self):
-        return self.legend
-
-    @legends.setter
-    def legends(self, legends):
-        self.legend = legends
-
-    @property
-    def positioning(self):
-        return self.position
-
-    @positioning.setter
-    def positioning(self, position):
-        self.position = position
-
-    @property
-    def positionning(self):
-        return self.position
-
-    @positionning.setter
-    def positionning(self, position):
-        self.position = position
-
     def add_legend_element(self, key, value):
         """Add a new legend element.
 
@@ -1923,88 +1894,39 @@ class LegendControl(Control):
         del self.legend[key]
         self.send_state()
 
-class ColormapControl(Control):
-    """ColormapControl class, with Control as parent class.
 
-    A control which contains a colormap.
+
+class ColormapControl(WidgetControl):
+    """ColormapControl class, with WidgetControl as parent class.
+
+    A control which contains a colormap, to be used with Choropleth.
 
     Attributes
     ----------
-    title: str, default 'Colormap'
-        The title of the colormap.
+    caption : str, default 'caption'
+        The caption of the colormap.
+    colormap_choice : str, default 'linear.YlOrRd_04'
+        The choosen colormap.
+    value_min : float, default 0.0
+        The minimal value taken by the data to be represented by the colormap.
+    value_max : float, default 1.0
+        The maximal value taken by the data to be represented by the colormap.
     """
+    caption = Unicode('caption')
+    colormap_choice = Any(linear.YlOrRd_04)
+    value_min = CFloat(0.0)
+    value_max = CFloat(1.0)
 
-    _view_name = Unicode('LeafletColormapControlView').tag(sync=True)
-    _model_name = Unicode('LeafletColormapControlModel').tag(sync=True)
+    @default('widget')
+    def _default_widget(self):
+        widget = Output(layout={'height': '55px','width': '520px','margin' :'0 px 0px 0px 0px'})
+        with widget:
+            colormap = self.colormap_choice.scale(self.value_min, self.value_max)
+            text = self.caption
+            display(text)
+            display (colormap)
 
-    title = Unicode('colormap').tag(sync=True)
-    colormap_choice = Unicode('linear.YlOrRd_04').tag(sync=True)
-    value_min = CFloat(0.0).tag(sync=True)
-    value_max = CFloat(1.0).tag(sync=True)
-
-    def __init__(self, legend, *args, name="Colormap", **kwargs):
-        super().__init__(*args, **kwargs)
-        self.title = name
-        self.colormap = self.colormap_choice.scale(self.value_min, self.value_max)
-
-
-
-    @property
-    def name(self):
-        return self.title
-
-    @name.setter
-    def name(self, title):
-        self.title = title
-
-    @property
-    def legends(self):
-        return self.legend
-
-    @legends.setter
-    def legends(self, legends):
-        self.legend = legends
-
-    @property
-    def positioning(self):
-        return self.position
-
-    @positioning.setter
-    def positioning(self, position):
-        self.position = position
-
-    @property
-    def positionning(self):
-        return self.position
-
-    @positionning.setter
-    def positionning(self, position):
-        self.position = position
-
-    def add_colormap_element(self, key, value):
-        """Add a new colormap element.
-
-        Parameters
-        ----------
-        key: str
-            The key for the legend element.
-        value: CSS Color
-            The value for the legend element.
-        """
-        self.legend[key] = value
-        self.send_state()
-
-    def remove_colormap_element(self, key):
-        """Remove a legend element.
-
-        Parameters
-        ----------
-        key: str
-            The element to remove.
-        """
-        del self.legend[key]
-        self.send_state()
-
+        return widget
 
 class SearchControl(Control):
     """ SearchControl class, with Control as parent class.

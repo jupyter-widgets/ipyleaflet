@@ -14,3 +14,4 @@ Controls
     widget_control
     legend_control
     search_control
+    colormap_control

@@ -1866,38 +1866,6 @@ class LegendControl(Control):
         self.title = name
         self.legend = legend
 
-    @property
-    def name(self):
-        return self.title
-
-    @name.setter
-    def name(self, title):
-        self.title = title
-
-    @property
-    def legends(self):
-        return self.legend
-
-    @legends.setter
-    def legends(self, legends):
-        self.legend = legends
-
-    @property
-    def positioning(self):
-        return self.position
-
-    @positioning.setter
-    def positioning(self, position):
-        self.position = position
-
-    @property
-    def positionning(self):
-        return self.position
-
-    @positionning.setter
-    def positionning(self, position):
-        self.position = position
-
     def add_legend_element(self, key, value):
         """Add a new legend element.
 

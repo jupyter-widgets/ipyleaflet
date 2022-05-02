@@ -9,7 +9,7 @@ from jupyter_packaging import (
     ensure_targets,
     combine_commands,
     get_version,
-    skip_if_exists,
+    skip_if_exists
 )
 
 # the name of the package

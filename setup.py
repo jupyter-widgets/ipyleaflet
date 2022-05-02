@@ -9,7 +9,7 @@ from jupyter_packaging import (
     ensure_targets,
     combine_commands,
     get_version,
-    skip_if_exists
+    skip_if_exists,
 )
 
 # the name of the package
@@ -56,7 +56,8 @@ setup_args = dict(
     install_requires=[
         'ipywidgets>=7.6.0,<8',
         'traittypes>=0.2.1,<3',
-        'xyzservices>=2021.8.1'
+        'xyzservices>=2021.8.1',
+        'branca>=0.5.0'
     ],
     packages=find_packages(),
     zip_safe=False,

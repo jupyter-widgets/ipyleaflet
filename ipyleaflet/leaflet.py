@@ -2,19 +2,18 @@
 # Distributed under the terms of the Modified BSD License.
 #
 
-from ast import In
 import copy
 import asyncio
 import json
 import xyzservices
 from datetime import date, timedelta
 from math import isnan
-import branca.colormap as cm
 from branca.colormap import linear
+from IPython.core import display
 
 from ipywidgets import (
     Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
-    interactive, Style, Output, Layout
+    interactive, Style, Output
 )
 
 from ipywidgets.widgets.trait_types import InstanceDict
@@ -1393,7 +1392,6 @@ class Choropleth(GeoJSON):
         data = copy.deepcopy(self.geo_data)
 
         for feature in data['features']:
-            #print('feature is :', feature)
             feature['properties']['style'] = self.style_callback(feature, colormap,
                                                                  self.choro_data[feature[self.key_on]])
 
@@ -1895,7 +1893,6 @@ class LegendControl(Control):
         self.send_state()
 
 
-
 class ColormapControl(WidgetControl):
     """ColormapControl class, with WidgetControl as parent class.
 
@@ -1919,14 +1916,15 @@ class ColormapControl(WidgetControl):
 
     @default('widget')
     def _default_widget(self):
-        widget = Output(layout={'height': '55px','width': '520px','margin' :'0 px 0px 0px 0px'})
+        widget = Output(layout={'height': '55px', 'width': '520px', 'margin': '0 px 0px 0px 0px'})
         with widget:
             colormap = self.colormap_choice.scale(self.value_min, self.value_max)
             text = self.caption
             display(text)
-            display (colormap)
+            display(colormap)
 
         return widget
+
 
 class SearchControl(Control):
     """ SearchControl class, with Control as parent class.

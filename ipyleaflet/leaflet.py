@@ -9,7 +9,7 @@ import xyzservices
 from datetime import date, timedelta
 from math import isnan
 from branca.colormap import linear
-#from IPython.core import display
+from IPython.display import display
 
 from ipywidgets import (
     Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
@@ -1948,11 +1948,10 @@ class ColormapControl(WidgetControl):
 
     @default('widget')
     def _default_widget(self):
-        widget = Output(layout={'height': '55px', 'width': '520px', 'margin': '0px 0px 0px 0px'})
+        widget = Output(layout={'width': '520px','height':'40px', 'background':'red', 'margin': '0px 0px 0px 20px'})
         with widget:
             colormap = self.colormap_choice.scale(self.value_min, self.value_max)
-            text = self.caption
-            display(text)
+            colormap.caption = self.caption
             display(colormap)
 
         return widget

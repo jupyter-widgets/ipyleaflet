@@ -3,7 +3,9 @@
 #
 
 from traittypes import Dataset
-from traitlets import Unicode, Bool, Dict, Float, List
+from traitlets import Unicode, Bool, Dict, Float, List, Any, default
+from branca.colormap import linear
+import math
 
 from .leaflet import Layer
 from .xarray_ds import ds_x_to_json
@@ -67,20 +69,18 @@ class Velocity(Layer):
     min_velocity = Float(0).tag(sync=True, o=True)
     max_velocity = Float(10).tag(sync=True, o=True)
     velocity_scale = Float(0.005).tag(sync=True, o=True)
-    color_scale = List([
-        "rgb(36,104, 180)",
-        "rgb(60,157, 194)",
-        "rgb(128,205,193)",
-        "rgb(151,218,168)",
-        "rgb(198,231,181)",
-        "rgb(238,247,217)",
-        "rgb(255,238,159)",
-        "rgb(252,217,125)",
-        "rgb(255,182,100)",
-        "rgb(252,150,75)",
-        "rgb(250,112,52)",
-        "rgb(245,64,32)",
-        "rgb(237,45,28)",
-        "rgb(220,24,32)",
-        "rgb(180,0,35)"
-    ]).tag(sync=True, o=True)
+    colormap = Any()
+    color_scale = List([]).tag(sync=True, o=True)
+
+    @default('color_scale')
+    def _default_color_scale(self):
+        self.color_scale=[]
+
+        for i in range(len(self.colormap.colors)):
+            rgb_tuple = tuple(str(int(x * 256)) for x in self.colormap.colors[i][:3])
+            rgb_tuple_str = " , ".join(rgb_tuple)
+            rgb_str = 'rgb('+ rgb_tuple_str + ')'
+            self.color_scale.append(rgb_str)
+
+        return self.color_scale
+

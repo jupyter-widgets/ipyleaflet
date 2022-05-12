@@ -6,3 +6,4 @@ Map and basemaps
 
     map
     basemaps
+    gallery

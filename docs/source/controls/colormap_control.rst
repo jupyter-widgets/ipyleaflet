@@ -36,10 +36,10 @@ Example
 
 
     layer = ipyleaflet.Choropleth(
-    geo_data=geo_json_data,
-    choro_data=data_unemployment,
-    colormap=colormap_choice,
-    style={"dashArray": "5, 5"}
+        geo_data=geo_json_data,
+        choro_data=data_unemployment,
+        colormap=colormap_choice,
+        style={"dashArray": "5, 5"}
     )
 
     m = ipyleaflet.Map(center = (43,-100), zoom = 4)

@@ -1928,7 +1928,7 @@ class LegendControl(Control):
 class ColormapControl(WidgetControl):
     """ColormapControl class, with WidgetControl as parent class.
 
-    A control which contains a colormap, to be used with Choropleth.
+    A control which contains a colormap, to be used with Choropleth and Velocity.
 
     Attributes
     ----------

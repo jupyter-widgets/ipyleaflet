@@ -4,9 +4,6 @@
 
 from traittypes import Dataset
 from traitlets import Unicode, Bool, Dict, Float, List, Any, default
-from branca.colormap import linear
-import math
-
 from .leaflet import Layer
 from .xarray_ds import ds_x_to_json
 
@@ -74,13 +71,12 @@ class Velocity(Layer):
 
     @default('color_scale')
     def _default_color_scale(self):
-        self.color_scale=[]
+        self.color_scale = []
 
         for i in range(len(self.colormap.colors)):
             rgb_tuple = tuple(str(int(x * 256)) for x in self.colormap.colors[i][:3])
             rgb_tuple_str = " , ".join(rgb_tuple)
-            rgb_str = 'rgb('+ rgb_tuple_str + ')'
+            rgb_str = 'rgb(' + rgb_tuple_str + ')'
             self.color_scale.append(rgb_str)
 
         return self.color_scale
-

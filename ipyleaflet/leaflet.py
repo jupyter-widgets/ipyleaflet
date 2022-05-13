@@ -1932,13 +1932,13 @@ class ColormapControl(WidgetControl):
 
     Attributes
     ----------
-    caption : str, default 'caption'
+    caption: str, default 'caption'
         The caption of the colormap.
-    colormap_choice : str, default 'linear.YlOrRd_04'
+    colormap_choice: str, default 'linear.YlOrRd_04'
         The choosen colormap.
-    value_min : float, default 0.0
+    value_min: float, default 0.0
         The minimal value taken by the data to be represented by the colormap.
-    value_max : float, default 1.0
+    value_max: float, default 1.0
         The maximal value taken by the data to be represented by the colormap.
     """
     caption = Unicode('caption')
@@ -1948,7 +1948,7 @@ class ColormapControl(WidgetControl):
 
     @default('widget')
     def _default_widget(self):
-        widget = Output(layout={'width': '520px','height':'40px', 'background':'red', 'margin': '0px 0px 0px 20px'})
+        widget = Output(layout={'width': '520px', 'height':'40px', 'background':'red', 'margin': '0px 0px 0px 20px'})
         with widget:
             colormap = self.colormap_choice.scale(self.value_min, self.value_max)
             colormap.caption = self.caption

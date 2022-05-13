@@ -14,7 +14,7 @@ Example
 
     colormap_choice = linear.YlOrRd_04
     geo_json_data = json.load(open("us-states.json"))
-    m = ipyleaflet.Map(center=(43, -100), zoom=4)
+    m = ipyleaflet.Map(center=(43, -100), zoom=10)
     unemployment = pd.read_csv("US_Unemployment_Oct2012.csv")
     data_unemployment = dict(
     zip(unemployment["State"].tolist(), unemployment["Unemployment"].tolist())
@@ -33,7 +33,8 @@ Example
         colormap_choice=colormap_choice,
         value_min=layer.value_min,
         value_max=layer.value_max,
-        position='topright'
+        position='topright',
+        bg = 'transparent'
     )
     m.add_control(myColormapControl)
     m

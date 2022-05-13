@@ -6,6 +6,7 @@ from traittypes import Dataset
 from traitlets import Unicode, Bool, Dict, Float, List, Any, default
 from .leaflet import Layer
 from .xarray_ds import ds_x_to_json
+from branca.colormap import linear
 
 
 class Velocity(Layer):
@@ -66,7 +67,7 @@ class Velocity(Layer):
     min_velocity = Float(0).tag(sync=True, o=True)
     max_velocity = Float(10).tag(sync=True, o=True)
     velocity_scale = Float(0.005).tag(sync=True, o=True)
-    colormap = Any()
+    colormap = Any(linear.YlOrRd_04)
     color_scale = List([]).tag(sync=True, o=True)
 
     @default('color_scale')

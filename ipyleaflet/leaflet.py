@@ -8,6 +8,7 @@ import json
 import xyzservices
 from datetime import date, timedelta
 from math import isnan
+import warnings
 
 from ipywidgets import (
     Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
@@ -1095,6 +1096,14 @@ class LayerGroup(Layer):
         layer: layer instance
             The new layer to include in the group.
         """
+        warnings.warn(
+
+            "add_layer will be deprecated in future version, use add instead",
+             PendingDeprecationWarning
+
+        )
+        warnings.simplefilter("default")
+
         if isinstance(layer, dict):
             layer = basemap_to_tiles(layer)
         if layer.model_id in self._layer_ids:
@@ -2203,6 +2212,11 @@ class Map(DOMWidget, InteractMixin):
         layer: Layer instance
             The new layer to add.
         """
+        warnings.warn(
+        "add_layer will be deprecated in future version, use add instead",PendingDeprecationWarning
+        )
+        warnings.simplefilter("default")
+
         if isinstance(layer, dict):
             layer = basemap_to_tiles(layer)
         if layer.model_id in self._layer_ids:
@@ -2217,6 +2231,10 @@ class Map(DOMWidget, InteractMixin):
         layer: Layer instance
             The layer to remove.
         """
+        warnings.warn(
+        "remove_layer will be deprecated in future version, use remove instead",PendingDeprecationWarning
+        )
+        warnings.simplefilter("default")
         if rm_layer.model_id not in self._layer_ids:
             raise LayerException('layer not on map: %r' % rm_layer)
         self.layers = tuple([layer for layer in self.layers if layer.model_id != rm_layer.model_id])
@@ -2264,6 +2282,12 @@ class Map(DOMWidget, InteractMixin):
         control: Control instance
             The new control to add.
         """
+
+        warnings.warn(
+            "add_control will be deprecated in future version, use add instead",
+             PendingDeprecationWarning
+        )
+
         if control.model_id in self._control_ids:
             raise ControlException('control already on map: %r' % control)
         self.controls = tuple([c for c in self.controls] + [control])
@@ -2276,6 +2300,10 @@ class Map(DOMWidget, InteractMixin):
         control: Control instance
             The control to remove.
         """
+        warnings.warn(
+        "remove_control will be deprecated in future version, use remove instead",PendingDeprecationWarning
+        )
+        warnings.simplefilter("default")
         if control.model_id not in self._control_ids:
             raise ControlException('control not on map: %r' % control)
         self.controls = tuple([c for c in self.controls if c.model_id != control.model_id])
@@ -2297,24 +2325,28 @@ class Map(DOMWidget, InteractMixin):
         embed_minimal_html(outfile, views=[self], **kwargs)
 
     def __iadd__(self, item):
+        self.add(item)
+        return self
+
+    def __isub__(self, item):
+        self.remove(item)
+        return self
+
+    def __add__(self, item):
+        return self.add(item)
+
+    def add (self, item):
         if isinstance(item, Layer):
             self.add_layer(item)
         elif isinstance(item, Control):
             self.add_control(item)
         return self
 
-    def __isub__(self, item):
+    def remove(self, item):
         if isinstance(item, Layer):
             self.remove_layer(item)
         elif isinstance(item, Control):
             self.remove_control(item)
-        return self
-
-    def __add__(self, item):
-        if isinstance(item, Layer):
-            self.add_layer(item)
-        elif isinstance(item, Control):
-            self.add_control(item)
         return self
 
     # Event handling

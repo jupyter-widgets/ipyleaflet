@@ -15,7 +15,7 @@ Example
     m = Map(center=center, zoom=9, close_popup_on_click=False)
 
     marker = Marker(location=(52.1, 359.9))
-    m.add_layer(marker)
+    m.add(marker)
 
     message1 = HTML()
     message2 = HTML()
@@ -32,7 +32,7 @@ Example
         auto_close=False,
         close_on_escape_key=False
     )
-    m.add_layer(popup)
+    m.add(popup)
 
     # Popup associated to a layer
     marker.popup = message2

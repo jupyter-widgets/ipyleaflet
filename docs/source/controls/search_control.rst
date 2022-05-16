@@ -12,7 +12,7 @@ Example
 
     marker = Marker(icon=AwesomeIcon(name="check", marker_color='green', icon_color='darkgreen'))
 
-    m.add_control(SearchControl(
+    m.add(SearchControl(
       position="topleft",
       url='https://nominatim.openstreetmap.org/search?format=json&q={s}',
       zoom=5,
@@ -32,7 +32,7 @@ You can add a callback that will be run when on search found:
         url='https://cartoradon.irsn.fr/commune.py/communes/search/FR/{s}?',
         zoom=5
     )
-    m.add_control(search)
+    m.add(search)
 
     def on_found(**kwargs):
         # Print the result of the search (text, location etc)
@@ -68,7 +68,7 @@ You can also search features from GeoJSON layers.
     layer_group = LayerGroup(layers=(countries,))
     marker = Marker(icon=AwesomeIcon(name="check", marker_color='green', icon_color='darkred'))
 
-    m.add_control(SearchControl(
+    m.add(SearchControl(
       position="topleft",
       layer=layer_group,
       zoom=4,

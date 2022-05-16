@@ -20,7 +20,7 @@ Usage
 -----
 You can find the list of available basemaps in the :ref:`basemaps-section` page.
 
-You can add multiple layers and controls to the map, using the ``add_layer``/``add_control`` methods. All those layers and controls are widgets themselves. So you can dynamically update their attributes from Python or by interacting with the map on the page (see :ref:`usage-section`)
+You can add multiple layers and controls to the map, using the ``add_`` methods. All those layers and controls are widgets themselves. So you can dynamically update their attributes from Python or by interacting with the map on the page (see :ref:`usage-section`)
 
 .. jupyter-execute::
 

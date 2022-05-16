@@ -1096,13 +1096,7 @@ class LayerGroup(Layer):
         layer: layer instance
             The new layer to include in the group.
         """
-        warnings.warn(
-
-            "add_layer will be deprecated in future version, use add instead",
-             PendingDeprecationWarning
-
-        )
-        warnings.simplefilter("default")
+        warnings.warn("add_layer will be deprecated in future version, use add instead", PendingDeprecationWarning)
 
         if isinstance(layer, dict):
             layer = basemap_to_tiles(layer)
@@ -1118,6 +1112,7 @@ class LayerGroup(Layer):
         layer: layer instance
             The layer to remove from the group.
         """
+        warnings.warn("remove_layer will be deprecated in future version, use remove instead", PendingDeprecationWarning)
         if rm_layer.model_id not in self._layer_ids:
             raise LayerException('layer not on in layergroup: %r' % rm_layer)
         self.layers = tuple([layer for layer in self.layers if layer.model_id != rm_layer.model_id])
@@ -2212,11 +2207,7 @@ class Map(DOMWidget, InteractMixin):
         layer: Layer instance
             The new layer to add.
         """
-        warnings.warn(
-        "add_layer will be deprecated in future version, use add instead",PendingDeprecationWarning
-        )
-        warnings.simplefilter("default")
-
+        warnings.warn("add_layer will be deprecated in future version, use add instead", PendingDeprecationWarning)
         if isinstance(layer, dict):
             layer = basemap_to_tiles(layer)
         if layer.model_id in self._layer_ids:
@@ -2231,10 +2222,8 @@ class Map(DOMWidget, InteractMixin):
         layer: Layer instance
             The layer to remove.
         """
-        warnings.warn(
-        "remove_layer will be deprecated in future version, use remove instead",PendingDeprecationWarning
-        )
-        warnings.simplefilter("default")
+        warnings.warn("remove_layer will be deprecated in future version, use remove instead", PendingDeprecationWarning)
+
         if rm_layer.model_id not in self._layer_ids:
             raise LayerException('layer not on map: %r' % rm_layer)
         self.layers = tuple([layer for layer in self.layers if layer.model_id != rm_layer.model_id])
@@ -2283,10 +2272,7 @@ class Map(DOMWidget, InteractMixin):
             The new control to add.
         """
 
-        warnings.warn(
-            "add_control will be deprecated in future version, use add instead",
-             PendingDeprecationWarning
-        )
+        warnings.warn("add_control will be deprecated in future version, use add instead", PendingDeprecationWarning)
 
         if control.model_id in self._control_ids:
             raise ControlException('control already on map: %r' % control)
@@ -2300,10 +2286,8 @@ class Map(DOMWidget, InteractMixin):
         control: Control instance
             The control to remove.
         """
-        warnings.warn(
-        "remove_control will be deprecated in future version, use remove instead",PendingDeprecationWarning
-        )
-        warnings.simplefilter("default")
+        warnings.warn("remove_control will be deprecated in future version, use remove instead", PendingDeprecationWarning)
+
         if control.model_id not in self._control_ids:
             raise ControlException('control not on map: %r' % control)
         self.controls = tuple([c for c in self.controls if c.model_id != control.model_id])
@@ -2335,7 +2319,7 @@ class Map(DOMWidget, InteractMixin):
     def __add__(self, item):
         return self.add(item)
 
-    def add (self, item):
+    def add(self, item):
         if isinstance(item, Layer):
             self.add_layer(item)
         elif isinstance(item, Control):

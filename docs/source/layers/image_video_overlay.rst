@@ -16,7 +16,7 @@ Example ImageOverlay
         bounds=((13, -130), (32, -100))
     )
 
-    m.add_layer(image);
+    m.add(image);
     m
 
 Attributes
@@ -39,7 +39,7 @@ Example VideoOverlay
         bounds=((13, -130), (32, -100))
     )
 
-    m.add_layer(video);
+    m.add(video);
     m
 
 

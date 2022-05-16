@@ -37,7 +37,7 @@ Example
                     velocity_scale=0.01,
                     max_velocity=20,
                     display_options=display_options)
-    m.add_layer(wind)
+    m.add(wind)
 
     m
 

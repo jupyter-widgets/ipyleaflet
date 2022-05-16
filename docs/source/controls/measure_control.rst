@@ -15,7 +15,7 @@ Example
         active_color = 'orange',
         primary_length_unit = 'kilometers'
     )
-    m.add_control(measure)
+    m.add(measure)
 
     measure.completed_color = 'red'
 

@@ -41,7 +41,7 @@ Example
           style={'fillOpacity': 0.8, 'dashArray': '5, 5'})
 
       m = ipyleaflet.Map(center = (43,-100), zoom = 4)
-      m.add_layer(layer)
+      m.add(layer)
       m
 
 

@@ -11,7 +11,7 @@ Example
     m = Map(center=(-10,-45), zoom=4)
 
     legend = LegendControl({"low":"#FAA", "medium":"#A55", "High":"#500"}, name="Legend", position="bottomright")
-    m.add_control(legend)
+    m.add(legend)
 
     m
 

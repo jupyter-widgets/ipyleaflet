@@ -1091,6 +1091,9 @@ class LayerGroup(Layer):
     def add_layer(self, layer):
         """Add a new layer to the group.
 
+        .. deprecated :: 0.17.0
+           Use add method instead.
+
         Parameters
         ----------
         layer: layer instance
@@ -1107,6 +1110,9 @@ class LayerGroup(Layer):
     def remove_layer(self, rm_layer):
         """Remove a layer from the group.
 
+        .. deprecated :: 0.17.0
+           Use remove method instead.
+
         Parameters
         ----------
         layer: layer instance
@@ -1119,6 +1125,9 @@ class LayerGroup(Layer):
 
     def substitute_layer(self, old, new):
         """Substitute a layer with another one in the group.
+
+        .. deprecated :: 0.17.0
+           Use substitute method instead.
 
         Parameters
         ----------
@@ -1136,7 +1145,13 @@ class LayerGroup(Layer):
         self.layers = tuple([new if layer.model_id == old.model_id else layer for layer in self.layers])
 
     def clear_layers(self):
-        """Remove all layers from the group."""
+        """Remove all layers from the group.
+
+        .. deprecated :: 0.17.0
+           Use clear method instead.
+
+        """
+
         warnings.warn("clear_layers will be deprecated in future version, use clear instead", PendingDeprecationWarning)
 
         self.layers = ()
@@ -2254,6 +2269,9 @@ class Map(DOMWidget, InteractMixin):
     def add_layer(self, layer):
         """Add a layer on the map.
 
+        .. deprecated :: 0.0
+           Use add method instead.
+
         Parameters
         ----------
         layer: Layer instance
@@ -2264,6 +2282,9 @@ class Map(DOMWidget, InteractMixin):
 
     def remove_layer(self, rm_layer):
         """Remove a layer from the map.
+
+        .. deprecated :: 0.17.0
+           Use remove method instead.
 
         Parameters
         ----------
@@ -2277,6 +2298,9 @@ class Map(DOMWidget, InteractMixin):
     def substitute_layer(self, old, new):
         """Replace a layer with another one on the map.
 
+        .. deprecated :: 0.17.0
+           Use substitute method instead.
+
         Parameters
         ----------
         old: Layer instance
@@ -2289,7 +2313,12 @@ class Map(DOMWidget, InteractMixin):
         self.substitute(old, new)
 
     def clear_layers(self):
-        """Remove all layers from the map."""
+        """Remove all layers from the map.
+
+        .. deprecated :: 0.17.0
+           Use add method instead.
+
+        """
         warnings.warn("clear_layers will be deprecated in future version, use clear instead", PendingDeprecationWarning)
 
         self.layers = ()
@@ -2312,6 +2341,9 @@ class Map(DOMWidget, InteractMixin):
     def add_control(self, control):
         """Add a control on the map.
 
+        .. deprecated :: 0.17.0
+           Use add method instead.
+
         Parameters
         ----------
         control: Control instance
@@ -2325,6 +2357,9 @@ class Map(DOMWidget, InteractMixin):
     def remove_control(self, control):
         """Remove a control from the map.
 
+        .. deprecated :: 0.17.0
+           Use remove method instead.
+
         Parameters
         ----------
         control: Control instance
@@ -2335,7 +2370,11 @@ class Map(DOMWidget, InteractMixin):
         self.remove(control)
 
     def clear_controls(self):
-        """Remove all controls from the map."""
+        """Remove all controls from the map.
+
+        .. deprecated :: 0.17.0
+           Use clear method instead.
+        """
         warnings.warn("clear_controls will be deprecated in future version, use clear instead", PendingDeprecationWarning)
 
         self.controls = ()
@@ -2382,7 +2421,6 @@ class Map(DOMWidget, InteractMixin):
             if item.model_id in self._control_ids:
                 raise ControlException('control already on map: %r' % item)
             self.controls = tuple([control for control in self.controls] + [item])
-
         return self
 
     def remove(self, item):
@@ -2402,7 +2440,6 @@ class Map(DOMWidget, InteractMixin):
             if item.model_id not in self._control_ids:
                 raise ControlException('control not on map: %r' % item)
             self.controls = tuple([control for control in self.controls if control.model_id != item.model_id])
-
         return self
 
     def clear(self):
@@ -2431,6 +2468,7 @@ class Map(DOMWidget, InteractMixin):
             if old.model_id not in self._control_ids:
                 raise ControlException('Could not substitute control: control not on map.')
             self.controls = tuple([new if control.model_id == old.model_id else control for control in self.controls])
+        return self
 
     # Event handling
     _interaction_callbacks = Instance(CallbackDispatcher, ())

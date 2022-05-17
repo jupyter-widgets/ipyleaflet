@@ -20,7 +20,7 @@ Usage
 -----
 You can find the list of available basemaps in the :ref:`basemaps-section` page.
 
-You can add multiple layers and controls to the map, using the ``add_`` methods. All those layers and controls are widgets themselves. So you can dynamically update their attributes from Python or by interacting with the map on the page (see :ref:`usage-section`)
+You can add multiple layers and controls to the map, using the ``add`` methods. All those layers and controls are widgets themselves. So you can dynamically update their attributes from Python or by interacting with the map on the page (see :ref:`usage-section`)
 
 .. jupyter-execute::
 
@@ -32,7 +32,7 @@ You can add multiple layers and controls to the map, using the ``add_`` methods.
         zoom=4
     )
 
-    m.add_layer(Marker(location=(52.204793, 360.121558)))
+    m.add(Marker(location=(52.204793, 360.121558)))
 
     m
 
@@ -50,7 +50,7 @@ As a Jupyter interactive widget, the layout of the ``Map`` object is specified b
         layout=Layout(width='80%', height='500px')
     )
 
-    m.add_layer(Marker(location=(52.204793, 360.121558)))
+    m.add(Marker(location=(52.204793, 360.121558)))
 
     m
 

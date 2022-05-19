@@ -1133,7 +1133,7 @@ class LayerGroup(Layer):
         """
         warnings.warn("substitute_layer will be deprecated in future version, substitute instead", PendingDeprecationWarning)
 
-        self.substitute(old,new)
+        self.substitute(old, new)
 
     def clear_layers(self):
         """Remove all layers from the group.

@@ -1133,11 +1133,7 @@ class LayerGroup(Layer):
         """
         warnings.warn("substitute_layer will be deprecated in future version, substitute instead", PendingDeprecationWarning)
 
-        if isinstance(new, dict):
-            new = basemap_to_tiles(new)
-        if old.model_id not in self._layer_ids:
-            raise LayerException('Could not substitute layer: layer not in layergroup.')
-        self.layers = tuple([new if layer.model_id == old.model_id else layer for layer in self.layers])
+        self.substitute(old,new)
 
     def clear_layers(self):
         """Remove all layers from the group.

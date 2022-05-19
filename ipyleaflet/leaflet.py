@@ -1101,11 +1101,7 @@ class LayerGroup(Layer):
         """
         warnings.warn("add_layer will be deprecated in future version, use add instead", PendingDeprecationWarning)
 
-        if isinstance(layer, dict):
-            layer = basemap_to_tiles(layer)
-        if layer.model_id in self._layer_ids:
-            raise LayerException('layer already in layergroup: %r' % layer)
-        self.layers = tuple([layer for layer in self.layers] + [layer])
+        self.add(layer)
 
     def remove_layer(self, rm_layer):
         """Remove a layer from the group.
@@ -1119,9 +1115,8 @@ class LayerGroup(Layer):
             The layer to remove from the group.
         """
         warnings.warn("remove_layer will be deprecated in future version, use remove instead", PendingDeprecationWarning)
-        if rm_layer.model_id not in self._layer_ids:
-            raise LayerException('layer not on in layergroup: %r' % rm_layer)
-        self.layers = tuple([layer for layer in self.layers if layer.model_id != rm_layer.model_id])
+
+        self.remove(rm_layer)
 
     def substitute_layer(self, old, new):
         """Substitute a layer with another one in the group.

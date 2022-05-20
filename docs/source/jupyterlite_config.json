@@ -20,6 +20,12 @@
         "https://files.pythonhosted.org/packages/py3/n/nest-asyncio/nest_asyncio-1.5.4-py3-none-any.whl",
         "https://files.pythonhosted.org/packages/py3/n/notebook/notebook-6.4.8-py3-none-any.whl",
         "https://files.pythonhosted.org/packages/py3/t/traitlets/traitlets-5.1.1-py3-none-any.whl"
+      ],
+      "contents":[
+        "ipyleaflet.ipynb",
+        "maps_and_basemaps/gallery_with_apikey.ipynb",
+        "maps_and_basemaps/gallery_without_apikey.ipynb",
+        "maps_and_basemaps/access-data.json"
       ]
     }
 }

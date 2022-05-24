@@ -9,7 +9,7 @@ Example
     from ipyleaflet import Map, LocalTileLayer
 
     m = Map(center=(52.204793, 360.121558), zoom=9)
-    m.add_layer(LocalTileLayer(path='tiles/{z}/{x}/{y}.png'))
+    m.add(LocalTileLayer(path='tiles/{z}/{x}/{y}.png'))
 
     m
 

@@ -33,7 +33,7 @@ Example
         pulse_color='#3f6fba'
     )
 
-    m.add_layer(ant_path)
+    m.add(ant_path)
 
     m
 

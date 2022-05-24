@@ -18,7 +18,7 @@ For example, you can create a ``Marker`` layer and interact with it:
     m = Map(center=center, zoom=15)
 
     marker = Marker(location=center, draggable=True)
-    m.add_layer(marker);
+    m.add(marker);
 
     display(m)
 

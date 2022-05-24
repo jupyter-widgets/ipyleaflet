@@ -23,7 +23,7 @@ Example
 
     m = Map(center=(42.3152960829043, -71.1031627617667), zoom=17)
     wlayer = WKTLayer(path="test.wkt", hover_style={"fillColor": "red"})
-    m.add_layer(wlayer)
+    m.add(wlayer)
 
     m
 
@@ -38,7 +38,7 @@ You can also provide WKT string as input.
         wkt_string="POLYGON((10.689697265625 -25.0927734375, 34.595947265625 -20.1708984375, 38.814697265625 -35.6396484375, 13.502197265625 -39.1552734375, 10.689697265625 -25.0927734375))",
         hover_style={"fillColor": "red"},
     )
-    m.add_layer(wlayer)
+    m.add(wlayer)
 
     m
 

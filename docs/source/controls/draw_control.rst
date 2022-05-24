@@ -48,7 +48,7 @@ Example
         }
     }
 
-    m.add_control(draw_control)
+    m.add(draw_control)
 
     m
 

@@ -18,7 +18,7 @@ Example
     circle.color = "green"
     circle.fill_color = "green"
 
-    m.add_layer(circle)
+    m.add(circle)
 
     m
 

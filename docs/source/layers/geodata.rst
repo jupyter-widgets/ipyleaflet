@@ -23,8 +23,8 @@ Examples
                        hover_style={'fillColor': 'red' , 'fillOpacity': 0.2},
                        name = 'Countries')
 
-    m.add_layer(geo_data)
-    m.add_control(LayersControl())
+    m.add(geo_data)
+    m.add(LayersControl())
 
     m
 
@@ -54,7 +54,7 @@ Points example:
         point_style={'radius': 5, 'color': 'red', 'fillOpacity': 0.8, 'fillColor': 'blue', 'weight': 3},
         name = 'Release')
 
-    m.add_layer(geo_data)
+    m.add(geo_data)
     m
 
 

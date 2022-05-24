@@ -18,7 +18,7 @@ You can easily create a ``Polygon`` providing the list of vertex locations (in l
     )
 
     m = Map(center=(42.5531, -48.6914), zoom=6)
-    m.add_layer(polygon);
+    m.add(polygon);
 
     m
 
@@ -43,7 +43,7 @@ You can define holes in your ``Polygon`` by using nested lists of vertex locatio
     )
 
     m = Map(center=(37.5531, -109.6914), zoom=5)
-    m.add_layer(polygon);
+    m.add(polygon);
 
     m
 
@@ -65,7 +65,7 @@ Example MultiPolygon
     )
 
     m = Map(center=(42.5531, -48.6914), zoom=6)
-    m.add_layer(multipolygon);
+    m.add(multipolygon);
 
     m
 
@@ -87,7 +87,7 @@ If ``transform`` is set to ``True``, you can dynamically edit the polygon with t
     )
 
     m = Map(center=(42.5531, -48.6914), zoom=6)
-    m.add_layer(polygon);
+    m.add(polygon);
 
     m
 

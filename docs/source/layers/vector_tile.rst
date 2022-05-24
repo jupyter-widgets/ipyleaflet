@@ -134,7 +134,7 @@ Example
 
     m = Map(center=(52.204793, 360.121558), zoom=9)
     vl = CustomVectorTileLayer(url=url, vector_tile_layer_styles=vector_tile_layer_styles)
-    m.add_layer(vl)
+    m.add(vl)
     m
 
 

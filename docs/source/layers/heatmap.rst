@@ -15,7 +15,7 @@ Example
         radius=20
     )
 
-    m.add_layer(heatmap);
+    m.add(heatmap);
 
     m
 

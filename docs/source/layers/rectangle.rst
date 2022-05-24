@@ -14,7 +14,7 @@ Example
 
     rectangle = Rectangle(bounds=((52, 354), (53, 360)))
 
-    m.add_layer(rectangle)
+    m.add(rectangle)
 
     m
 

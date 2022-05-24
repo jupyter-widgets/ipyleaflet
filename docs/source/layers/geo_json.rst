@@ -40,7 +40,7 @@ Example
         },
         style_callback=random_color
     )
-    m.add_layer(geo_json)
+    m.add(geo_json)
 
     m
 

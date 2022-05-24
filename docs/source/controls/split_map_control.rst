@@ -14,7 +14,7 @@ Example
     left_layer = basemap_to_tiles(basemaps.NASAGIBS.ModisAquaBands721CR, "2017-11-11")
 
     control = SplitMapControl(left_layer=left_layer, right_layer=right_layer)
-    m.add_control(control)
+    m.add(control)
 
     m
 

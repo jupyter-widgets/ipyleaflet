@@ -11,7 +11,7 @@ Example
     m = Map(center=(52.204793, 360.121558), zoom=9)
 
     dark_matter_layer = basemap_to_tiles(basemaps.CartoDB.DarkMatter)
-    m.add_layer(dark_matter_layer)
+    m.add(dark_matter_layer)
     m
 
 
@@ -29,7 +29,7 @@ Sometimes one could want to specify the date of the given images, for instance w
 .. code::
 
     nasa_layer = basemap_to_tiles(basemaps.NASAGIBS.ModisTerraTrueColorCR, "2018-04-08");
-    m.add_layer(nasa_layer);
+    m.add(nasa_layer);
 
 .. _Tile Layer Basemap:
 
@@ -37,19 +37,19 @@ To use multiple base maps and the built in base map switching in ``LayerControl`
 These layers can then be passed in an array to ``Map(layers)``:
 
 .. jupyter-execute::
-    
+
     from ipyleaflet import Map, basemaps, basemap_to_tiles
     from ipyleaflet import LayersControl
-    
+
     mapnik = basemap_to_tiles(basemaps.OpenStreetMap.Mapnik)
     mapnik.base = True
     toner = basemap_to_tiles(basemaps.Stamen.Toner)
     toner.base = True
 
     m = Map(layers=[mapnik, toner], center=(52.204793, 360.121558), zoom=9)
-    
+
     # use the LayersControl to switch basemaps
-    m.add_control(LayersControl())
+    m.add(LayersControl())
     m
 
 Attributes and methods

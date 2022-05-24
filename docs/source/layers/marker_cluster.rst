@@ -18,7 +18,7 @@ Example
         markers=(marker1, marker2, marker3)
     )
 
-    m.add_layer(marker_cluster);
+    m.add(marker_cluster);
 
     m
 

@@ -18,7 +18,7 @@ Example
 
     m = Map(basemap=basemaps.CartoDB.Positron, center=(38.491, -95.712), zoom=4)
 
-    m.add_layer(wms)
+    m.add(wms)
 
     m
 
@@ -50,7 +50,7 @@ adds a ``time`` parameter to the request by defining a custom ``TimeWMSLayer``:
 
     m2 = Map(basemap=basemaps.CartoDB.Positron, center=(30.661, -88.645), zoom=5)
 
-    m2.add_layer(time_wms)
+    m2.add(time_wms)
 
     m2
 

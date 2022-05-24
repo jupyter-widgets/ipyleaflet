@@ -23,7 +23,7 @@ Example
     # Create layer group
     layer_group = LayerGroup(layers=(marker, circle))
 
-    m.add_layer(layer_group)
+    m.add(layer_group)
 
     layer_group.add_layer(rectangle)
 

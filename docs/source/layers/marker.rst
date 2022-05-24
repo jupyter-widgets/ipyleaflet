@@ -13,7 +13,7 @@ Example
     m = Map(center=center, zoom=15)
 
     marker = Marker(location=center, draggable=False)
-    m.add_layer(marker);
+    m.add(marker);
 
     m
 

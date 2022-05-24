@@ -32,8 +32,8 @@ Example
 
     m = Map(center=center, zoom=13)
 
-    m.add_layer(marker1)
-    m.add_layer(marker2)
+    m.add(marker1)
+    m.add(marker2)
 
     m
 

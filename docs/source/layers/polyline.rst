@@ -19,7 +19,7 @@ Example Polyline
     )
 
     m = Map(center = (42.5, -41), zoom =2)
-    m.add_layer(line)
+    m.add(line)
     m
 
 
@@ -45,7 +45,7 @@ Example MultiPolyline
       )
 
       m = Map(center = (42.5, -41), zoom =2)
-      m.add_layer(lines)
+      m.add(lines)
       m
 
 

@@ -21,12 +21,12 @@ Example
     marker1 = Marker(name='marker1', location=(48, -2))
     marker2 = Marker(name='marker2', location=(50, 0))
     marker3 = Marker(name='marker3', location=(52, 2))
-    m.add_layer(marker1)
-    m.add_layer(marker2)
-    m.add_layer(marker3)
+    m.add(marker1)
+    m.add(marker2)
+    m.add(marker3)
 
     control = LayersControl(position='topright')
-    m.add_control(control)
+    m.add(control)
 
     m
 

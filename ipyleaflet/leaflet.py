@@ -8,6 +8,8 @@ import json
 import xyzservices
 from datetime import date, timedelta
 from math import isnan
+from branca.colormap import linear
+import warnings
 
 from ipywidgets import (
     Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
@@ -1090,18 +1092,78 @@ class LayerGroup(Layer):
     def add_layer(self, layer):
         """Add a new layer to the group.
 
+        .. deprecated :: 0.17.0
+           Use add method instead.
+
         Parameters
         ----------
         layer: layer instance
             The new layer to include in the group.
         """
+        warnings.warn("add_layer will be deprecated in future version, use add instead", PendingDeprecationWarning)
+
+        self.add(layer)
+
+    def remove_layer(self, rm_layer):
+        """Remove a layer from the group.
+
+        .. deprecated :: 0.17.0
+           Use remove method instead.
+
+        Parameters
+        ----------
+        layer: layer instance
+            The layer to remove from the group.
+        """
+        warnings.warn("remove_layer will be deprecated in future version, use remove instead", PendingDeprecationWarning)
+
+        self.remove(rm_layer)
+
+    def substitute_layer(self, old, new):
+        """Substitute a layer with another one in the group.
+
+        .. deprecated :: 0.17.0
+           Use substitute method instead.
+
+        Parameters
+        ----------
+        old: layer instance
+            The layer to remove from the group.
+        new: layer instance
+            The new layer to include in the group.
+        """
+        warnings.warn("substitute_layer will be deprecated in future version, substitute instead", PendingDeprecationWarning)
+
+        self.substitute(old, new)
+
+    def clear_layers(self):
+        """Remove all layers from the group.
+
+        .. deprecated :: 0.17.0
+           Use clear method instead.
+
+        """
+
+        warnings.warn("clear_layers will be deprecated in future version, use clear instead", PendingDeprecationWarning)
+
+        self.layers = ()
+
+    def add(self, layer):
+        """Add a new layer to the group.
+
+        Parameters
+        ----------
+        layer: layer instance
+            The new layer to include in the group.
+        """
+
         if isinstance(layer, dict):
             layer = basemap_to_tiles(layer)
         if layer.model_id in self._layer_ids:
             raise LayerException('layer already in layergroup: %r' % layer)
         self.layers = tuple([layer for layer in self.layers] + [layer])
 
-    def remove_layer(self, rm_layer):
+    def remove(self, rm_layer):
         """Remove a layer from the group.
 
         Parameters
@@ -1109,11 +1171,12 @@ class LayerGroup(Layer):
         layer: layer instance
             The layer to remove from the group.
         """
+
         if rm_layer.model_id not in self._layer_ids:
             raise LayerException('layer not on in layergroup: %r' % rm_layer)
         self.layers = tuple([layer for layer in self.layers if layer.model_id != rm_layer.model_id])
 
-    def substitute_layer(self, old, new):
+    def substitute(self, old, new):
         """Substitute a layer with another one in the group.
 
         Parameters
@@ -1129,7 +1192,7 @@ class LayerGroup(Layer):
             raise LayerException('Could not substitute layer: layer not in layergroup.')
         self.layers = tuple([new if layer.model_id == old.model_id else layer for layer in self.layers])
 
-    def clear_layers(self):
+    def clear(self):
         """Remove all layers from the group."""
         self.layers = ()
 
@@ -2157,29 +2220,29 @@ class Map(DOMWidget, InteractMixin):
 
         if self.zoom_control:
             self.zoom_control_instance = ZoomControl()
-            self.add_control(self.zoom_control_instance)
+            self.add(self.zoom_control_instance)
 
         if self.attribution_control:
             self.attribution_control_instance = AttributionControl(position='bottomright')
-            self.add_control(self.attribution_control_instance)
+            self.add(self.attribution_control_instance)
 
     @observe('zoom_control')
     def observe_zoom_control(self, change):
         if change['new']:
             self.zoom_control_instance = ZoomControl()
-            self.add_control(self.zoom_control_instance)
+            self.add(self.zoom_control_instance)
         else:
             if self.zoom_control_instance is not None and self.zoom_control_instance in self.controls:
-                self.remove_control(self.zoom_control_instance)
+                self.remove(self.zoom_control_instance)
 
     @observe('attribution_control')
     def observe_attribution_control(self, change):
         if change['new']:
             self.attribution_control_instance = AttributionControl(position='bottomright')
-            self.add_control(self.attribution_control_instance)
+            self.add(self.attribution_control_instance)
         else:
             if self.attribution_control_instance is not None and self.attribution_control_instance in self.controls:
-                self.remove_control(self.attribution_control_instance)
+                self.remove(self.attribution_control_instance)
 
     _layer_ids = List()
 
@@ -2198,31 +2261,37 @@ class Map(DOMWidget, InteractMixin):
     def add_layer(self, layer):
         """Add a layer on the map.
 
+        .. deprecated :: 0.0
+           Use add method instead.
+
         Parameters
         ----------
         layer: Layer instance
             The new layer to add.
         """
-        if isinstance(layer, dict):
-            layer = basemap_to_tiles(layer)
-        if layer.model_id in self._layer_ids:
-            raise LayerException('layer already on map: %r' % layer)
-        self.layers = tuple([layer for layer in self.layers] + [layer])
+        warnings.warn("add_layer will be deprecated in future version, use add instead", PendingDeprecationWarning)
+        self.add(layer)
 
     def remove_layer(self, rm_layer):
         """Remove a layer from the map.
+
+        .. deprecated :: 0.17.0
+           Use remove method instead.
 
         Parameters
         ----------
         layer: Layer instance
             The layer to remove.
         """
-        if rm_layer.model_id not in self._layer_ids:
-            raise LayerException('layer not on map: %r' % rm_layer)
-        self.layers = tuple([layer for layer in self.layers if layer.model_id != rm_layer.model_id])
+        warnings.warn("remove_layer will be deprecated in future version, use remove instead", PendingDeprecationWarning)
+
+        self.remove(rm_layer)
 
     def substitute_layer(self, old, new):
         """Replace a layer with another one on the map.
+
+        .. deprecated :: 0.17.0
+           Use substitute method instead.
 
         Parameters
         ----------
@@ -2231,14 +2300,19 @@ class Map(DOMWidget, InteractMixin):
         new: Layer instance
             The new layer to add.
         """
-        if isinstance(new, dict):
-            new = basemap_to_tiles(new)
-        if old.model_id not in self._layer_ids:
-            raise LayerException('Could not substitute layer: layer not on map.')
-        self.layers = tuple([new if layer.model_id == old.model_id else layer for layer in self.layers])
+        warnings.warn("substitute_layer will be deprecated in future version, use substitute instead", PendingDeprecationWarning)
+
+        self.substitute(old, new)
 
     def clear_layers(self):
-        """Remove all layers from the map."""
+        """Remove all layers from the map.
+
+        .. deprecated :: 0.17.0
+           Use add method instead.
+
+        """
+        warnings.warn("clear_layers will be deprecated in future version, use clear instead", PendingDeprecationWarning)
+
         self.layers = ()
 
     controls = Tuple().tag(trait=Instance(Control), sync=True, **widget_serialization)
@@ -2259,29 +2333,42 @@ class Map(DOMWidget, InteractMixin):
     def add_control(self, control):
         """Add a control on the map.
 
+        .. deprecated :: 0.17.0
+           Use add method instead.
+
         Parameters
         ----------
         control: Control instance
             The new control to add.
         """
-        if control.model_id in self._control_ids:
-            raise ControlException('control already on map: %r' % control)
-        self.controls = tuple([c for c in self.controls] + [control])
+
+        warnings.warn("add_control will be deprecated in future version, use add instead", PendingDeprecationWarning)
+
+        self.add(control)
 
     def remove_control(self, control):
         """Remove a control from the map.
+
+        .. deprecated :: 0.17.0
+           Use remove method instead.
 
         Parameters
         ----------
         control: Control instance
             The control to remove.
         """
-        if control.model_id not in self._control_ids:
-            raise ControlException('control not on map: %r' % control)
-        self.controls = tuple([c for c in self.controls if c.model_id != control.model_id])
+        warnings.warn("remove_control will be deprecated in future version, use remove instead", PendingDeprecationWarning)
+
+        self.remove(control)
 
     def clear_controls(self):
-        """Remove all controls from the map."""
+        """Remove all controls from the map.
+
+        .. deprecated :: 0.17.0
+           Use clear method instead.
+        """
+        warnings.warn("clear_controls will be deprecated in future version, use clear instead", PendingDeprecationWarning)
+
         self.controls = ()
 
     def save(self, outfile, **kwargs):
@@ -2297,24 +2384,82 @@ class Map(DOMWidget, InteractMixin):
         embed_minimal_html(outfile, views=[self], **kwargs)
 
     def __iadd__(self, item):
-        if isinstance(item, Layer):
-            self.add_layer(item)
-        elif isinstance(item, Control):
-            self.add_control(item)
+        self.add(item)
         return self
 
     def __isub__(self, item):
-        if isinstance(item, Layer):
-            self.remove_layer(item)
-        elif isinstance(item, Control):
-            self.remove_control(item)
+        self.remove(item)
         return self
 
     def __add__(self, item):
+        return self.add(item)
+
+    def add(self, item):
+        """Add an item on the map: either a layer or a control.
+
+        Parameters
+        ----------
+        item: Layer or Control instance
+            The layer or control to add.
+        """
         if isinstance(item, Layer):
-            self.add_layer(item)
+            if isinstance(item, dict):
+                item = basemap_to_tiles(item)
+            if item.model_id in self._layer_ids:
+                raise LayerException('layer already on map: %r' % item)
+            self.layers = tuple([layer for layer in self.layers] + [item])
+
         elif isinstance(item, Control):
-            self.add_control(item)
+            if item.model_id in self._control_ids:
+                raise ControlException('control already on map: %r' % item)
+            self.controls = tuple([control for control in self.controls] + [item])
+        return self
+
+    def remove(self, item):
+        """Remove an item from the map : either a layer or a control.
+
+        Parameters
+        ----------
+        item: Layer or Control instance
+            The layer or control to remove.
+        """
+        if isinstance(item, Layer):
+            if item.model_id not in self._layer_ids:
+                raise LayerException('layer not on map: %r' % item)
+            self.layers = tuple([layer for layer in self.layers if layer.model_id != item.model_id])
+
+        elif isinstance(item, Control):
+            if item.model_id not in self._control_ids:
+                raise ControlException('control not on map: %r' % item)
+            self.controls = tuple([control for control in self.controls if control.model_id != item.model_id])
+        return self
+
+    def clear(self):
+        "Clear all layers and controls."
+        self.controls = ()
+        self.layers = ()
+        return self
+
+    def substitute(self, old, new):
+        """Replace an item (layer or control) with another one on the map.
+
+        Parameters
+        ----------
+        old: Layer or control instance
+            The old layer or control to remove.
+        new: Layer or control instance
+            The new layer or control to add.
+        """
+        if (isinstance(new, Layer)):
+            if isinstance(new, dict):
+                new = basemap_to_tiles(new)
+            if old.model_id not in self._layer_ids:
+                raise LayerException('Could not substitute layer: layer not on map.')
+            self.layers = tuple([new if layer.model_id == old.model_id else layer for layer in self.layers])
+        elif (isinstance(new, Control)):
+            if old.model_id not in self._control_ids:
+                raise ControlException('Could not substitute control: control not on map.')
+            self.controls = tuple([new if control.model_id == old.model_id else control for control in self.controls])
         return self
 
     # Event handling

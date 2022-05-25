@@ -1,9 +1,10 @@
 import xyzservices.providers as basemaps
 import json
-access_data = json.load(open("access-data.json"))
 from ipyleaflet import basemap_to_tiles
+access_data = json.load(open("access-data.json"))
 
-## Using a dict of basemaps to use Dropdown widget for basemaps that don't require apikey
+
+# Using a dict of basemaps to use Dropdown widget for basemaps that don't require apikey
 def define_basemapsDict():
     WithoutApikeyDict = {}
 
@@ -18,20 +19,21 @@ def define_basemapsDict():
         else:
             newdata = basemaps[key]
 
-
             for newval in newdata.values():
-                    basemap_name = newval.name
-                    apiname = basemap_name.split('.')[0]
-                    subname = basemap_name.split('.')[1]
+                basemap_name = newval.name
+                apiname = basemap_name.split('.')[0]
+                subname = basemap_name.split('.')[1]
 
-                    if (apiname == 'HERE'):
-                        pass
-                    elif (apiname in access_data):
-                        pass
-                    else:
-                        WithoutApikeyDict[basemap_name] = (basemap_to_tiles(basemaps[apiname][subname]),)
+                if (apiname == 'HERE'):
+                    pass
+                elif (apiname in access_data):
+                    pass
+                else:
+                    WithoutApikeyDict[basemap_name] = (basemap_to_tiles(basemaps[apiname][subname]),)
     return WithoutApikeyDict
 
+
+# Distribute the basemaps between 2 lists : the one with apikey and the one without
 def define_basemapsList():
     WithApikeyList = []
     WithoutApikeyList = []
@@ -46,18 +48,20 @@ def define_basemapsList():
             newdata = basemaps[key]
 
             for newval in newdata.values():
-                    basemap_name = newval.name
-                    apiname = basemap_name.split('.')[0]
+                basemap_name = newval.name
+                apiname = basemap_name.split('.')[0]
 
-                    if (apiname == 'HERE'):
-                        pass
-                    elif (apiname in access_data):
-                        WithApikeyList.append(newval.name)
-                    else:
-                        WithoutApikeyList.append(newval.name)
+                if (apiname == 'HERE'):
+                    pass
+                elif (apiname in access_data):
+                    WithApikeyList.append(newval.name)
+                else:
+                    WithoutApikeyList.append(newval.name)
     return WithoutApikeyList, WithApikeyList
 
-def define_basemap_from_list(List, index) :
+
+# Select one basemap from the list given on index
+def define_basemap_from_list(List, index):
     basemap_name = List[index]
 
     if ('.' in basemap_name):
@@ -67,5 +71,4 @@ def define_basemap_from_list(List, index) :
     else:
         basemap = basemaps[apiname]
 
-    return basemap , apiname
-
+    return basemap, apiname

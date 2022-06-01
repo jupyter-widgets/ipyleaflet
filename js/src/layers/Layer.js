@@ -23,7 +23,8 @@ export class LeafletLayerModel extends widgets.WidgetModel {
       popup: null,
       popup_min_width: 50,
       popup_max_width: 300,
-      popup_max_height: null
+      popup_max_height: null,
+      subitems: []
     };
   }
 }

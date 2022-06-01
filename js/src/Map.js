@@ -75,6 +75,7 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       options: [],
       layers: [],
       controls: [],
+      layer_subitems:[],
       crs: {
         name: 'EPSG3857',
         custom: false
@@ -152,6 +153,7 @@ LeafletMapModel.serializers = {
   ...widgets.DOMWidgetModel.serializers,
   layers: { deserialize: widgets.unpack_models },
   controls: { deserialize: widgets.unpack_models },
+  layer_subitems: { deserialize: widgets.unpack_models },
   style: { deserialize: widgets.unpack_models },
   default_style: { deserialize: widgets.unpack_models },
   dragging_style: { deserialize: widgets.unpack_models }
@@ -224,6 +226,11 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       this.remove_control_view,
       this
     );
+    this.layer_subitems_views = new widgets.ViewList(
+      this.add_control_model,
+      this.remove_control_view,
+      this
+    );
     this.displayed.then(this.render_leaflet.bind(this));
   }
 
@@ -231,6 +238,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     this.create_obj().then(() => {
       this.layer_views.update(this.model.get('layers'));
       this.control_views.update(this.model.get('controls'));
+      this.layer_subitems_views.update(this.model.get('layer_subitems'));
       this.leaflet_events();
       this.model_events();
       this.model.update_bounds().then(() => {
@@ -330,6 +338,14 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       'change:controls',
       function () {
         this.control_views.update(this.model.get('controls'));
+      },
+      this
+    );
+    this.listenTo(
+      this.model,
+      'change: layer_subitems',
+      function () {
+        this.layer_subitems_views.update(this.model.get('layer_subitems'));
       },
       this
     );

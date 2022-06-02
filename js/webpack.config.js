@@ -8,7 +8,7 @@ crypto.createHash = (algorithm) =>
 
 var rules = [
   { test: /\.css$/, use: ["style-loader", "css-loader"] },
-  { test: /\.(jpg|png|gif|svg)$/i, type: "asset/resource" },
+  { test: /\.(jpg|png|gif|svg)$/i, type: "asset" },
 ];
 
 var resolve = {

@@ -1,6 +1,9 @@
-ipyleaflet: Interactive maps in the Jupyter notebook
-====================================================
+Introduction
+============
+Ipyleaflet is a Jupyter / Leaflet bridge enabling interactive maps in the Jupyter notebook. It is an interactive widgets library, based on ipywidgets. This means that everything in ipyleaflet (e.g. the Map, TileLayers, Layers, Controls…) is interactive: you can dynamically update attributes from Python or from the Notebook interface.
 
+.. image:: _static/gallery.gif
+   :width: 1200
 
 Try it online
 -------------

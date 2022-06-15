@@ -30,7 +30,6 @@ LeafletMapStyleModel.styleProperties = {
 };
 
 export class LeafletMapModel extends widgets.DOMWidgetModel {
-
   defaults() {
     return {
       ...super.defaults(),

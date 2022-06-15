@@ -30,10 +30,6 @@ LeafletMapStyleModel.styleProperties = {
 };
 
 export class LeafletMapModel extends widgets.DOMWidgetModel {
-  constructor() {
-    super();
-    this._dragging = false;
-  }
 
   defaults() {
     return {
@@ -93,6 +89,7 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
   initialize(attributes, options) {
     super.initialize(attributes, options);
     this.set('window_url', window.location.href);
+    this._dragging = false
   }
 
   update_style() {

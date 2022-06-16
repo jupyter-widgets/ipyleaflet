@@ -82,18 +82,18 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       style: null,
       default_style: null,
       dragging_style: null,
-      _dragging: false
     };
   }
 
   initialize(attributes, options) {
     super.initialize(attributes, options);
     this.set('window_url', window.location.href);
+    this._dragging = false
   }
 
   update_style() {
     var new_style;
-    if (!this.get('_dragging')) {
+    if (!this._dragging) {
       new_style = this.get('default_style');
     } else {
       new_style = this.get('dragging_style');
@@ -264,12 +264,12 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       this.model.update_bounds().then(() => {
         this.touch();
       });
-      this.model.set('_dragging', false);
+      this.model._dragging = false;
       this.model.update_style();
     });
 
     this.obj.on('movestart', () => {
-      this.model.set('_dragging', true);
+      this.model._dragging = true;
       this.model.update_style();
     });
 

@@ -58,7 +58,7 @@ module.exports = [
     resolve: resolve,
   },
   {
-    // Embeddable {{ cookiecutter.npm_package_name }} bundle
+    // Embeddable jupyter-leaflet bundle
     //
     // This bundle is identical to the notebook bundle containing the custom
     // widget views and models. The only difference is it is placed in the

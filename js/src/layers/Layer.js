@@ -23,7 +23,8 @@ export class LeafletLayerModel extends widgets.WidgetModel {
       popup: null,
       popup_min_width: 50,
       popup_max_width: 300,
-      popup_max_height: null
+      popup_max_height: null,
+      pane: ''
     };
   }
 }
@@ -58,6 +59,10 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
       this.listenTo(this.model, 'change:popup', function(model, value) {
         this.bind_popup(value);
       });
+      const pane = this.model.get('pane');
+      if (pane !== '') {
+        L.setOptions(this.obj, {pane});
+      }
     });
   }
 

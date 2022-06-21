@@ -59,11 +59,15 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
       this.listenTo(this.model, 'change:popup', function(model, value) {
         this.bind_popup(value);
       });
-      const pane = this.model.get('pane');
-      if (pane !== '') {
-        L.setOptions(this.obj, {pane});
-      }
+      this.update_pane();
     });
+  }
+
+  update_pane() {
+    const pane = this.model.get('pane');
+    if (pane !== '') {
+      L.setOptions(this.obj, {pane});
+    }
   }
 
   leaflet_events() {
@@ -114,6 +118,15 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
     this.model.on_some_change(
       ['popup_min_width', 'popup_max_width', 'popup_max_height'],
       this.update_popup,
+      this
+    );
+    this.listenTo(
+      this.model,
+      'change:pane',
+      function() {
+        this.update_pane(),
+        this.map_view.rerender();
+      },
       this
     );
   }

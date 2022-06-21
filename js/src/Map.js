@@ -267,6 +267,8 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
   }
 
   rerender() {
+    this.obj.remove();
+    delete this.obj;
     this.el.removeChild(this.map_child);
     this.render();
   }

@@ -124,7 +124,6 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
       this.model,
       'change:pane',
       function() {
-        this.update_pane(),
         this.map_view.rerender();
       },
       this

@@ -80,6 +80,11 @@ def wait_for_change(widget, value):
     return future
 
 
+class PaneException(TraitError):
+    """Custom PaneException class."""
+    pass
+
+
 class LayerException(TraitError):
     """Custom LayerException class."""
     pass
@@ -112,6 +117,8 @@ class Layer(Widget, InteractMixin):
         Custom name for the layer, which will be used by the LayersControl.
     popup: object
         Interactive widget that will be shown in a Popup when clicking on the layer.
+    pane: string
+        Name of the pane to use for the layer.
     """
 
     _view_name = Unicode('LeafletLayerView').tag(sync=True)
@@ -129,6 +136,7 @@ class Layer(Widget, InteractMixin):
     popup_min_width = Int(50).tag(sync=True)
     popup_max_width = Int(300).tag(sync=True)
     popup_max_height = Int(default_value=None, allow_none=True).tag(sync=True)
+    pane = Unicode('').tag(sync=True)
 
     options = List(trait=Unicode()).tag(sync=True)
 
@@ -2181,6 +2189,7 @@ class Map(DOMWidget, InteractMixin):
     right = Float(0, read_only=True).tag(sync=True)
     left = Float(9007199254740991, read_only=True).tag(sync=True)
 
+    panes = Dict().tag(sync=True)
     layers = Tuple().tag(trait=Instance(Layer), sync=True, **widget_serialization)
 
     @default('layers')
@@ -2242,6 +2251,19 @@ class Map(DOMWidget, InteractMixin):
         else:
             if self.attribution_control_instance is not None and self.attribution_control_instance in self.controls:
                 self.remove(self.attribution_control_instance)
+
+    @validate('panes')
+    def _validate_panes(self, proposal):
+        '''Validate panes.
+        '''
+        error_msg = "Panes should look like: {'pane_name': {'zIndex': 650, 'pointerEvents': 'none'}, ...}"
+        for k1, v1 in proposal.value.items():
+            if not isinstance(k1, str) or not isinstance(v1, dict):
+                raise PaneException(error_msg)
+            for k2, v2 in v1.items():
+                if not isinstance(k2, str) or not isinstance(v2, (str, int, float)):
+                    raise PaneException(error_msg)
+        return proposal.value
 
     _layer_ids = List()
 

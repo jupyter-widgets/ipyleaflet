@@ -73,6 +73,7 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       right: 0,
       left: 9007199254740991,
       options: [],
+      panes: {},
       layers: [],
       controls: [],
       crs: {
@@ -165,6 +166,17 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     this.dirty = false;
   }
 
+  create_panes() {
+    const panes = this.model.get('panes');
+    for (const name in panes) {
+      const pane = this.obj.createPane(name);
+      const styles = panes[name];
+      for (const key in styles) {
+        pane.style[key] = styles[key];
+      }
+    }
+  }
+
   remove_layer_view(child_view) {
     this.obj.removeLayer(child_view.obj);
     child_view.remove();
@@ -210,7 +222,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     this.el.classList.add('jupyter-widgets');
     this.el.classList.add('leaflet-widgets');
     this.map_container = document.createElement('div');
-    this.el.appendChild(this.map_container);
+    this.map_child = this.el.appendChild(this.map_container);
     if (this.get_options().interpolation == 'nearest') {
       this.map_container.classList.add('crisp-image');
     }
@@ -229,6 +241,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
 
   render_leaflet() {
     this.create_obj().then(() => {
+      this.create_panes();
       this.layer_views.update(this.model.get('layers'));
       this.control_views.update(this.model.get('controls'));
       this.leaflet_events();
@@ -251,6 +264,13 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       };
       this.obj = L.map(this.map_container, options);
     });
+  }
+
+  rerender() {
+    this.obj.remove();
+    delete this.obj;
+    this.el.removeChild(this.map_child);
+    this.render();
   }
 
   leaflet_events() {
@@ -317,6 +337,12 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       );
     }
     this.listenTo(this.model, 'msg:custom', this.handle_msg, this);
+    this.listenTo(
+      this.model,
+      'change:panes',
+      this.rerender,
+      this
+    );
     this.listenTo(
       this.model,
       'change:layers',

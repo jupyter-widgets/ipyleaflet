@@ -12,6 +12,7 @@ export class LeafletGeoJSONModel extends featuregroup.LeafletFeatureGroupModel {
       _model_name: 'LeafletGeoJSONModel',
       data: {},
       style: {},
+      visible: true,
       hover_style: {},
       point_style: {}
     };
@@ -79,6 +80,18 @@ export class LeafletGeoJSONView extends featuregroup.LeafletFeatureGroupView {
       function() {
         this.obj.clearLayers();
         this.obj.addData(this.model.get('data'));
+      },
+      this
+    );
+    this.listenTo(
+      this.model,
+      'change:visible',
+      function() {
+        if (this.model.get('visible')) {
+          this.obj.addData(this.model.get('data'));
+        } else {
+          this.obj.clearLayers();
+        }
       },
       this
     );

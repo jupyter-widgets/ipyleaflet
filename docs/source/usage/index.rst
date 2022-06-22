@@ -3,11 +3,7 @@
 Usage
 =====
 
-ipyleaflet is an interactive widgets library, it is based on `ipywidgets <https://github.com/jupyter-widgets/ipywidgets/>`_.
-This means that everything in ipyleaflet (e.g. the ``Map``, ``TileLayers``, ``Markers``...) is interactive: you can dynamically update
-attributes from Python or from the Notebook interface.
-
-For example, you can create a ``Marker`` layer and interact with it:
+In the following example, a ``Marker`` layer is created and one interacts with it:
 
 .. code::
 

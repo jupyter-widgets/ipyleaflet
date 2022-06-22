@@ -345,6 +345,19 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     );
     this.listenTo(
       this.model,
+      'change:dragging',
+      function () {
+        if (this.model.get('dragging')) {
+          this.obj.dragging.enable();
+        }
+        else {
+          this.obj.dragging.disable();
+        }
+      },
+      this
+    );
+    this.listenTo(
+      this.model,
       'change:layers',
       function () {
         this.layer_views.update(this.model.get('layers'));

@@ -5,7 +5,13 @@
 * Add Map panes [#999](https://github.com/jupyter-widgets/ipyleaflet/pull/999)
 * Allow setting Map.dragging [#1001](https://github.com/jupyter-widgets/ipyleaflet/pull/1001)
 * Add visible attribute to GeoJSON layer [#1002](https://github.com/jupyter-widgets/ipyleaflet/pull/1002)
-* [BREAKING CHANGE] Remove get and set decorators in LegendControl [#979](https://github.com/jupyter-widgets/ipyleaflet/pull/979)
+* [BREAKING CHANGE] Remove `name`, `legends`, `positioning`, and `positionning` properties in LegendControl [#979](https://github.com/jupyter-widgets/ipyleaflet/pull/979). Update your code with the following substitutions for a LegendControl `legend`:
+  * `legend.name` -> `legend.title`
+  * `legend.legends` -> `legend.legend`
+  * `legend.positioning` -> `legend.position`
+  * `legend.positionnning` -> `legend.position`
+  
+  The recommended way to create a LegendControl with a given title is to use the `title` parameter: `LegendControl({}, title='My Title')`. There is a backwards compatibility shim in place, so giving the title as `name` in the constructor still works, but is not recommended: `LegendControl({}, name='My Title')`
 
 ## Maintenance
 

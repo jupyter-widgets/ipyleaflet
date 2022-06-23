@@ -1,7 +1,24 @@
+## v0.17.0
+### New Features
+
+* Make it possible to use Choropleth layer with data containing NaNs [#972](https://github.com/jupyter-widgets/ipyleaflet/pull/972)
+* Add Map panes [#999](https://github.com/jupyter-widgets/ipyleaflet/pull/999)
+* Allow setting Map.dragging [#1001](https://github.com/jupyter-widgets/ipyleaflet/pull/1001)
+* Add visible attribute to GeoJSON layer [#1002](https://github.com/jupyter-widgets/ipyleaflet/pull/1002)
+* [BREAKING CHANGE] Remove get and set decorators in LegendControl [#979](https://github.com/jupyter-widgets/ipyleaflet/pull/979)
+
+## Maintenance
+
+* Compute the public path automatically [#988](https://github.com/jupyter-widgets/ipyleaflet/pull/988)
+
+### Docs
+
+* Document use of multiple basemaps [#971](https://github.com/jupyter-widgets/ipyleaflet/pull/971)
+* Add a small introduction text [#992](https://github.com/jupyter-widgets/ipyleaflet/pull/992)
+
+**Full Changelog**: https://github.com/jupyter-widgets/ipyleaflet/compare/0.16.0...0.17.0
+
 ## v0.16.0
-
-## What's Changed
-
 ### New features
 
 * Add bounds attribute to TileLayer by @davidbrochart in https://github.com/jupyter-widgets/ipyleaflet/pull/907
@@ -44,7 +61,7 @@
 * @PROgram52bc made their first contribution in https://github.com/jupyter-widgets/ipyleaflet/pull/914
 * @HaudinFlorence made their first contribution in https://github.com/jupyter-widgets/ipyleaflet/pull/953
 
-**Full Changelog**: https://github.com/jupyter-widgets/ipyleaflet/compare/0.15.0...master
+**Full Changelog**: https://github.com/jupyter-widgets/ipyleaflet/compare/0.15.0...0.16.0
 
 ## v0.15.0
 

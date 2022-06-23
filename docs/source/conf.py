@@ -7,6 +7,7 @@ extensions = [
 templates_path = ['_templates']
 
 jupyterlite_config = "jupyterlite_config.json"
+jupyterlite_contents = "../examples"
 
 def setup(app):
     app.add_css_file("main_stylesheet.css")

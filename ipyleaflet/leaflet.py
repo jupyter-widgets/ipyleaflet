@@ -1932,10 +1932,13 @@ class LegendControl(Control):
         "value 2": "#55A",
         "value 3": "#005"}).tag(sync=True)
 
-    def __init__(self, legend, *args, name="Legend", **kwargs):
+    def __init__(self, legend, *args, **kwargs):
+        kwargs["legend"] = legend
+        # For backwards compatibility with ipyleaflet<=0.16.0
+        if 'name' in kwargs:
+            kwargs.setdefault('title', kwargs['name'])
+            del kwargs['name']
         super().__init__(*args, **kwargs)
-        self.title = name
-        self.legend = legend
 
     def add_legend_element(self, key, value):
         """Add a new legend element.

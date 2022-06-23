@@ -10,7 +10,7 @@ Example
 
     m = Map(center=(-10,-45), zoom=4)
 
-    legend = LegendControl({"low":"#FAA", "medium":"#A55", "High":"#500"}, name="Legend", position="bottomright")
+    legend = LegendControl({"low":"#FAA", "medium":"#A55", "High":"#500"}, title="Legend", position="bottomright")
     m.add(legend)
 
     m
@@ -20,12 +20,12 @@ Example
     # Manipulate the legend
 
     # Set/Get legend title
-    legend.name = "Risk"  # Set name
-    legend.name  # Get name
+    legend.title = "Risk"  # Set title
+    legend.title  # Get title
 
     # Set/Get legend content
-    legend.legends = {"el1":"#FAA", "el2":"#A55", "el3":"#500"}  # Set content
-    legend.legends  # Get content
+    legend.legend = {"el1":"#FAA", "el2":"#A55", "el3":"#500"}  # Set content
+    legend.legend  # Get content
 
     legend.add_legend_element("el5","#000")  # Add a legend element
     legend.remove_legend_element("el5")  # Remove a legend element

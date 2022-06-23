@@ -1,11 +1,17 @@
 ## v0.17.0
+
+Here are some highlights of changes in this version. See the full list of changes for more details: https://github.com/jupyter-widgets/ipyleaflet/compare/0.16.0...0.17.0
+
 ### New Features
 
 * Make it possible to use Choropleth layer with data containing NaNs [#972](https://github.com/jupyter-widgets/ipyleaflet/pull/972)
 * Add Map panes [#999](https://github.com/jupyter-widgets/ipyleaflet/pull/999)
 * Allow setting Map.dragging [#1001](https://github.com/jupyter-widgets/ipyleaflet/pull/1001)
 * Add visible attribute to GeoJSON layer [#1002](https://github.com/jupyter-widgets/ipyleaflet/pull/1002)
-* [BREAKING CHANGE] Remove `name`, `legends`, `positioning`, and `positionning` properties in LegendControl [#979](https://github.com/jupyter-widgets/ipyleaflet/pull/979). Update your code with the following substitutions for a LegendControl `legend`:
+
+### Breaking Changes
+
+* Remove `name`, `legends`, `positioning`, and `positionning` properties in LegendControl [#979](https://github.com/jupyter-widgets/ipyleaflet/pull/979). Update your code with the following substitutions for a LegendControl `legend`:
   * `legend.name` -> `legend.title`
   * `legend.legends` -> `legend.legend`
   * `legend.positioning` -> `legend.position`
@@ -13,7 +19,7 @@
   
   The recommended way to create a LegendControl with a given title is to use the `title` parameter: `LegendControl({}, title='My Title')`. There is a backwards compatibility shim in place, so giving the title as `name` in the constructor still works, but is not recommended: `LegendControl({}, name='My Title')`
 
-## Maintenance
+### Maintenance
 
 * Compute the public path automatically [#988](https://github.com/jupyter-widgets/ipyleaflet/pull/988)
 
@@ -21,8 +27,6 @@
 
 * Document use of multiple basemaps [#971](https://github.com/jupyter-widgets/ipyleaflet/pull/971)
 * Add a small introduction text [#992](https://github.com/jupyter-widgets/ipyleaflet/pull/992)
-
-**Full Changelog**: https://github.com/jupyter-widgets/ipyleaflet/compare/0.16.0...0.17.0
 
 ## v0.16.0
 ### New features

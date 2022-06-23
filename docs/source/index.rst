@@ -13,7 +13,7 @@ Try it online
 -------------
 
 You can try ipyleaflet below, or open the example in a new browser tab with
-`RetroLite <./lite/retro?path=ipyleaflet.ipynb>`_ or
+`RetroLite <./lite/retro/notebooks?path=ipyleaflet.ipynb>`_ or
 `JupyterLite <./lite/lab?path=ipyleaflet.ipynb>`_.
 
 .. retrolite:: ipyleaflet.ipynb

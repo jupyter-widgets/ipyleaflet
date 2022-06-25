@@ -9,7 +9,7 @@ Here are some highlights of changes in this version. See the full list of change
 * Allow setting Map.dragging [#1001](https://github.com/jupyter-widgets/ipyleaflet/pull/1001)
 * Add visible attribute to GeoJSON layer [#1002](https://github.com/jupyter-widgets/ipyleaflet/pull/1002)
 
-### Breaking Changes
+### Deprecated API
 
 * Deprecate LegendControl properties `name`, `legends`, `positioning`, and `positionning` [#979](https://github.com/jupyter-widgets/ipyleaflet/pull/979) and [#1005](https://github.com/jupyter-widgets/ipyleaflet/pull/1005). Update your code with the following substitutions for a LegendControl `legend`:
   * `legend.name` -> `legend.title`

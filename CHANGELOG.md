@@ -18,9 +18,8 @@ Here are some highlights of changes in this version. See the full list of change
   * `legend.positionnning` -> `legend.position`
   
   The `name` argument in creating a LegendControl is also deprecated, please use the `title` argument instead: `LegendControl({}, title='My Title')`.
-* Deprecate layer and control-specific methods for maps, in favor of methods that work for both layers and controls [#982](https://github.com/jupyter-widgets/ipyleaflet/pull/982). Update your code with the following substitutions for a Map `map`:
+* Deprecate layer and control-specific method names for Map and LayerGroup, in favor of methods that work for both layers and controls [#982](https://github.com/jupyter-widgets/ipyleaflet/pull/982). Update your code with the following substitutions for a Map `map` (or LayerGroup):
   * `map.add_control(...)` or `map.add_layer(...)` -> `map.add(...)`
-  * `map.remove_control(...)` or `map.remove_layer(...)` -> `map.remove(...)`
   * `map.remove_control(...)` or `map.remove_layer(...)` -> `map.remove(...)`
   * `map.substitute_control(...)` or `map.substitute_layer(...)` -> `map.substitute(...)`
   * `map.clear_controls(...)` or `map.clear_layers(...)` -> `map.clear(...)`

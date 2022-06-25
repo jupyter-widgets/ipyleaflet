@@ -11,13 +11,13 @@ Here are some highlights of changes in this version. See the full list of change
 
 ### Breaking Changes
 
-* Remove `name`, `legends`, `positioning`, and `positionning` properties in LegendControl [#979](https://github.com/jupyter-widgets/ipyleaflet/pull/979). Update your code with the following substitutions for a LegendControl `legend`:
+* Deprecate LegendControl properties `name`, `legends`, `positioning`, and `positionning` [#979](https://github.com/jupyter-widgets/ipyleaflet/pull/979) and [#1005](https://github.com/jupyter-widgets/ipyleaflet/pull/1005). Update your code with the following substitutions for a LegendControl `legend`:
   * `legend.name` -> `legend.title`
   * `legend.legends` -> `legend.legend`
   * `legend.positioning` -> `legend.position`
   * `legend.positionnning` -> `legend.position`
   
-  The recommended way to create a LegendControl with a given title is to use the `title` parameter: `LegendControl({}, title='My Title')`. There is a backwards compatibility shim in place, so giving the title as `name` in the constructor still works, but is not recommended: `LegendControl({}, name='My Title')`
+  The `name` argument in creating a LegendControl is also deprecated, please use the `title` argument instead: `LegendControl({}, title='My Title')`.
 * Deprecate layer and control-specific methods for maps, in favor of methods that work for both layers and controls [#982](https://github.com/jupyter-widgets/ipyleaflet/pull/982). Update your code with the following substitutions for a Map `map`:
   * `map.add_control(...)` or `map.add_layer(...)` -> `map.add(...)`
   * `map.remove_control(...)` or `map.remove_layer(...)` -> `map.remove(...)`

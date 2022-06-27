@@ -1107,7 +1107,7 @@ class LayerGroup(Layer):
         layer: layer instance
             The new layer to include in the group.
         """
-        warnings.warn("add_layer will be deprecated in future version, use add instead", PendingDeprecationWarning)
+        warnings.warn("add_layer is deprecated, use add instead", DeprecationWarning)
 
         self.add(layer)
 
@@ -1122,7 +1122,7 @@ class LayerGroup(Layer):
         layer: layer instance
             The layer to remove from the group.
         """
-        warnings.warn("remove_layer will be deprecated in future version, use remove instead", PendingDeprecationWarning)
+        warnings.warn("remove_layer is deprecated, use remove instead", DeprecationWarning)
 
         self.remove(rm_layer)
 
@@ -1139,7 +1139,7 @@ class LayerGroup(Layer):
         new: layer instance
             The new layer to include in the group.
         """
-        warnings.warn("substitute_layer will be deprecated in future version, substitute instead", PendingDeprecationWarning)
+        warnings.warn("substitute_layer is deprecated, use substitute instead", DeprecationWarning)
 
         self.substitute(old, new)
 
@@ -1151,7 +1151,7 @@ class LayerGroup(Layer):
 
         """
 
-        warnings.warn("clear_layers will be deprecated in future version, use clear instead", PendingDeprecationWarning)
+        warnings.warn("clear_layers is deprecated, use clear instead", DeprecationWarning)
 
         self.layers = ()
 
@@ -1915,6 +1915,10 @@ class LegendControl(Control):
 
     A control which contains a legend.
 
+    .. deprecated :: 0.17.0
+       The constructor argument 'name' is deprecated, use the 'title' argument instead.
+
+
     Attributes
     ----------
     title: str, default 'Legend'
@@ -1932,10 +1936,75 @@ class LegendControl(Control):
         "value 2": "#55A",
         "value 3": "#005"}).tag(sync=True)
 
-    def __init__(self, legend, *args, name="Legend", **kwargs):
+    def __init__(self, legend, *args, **kwargs):
+        kwargs["legend"] = legend
+        # For backwards compatibility with ipyleaflet<=0.16.0
+        if 'name' in kwargs:
+            warnings.warn("the name argument is deprecated, use title instead", DeprecationWarning)
+            kwargs.setdefault('title', kwargs['name'])
+            del kwargs['name']
         super().__init__(*args, **kwargs)
-        self.title = name
-        self.legend = legend
+
+    @property
+    def name(self):
+        """The title of the legend.
+
+        .. deprecated :: 0.17.0
+           Use title attribute instead.
+        """
+        warnings.warn(".name is deprecated, use .title instead", DeprecationWarning)
+        return self.title
+
+    @name.setter
+    def name(self, title):
+        warnings.warn(".name is deprecated, use .title instead", DeprecationWarning)
+        self.title = title
+
+    @property
+    def legends(self):
+        """The legend information.
+
+        .. deprecated :: 0.17.0
+           Use legend attribute instead.
+        """
+
+        warnings.warn(".legends is deprecated, use .legend instead", DeprecationWarning)
+        return self.legend
+
+    @legends.setter
+    def legends(self, legends):
+        warnings.warn(".legends is deprecated, use .legend instead", DeprecationWarning)
+        self.legend = legends
+
+    @property
+    def positioning(self):
+        """The position information.
+
+        .. deprecated :: 0.17.0
+           Use position attribute instead.
+        """
+        warnings.warn(".positioning is deprecated, use .position instead", DeprecationWarning)
+        return self.position
+
+    @positioning.setter
+    def positioning(self, position):
+        warnings.warn(".positioning is deprecated, use .position instead", DeprecationWarning)
+        self.position = position
+
+    @property
+    def positionning(self):
+        """The position information.
+
+        .. deprecated :: 0.17.0
+           Use position attribute instead.
+        """
+        warnings.warn(".positionning is deprecated, use .position instead", DeprecationWarning)
+        return self.position
+
+    @positionning.setter
+    def positionning(self, position):
+        warnings.warn(".positionning is deprecated, use .position instead", DeprecationWarning)
+        self.position = position
 
     def add_legend_element(self, key, value):
         """Add a new legend element.
@@ -2283,7 +2352,7 @@ class Map(DOMWidget, InteractMixin):
     def add_layer(self, layer):
         """Add a layer on the map.
 
-        .. deprecated :: 0.0
+        .. deprecated :: 0.17.0
            Use add method instead.
 
         Parameters
@@ -2291,7 +2360,7 @@ class Map(DOMWidget, InteractMixin):
         layer: Layer instance
             The new layer to add.
         """
-        warnings.warn("add_layer will be deprecated in future version, use add instead", PendingDeprecationWarning)
+        warnings.warn("add_layer is deprecated, use add instead", DeprecationWarning)
         self.add(layer)
 
     def remove_layer(self, rm_layer):
@@ -2305,7 +2374,7 @@ class Map(DOMWidget, InteractMixin):
         layer: Layer instance
             The layer to remove.
         """
-        warnings.warn("remove_layer will be deprecated in future version, use remove instead", PendingDeprecationWarning)
+        warnings.warn("remove_layer is deprecated, use remove instead", DeprecationWarning)
 
         self.remove(rm_layer)
 
@@ -2322,7 +2391,7 @@ class Map(DOMWidget, InteractMixin):
         new: Layer instance
             The new layer to add.
         """
-        warnings.warn("substitute_layer will be deprecated in future version, use substitute instead", PendingDeprecationWarning)
+        warnings.warn("substitute_layer is deprecated, use substitute instead", DeprecationWarning)
 
         self.substitute(old, new)
 
@@ -2333,7 +2402,7 @@ class Map(DOMWidget, InteractMixin):
            Use add method instead.
 
         """
-        warnings.warn("clear_layers will be deprecated in future version, use clear instead", PendingDeprecationWarning)
+        warnings.warn("clear_layers is deprecated, use clear instead", DeprecationWarning)
 
         self.layers = ()
 
@@ -2364,7 +2433,7 @@ class Map(DOMWidget, InteractMixin):
             The new control to add.
         """
 
-        warnings.warn("add_control will be deprecated in future version, use add instead", PendingDeprecationWarning)
+        warnings.warn("add_control is deprecated, use add instead", DeprecationWarning)
 
         self.add(control)
 
@@ -2379,7 +2448,7 @@ class Map(DOMWidget, InteractMixin):
         control: Control instance
             The control to remove.
         """
-        warnings.warn("remove_control will be deprecated in future version, use remove instead", PendingDeprecationWarning)
+        warnings.warn("remove_control is deprecated, use remove instead", DeprecationWarning)
 
         self.remove(control)
 
@@ -2389,7 +2458,7 @@ class Map(DOMWidget, InteractMixin):
         .. deprecated :: 0.17.0
            Use clear method instead.
         """
-        warnings.warn("clear_controls will be deprecated in future version, use clear instead", PendingDeprecationWarning)
+        warnings.warn("clear_controls is deprecated, use clear instead", DeprecationWarning)
 
         self.controls = ()
 

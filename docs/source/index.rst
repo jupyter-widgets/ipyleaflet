@@ -33,3 +33,4 @@ Table of Contents
     controls/index
     api_reference/index
     related_projects/index
+    changelog

@@ -8,11 +8,13 @@ import json
 import xyzservices
 from datetime import date, timedelta
 from math import isnan
+from branca.colormap import linear
+from IPython.display import display
 import warnings
 
 from ipywidgets import (
     Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
-    interactive, Style
+    interactive, Style, Output
 )
 
 from ipywidgets.widgets.trait_types import InstanceDict
@@ -139,6 +141,20 @@ class Layer(Widget, InteractMixin):
     pane = Unicode('').tag(sync=True)
 
     options = List(trait=Unicode()).tag(sync=True)
+    subitems = Tuple().tag(trait=Instance(Widget), sync=True, **widget_serialization)
+    _subitem_ids = List()
+
+    @validate('subitems')
+    def _validate_subitems(self, proposal):
+        '''Validate subitems list.
+
+        Makes sure only one instance of any given subitem can exist in the
+        subitem list.
+        '''
+        self._subitem_ids = [subitem.model_id for subitem in proposal.value]
+        if len(set(self._subitem_ids)) != len(self._subitem_ids):
+            raise Exception('duplicate subitem detected, only use each subitem once')
+        return proposal.value
 
     def __init__(self, **kwargs):
         super(Layer, self).__init__(**kwargs)
@@ -1107,7 +1123,7 @@ class LayerGroup(Layer):
         layer: layer instance
             The new layer to include in the group.
         """
-        warnings.warn("add_layer will be deprecated in future version, use add instead", PendingDeprecationWarning)
+        warnings.warn("add_layer is deprecated, use add instead", DeprecationWarning)
 
         self.add(layer)
 
@@ -1122,7 +1138,7 @@ class LayerGroup(Layer):
         layer: layer instance
             The layer to remove from the group.
         """
-        warnings.warn("remove_layer will be deprecated in future version, use remove instead", PendingDeprecationWarning)
+        warnings.warn("remove_layer is deprecated, use remove instead", DeprecationWarning)
 
         self.remove(rm_layer)
 
@@ -1139,7 +1155,7 @@ class LayerGroup(Layer):
         new: layer instance
             The new layer to include in the group.
         """
-        warnings.warn("substitute_layer will be deprecated in future version, substitute instead", PendingDeprecationWarning)
+        warnings.warn("substitute_layer is deprecated, use substitute instead", DeprecationWarning)
 
         self.substitute(old, new)
 
@@ -1151,7 +1167,7 @@ class LayerGroup(Layer):
 
         """
 
-        warnings.warn("clear_layers will be deprecated in future version, use clear instead", PendingDeprecationWarning)
+        warnings.warn("clear_layers is deprecated, use clear instead", DeprecationWarning)
 
         self.layers = ()
 
@@ -1420,6 +1436,7 @@ class Choropleth(GeoJSON):
     nan_color = Unicode('black')
     nan_opacity = CFloat(0.4)
     default_opacity = CFloat(1.0)
+    caption = Unicode('data')
 
     @observe('style', 'style_callback', 'value_min', 'value_max', 'nan_color', 'nan_opacity', 'default_opacity', 'geo_data', 'choro_data', 'colormap')
     def _update_data(self, change):
@@ -1469,6 +1486,16 @@ class Choropleth(GeoJSON):
     def __init__(self, **kwargs):
         super(Choropleth, self).__init__(**kwargs)
         self.data = self._get_data()
+        self.colormap_control = ColormapControl(caption=self.caption, colormap_choice=self.colormap, value_min=self.value_min, value_max=self.value_max, position='topright', transparent_bg=True)
+        self.magnifying_glass = MagnifyingGlass(layers=[self], zoom_offset=1)
+        self.legend_control = LegendControl({"low": "yellow", "medium": "orange", "High": "red"}, name=self.caption, position="topleft")
+        subitem_list = [self.magnifying_glass, self.colormap_control, self.legend_control]
+        for subitem in subitem_list:
+
+            if subitem.model_id in self._subitem_ids:
+                raise Exception('subitem already associated to the layer')
+
+            self.subitems = tuple([subitem for subitem in self.subitems] + [subitem])
 
 
 class WKTLayer(GeoJSON):
@@ -1915,6 +1942,10 @@ class LegendControl(Control):
 
     A control which contains a legend.
 
+    .. deprecated :: 0.17.0
+       The constructor argument 'name' is deprecated, use the 'title' argument instead.
+
+
     Attributes
     ----------
     title: str, default 'Legend'
@@ -1932,10 +1963,75 @@ class LegendControl(Control):
         "value 2": "#55A",
         "value 3": "#005"}).tag(sync=True)
 
-    def __init__(self, legend, *args, name="Legend", **kwargs):
+    def __init__(self, legend, *args, **kwargs):
+        kwargs["legend"] = legend
+        # For backwards compatibility with ipyleaflet<=0.16.0
+        if 'name' in kwargs:
+            warnings.warn("the name argument is deprecated, use title instead", DeprecationWarning)
+            kwargs.setdefault('title', kwargs['name'])
+            del kwargs['name']
         super().__init__(*args, **kwargs)
-        self.title = name
-        self.legend = legend
+
+    @property
+    def name(self):
+        """The title of the legend.
+
+        .. deprecated :: 0.17.0
+           Use title attribute instead.
+        """
+        warnings.warn(".name is deprecated, use .title instead", DeprecationWarning)
+        return self.title
+
+    @name.setter
+    def name(self, title):
+        warnings.warn(".name is deprecated, use .title instead", DeprecationWarning)
+        self.title = title
+
+    @property
+    def legends(self):
+        """The legend information.
+
+        .. deprecated :: 0.17.0
+           Use legend attribute instead.
+        """
+
+        warnings.warn(".legends is deprecated, use .legend instead", DeprecationWarning)
+        return self.legend
+
+    @legends.setter
+    def legends(self, legends):
+        warnings.warn(".legends is deprecated, use .legend instead", DeprecationWarning)
+        self.legend = legends
+
+    @property
+    def positioning(self):
+        """The position information.
+
+        .. deprecated :: 0.17.0
+           Use position attribute instead.
+        """
+        warnings.warn(".positioning is deprecated, use .position instead", DeprecationWarning)
+        return self.position
+
+    @positioning.setter
+    def positioning(self, position):
+        warnings.warn(".positioning is deprecated, use .position instead", DeprecationWarning)
+        self.position = position
+
+    @property
+    def positionning(self):
+        """The position information.
+
+        .. deprecated :: 0.17.0
+           Use position attribute instead.
+        """
+        warnings.warn(".positionning is deprecated, use .position instead", DeprecationWarning)
+        return self.position
+
+    @positionning.setter
+    def positionning(self, position):
+        warnings.warn(".positionning is deprecated, use .position instead", DeprecationWarning)
+        self.position = position
 
     def add_legend_element(self, key, value):
         """Add a new legend element.
@@ -1960,6 +2056,38 @@ class LegendControl(Control):
         """
         del self.legend[key]
         self.send_state()
+
+
+class ColormapControl(WidgetControl):
+    """ColormapControl class, with WidgetControl as parent class.
+
+    A control which contains a colormap, to be used with Choropleth.
+
+    Attributes
+    ----------
+    caption : str, default 'caption'
+        The caption of the colormap.
+    colormap_choice : str, default 'linear.YlOrRd_04'
+        The choosen colormap.
+    value_min : float, default 0.0
+        The minimal value taken by the data to be represented by the colormap.
+    value_max : float, default 1.0
+        The maximal value taken by the data to be represented by the colormap.
+    """
+    caption = Unicode('caption')
+    colormap_choice = Any(linear.YlOrRd_04)
+    value_min = CFloat(0.0)
+    value_max = CFloat(1.0)
+
+    @default('widget')
+    def _default_widget(self):
+        widget = Output(layout={'height': '40px', 'width': '520px', 'margin': '0px 0px 0px 0px'})
+        with widget:
+            colormap = self.colormap_choice.scale(self.value_min, self.value_max)
+            colormap.caption = self.caption
+            display(colormap)
+
+        return widget
 
 
 class SearchControl(Control):
@@ -2283,7 +2411,7 @@ class Map(DOMWidget, InteractMixin):
     def add_layer(self, layer):
         """Add a layer on the map.
 
-        .. deprecated :: 0.0
+        .. deprecated :: 0.17.0
            Use add method instead.
 
         Parameters
@@ -2291,7 +2419,7 @@ class Map(DOMWidget, InteractMixin):
         layer: Layer instance
             The new layer to add.
         """
-        warnings.warn("add_layer will be deprecated in future version, use add instead", PendingDeprecationWarning)
+        warnings.warn("add_layer is deprecated, use add instead", DeprecationWarning)
         self.add(layer)
 
     def remove_layer(self, rm_layer):
@@ -2305,7 +2433,7 @@ class Map(DOMWidget, InteractMixin):
         layer: Layer instance
             The layer to remove.
         """
-        warnings.warn("remove_layer will be deprecated in future version, use remove instead", PendingDeprecationWarning)
+        warnings.warn("remove_layer is deprecated, use remove instead", DeprecationWarning)
 
         self.remove(rm_layer)
 
@@ -2322,7 +2450,7 @@ class Map(DOMWidget, InteractMixin):
         new: Layer instance
             The new layer to add.
         """
-        warnings.warn("substitute_layer will be deprecated in future version, use substitute instead", PendingDeprecationWarning)
+        warnings.warn("substitute_layer is deprecated, use substitute instead", DeprecationWarning)
 
         self.substitute(old, new)
 
@@ -2333,7 +2461,7 @@ class Map(DOMWidget, InteractMixin):
            Use add method instead.
 
         """
-        warnings.warn("clear_layers will be deprecated in future version, use clear instead", PendingDeprecationWarning)
+        warnings.warn("clear_layers is deprecated, use clear instead", DeprecationWarning)
 
         self.layers = ()
 
@@ -2364,7 +2492,7 @@ class Map(DOMWidget, InteractMixin):
             The new control to add.
         """
 
-        warnings.warn("add_control will be deprecated in future version, use add instead", PendingDeprecationWarning)
+        warnings.warn("add_control is deprecated, use add instead", DeprecationWarning)
 
         self.add(control)
 
@@ -2379,7 +2507,7 @@ class Map(DOMWidget, InteractMixin):
         control: Control instance
             The control to remove.
         """
-        warnings.warn("remove_control will be deprecated in future version, use remove instead", PendingDeprecationWarning)
+        warnings.warn("remove_control is deprecated, use remove instead", DeprecationWarning)
 
         self.remove(control)
 
@@ -2389,7 +2517,7 @@ class Map(DOMWidget, InteractMixin):
         .. deprecated :: 0.17.0
            Use clear method instead.
         """
-        warnings.warn("clear_controls will be deprecated in future version, use clear instead", PendingDeprecationWarning)
+        warnings.warn("clear_controls is deprecated, use clear instead", DeprecationWarning)
 
         self.controls = ()
 
@@ -2435,6 +2563,7 @@ class Map(DOMWidget, InteractMixin):
             if item.model_id in self._control_ids:
                 raise ControlException('control already on map: %r' % item)
             self.controls = tuple([control for control in self.controls] + [item])
+
         return self
 
     def remove(self, item):

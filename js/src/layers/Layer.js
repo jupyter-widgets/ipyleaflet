@@ -24,15 +24,19 @@ export class LeafletLayerModel extends widgets.WidgetModel {
       popup_min_width: 50,
       popup_max_width: 300,
       popup_max_height: null,
-      pane: ''
+      pane: '',
+      subitems: []
     };
   }
 }
 
 LeafletLayerModel.serializers = {
   ...widgets.WidgetModel.serializers,
-  popup: { deserialize: widgets.unpack_models }
+  popup: { deserialize: widgets.unpack_models },
+  subitems: { deserialize: widgets.unpack_models }
 };
+
+
 
 export class LeafletUILayerModel extends LeafletLayerModel {
   defaults() {

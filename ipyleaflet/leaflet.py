@@ -1488,7 +1488,7 @@ class Choropleth(GeoJSON):
         self.data = self._get_data()
         self.colormap_control = ColormapControl(caption=self.caption, colormap_choice=self.colormap, value_min=self.value_min, value_max=self.value_max, position='topright', transparent_bg=True)
         self.magnifying_glass = MagnifyingGlass(layers=[self], zoom_offset=1)
-        self.legend_control = LegendControl({"low": "yellow", "medium": "orange", "High": "red"}, name=self.caption, position="topleft")
+        self.legend_control = LegendControl({"low": "yellow", "medium": "orange", "high": "red"}, name=self.caption, position="topleft")
         subitem_list = [self.magnifying_glass, self.colormap_control, self.legend_control]
         for subitem in subitem_list:
 

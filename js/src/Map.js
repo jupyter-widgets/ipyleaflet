@@ -282,12 +282,12 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       console.log('layer_views:', this.layer_views)
 
       var layer_list = this.model.get('layers');
-      //console.log('layer_list :', layer_list)
+      console.log('layer_list :', layer_list)
       for (let i = 1; i < layer_list.length; i++) { // starting index is 1, since we are not taking into account the TileLayer at index 0
         var subitem_list = layer_list[i].attributes.subitems
         this.subitem_views.update(subitem_list);
-        //console.log(`For ${layer_list[i].name}`);
-        //console.log('subitem_list:', subitem_list)
+        console.log(`For ${layer_list[i].name}`);
+        console.log('subitem_list:', subitem_list)
         console.log('subitem_views:', this.subitem_views)
 
       }

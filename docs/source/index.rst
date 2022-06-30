@@ -11,14 +11,11 @@ Python or from the browser.
 
 Try it online
 -------------
-
 .. image:: https://jupyterlite.rtfd.io/en/latest/_static/badge.svg
    :target: ./lite/lab?path=ipyleaflet.ipynb
 
-You can try ipyleaflet below, or open many other live examples in a new browser tab with
-`JupyterLite <./lite/lab?path=ipyleaflet.ipynb>`_ or `RetroLite <./lite/retro/tree>`_.
+You can try ipyleaflet below, or open many other live examples in a new browser tab with : `JupyterLite <./lite/lab?path=ipyleaflet.ipynb>`_ or `RetroLite <./lite/retro/tree>`_.
 
-.. retrolite:: ipyleaflet.ipynb
 
 Table of Contents
 -----------------

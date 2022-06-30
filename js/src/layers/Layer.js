@@ -24,6 +24,7 @@ export class LeafletLayerModel extends widgets.WidgetModel {
       popup_min_width: 50,
       popup_max_width: 300,
       popup_max_height: null,
+      pane: '',
       subitems: []
     };
   }
@@ -31,8 +32,11 @@ export class LeafletLayerModel extends widgets.WidgetModel {
 
 LeafletLayerModel.serializers = {
   ...widgets.WidgetModel.serializers,
-  popup: { deserialize: widgets.unpack_models }
+  popup: { deserialize: widgets.unpack_models },
+  subitems: { deserialize: widgets.unpack_models }
 };
+
+
 
 export class LeafletUILayerModel extends LeafletLayerModel {
   defaults() {
@@ -59,7 +63,15 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
       this.listenTo(this.model, 'change:popup', function(model, value) {
         this.bind_popup(value);
       });
+      this.update_pane();
     });
+  }
+
+  update_pane() {
+    const pane = this.model.get('pane');
+    if (pane !== '') {
+      L.setOptions(this.obj, {pane});
+    }
   }
 
   leaflet_events() {
@@ -110,6 +122,14 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
     this.model.on_some_change(
       ['popup_min_width', 'popup_max_width', 'popup_max_height'],
       this.update_popup,
+      this
+    );
+    this.listenTo(
+      this.model,
+      'change:pane',
+      function() {
+        this.map_view.rerender();
+      },
       this
     );
   }

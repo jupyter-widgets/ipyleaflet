@@ -73,9 +73,9 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       right: 0,
       left: 9007199254740991,
       options: [],
+      panes: {},
       layers: [],
       controls: [],
-      layer_subitems:[],
       crs: {
         name: 'EPSG3857',
         custom: false
@@ -83,18 +83,18 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       style: null,
       default_style: null,
       dragging_style: null,
-      _dragging: false
     };
   }
 
   initialize(attributes, options) {
     super.initialize(attributes, options);
     this.set('window_url', window.location.href);
+    this._dragging = false
   }
 
   update_style() {
     var new_style;
-    if (!this.get('_dragging')) {
+    if (!this._dragging) {
       new_style = this.get('default_style');
     } else {
       new_style = this.get('dragging_style');
@@ -153,11 +153,11 @@ LeafletMapModel.serializers = {
   ...widgets.DOMWidgetModel.serializers,
   layers: { deserialize: widgets.unpack_models },
   controls: { deserialize: widgets.unpack_models },
-  layer_subitems: { deserialize: widgets.unpack_models },
   style: { deserialize: widgets.unpack_models },
   default_style: { deserialize: widgets.unpack_models },
   dragging_style: { deserialize: widgets.unpack_models }
 };
+
 
 export class LeafletMapView extends utils.LeafletDOMWidgetView {
   initialize(options) {
@@ -167,23 +167,35 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     this.dirty = false;
   }
 
+  create_panes() {
+    const panes = this.model.get('panes');
+    for (const name in panes) {
+      const pane = this.obj.createPane(name);
+      const styles = panes[name];
+      for (const key in styles) {
+        pane.style[key] = styles[key];
+      }
+    }
+  }
+
   remove_layer_view(child_view) {
+    console.log('A layer view has been removed :', child_view)
     this.obj.removeLayer(child_view.obj);
     child_view.remove();
   }
 
   add_layer_model(child_model) {
+    console.log('A layer model has been added :', child_model)
     return this.create_child_view(child_model, {
       map_view: this
     }).then(view => {
       this.obj.addLayer(view.obj);
 
-      // Trigger the displayed event of the child view.
       this.displayed.then(() => {
         view.trigger('displayed', this);
       });
-
       return view;
+
     });
   }
 
@@ -198,21 +210,48 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     }).then(view => {
       this.obj.addControl(view.obj);
 
+
       // Trigger the displayed event of the child view.
       this.displayed.then(() => {
         view.trigger('displayed', this);
       });
-
       return view;
     });
   }
+
+  remove_subitem_view(child_view) {
+    if(child_view['name'].includes('Control')){
+      this.obj.removeControl(child_view.obj);
+    } else {
+      this.obj.removeLayer(child_view.obj);
+    }
+    child_view.remove();
+    }
+
+    add_subitem_model(child_model) {
+    return this.create_child_view(child_model, {
+    map_view: this
+    }).then(view => {
+    if(child_model['name'].includes('Control')){
+      this.obj.addControl(view.obj);
+    } else {
+      this.obj.addLayer(view.obj);
+    }
+
+    // Trigger the displayed event of the child view.
+    this.displayed.then(() => {
+    view.trigger('displayed', this);
+    });
+    return view;
+    });
+    }
 
   render() {
     super.render();
     this.el.classList.add('jupyter-widgets');
     this.el.classList.add('leaflet-widgets');
     this.map_container = document.createElement('div');
-    this.el.appendChild(this.map_container);
+    this.map_child = this.el.appendChild(this.map_container);
     if (this.get_options().interpolation == 'nearest') {
       this.map_container.classList.add('crisp-image');
     }
@@ -226,19 +265,34 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       this.remove_control_view,
       this
     );
-    this.layer_subitems_views = new widgets.ViewList(
-      this.add_control_model,
-      this.remove_control_view,
+    this.subitem_views = new widgets.ViewList(
+      this.add_subitem_model,
+      this.remove_subitem_view,
       this
     );
+
     this.displayed.then(this.render_leaflet.bind(this));
   }
 
   render_leaflet() {
     this.create_obj().then(() => {
+      this.create_panes();
       this.layer_views.update(this.model.get('layers'));
       this.control_views.update(this.model.get('controls'));
-      this.layer_subitems_views.update(this.model.get('layer_subitems'));
+      console.log('layer_views:', this.layer_views)
+
+      var layer_list = this.model.get('layers');
+      console.log('layer_list :', layer_list)
+      for (let i = 1; i < layer_list.length; i++) { // starting index is 1, since we are not taking into account the TileLayer at index 0
+        var subitem_list = layer_list[i].attributes.subitems
+        this.subitem_views.update(subitem_list);
+        console.log(`For ${layer_list[i].name}`);
+        console.log('subitem_list:', subitem_list)
+        console.log('subitem_views:', this.subitem_views)
+
+      }
+
+
       this.leaflet_events();
       this.model_events();
       this.model.update_bounds().then(() => {
@@ -261,6 +315,13 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     });
   }
 
+  rerender() {
+    this.obj.remove();
+    delete this.obj;
+    this.el.removeChild(this.map_child);
+    this.render();
+  }
+
   leaflet_events() {
     this.obj.on('moveend', e => {
       if (!this.dirty) {
@@ -272,12 +333,12 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       this.model.update_bounds().then(() => {
         this.touch();
       });
-      this.model.set('_dragging', false);
+      this.model._dragging = false;
       this.model.update_style();
     });
 
     this.obj.on('movestart', () => {
-      this.model.set('_dragging', true);
+      this.model._dragging = true;
       this.model.update_style();
     });
 
@@ -327,6 +388,25 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     this.listenTo(this.model, 'msg:custom', this.handle_msg, this);
     this.listenTo(
       this.model,
+      'change:panes',
+      this.rerender,
+      this
+    );
+    this.listenTo(
+      this.model,
+      'change:dragging',
+      function () {
+        if (this.model.get('dragging')) {
+          this.obj.dragging.enable();
+        }
+        else {
+          this.obj.dragging.disable();
+        }
+      },
+      this
+    );
+    this.listenTo(
+      this.model,
       'change:layers',
       function () {
         this.layer_views.update(this.model.get('layers'));
@@ -341,14 +421,8 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       },
       this
     );
-    this.listenTo(
-      this.model,
-      'change: layer_subitems',
-      function () {
-        this.layer_subitems_views.update(this.model.get('layer_subitems'));
-      },
-      this
-    );
+
+
     this.listenTo(
       this.model,
       'change:zoom',

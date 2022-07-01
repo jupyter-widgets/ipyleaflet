@@ -17,7 +17,7 @@ export class LeafletLayerGroupModel extends layer.LeafletLayerModel {
 }
 
 LeafletLayerGroupModel.serializers = {
-  ...widgets.WidgetModel.serializers,
+  ...layer.LeafletLayerModel.serializers,
   layers: { deserialize: widgets.unpack_models }
 };
 

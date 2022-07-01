@@ -140,6 +140,20 @@ class Layer(Widget, InteractMixin):
     pane = Unicode('').tag(sync=True)
 
     options = List(trait=Unicode()).tag(sync=True)
+    subitems = Tuple().tag(trait=Instance(Widget), sync=True, **widget_serialization)
+    _subitem_ids = List()
+
+    @validate('subitems')
+    def _validate_subitems(self, proposal):
+        '''Validate subitems list.
+
+        Makes sure only one instance of any given subitem can exist in the
+        subitem list.
+        '''
+        self._subitem_ids = [subitem.model_id for subitem in proposal.value]
+        if len(set(self._subitem_ids)) != len(self._subitem_ids):
+            raise Exception('duplicate subitem detected, only use each subitem once')
+        return proposal.value
 
     def __init__(self, **kwargs):
         super(Layer, self).__init__(**kwargs)
@@ -1426,6 +1440,7 @@ class Choropleth(GeoJSON):
     nan_color = Unicode('black')
     nan_opacity = CFloat(0.4)
     default_opacity = CFloat(1.0)
+    caption = Unicode('data')
 
     @observe('style', 'style_callback', 'value_min', 'value_max', 'nan_color', 'nan_opacity', 'default_opacity', 'geo_data', 'choro_data', 'colormap')
     def _update_data(self, change):
@@ -2537,6 +2552,7 @@ class Map(DOMWidget, InteractMixin):
             if item.model_id in self._control_ids:
                 raise ControlException('control already on map: %r' % item)
             self.controls = tuple([control for control in self.controls] + [item])
+
         return self
 
     def remove(self, item):

@@ -158,6 +158,7 @@ LeafletMapModel.serializers = {
   dragging_style: { deserialize: widgets.unpack_models }
 };
 
+
 export class LeafletMapView extends utils.LeafletDOMWidgetView {
   initialize(options) {
     super.initialize(options);
@@ -188,12 +189,11 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     }).then(view => {
       this.obj.addLayer(view.obj);
 
-      // Trigger the displayed event of the child view.
       this.displayed.then(() => {
         view.trigger('displayed', this);
       });
-
       return view;
+
     });
   }
 
@@ -208,14 +208,41 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     }).then(view => {
       this.obj.addControl(view.obj);
 
+
       // Trigger the displayed event of the child view.
       this.displayed.then(() => {
         view.trigger('displayed', this);
       });
-
       return view;
     });
   }
+
+  remove_subitem_view(child_view) {
+    if(child_view['name'].includes('Control')){
+      this.obj.removeControl(child_view.obj);
+    } else {
+      this.obj.removeLayer(child_view.obj);
+    }
+    child_view.remove();
+    }
+
+    add_subitem_model(child_model) {
+    return this.create_child_view(child_model, {
+    map_view: this
+    }).then(view => {
+    if(child_model['name'].includes('Control')){
+      this.obj.addControl(view.obj);
+    } else {
+      this.obj.addLayer(view.obj);
+    }
+
+    // Trigger the displayed event of the child view.
+    this.displayed.then(() => {
+    view.trigger('displayed', this);
+    });
+    return view;
+    });
+    }
 
   render() {
     super.render();
@@ -236,6 +263,12 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       this.remove_control_view,
       this
     );
+    this.subitem_views = new widgets.ViewList(
+      this.add_subitem_model,
+      this.remove_subitem_view,
+      this
+    );
+
     this.displayed.then(this.render_leaflet.bind(this));
   }
 
@@ -244,6 +277,14 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       this.create_panes();
       this.layer_views.update(this.model.get('layers'));
       this.control_views.update(this.model.get('controls'));
+
+      var layer_list = this.model.get('layers');
+      for (let i = 1; i < layer_list.length; i++) { // starting index is 1, since we are not taking into account the TileLayer at index 0
+        var subitem_list = layer_list[i].attributes.subitems
+        this.subitem_views.update(subitem_list);
+      }
+
+
       this.leaflet_events();
       this.model_events();
       this.model.update_bounds().then(() => {
@@ -372,6 +413,8 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       },
       this
     );
+
+
     this.listenTo(
       this.model,
       'change:zoom',

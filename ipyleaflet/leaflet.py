@@ -8,11 +8,13 @@ import json
 import xyzservices
 from datetime import date, timedelta
 from math import isnan
+from branca.colormap import linear
+from IPython.display import display
 import warnings
 
 from ipywidgets import (
     Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
-    interactive, Style
+    interactive, Style, Output
 )
 
 from ipywidgets.widgets.trait_types import InstanceDict
@@ -22,7 +24,6 @@ from traitlets import (
     CFloat, Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
     link, observe, default, validate, TraitError, Union, Any
 )
-
 from ._version import EXTENSION_VERSION
 
 from .projections import projections
@@ -2029,6 +2030,38 @@ class LegendControl(Control):
         """
         del self.legend[key]
         self.send_state()
+
+
+class ColormapControl(WidgetControl):
+    """ColormapControl class, with WidgetControl as parent class.
+
+    A control which contains a colormap, to be used with Choropleth.
+
+    Attributes
+    ----------
+    caption : str, default 'caption'
+        The caption of the colormap.
+    colormap_choice : str, default 'linear.YlOrRd_04'
+        The choosen colormap.
+    value_min : float, default 0.0
+        The minimal value taken by the data to be represented by the colormap.
+    value_max : float, default 1.0
+        The maximal value taken by the data to be represented by the colormap.
+    """
+    caption = Unicode('caption')
+    colormap_choice = Any(linear.YlOrRd_04)
+    value_min = CFloat(0.0)
+    value_max = CFloat(1.0)
+
+    @default('widget')
+    def _default_widget(self):
+        widget = Output(layout={'height': '40px', 'width': '520px', 'margin': '0px 0px 0px 0px'})
+        with widget:
+            colormap = self.colormap_choice.scale(self.value_min, self.value_max)
+            colormap.caption = self.caption
+            display(colormap)
+
+        return widget
 
 
 class SearchControl(Control):

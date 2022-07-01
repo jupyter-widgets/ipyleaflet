@@ -8,11 +8,13 @@ import json
 import xyzservices
 from datetime import date, timedelta
 from math import isnan
+from branca.colormap import linear
+from IPython.display import display
 import warnings
 
 from ipywidgets import (
     Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
-    interactive, Style
+    interactive, Style, Output
 )
 
 from ipywidgets.widgets.trait_types import InstanceDict
@@ -139,6 +141,20 @@ class Layer(Widget, InteractMixin):
     pane = Unicode('').tag(sync=True)
 
     options = List(trait=Unicode()).tag(sync=True)
+    subitems = Tuple().tag(trait=Instance(Widget), sync=True, **widget_serialization)
+    _subitem_ids = List()
+
+    @validate('subitems')
+    def _validate_subitems(self, proposal):
+        '''Validate subitems list.
+
+        Makes sure only one instance of any given subitem can exist in the
+        subitem list.
+        '''
+        self._subitem_ids = [subitem.model_id for subitem in proposal.value]
+        if len(set(self._subitem_ids)) != len(self._subitem_ids):
+            raise Exception('duplicate subitem detected, only use each subitem once')
+        return proposal.value
 
     def __init__(self, **kwargs):
         super(Layer, self).__init__(**kwargs)
@@ -1420,6 +1436,7 @@ class Choropleth(GeoJSON):
     nan_color = Unicode('black')
     nan_opacity = CFloat(0.4)
     default_opacity = CFloat(1.0)
+    caption = Unicode('data')
 
     @observe('style', 'style_callback', 'value_min', 'value_max', 'nan_color', 'nan_opacity', 'default_opacity', 'geo_data', 'choro_data', 'colormap')
     def _update_data(self, change):
@@ -1469,6 +1486,14 @@ class Choropleth(GeoJSON):
     def __init__(self, **kwargs):
         super(Choropleth, self).__init__(**kwargs)
         self.data = self._get_data()
+        self.colormap_control = ColormapControl(caption=self.caption, colormap_choice=self.colormap, value_min=self.value_min, value_max=self.value_max, position='topright', transparent_bg=True)
+        subitem_list = [self.colormap_control]
+        for subitem in subitem_list:
+
+            if subitem.model_id in self._subitem_ids:
+                raise Exception('subitem already associated to the layer')
+
+            self.subitems = tuple([subitem for subitem in self.subitems] + [subitem])
 
 
 class WKTLayer(GeoJSON):
@@ -2031,6 +2056,38 @@ class LegendControl(Control):
         self.send_state()
 
 
+class ColormapControl(WidgetControl):
+    """ColormapControl class, with WidgetControl as parent class.
+
+    A control which contains a colormap, to be used with Choropleth.
+
+    Attributes
+    ----------
+    caption : str, default 'caption'
+        The caption of the colormap.
+    colormap_choice : str, default 'linear.YlOrRd_04'
+        The choosen colormap.
+    value_min : float, default 0.0
+        The minimal value taken by the data to be represented by the colormap.
+    value_max : float, default 1.0
+        The maximal value taken by the data to be represented by the colormap.
+    """
+    caption = Unicode('caption')
+    colormap_choice = Any(linear.YlOrRd_04)
+    value_min = CFloat(0.0)
+    value_max = CFloat(1.0)
+
+    @default('widget')
+    def _default_widget(self):
+        widget = Output(layout={'height': '40px', 'width': '520px', 'margin': '0px 0px 0px 0px'})
+        with widget:
+            colormap = self.colormap_choice.scale(self.value_min, self.value_max)
+            colormap.caption = self.caption
+            display(colormap)
+
+        return widget
+
+
 class SearchControl(Control):
     """ SearchControl class, with Control as parent class.
 
@@ -2504,6 +2561,7 @@ class Map(DOMWidget, InteractMixin):
             if item.model_id in self._control_ids:
                 raise ControlException('control already on map: %r' % item)
             self.controls = tuple([control for control in self.controls] + [item])
+
         return self
 
     def remove(self, item):

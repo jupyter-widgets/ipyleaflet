@@ -3,10 +3,10 @@
 #
 
 from traittypes import Dataset
-from traitlets import Unicode, Bool, Dict, Float, List
-
-from .leaflet import Layer
+from traitlets import Unicode, Bool, Dict, Float, List, Any, default
+from .leaflet import Layer, ColormapControl
 from .xarray_ds import ds_x_to_json
+from branca.colormap import linear
 
 
 class Velocity(Layer):
@@ -62,25 +62,28 @@ class Velocity(Layer):
         'angleConvention': 'bearingCW',
         'displayPosition': 'bottomleft',
         'displayEmptyString': 'No velocity data',
-        'speedUnit': 'kt'
+        'speedUnit': 'kt',
     }).tag(sync=True)
+    caption = Unicode('Caption')
     min_velocity = Float(0).tag(sync=True, o=True)
     max_velocity = Float(10).tag(sync=True, o=True)
     velocity_scale = Float(0.005).tag(sync=True, o=True)
-    color_scale = List([
-        "rgb(36,104, 180)",
-        "rgb(60,157, 194)",
-        "rgb(128,205,193)",
-        "rgb(151,218,168)",
-        "rgb(198,231,181)",
-        "rgb(238,247,217)",
-        "rgb(255,238,159)",
-        "rgb(252,217,125)",
-        "rgb(255,182,100)",
-        "rgb(252,150,75)",
-        "rgb(250,112,52)",
-        "rgb(245,64,32)",
-        "rgb(237,45,28)",
-        "rgb(220,24,32)",
-        "rgb(180,0,35)"
-    ]).tag(sync=True, o=True)
+    colormap = Any(linear.YlOrRd_04)
+    color_scale = List([]).tag(sync=True, o=True)
+
+    @default('color_scale')
+    def _default_color_scale(self):
+        self.color_scale = []
+
+        for i in range(len(self.colormap.colors)):
+            rgb_tuple = tuple(str(int(x * 256)) for x in self.colormap.colors[i][:3])
+            rgb_tuple_str = " , ".join(rgb_tuple)
+            rgb_str = 'rgb(' + rgb_tuple_str + ')'
+            self.color_scale.append(rgb_str)
+
+        return self.color_scale
+
+    def __init__(self, **kwargs):
+        super(Velocity, self).__init__(**kwargs)
+        self.colormap_control = ColormapControl(caption=self.caption, colormap_choice=self.colormap, value_min=self.min_velocity, value_max=self.max_velocity, position='topright', transparent_bg=False)
+        self.subitems = [self.colormap_control]

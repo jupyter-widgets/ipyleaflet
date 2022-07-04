@@ -2035,21 +2035,21 @@ class LegendControl(Control):
 class ColormapControl(WidgetControl):
     """ColormapControl class, with WidgetControl as parent class.
 
-    A control which contains a colormap, to be used with Choropleth.
+    A control which contains a colormap.
 
     Attributes
     ----------
     caption : str, default 'caption'
         The caption of the colormap.
-    colormap_choice : str, default 'linear.YlOrRd_04'
-        The choosen colormap.
+    colormap: branca.colormap.ColorMap instance, default None
+        The colormap used for the effect.
     value_min : float, default 0.0
         The minimal value taken by the data to be represented by the colormap.
     value_max : float, default 1.0
         The maximal value taken by the data to be represented by the colormap.
     """
     caption = Unicode('caption')
-    colormap_choice = Any(linear.YlOrRd_04)
+    colormap = Any(linear.YlOrRd_04)
     value_min = CFloat(0.0)
     value_max = CFloat(1.0)
 
@@ -2057,7 +2057,7 @@ class ColormapControl(WidgetControl):
     def _default_widget(self):
         widget = Output(layout={'height': '40px', 'width': '520px', 'margin': '0px -19px 0px 0px'})
         with widget:
-            colormap = self.colormap_choice.scale(self.value_min, self.value_max)
+            colormap = self.colormap.scale(self.value_min, self.value_max)
             colormap.caption = self.caption
             display(colormap)
 

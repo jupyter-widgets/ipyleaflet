@@ -2055,7 +2055,7 @@ class ColormapControl(WidgetControl):
 
     @default('widget')
     def _default_widget(self):
-        widget = Output(layout={'height': '40px', 'width': '520px', 'margin': '0px 0px 0px 0px'})
+        widget = Output(layout={'height': '40px', 'width': '520px', 'margin': '0px -19px 0px 0px'})
         with widget:
             colormap = self.colormap_choice.scale(self.value_min, self.value_max)
             colormap.caption = self.caption

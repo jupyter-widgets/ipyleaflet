@@ -8,11 +8,13 @@ import json
 import xyzservices
 from datetime import date, timedelta
 from math import isnan
+from branca.colormap import linear, ColorMap
+from IPython.display import display
 import warnings
 
 from ipywidgets import (
     Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
-    interactive, Style
+    interactive, Style, Output
 )
 
 from ipywidgets.widgets.trait_types import InstanceDict
@@ -22,7 +24,6 @@ from traitlets import (
     CFloat, Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
     link, observe, default, validate, TraitError, Union, Any
 )
-
 from ._version import EXTENSION_VERSION
 
 from .projections import projections
@@ -1399,7 +1400,7 @@ class Choropleth(GeoJSON):
         Minimum data value for the color mapping.
     value_max: float, default None
         Maximum data value for the color mapping.
-    colormap: branca.colormap.ColorMap instance, default None
+    colormap: branca.colormap.ColorMap instance, default linear.OrRd_06
         The colormap used for the effect.
     key_on: string, default "id"
         The feature key to use for the colormap effect.
@@ -1415,7 +1416,7 @@ class Choropleth(GeoJSON):
     choro_data = Dict()
     value_min = CFloat(None, allow_none=True)
     value_max = CFloat(None, allow_none=True)
-    colormap = Any()
+    colormap = Instance(ColorMap, default_value=linear.OrRd_06)
     key_on = Unicode('id')
     nan_color = Unicode('black')
     nan_opacity = CFloat(0.4)
@@ -1424,14 +1425,6 @@ class Choropleth(GeoJSON):
     @observe('style', 'style_callback', 'value_min', 'value_max', 'nan_color', 'nan_opacity', 'default_opacity', 'geo_data', 'choro_data', 'colormap')
     def _update_data(self, change):
         self.data = self._get_data()
-
-    @default('colormap')
-    def _default_colormap(self):
-        try:
-            from branca.colormap import linear
-        except ImportError:
-            raise RuntimeError("The Choropleth needs branca to be installed, please run `pip install branca`")
-        return linear.OrRd_06
 
     @default('style_callback')
     def _default_style_callback(self):
@@ -2029,6 +2022,38 @@ class LegendControl(Control):
         """
         del self.legend[key]
         self.send_state()
+
+
+class ColormapControl(WidgetControl):
+    """ColormapControl class, with WidgetControl as parent class.
+
+    A control which contains a colormap.
+
+    Attributes
+    ----------
+    caption : str, default 'caption'
+        The caption of the colormap.
+    colormap: branca.colormap.ColorMap instance, default linear.OrRd_06
+        The colormap used for the effect.
+    value_min : float, default 0.0
+        The minimal value taken by the data to be represented by the colormap.
+    value_max : float, default 1.0
+        The maximal value taken by the data to be represented by the colormap.
+    """
+    caption = Unicode('caption')
+    colormap = Instance(ColorMap, default_value=linear.OrRd_06)
+    value_min = CFloat(0.0)
+    value_max = CFloat(1.0)
+
+    @default('widget')
+    def _default_widget(self):
+        widget = Output(layout={'height': '40px', 'width': '520px', 'margin': '0px -19px 0px 0px'})
+        with widget:
+            colormap = self.colormap.scale(self.value_min, self.value_max)
+            colormap.caption = self.caption
+            display(colormap)
+
+        return widget
 
 
 class SearchControl(Control):

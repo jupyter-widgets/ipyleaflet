@@ -5,11 +5,10 @@
 import copy
 import asyncio
 import json
-from folium import LinearColormap
 import xyzservices
 from datetime import date, timedelta
 from math import isnan
-from branca.colormap import linear
+from branca.colormap import linear, ColorMap
 from IPython.display import display
 import warnings
 
@@ -1417,7 +1416,7 @@ class Choropleth(GeoJSON):
     choro_data = Dict()
     value_min = CFloat(None, allow_none=True)
     value_max = CFloat(None, allow_none=True)
-    colormap = Any()
+    colormap = Instance(ColorMap)
     key_on = Unicode('id')
     nan_color = Unicode('black')
     nan_opacity = CFloat(0.4)
@@ -2050,7 +2049,7 @@ class ColormapControl(WidgetControl):
         The maximal value taken by the data to be represented by the colormap.
     """
     caption = Unicode('caption')
-    colormap = Instance(LinearColormap, default_value=linear.YlOrRd_04)
+    colormap = Instance(ColorMap, default_value=linear.YlOrRd_04)
     value_min = CFloat(0.0)
     value_max = CFloat(1.0)
 

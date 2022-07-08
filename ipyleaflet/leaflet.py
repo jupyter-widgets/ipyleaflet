@@ -5,6 +5,7 @@
 import copy
 import asyncio
 import json
+from folium import LinearColormap
 import xyzservices
 from datetime import date, timedelta
 from math import isnan
@@ -2041,7 +2042,7 @@ class ColormapControl(WidgetControl):
     ----------
     caption : str, default 'caption'
         The caption of the colormap.
-    colormap: branca.colormap.ColorMap instance, default None
+    colormap: branca.colormap.ColorMap instance, default linear.YlOrRd_04
         The colormap used for the effect.
     value_min : float, default 0.0
         The minimal value taken by the data to be represented by the colormap.
@@ -2049,7 +2050,7 @@ class ColormapControl(WidgetControl):
         The maximal value taken by the data to be represented by the colormap.
     """
     caption = Unicode('caption')
-    colormap = Any(linear.YlOrRd_04)
+    colormap = Instance(LinearColormap, default_value=linear.YlOrRd_04)
     value_min = CFloat(0.0)
     value_max = CFloat(1.0)
 

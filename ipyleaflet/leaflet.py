@@ -1400,7 +1400,7 @@ class Choropleth(GeoJSON):
         Minimum data value for the color mapping.
     value_max: float, default None
         Maximum data value for the color mapping.
-    colormap: branca.colormap.ColorMap instance, default None
+    colormap: branca.colormap.ColorMap instance, default linear.OrRd_06
         The colormap used for the effect.
     key_on: string, default "id"
         The feature key to use for the colormap effect.
@@ -1416,7 +1416,7 @@ class Choropleth(GeoJSON):
     choro_data = Dict()
     value_min = CFloat(None, allow_none=True)
     value_max = CFloat(None, allow_none=True)
-    colormap = Instance(ColorMap)
+    colormap = Instance(ColorMap, default_value=linear.OrRd_06)
     key_on = Unicode('id')
     nan_color = Unicode('black')
     nan_opacity = CFloat(0.4)
@@ -1425,14 +1425,6 @@ class Choropleth(GeoJSON):
     @observe('style', 'style_callback', 'value_min', 'value_max', 'nan_color', 'nan_opacity', 'default_opacity', 'geo_data', 'choro_data', 'colormap')
     def _update_data(self, change):
         self.data = self._get_data()
-
-    @default('colormap')
-    def _default_colormap(self):
-        try:
-            from branca.colormap import linear
-        except ImportError:
-            raise RuntimeError("The Choropleth needs branca to be installed, please run `pip install branca`")
-        return linear.OrRd_06
 
     @default('style_callback')
     def _default_style_callback(self):
@@ -2041,7 +2033,7 @@ class ColormapControl(WidgetControl):
     ----------
     caption : str, default 'caption'
         The caption of the colormap.
-    colormap: branca.colormap.ColorMap instance, default linear.YlOrRd_04
+    colormap: branca.colormap.ColorMap instance, default linear.OrRd_06
         The colormap used for the effect.
     value_min : float, default 0.0
         The minimal value taken by the data to be represented by the colormap.
@@ -2049,7 +2041,7 @@ class ColormapControl(WidgetControl):
         The maximal value taken by the data to be represented by the colormap.
     """
     caption = Unicode('caption')
-    colormap = Instance(ColorMap, default_value=linear.YlOrRd_04)
+    colormap = Instance(ColorMap, default_value=linear.OrRd_06)
     value_min = CFloat(0.0)
     value_max = CFloat(1.0)
 

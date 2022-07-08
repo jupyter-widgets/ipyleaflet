@@ -19,9 +19,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Base Setup
-        uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
-
       - name: Setup conda
         uses: conda-incubator/setup-miniconda@v2
         with:
@@ -29,7 +26,7 @@ jobs:
           channels: conda-forge
 
       - name: Mamba install dependencies
-        run: mamba install python=${{ matrix.python-version }} pip nodejs flake8 jupyterlab ipywidgets jupyter-packaging~=0.7.9
+        run: mamba install python=${{ matrix.python-version }} pip nodejs=16 flake8 jupyterlab ipywidgets jupyter-packaging~=0.7.9
 
       - name: Install ipyleaflet
         run: pip install .

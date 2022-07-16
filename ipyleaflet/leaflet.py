@@ -577,6 +577,8 @@ class TileLayer(RasterLayer):
         Whether the layer is wrapped around the antimeridian.
     tms: boolean, default False
         If true, inverses Y axis numbering for tiles (turn this on for TMS services).
+    zoom_offset: int, default 0
+        The zoom number used in tile URLs will be offset with this value.
     show_loading: boolean, default False
         Whether to show a spinner when tiles are loading.
     loading: boolean, default False (dynamically updated)
@@ -601,6 +603,7 @@ class TileLayer(RasterLayer):
     detect_retina = Bool(False).tag(sync=True, o=True)
     no_wrap = Bool(False).tag(sync=True, o=True)
     tms = Bool(False).tag(sync=True, o=True)
+    zoom_offset = Int(0).tag(sync=True, o=True)
     show_loading = Bool(False).tag(sync=True)
     loading = Bool(False, read_only=True).tag(sync=True)
 

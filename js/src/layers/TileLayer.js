@@ -24,7 +24,8 @@ export class LeafletTileLayerModel extends rasterlayer.LeafletRasterLayerModel {
       no_wrap: false,
       tms: false,
       show_loading: false,
-      loading: false
+      loading: false,
+      zoom_offset: 0
     };
   }
 }

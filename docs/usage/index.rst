@@ -47,4 +47,4 @@ Please check out the `traitlets documentation <https://traitlets.readthedocs.io/
 You can try ipyleaflet online using binder, no need to install anything on your computer:
 
 .. image:: https://mybinder.org/badge_logo.svg
-    :target: https://mybinder.org/v2/gh/jupyter-widgets/ipyleaflet/stable?filepath=examples
+    :target: https://mybinder.org/v2/gh/jupyter-widgets/ipyleaflet/stable?urlpath=lab%2Ftree%2Fexamples

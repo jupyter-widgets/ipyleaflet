@@ -782,6 +782,79 @@ class VideoOverlay(RasterLayer):
     attribution = Unicode().tag(sync=True, o=True)
 
 
+class ImageService(Layer):
+    """ImageService class
+
+    Image Service layer for raster data served through a web service
+
+    Attributes
+    ----------
+    url: string, default ""
+        Url to the image service
+    f: string, default "image"
+        response format (use `'image'` to stream as bytes)
+    format: string, default "jpgpng"
+        format of exported image
+    pixel_type: string, default "UNKNOWN"
+        data type of the raster image
+    no_data: list, default []
+        pixel value or comma-delimited list of pixel values representing no data
+    no_data_interpretation: string, default ""
+        how to interpret no data values
+    interpolation: string, default ""
+        resampling process for interpolating the pixel values
+    compression_quality: int, default 100
+        lossy quality for image compression
+    band_ids: List, default []
+        Order of bands to export for multiple band images
+    time: List, default []
+        time instance or extent for image
+    rendering_rule: dict, default {}
+        rules for rendering
+    mosaic_rule: dict, default {}
+        rules for mosaicking
+    transparent: boolean, default False
+        If true, the image service will return images with transparency
+    endpoint: str, default 'Esri'
+        Endpoint format for building the export image url
+    attribution: string, default ""
+        Image service attribution.
+    crs: dict, default ipyleaflet.projections.EPSG3857
+        Projection used for this image service.
+    interactive: bool, default False
+        Emit when clicked or hovered
+    update_interval: int, default 200
+        Update interval for panning
+    """
+
+    _view_name = Unicode('LeafletImageServiceView').tag(sync=True)
+    _model_name = Unicode('LeafletImageServiceModel').tag(sync=True)
+
+    _formats = ['jpgpng', 'png', 'png8', 'png24', 'jpg', 'bmp', 'gif', 'tiff', 'png32', 'bip', 'bsq', 'lerc']
+    _pixel_types = ['C128', 'C64', 'F32', 'F64', 'S16', 'S32', 'S8', 'U1', 'U16', 'U2', 'U32', 'U4', 'U8', 'UNKNOWN']
+    _no_data_interpretations = ['esriNoDataMatchAny', 'esriNoDataMatchAll']
+    _interpolations = ['RSP_BilinearInterpolation', 'RSP_CubicConvolution', 'RSP_Majority', 'RSP_NearestNeighbor']
+
+    url = Unicode().tag(sync=True)
+    f = Unicode('image').tag(sync=True, o=True)
+    format = Enum(values=_formats, default_value='jpgpng').tag(sync=True, o=True)
+    pixel_type = Enum(values=_pixel_types, default_value='UNKNOWN').tag(sync=True, o=True)
+    no_data = List(allow_none=True).tag(sync=True, o=True)
+    no_data_interpretation = Enum(values=_no_data_interpretations, allow_none=True).tag(sync=True, o=True)
+    interpolation = Enum(values=_interpolations, allow_none=True).tag(sync=True, o=True)
+    compression_quality = Unicode().tag(sync=True, o=True)
+    band_ids = List(allow_none=True).tag(sync=True, o=True)
+    time = List(allow_none=True).tag(sync=True, o=True)
+    rendering_rule = Dict({}).tag(sync=True, o=True)
+    mosaic_rule = Dict({}).tag(sync=True, o=True)
+    transparent = Bool(False).tag(sync=True, o=True)
+    endpoint = Unicode('Esri').tag(sync=True, o=True)
+    attribution = Unicode('').tag(sync=True, o=True)
+    crs = Dict(default_value=projections.EPSG3857).tag(sync=True)
+    interactive = Bool(False).tag(sync=True, o=True)
+    update_interval = Int(200).tag(sync=True, o=True)
+
+
 class Heatmap(RasterLayer):
     """Heatmap class, with RasterLayer as parent class.
 

@@ -18,7 +18,5 @@ dependencies:
 
   - pip:
     - ..
-    # Until jupyterlite-sphinx>0.4.9 is released, install from a commit hash to get the jupyterlite_contents config option
-    # - jupyterlite-sphinx
-    - https://github.com/jupyterlite/jupyterlite-sphinx/archive/944ccf4ee977627dbf75b5ae1994c08718566c76.zip
+    - jupyterlite-sphinx
     - jupyterlite>=0.1.0b9

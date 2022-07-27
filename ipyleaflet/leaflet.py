@@ -2072,7 +2072,7 @@ class SearchControl(Control):
         The marker used by the control.
     found_style: default {‘fillColor’: ‘#3f0’, ‘color’: ‘#0f0’}
         Style for searched feature when searching in LayerGroup.
-    property_name: default None
+    property_name: string, default "display_name"
         Field specifier for searching in LayerGroup.
     """
     _view_name = Unicode('LeafletSearchControlView').tag(sync=True)

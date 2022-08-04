@@ -74,10 +74,9 @@ class Velocity(Layer):
     def _default_color_scale(self):
         self.color_scale = []
 
-        for i in range(len(self.colormap.colors)):
-            rgb_tuple = tuple(str(int(x * 256)) for x in self.colormap.colors[i][:3])
-            rgb_tuple_str = " , ".join(rgb_tuple)
-            rgb_str = 'rgb(' + rgb_tuple_str + ')'
+        for color in self.colormap.colors:
+            rgb_tuple = tuple(int(x * 256) for x in color[:3])
+            rgb_str = f'rgb({" , ".join(rgb_tuple)})'
             self.color_scale.append(rgb_str)
 
         return self.color_scale

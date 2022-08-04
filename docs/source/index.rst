@@ -21,7 +21,7 @@ You can try ipyleaflet below, or open many other live examples in a new browser 
 .. retrolite:: ipyleaflet.ipynb
    :width: 100%
    :height: 810px
-   :prompt: Try Retrolite!
+   :prompt: Try ipyleaflet!
 
 
 Table of Contents

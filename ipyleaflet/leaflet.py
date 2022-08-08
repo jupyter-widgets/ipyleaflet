@@ -825,11 +825,11 @@ class Heatmap(RasterLayer):
     gradient = Dict({0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}).tag(sync=True, o=True)
     colors = ['blue', 'cyan', 'lime', 'yellow', 'red']
     values = [0.4, 0.6, 0.7, 0.8, 1.0]
-    dict ={}
+    dict = {}
     for i in range(len(values)):
         dict[values[i]] = colors[i]
     vmin = values[0]
-    vmax = values[len(values)-1]
+    vmax = values[len(values) - 1]
     gradient = Dict(dict).tag(sync=True, o=True)
     colormap = LinearColormap(colors, vmin=vmin, vmax=vmax)
 

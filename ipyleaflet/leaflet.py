@@ -799,14 +799,12 @@ class Heatmap(RasterLayer):
         Radius of the data points.
     blur: float, default 15.
         Blurring intensity.
-    values : list, default [0.4, 0.6, 0.7, 0.8, 1.0]
-        list of values to define the gradient
-    colors : list, default ['blue', 'cyan', 'lime', 'yellow', 'red']
-        list of colors to define the gradient
-    dict: dict, default built from values (keys) and colors lists (values)
-        dictionnary mapping value to colors.
-    gradient : Dict, default built from dict
+    gradient : Dict, default {0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}
         Colors used for the color-mapping from low to high heatmap intensity.
+    vmin : float, default 0.4
+        Minimum value of the color mapping
+    vmax : float, default 1.0
+        Maximum value of the color mapping
     colormap: branca.colormap.LinearColorMap instance
         The colormap used for displaying the HeatMap data, defined with the same min and max values and colors than the gradient.
     """
@@ -833,11 +831,11 @@ class Heatmap(RasterLayer):
         self.data = self._get_data()
 
     def _get_data(self):
-        self.values = list(self.gradient.keys())
-        self.colors = list(self.gradient.values())
-        self.vmin = self.values[0]
-        self.vmax = self.values[len(self.values) - 1]
-        self.colormap = LinearColormap(self.colors, vmin=self.vmin, vmax=self.vmax)
+        values = list(self.gradient.keys())
+        colors = list(self.gradient.values())
+        self.vmin = values[0]
+        self.vmax = values[len(values) - 1]
+        self.colormap = LinearColormap(colors, vmin=self.vmin, vmax=self.vmax)
 
 
 class VectorTileLayer(Layer):

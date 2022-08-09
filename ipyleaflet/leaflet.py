@@ -1165,7 +1165,9 @@ class LayerGroup(Layer):
         Parameters
         ----------
         layer: layer instance
-            The new layer to include in the group.
+            The new layer to include in the group. This can also be an object
+            with an ``as_leaflet_layer`` method which generates a compatible
+            layer type.
         """
 
         if isinstance(layer, dict):

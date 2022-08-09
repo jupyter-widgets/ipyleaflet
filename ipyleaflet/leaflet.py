@@ -823,15 +823,21 @@ class Heatmap(RasterLayer):
     radius = Float(25.0).tag(sync=True, o=True)
     blur = Float(15.0).tag(sync=True, o=True)
     gradient = Dict({0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}).tag(sync=True, o=True)
-    colors = ['blue', 'cyan', 'lime', 'yellow', 'red']
-    values = [0.4, 0.6, 0.7, 0.8, 1.0]
-    dict = {}
-    for i in range(len(values)):
-        dict[values[i]] = colors[i]
-    vmin = values[0]
-    vmax = values[len(values) - 1]
-    gradient = Dict(dict).tag(sync=True, o=True)
-    colormap = LinearColormap(colors, vmin=vmin, vmax=vmax)
+
+    def __init__(self, **kwargs):
+        super(Heatmap, self).__init__(**kwargs)
+        self.data = self._get_data()
+
+    @observe('color_mapping')
+    def _updata_data(self, change):
+        self.data = self._get_data()
+
+    def _get_data(self):
+        self.values = list(self.gradient.keys())
+        self.colors = list(self.gradient.values())
+        self.vmin = self.values[0]
+        self.vmax = self.values[len(self.values) - 1]
+        self.colormap = LinearColormap(self.colors, vmin=self.vmin, vmax=self.vmax)
 
 
 class VectorTileLayer(Layer):

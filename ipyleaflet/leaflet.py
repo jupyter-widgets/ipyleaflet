@@ -826,7 +826,7 @@ class Heatmap(RasterLayer):
         super(Heatmap, self).__init__(**kwargs)
         self.data = self._get_data()
 
-    @observe('color_mapping')
+    @observe('gradient')
     def _updata_data(self, change):
         self.data = self._get_data()
 

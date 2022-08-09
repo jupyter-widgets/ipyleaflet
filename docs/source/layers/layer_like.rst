@@ -1,0 +1,71 @@
+Layer-Like Objects
+==================
+
+:class:`ipyleaflet.Map`'s :func:`ipyleaflet.Map.add` method supports
+"layer-like" objects; meaning any object with an ``as_leaflet_layer`` method.
+This interface can be especially useful for downstream developers who want
+their users to more easily be able to add thier objects to an
+:class:`ipyleaflet.Map`.
+
+Example
+-------
+
+Downstream objects should implement an ``as_leaflet_layer`` method that returns
+an ``ipyleaflet`` type capable of being added to the ``Map``.
+
+Here is a simple example of creating a custom data class to hold heatmap data
+(coordinates with some numerical value).
+
+
+.. jupyter-execute::
+
+  import numpy as np
+
+
+  class MyHeatMap:
+      def __init__(self, points, values, radius=20):
+          self._points = points
+          self._values = values
+          self._radius = 20
+
+      @property
+      def points(self):
+          return self._points
+
+      @property
+      def values(self):
+          return self._counts
+
+      @property
+      def data(self):
+          return np.column_stack((self.points, self.values))
+
+      def as_leaflet_layer(self):
+          from ipyleaflet import Heatmap
+          return Heatmap(
+              locations=self.data.tolist(),
+              radius=self._radius,
+          )
+
+.. jupyter-execute::
+
+  from ipyleaflet import Map
+
+  n = 1000
+  d = MyHeatMap(
+      np.random.uniform(-80, 80, (n, 2)),
+      np.random.uniform(0, 1000, n),
+  )
+
+  m = Map(center=(0, 0), zoom=2)
+  m.add_layer(d.as_leaflet_layer())
+  m
+
+
+External Examples
+-----------------
+
+The following external libraries are working to implement this new interface
+
+- `localtileserver <https://github.com/banesullivan/localtileserver>`_: a dynamic tile server built for visualizing large geospatial images/rasters with ipyleaflet.
+- `xarray-leaflet <https://github.com/davidbrochart/xarray_leaflet>`_: an xarray extension for tiled map plotting, based on ipyleaflet.

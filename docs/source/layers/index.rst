@@ -29,4 +29,4 @@ Layers
     choropleth
     vector_tile.rst
     wkt_layer
-
+    layer_like

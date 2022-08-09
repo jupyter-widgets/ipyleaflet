@@ -4,7 +4,7 @@ Layer-Like Objects
 :class:`ipyleaflet.Map`'s :func:`ipyleaflet.Map.add` method supports
 "layer-like" objects; meaning any object with an ``as_leaflet_layer`` method.
 This interface can be especially useful for downstream developers who want
-their users to more easily be able to add thier objects to an
+their users to more easily be able to add their objects to an
 :class:`ipyleaflet.Map`.
 
 Example

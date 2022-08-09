@@ -24,17 +24,9 @@ Here is a simple example of creating a custom data class to hold heatmap data
 
   class MyHeatMap:
       def __init__(self, points, values, radius=20):
-          self._points = points
-          self._values = values
-          self._radius = 20
-
-      @property
-      def points(self):
-          return self._points
-
-      @property
-      def values(self):
-          return self._counts
+          self.points = points
+          self.values = values
+          self.radius = 20
 
       @property
       def data(self):
@@ -44,21 +36,26 @@ Here is a simple example of creating a custom data class to hold heatmap data
           from ipyleaflet import Heatmap
           return Heatmap(
               locations=self.data.tolist(),
-              radius=self._radius,
+              radius=self.radius,
           )
+
+We can now use that custom data class and because it has an
+``as_leaflet_layer`` interface, we can pass the object directly to
+:func:`ipyleaflet.Map.add`.
+
 
 .. jupyter-execute::
 
   from ipyleaflet import Map
 
   n = 1000
-  d = MyHeatMap(
+  data = MyHeatMap(
       np.random.uniform(-80, 80, (n, 2)),
       np.random.uniform(0, 1000, n),
   )
 
   m = Map(center=(0, 0), zoom=2)
-  m.add_layer(d.as_leaflet_layer())
+  m.add(data)
   m
 
 

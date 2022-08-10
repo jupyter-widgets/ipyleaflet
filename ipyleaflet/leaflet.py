@@ -820,7 +820,8 @@ class Heatmap(RasterLayer):
     max = Float(1.0).tag(sync=True, o=True)
     radius = Float(25.0).tag(sync=True, o=True)
     blur = Float(15.0).tag(sync=True, o=True)
-    gradient = Dict({0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}).tag(sync=True, o=True)
+    #gradient = Dict({0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}).tag(sync=True, o=True)
+    gradient = Dict({ 0.8: 'yellow', 0.6: 'cyan', 0.4: 'blue', 0.7: 'lime', 1.0: 'red'}).tag(sync=True, o=True)
 
     def __init__(self, **kwargs):
         super(Heatmap, self).__init__(**kwargs)
@@ -831,8 +832,12 @@ class Heatmap(RasterLayer):
         self.data = self._get_data()
 
     def _get_data(self):
-        colormap_labels = list(self.gradient.keys())
-        colors = list(self.gradient.values())
+        sorted_gradient = {}
+        sorted_keys = sorted(self.gradient.keys())
+        for key in sorted_keys:
+            sorted_gradient[key] = self.gradient[key]
+        colormap_labels = list(sorted_gradient.keys())
+        colors = list(sorted_gradient.values())
         self.vmin = colormap_labels[0]
         self.vmax = colormap_labels[-1]
         self.colormap = LinearColormap(colors=colors, index=colormap_labels, vmin=self.vmin, vmax=self.vmax)

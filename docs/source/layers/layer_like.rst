@@ -26,7 +26,7 @@ Here is a simple example of creating a custom data class to hold heatmap data
       def __init__(self, points, values, radius=20):
           self.points = points
           self.values = values
-          self.radius = 20
+          self.radius = radius
 
       @property
       def data(self):

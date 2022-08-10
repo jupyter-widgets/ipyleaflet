@@ -1165,11 +1165,15 @@ class LayerGroup(Layer):
         Parameters
         ----------
         layer: layer instance
-            The new layer to include in the group.
+            The new layer to include in the group. This can also be an object
+            with an ``as_leaflet_layer`` method which generates a compatible
+            layer type.
         """
 
         if isinstance(layer, dict):
             layer = basemap_to_tiles(layer)
+        elif hasattr(layer, 'as_leaflet_layer'):
+            layer = layer.as_leaflet_layer()
         if layer.model_id in self._layer_ids:
             raise LayerException('layer already in layergroup: %r' % layer)
         self.layers = tuple([layer for layer in self.layers] + [layer])

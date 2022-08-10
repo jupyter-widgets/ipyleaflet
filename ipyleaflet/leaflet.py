@@ -1440,7 +1440,6 @@ class Choropleth(GeoJSON):
     nan_color = Unicode('black')
     nan_opacity = CFloat(0.4)
     default_opacity = CFloat(1.0)
-    caption = Unicode('data')
 
     @observe('style', 'style_callback', 'value_min', 'value_max', 'nan_color', 'nan_opacity', 'default_opacity', 'geo_data', 'choro_data', 'colormap')
     def _update_data(self, change):
@@ -2651,4 +2650,5 @@ class Map(DOMWidget, InteractMixin):
                 else:
                     self.zoom -= 1
                     await wait_for_change(self, 'bounds')
+
                     break

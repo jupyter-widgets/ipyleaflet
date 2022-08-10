@@ -820,8 +820,7 @@ class Heatmap(RasterLayer):
     max = Float(1.0).tag(sync=True, o=True)
     radius = Float(25.0).tag(sync=True, o=True)
     blur = Float(15.0).tag(sync=True, o=True)
-    #gradient = Dict({0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}).tag(sync=True, o=True)
-    gradient = Dict({ 0.8: 'yellow', 0.6: 'cyan', 0.4: 'blue', 0.7: 'lime', 1.0: 'red'}).tag(sync=True, o=True)
+    gradient = Dict({0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}).tag(sync=True, o=True)
 
     def __init__(self, **kwargs):
         super(Heatmap, self).__init__(**kwargs)

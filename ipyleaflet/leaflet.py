@@ -799,7 +799,7 @@ class Heatmap(RasterLayer):
         Radius of the data points.
     blur: float, default 15.
         Blurring intensity.
-    gradient : Dict, default {0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}
+    gradient : dict, default {0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}
         Colors used for the color-mapping from low to high heatmap intensity.
     vmin : float, default 0.4
         Minimum value of the color mapping

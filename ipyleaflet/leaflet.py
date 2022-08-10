@@ -834,7 +834,7 @@ class Heatmap(RasterLayer):
         values = list(self.gradient.keys())
         colors = list(self.gradient.values())
         self.vmin = values[0]
-        self.vmax = values[len(values) - 1]
+        self.vmax = values[-1]
         self.colormap = LinearColormap(colors, vmin=self.vmin, vmax=self.vmax)
 
 

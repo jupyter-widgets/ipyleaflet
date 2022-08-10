@@ -835,7 +835,7 @@ class Heatmap(RasterLayer):
         colors = list(self.gradient.values())
         self.vmin = values[0]
         self.vmax = values[-1]
-        self.colormap = LinearColormap(colors, vmin=self.vmin, vmax=self.vmax)
+        self.colormap = LinearColormap(colors=colors, index=values, vmin=self.vmin, vmax=self.vmax)
 
 
 class VectorTileLayer(Layer):

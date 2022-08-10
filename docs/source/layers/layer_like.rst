@@ -65,4 +65,4 @@ External Examples
 The following external libraries are working to implement this new interface
 
 - `localtileserver <https://github.com/banesullivan/localtileserver>`_: a dynamic tile server built for visualizing large geospatial images/rasters with ipyleaflet.
-- `xarray-leaflet <https://github.com/davidbrochart/xarray_leaflet>`_: an xarray extension for tiled map plotting, based on ipyleaflet.
+- `xarray-leaflet <https://github.com/xarray-contrib/xarray_leaflet>`_: an xarray extension for tiled map plotting, based on ipyleaflet.

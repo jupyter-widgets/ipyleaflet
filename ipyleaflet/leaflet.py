@@ -1172,8 +1172,6 @@ class LayerGroup(Layer):
 
         if isinstance(layer, dict):
             layer = basemap_to_tiles(layer)
-        elif hasattr(layer, 'as_leaflet_layer'):
-            layer = layer.as_leaflet_layer()
         if layer.model_id in self._layer_ids:
             raise LayerException('layer already in layergroup: %r' % layer)
         self.layers = tuple([layer for layer in self.layers] + [layer])
@@ -2525,6 +2523,9 @@ class Map(DOMWidget, InteractMixin):
         item: Layer or Control instance
             The layer or control to add.
         """
+        if hasattr(item, 'as_leaflet_layer'):
+            item = item.as_leaflet_layer()
+
         if isinstance(item, Layer):
             if isinstance(item, dict):
                 item = basemap_to_tiles(item)

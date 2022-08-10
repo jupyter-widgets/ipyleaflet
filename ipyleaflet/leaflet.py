@@ -832,10 +832,7 @@ class Heatmap(RasterLayer):
         self.data = self._get_data()
 
     def _get_data(self):
-        sorted_gradient = {}
-        sorted_keys = sorted(self.gradient.keys())
-        for key in sorted_keys:
-            sorted_gradient[key] = self.gradient[key]
+        sorted_gradient = dict(sorted(self.gradient.items()))
         colormap_labels = list(sorted_gradient.keys())
         colors = list(sorted_gradient.values())
         self.vmin = colormap_labels[0]

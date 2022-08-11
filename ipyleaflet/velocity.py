@@ -76,7 +76,7 @@ class Velocity(Layer):
 
         for color in self.colormap.colors:
             rgb_tuple = tuple(int(x * 256) for x in color[:3])
-            rgb_str = f'rgb{str(rgb_tuple)}'
+            rgb_str = f"rgb{rgb_tuple}"
             self.color_scale.append(rgb_str)
 
         return self.color_scale

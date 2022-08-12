@@ -71,15 +71,15 @@ class Velocity(Layer):
     max_velocity = Float(10).tag(sync=True, o=True)
     velocity_scale = Float(0.005).tag(sync=True, o=True)
     colormap = Any(linear.OrRd_06)
-    _color_scale = List([]).tag(sync=True, o=True)
+    color_scale = List([]).tag(sync=True, o=True)
 
-    @default('_color_scale')
+    @default('color_scale')
     def _default_color_scale(self):
-        self._color_scale = []
+        self.color_scale = []
 
         for color in self.colormap.colors:
             rgb_tuple = tuple(int(x * 256) for x in color[:3])
             rgb_str = f"rgb{rgb_tuple}"
-            self._color_scale.append(rgb_str)
+            self.color_scale.append(rgb_str)
 
-        return self._color_scale
+        return self.color_scale

@@ -25,7 +25,7 @@ export class LeafletVelocityModel extends layer.LeafletLayerModel {
       minVelocity: 0,
       maxVelocity: 10,
       velocityScale: 0.005,
-      _colorScale: []
+      colorScale: []
     };
   }
 }
@@ -57,14 +57,6 @@ export class LeafletVelocityView extends layer.LeafletLayerView {
         var options = {};
         options[utils.camel_case(key)] = { ...this.model.get(key) };
         L.setOptions(this.obj, options);
-      },
-      this
-    );
-    this.listenTo(
-      this.model,
-      'change:_colorScale',
-      function () {
-        this.layer_views.update(this.model.get('_colorScale'));
       },
       this
     );

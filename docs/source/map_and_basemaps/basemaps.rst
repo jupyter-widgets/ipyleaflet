@@ -66,12 +66,6 @@ These basemaps are coming from the `xyzservices <https://xyzservices.readthedocs
     Map(basemap=basemaps.Esri.NatGeoWorldMap, center=center, zoom=zoom)
 
 
-.. jupyter-execute::
-
-    Map(basemap=basemaps.HikeBike.HikeBike, center=center, zoom=zoom)
-
-
-
 
 .. jupyter-execute::
 

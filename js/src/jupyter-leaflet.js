@@ -30,6 +30,7 @@ export * from './layers/LayerGroup.js';
 export * from './layers/FeatureGroup.js';
 export * from './layers/GeoJSON.js';
 export * from './layers/DivIcon.js';
+export * from './layers/Geoportal.js';
 
 //Controls
 export * from './controls/AttributionControl.js';

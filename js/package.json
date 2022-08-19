@@ -45,7 +45,9 @@
     "proj4": "^2.6.0",
     "proj4leaflet": "^1.0.1",
     "spin.js": "^4.1.0",
-    "stream-browserify": "^3.0.0"
+    "stream-browserify": "^3.0.0",
+    "geoportal-extensions-leaflet": "2.2.4"
+
   },
   "devDependencies": {
     "@jupyterlab/builder": "^3.0.0",

@@ -3,9 +3,8 @@
 #
 
 
-from traitlets import Unicode, List
+from traitlets import Unicode
 from .leaflet import TileLayer
-
 
 
 class GeoportalWMTS(TileLayer):

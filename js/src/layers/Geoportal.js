@@ -23,20 +23,3 @@ export class LeafletGeoportalWMTSView extends layer.LeafletTileLayerView {
   }
 }
 
-export class LeafletGeoportalWMSModel extends layer.LeafletTileLayerModel {
-  defaults() {
-    return {
-      ...super.defaults(),
-      _view_name: 'LeafletGeoportalWMSView',
-      _model_name: 'LeafletGeoportalWMSModel',
-      layer_name : "GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2",
-      apiKey : "essentiels"
-    };
-  }
-}
-
-export class LeafletGeoportalWMSView extends layer.LeafletTileLayerView {
-  create_obj() {
-    this.obj = L.geoportalLayer.WMS({layer : this.model.get('layer_name'), apiKey : this.model.get('apiKey')})
-  }
-}

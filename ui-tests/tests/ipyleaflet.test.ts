@@ -9,7 +9,12 @@ async function renderMap(fileName: string, page: IJupyterLabPageFixture) {
   await page.notebook.waitForRun();
   const maps = await page.$("div.leaflet-container");
   await new Promise((_) => setTimeout(_, 1000));
-  expect(await maps.screenshot()).toMatchSnapshot({
+
+  // Move the mouse to the center of the map
+  const bb = await maps?.boundingBox();
+  await page.mouse.move(bb!.x + bb!.width / 2, bb!.y + bb!.height / 2);
+
+  expect(await maps!.screenshot()).toMatchSnapshot({
     name: `${fileName}.png`,
   });
 }

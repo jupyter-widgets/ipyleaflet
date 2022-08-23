@@ -26,7 +26,7 @@ jobs:
           channels: conda-forge
 
       - name: Mamba install dependencies
-        run: mamba install python=${{ matrix.python-version }} pip nodejs=16 flake8 jupyterlab ipywidgets jupyter-packaging~=0.7.9
+        run: mamba install python=${{ matrix.python-version }} pip nodejs=16 flake8 jupyterlab ipywidgets>=8.0.1 jupyter-packaging~=0.7.9
 
       - name: Install ipyleaflet
         run: pip install .

@@ -52,9 +52,10 @@ setup_args = dict(
     description='A Jupyter widget for dynamic Leaflet maps',
     long_description=long_description,
     license='MIT License',
+    python_requires = ">=3.7",
     include_package_data=True,
     install_requires=[
-        'ipywidgets>=7.6.0,<8',
+        'ipywidgets>=7.6.0,<9',
         'traittypes>=0.2.1,<3',
         'xyzservices>=2021.8.1',
         'branca>=0.5.0'
@@ -73,7 +74,6 @@ setup_args = dict(
         'Topic :: Multimedia :: Graphics',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',

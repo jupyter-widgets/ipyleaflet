@@ -26,7 +26,6 @@ export class LeafletLayersControlView extends control.LeafletControlView {
 
   initialize(parameters) {
     super.initialize(parameters);
-    super.initialize(parameters);
     this.map_view = this.options.map_view;
   }
 

@@ -28,5 +28,5 @@ docs/test.wkt
 *Untitled*.ipynb
 
 #Galata
-ui-test/playwright-report
-ui-test/test-results
+ui-tests/playwright-report
+ui-tests/test-results

@@ -8,7 +8,7 @@ import json
 import xyzservices
 from datetime import date, timedelta
 from math import isnan
-from branca.colormap import linear, ColorMap
+from branca.colormap import linear, LinearColormap, ColorMap
 from IPython.display import display
 import warnings
 
@@ -799,8 +799,14 @@ class Heatmap(RasterLayer):
         Radius of the data points.
     blur: float, default 15.
         Blurring intensity.
-    gradient: dict, default {0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}
+    gradient : dict, default {0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}
         Colors used for the color-mapping from low to high heatmap intensity.
+    vmin : float, default 0.4
+        Minimum value of the color mapping
+    vmax : float, default 1.0
+        Maximum value of the color mapping
+    colormap: branca.colormap.LinearColorMap instance
+        The colormap used for displaying the HeatMap data, defined with the same min and max values and colors than the gradient.
     """
 
     _view_name = Unicode('LeafletHeatmapView').tag(sync=True)
@@ -815,6 +821,22 @@ class Heatmap(RasterLayer):
     radius = Float(25.0).tag(sync=True, o=True)
     blur = Float(15.0).tag(sync=True, o=True)
     gradient = Dict({0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}).tag(sync=True, o=True)
+
+    def __init__(self, **kwargs):
+        super(Heatmap, self).__init__(**kwargs)
+        self.data = self._get_data()
+
+    @observe('gradient')
+    def _updata_data(self, change):
+        self.data = self._get_data()
+
+    def _get_data(self):
+        sorted_gradient = dict(sorted(self.gradient.items()))
+        colormap_labels = list(sorted_gradient.keys())
+        colors = list(sorted_gradient.values())
+        self.vmin = colormap_labels[0]
+        self.vmax = colormap_labels[-1]
+        self.colormap = LinearColormap(colors=colors, index=colormap_labels, vmin=self.vmin, vmax=self.vmax)
 
 
 class VectorTileLayer(Layer):

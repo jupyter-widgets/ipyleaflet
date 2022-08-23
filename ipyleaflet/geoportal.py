@@ -3,8 +3,8 @@
 #
 
 
-from traitlets import Unicode
-from .leaflet import TileLayer
+from traitlets import Unicode, Dict
+from .leaflet import TileLayer, Control
 
 
 class GeoportalWMTS(TileLayer):
@@ -26,3 +26,14 @@ class GeoportalWMTS(TileLayer):
     layer = Unicode('ORTHOIMAGERY.ORTHOPHOTOS').tag(sync=True, o=True)
     api_key = Unicode('essentiels').tag(sync=True, o=True)
     format = Unicode('image/jpeg').tag(sync=True, o=True)
+
+
+class GeoportalLayerSwitcher(Control):
+    """GeoportalLayerSwitcher class, with Control as parent class
+
+    Attributes
+        ----------
+    """
+
+    _view_name = Unicode('LeafletGeoportalLayerSwitcherView').tag(sync=True)
+    _model_name = Unicode('LeafletGeoportalLayerSwitcherModel').tag(sync=True)

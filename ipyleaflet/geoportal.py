@@ -15,11 +15,11 @@ class GeoportalWMTS(TileLayer):
     ----------
     layer_name: string, default "ORTHOIMAGERY.ORTHOPHOTOS"
         name of the layer to show.
-    apiKey: string, default "essentiels"
+    api_key: string, default "essentiels"
         key to access a given ressource, detailed correspondances are given here : https://geoservices.ign.fr/documentation/services/tableau_ressources
     """
 
     _view_name = Unicode('LeafletGeoportalWMTSView').tag(sync=True)
     _model_name = Unicode('LeafletGeoportalWMTSModel').tag(sync=True)
-    layer_name = Unicode("ORTHOIMAGERY.ORTHOPHOTOS").tag(sync=True, o=True)
-    apiKey = Unicode("essentiels").tag(sync=True, o=True)
+    layer = Unicode("ORTHOIMAGERY.ORTHOPHOTOS").tag(sync=True, o=True)
+    api_key = Unicode("essentiels").tag(sync=True, o=True)

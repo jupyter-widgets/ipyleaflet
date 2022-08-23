@@ -11,7 +11,7 @@ export class LeafletGeoportalWMTSModel extends layer.LeafletTileLayerModel {
       ...super.defaults(),
       _view_name: 'LeafletGeoportalWMTSView',
       _model_name: 'LeafletGeoportalWMTSModel',
-      layer_name : "ORTHOIMAGERY.ORTHOPHOTOS",
+      layer : "ORTHOIMAGERY.ORTHOPHOTOS",
       apiKey : "essentiels"
     };
   }
@@ -19,7 +19,6 @@ export class LeafletGeoportalWMTSModel extends layer.LeafletTileLayerModel {
 
 export class LeafletGeoportalWMTSView extends layer.LeafletTileLayerView {
   create_obj() {
-    this.obj = L.geoportalLayer.WMTS({layer : this.model.get('layer_name'), apiKey : this.model.get('apiKey')})
+    this.obj = L.geoportalLayer.WMTS({layer : this.model.get('layer'), apiKey : this.model.get('api_key')})
   }
 }
-

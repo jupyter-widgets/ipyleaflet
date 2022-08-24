@@ -61,3 +61,6 @@ require('leaflet.awesome-markers/dist/leaflet.awesome-markers.css');
 require('spin.js/spin.css');
 require('./jupyter-leaflet.css');
 require('leaflet-search/dist/leaflet-search.src.css');
+require('geoportal-extensions-leaflet/dist/GpPluginLeaflet-map.css');
+require('geoportal-extensions-leaflet/dist/GpPluginLeaflet-src.css');
+require('geoportal-extensions-leaflet/dist/GpPluginLeaflet.css');

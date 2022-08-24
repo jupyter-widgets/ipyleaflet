@@ -21,8 +21,7 @@ export class LeafletGeoportalWMTSModel extends layer.LeafletTileLayerModel {
 
 export class LeafletGeoportalWMTSView extends layer.LeafletTileLayerView {
   create_obj() {
-    console.log('this.get_options():', this.get_options())
-    this.obj = L.geoportalLayer.WMTS(this.get_options(), {format : this.model.get('format')})
+    this.obj = L.geoportalLayer.WMTS({layer : this.model.get('layer'), apiKey : this.model.get('api_key')}, {format : this.model.get('format')})
   }
 }
 
@@ -45,4 +44,24 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
       this.obj = L.geoportalControl.LayerSwitcher()
     }
   }
+
+  export class LeafletGeoportalSearchEngineModel extends control.LeafletControlModel {
+    defaults() {
+      return {
+        ...super.defaults(),
+       _view_name: 'LeafletGeoportalSearchEngineView',
+        _model_name: 'LeafletGeoportalSearchEngineModel'
+        };
+      }
+    }
+
+    export class LeafletGeoportalSearchEngineView extends control.LeafletControlView {
+      initialize(parameters) {
+        super.initialize(parameters);
+        this.map_view = this.options.map_view;
+      }
+      create_obj() {
+        this.obj = L.geoportalControl.SearchEngine({position : "topright"})
+      }
+    }
 

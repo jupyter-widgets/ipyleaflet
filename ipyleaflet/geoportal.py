@@ -37,3 +37,14 @@ class GeoportalLayerSwitcher(Control):
 
     _view_name = Unicode('LeafletGeoportalLayerSwitcherView').tag(sync=True)
     _model_name = Unicode('LeafletGeoportalLayerSwitcherModel').tag(sync=True)
+
+class GeoportalSearchEngine(Control):
+    """GeoportalSearchEngine class, with Control as parent class
+
+    Attributes
+        ----------
+    """
+
+    _view_name = Unicode('LeafletGeoportalSearchEngineView').tag(sync=True)
+    _model_name = Unicode('LeafletGeoportalSearchEngineModel').tag(sync=True)
+

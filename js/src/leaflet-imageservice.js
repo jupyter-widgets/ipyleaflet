@@ -3,41 +3,23 @@
 
 L.ImageService = L.Layer.extend({
   options: {
-    // image server url
     url: '',
-    // response format
     f: 'image',
-    // output image format
     format: 'jpgpng',
-    // data type of the raster image
     pixelType: 'UNKNOWN',
-    // pixel value or list of pixel values representing no data
     noData: [],
-    // how to interpret no data values
     noDataInterpretation: '',
-    // resampling process for interpolating the pixel values
     interpolation: '',
-    // lossy quality for image compression
     compressionQuality: '',
-    // order of bands to export for multiple band images
     bandIds: [],
-    // time instance or extent for image
     time: [],
-    // rules for rendering
     renderingRule: {},
-    // rules for mosaicking
     mosaicRule: {},
-    // image transparency
     transparent: false,
-    // endpoint format for building the export image url
     endpoint: '',
-    // image service attribution
     attribution: '',
-    // coordinate reference system
     crs: null,
-    // emit when clicked or hovered
     interactive: false,
-    // update interval for panning
     updateInterval: 200
   },
 

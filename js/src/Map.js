@@ -226,9 +226,9 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     child_view.remove();
     }
 
-    add_subitem_model(child_model) {
+  add_subitem_model(child_model) {
     return this.create_child_view(child_model, {
-    map_view: this
+      map_view: this
     }).then(view => {
     if(child_model['name'].includes('Control')){
       this.obj.addControl(view.obj);
@@ -279,11 +279,17 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       this.control_views.update(this.model.get('controls'));
 
       var layer_list = this.model.get('layers');
-      for (let i = 1; i < layer_list.length; i++) { // starting index is 1, since we are not taking into account the TileLayer at index 0
-        var subitem_list = layer_list[i].attributes.subitems
-        this.subitem_views.update(subitem_list);
+      layer_list.forEach((layer) => { // starting index is 1, since we are not taking into account the TileLayer at index 0
+        var all_subitems = []
+        var subitem_list = layer.attributes.subitems
+        subitem_list.forEach((subitem) => {
+          console.log('subitem is:', subitem)
+          all_subitems.push(subitem)
+        }
+        )
+        this.subitem_views.update(all_subitems);
       }
-
+      )
 
       this.leaflet_events();
       this.model_events();

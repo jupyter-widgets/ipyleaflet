@@ -790,41 +790,77 @@ class ImageService(Layer):
     Attributes
     ----------
     url: string, default ""
-        Url to the image service
+        URL to the image service
     f: string, default "image"
         response format (use `'image'` to stream as bytes)
     format: string, default "jpgpng"
         format of exported image
+
+        - ``jpgpng``
+        - ``png``
+        - ``png8``
+        - ``png24``
+        - ``jpg``
+        - ``bmp``
+        - ``gif``
+        - ``tiff``
+        - ``png32``
+        - ``bip``
+        - ``bsq``
+        - ``lerc``
     pixel_type: string, default "UNKNOWN"
         data type of the raster image
+
+        - ``C128``
+        - ``C64``
+        - ``F32``
+        - ``F64``
+        - ``S16``
+        - ``S32``
+        - ``S8``
+        - ``U1``
+        - ``U16``
+        - ``U2``
+        - ``U32``
+        - ``U4``
+        - ``U8``
+        - ``UNKNOWN``
     no_data: list, default []
-        pixel value or comma-delimited list of pixel values representing no data
+        pixel values representing no data
     no_data_interpretation: string, default ""
         how to interpret no data values
+
+        - ``esriNoDataMatchAny``
+        - ``esriNoDataMatchAll``
     interpolation: string, default ""
         resampling process for interpolating the pixel values
+
+        - ``RSP_BilinearInterpolation``
+        - ``RSP_CubicConvolution``
+        - ``RSP_Majority``
+        - ``RSP_NearestNeighbor``
     compression_quality: int, default 100
         lossy quality for image compression
     band_ids: List, default []
-        Order of bands to export for multiple band images
+        order of bands to export for multiple band images
     time: List, default []
-        time instance or extent for image
+        time range for image
     rendering_rule: dict, default {}
         rules for rendering
     mosaic_rule: dict, default {}
         rules for mosaicking
-    transparent: boolean, default False
-        If true, the image service will return images with transparency
-    endpoint: str, default 'Esri'
-        Endpoint format for building the export image url
+    endpoint: str, default "Esri"
+        endpoint format for building the export image URL
+
+        - ``Esri``
     attribution: string, default ""
-        Image service attribution.
+        include image service attribution
     crs: dict, default ipyleaflet.projections.EPSG3857
-        Projection used for this image service.
+        projection used for this image service.
     interactive: bool, default False
-        Emit when clicked or hovered
+        emit when clicked for registered callback
     update_interval: int, default 200
-        Update interval for panning
+        minimum time interval to query for updates when panning (ms)
     """
 
     _view_name = Unicode('LeafletImageServiceView').tag(sync=True)
@@ -847,13 +883,22 @@ class ImageService(Layer):
     time = List(allow_none=True).tag(sync=True, o=True)
     rendering_rule = Dict({}).tag(sync=True, o=True)
     mosaic_rule = Dict({}).tag(sync=True, o=True)
-    transparent = Bool(False).tag(sync=True, o=True)
     endpoint = Unicode('Esri').tag(sync=True, o=True)
     attribution = Unicode('').tag(sync=True, o=True)
     crs = Dict(default_value=projections.EPSG3857).tag(sync=True)
     interactive = Bool(False).tag(sync=True, o=True)
     update_interval = Int(200).tag(sync=True, o=True)
 
+    _click_callbacks = Instance(CallbackDispatcher, ())
+
+    def __init__(self, **kwargs):
+        super(ImageService, self).__init__(**kwargs)
+        self.on_msg(self._handle_mouse_events)
+
+    def _handle_mouse_events(self, _, content, buffers):
+        event_type = content.get('type', '')
+        if event_type == 'click':
+            self._click_callbacks(**content)
 
 class Heatmap(RasterLayer):
     """Heatmap class, with RasterLayer as parent class.

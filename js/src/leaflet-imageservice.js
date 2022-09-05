@@ -15,7 +15,6 @@ L.ImageService = L.Layer.extend({
     time: [],
     renderingRule: {},
     mosaicRule: {},
-    transparent: false,
     endpoint: '',
     attribution: '',
     crs: null,
@@ -186,9 +185,6 @@ L.ImageService = L.Layer.extend({
     }
     if (this.options.compressionQuality) {
       params['compressionQuality'] = this.options.compressionQuality;
-    }
-    if (this.options.transparent) {
-      params['transparent'] = this.options.transparent;
     }
     // merge list parameters
     if (this.options.noData.length) {

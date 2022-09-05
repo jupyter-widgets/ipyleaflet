@@ -23,7 +23,6 @@ export class LeafletImageServiceModel extends layer.LeafletLayerModel {
       time: [],
       renderingRule: {},
       mosaicRule: {},
-      transparent: false,
       endpoint: '',
       attribution: '',
       crs: null,

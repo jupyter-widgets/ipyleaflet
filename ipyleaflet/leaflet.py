@@ -150,8 +150,8 @@ class Layer(Widget, InteractMixin):
         Makes sure only one instance of any given subitem can exist in the
         subitem list.
         '''
-        self._subitem_ids = [subitem.model_id for subitem in proposal.value]
-        if len(set(self._subitem_ids)) != len(self._subitem_ids):
+        subitem_ids = [subitem.model_id for subitem in proposal.value]
+        if len(set(subitem_ids)) != len(subitem_ids):
             raise Exception('duplicate subitem detected, only use each subitem once')
         return proposal.value
 

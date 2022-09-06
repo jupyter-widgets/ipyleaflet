@@ -224,7 +224,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       this.obj.removeLayer(child_view.obj);
     }
     child_view.remove();
-    }
+  }
 
   add_subitem_model(child_model) {
     return this.create_child_view(child_model, {

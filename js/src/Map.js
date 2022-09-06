@@ -284,8 +284,8 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
         var subitem_list = layer.attributes.subitems;
 
         all_subitems = all_subitems.concat(subitem_list)
-        this.subitem_views.update(all_subitems);
       });
+      this.subitem_views.update(all_subitems);
 
       this.leaflet_events();
       this.model_events();

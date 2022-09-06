@@ -1,6 +1,7 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
+import { LeafletLayerModel } from './layers/Layer.js';
 
 const widgets = require('@jupyter-widgets/base');
 const L = require('./leaflet.js');
@@ -218,10 +219,10 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
   }
 
   remove_subitem_view(child_view) {
-    if(child_view['name'].includes('Control')){
-      this.obj.removeControl(child_view.obj);
-    } else {
+    if(child_view instanceof(LeafletLayerView)){
       this.obj.removeLayer(child_view.obj);
+    } else {
+      this.obj.removeControl(child_view.obj);
     }
     child_view.remove();
   }
@@ -230,10 +231,10 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     return this.create_child_view(child_model, {
       map_view: this
       }).then(view => {
-        if(child_model['name'].includes('Control')){
-          this.obj.addControl(view.obj);
-        } else {
+        if (child_model instanceof LeafletLayerModel) {
           this.obj.addLayer(view.obj);
+        } else {
+          this.obj.addControl(view.obj);
         }
 
     // Trigger the displayed event of the child view.
@@ -281,6 +282,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       var all_subitems = [];
       layer_list.forEach((layer) => {
         var subitem_list = layer.attributes.subitems;
+
         subitem_list.forEach((subitem) => {
           all_subitems.push(subitem);
         });

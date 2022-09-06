@@ -141,7 +141,6 @@ class Layer(Widget, InteractMixin):
 
     options = List(trait=Unicode()).tag(sync=True)
     subitems = Tuple().tag(trait=Instance(Widget), sync=True, **widget_serialization)
-    _subitem_ids = List()
 
     @validate('subitems')
     def _validate_subitems(self, proposal):

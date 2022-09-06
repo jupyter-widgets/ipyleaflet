@@ -229,20 +229,20 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
   add_subitem_model(child_model) {
     return this.create_child_view(child_model, {
       map_view: this
-    }).then(view => {
-    if(child_model['name'].includes('Control')){
-      this.obj.addControl(view.obj);
-    } else {
-      this.obj.addLayer(view.obj);
-    }
+      }).then(view => {
+        if(child_model['name'].includes('Control')){
+          this.obj.addControl(view.obj);
+        } else {
+          this.obj.addLayer(view.obj);
+        }
 
     // Trigger the displayed event of the child view.
-    this.displayed.then(() => {
-    view.trigger('displayed', this);
-    });
+      this.displayed.then(() => {
+        view.trigger('displayed', this);
+      });
     return view;
     });
-    }
+  }
 
   render() {
     super.render();
@@ -277,19 +277,15 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       this.create_panes();
       this.layer_views.update(this.model.get('layers'));
       this.control_views.update(this.model.get('controls'));
-
       var layer_list = this.model.get('layers');
+      var all_subitems = [];
       layer_list.forEach((layer) => {
-        var all_subitems = []
-        var subitem_list = layer.attributes.subitems
+        var subitem_list = layer.attributes.subitems;
         subitem_list.forEach((subitem) => {
-          console.log('subitem is:', subitem)
-          all_subitems.push(subitem)
-        }
-        )
+          all_subitems.push(subitem);
+        });
         this.subitem_views.update(all_subitems);
-      }
-      )
+      });
 
       this.leaflet_events();
       this.model_events();

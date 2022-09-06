@@ -279,7 +279,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       this.control_views.update(this.model.get('controls'));
 
       var layer_list = this.model.get('layers');
-      layer_list.forEach((layer) => { // starting index is 1, since we are not taking into account the TileLayer at index 0
+      layer_list.forEach((layer) => {
         var all_subitems = []
         var subitem_list = layer.attributes.subitems
         subitem_list.forEach((subitem) => {

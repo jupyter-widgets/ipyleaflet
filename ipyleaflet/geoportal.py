@@ -48,3 +48,15 @@ class GeoportalSearchEngine(Control):
 
     _view_name = Unicode('LeafletGeoportalSearchEngineView').tag(sync=True)
     _model_name = Unicode('LeafletGeoportalSearchEngineModel').tag(sync=True)
+
+
+class GeoportalRoute(Control):
+    """GeoportalRoute class, with Control as parent class
+
+    Attributes
+        ----------
+    """
+
+    _view_name = Unicode('LeafletGeoportalRouteView').tag(sync=True)
+    _model_name = Unicode('LeafletGeoportalRouteModel').tag(sync=True)
+

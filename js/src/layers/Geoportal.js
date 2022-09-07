@@ -61,7 +61,28 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
         this.map_view = this.options.map_view;
       }
       create_obj() {
-        this.obj = L.geoportalControl.SearchEngine({position : "topright"})
+        this.obj = L.geoportalControl.SearchEngine({position : "bottomleft"})
       }
     }
+
+    export class LeafletGeoportalRouteModel extends control.LeafletControlModel {
+      defaults() {
+        return {
+          ...super.defaults(),
+         _view_name: 'LeafletGeoportalLayerSwitcherView',
+          _model_name: 'LeafletGeoportalLayerSwitcherModel'
+          };
+        }
+      }
+
+      export class LeafletGeoportalRouteView extends control.LeafletControlView {
+        initialize(parameters) {
+          super.initialize(parameters);
+          this.map_view = this.options.map_view;
+        }
+        create_obj() {
+          this.obj = L.geoportalControl.Route({})
+        }
+      }
+
 

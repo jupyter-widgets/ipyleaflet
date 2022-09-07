@@ -85,4 +85,24 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
         }
       }
 
+      export class LeafletGeoportalMousePositionModel extends control.LeafletControlModel {
+        defaults() {
+          return {
+            ...super.defaults(),
+           _view_name: 'LeafletGeoportalMousePositionView',
+            _model_name: 'LeafletGeoportalMousePositionModel'
+            };
+          }
+        }
+
+        export class LeafletGeoportalMousePositionView extends control.LeafletControlView {
+          initialize(parameters) {
+            super.initialize(parameters);
+            this.map_view = this.options.map_view;
+          }
+          create_obj() {
+            this.obj = L.geoportalControl.MousePosition({})
+          }
+        }
+
 

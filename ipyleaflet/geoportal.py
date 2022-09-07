@@ -60,3 +60,13 @@ class GeoportalRoute(Control):
     _view_name = Unicode('LeafletGeoportalRouteView').tag(sync=True)
     _model_name = Unicode('LeafletGeoportalRouteModel').tag(sync=True)
 
+
+class GeoportalMousePosition(Control):
+    """GeoportalMousePosition class, with Control as parent class
+
+    Attributes
+        ----------
+    """
+
+    _view_name = Unicode('LeafletGeoportalMousePositionView').tag(sync=True)
+    _model_name = Unicode('LeafletGeoportalMousePositionModel').tag(sync=True)

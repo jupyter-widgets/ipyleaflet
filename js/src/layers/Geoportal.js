@@ -105,4 +105,25 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
           }
         }
 
+        export class LeafletGeoportalElevationPathModel extends control.LeafletControlModel {
+          defaults() {
+            return {
+              ...super.defaults(),
+             _view_name: 'LeafletGeoportalElevationPathView',
+              _model_name: 'LeafletGeoportalElevationPathModel'
+              };
+            }
+          }
+
+          export class LeafletGeoportalElevationPathView extends control.LeafletControlView {
+            initialize(parameters) {
+              super.initialize(parameters);
+              this.map_view = this.options.map_view;
+            }
+            create_obj() {
+              this.obj = L.geoportalControl.ElevationPath({})
+            }
+          }
+
+
 

@@ -2,28 +2,8 @@
 // Distributed under the terms of the Modified BSD License.
 
 const L = require('../leaflet.js');
-const layer = require('./TileLayer.js');
 const control = require('../controls/Control.js');
-const utils = require('../utils');
 
-export class LeafletGeoportalWMTSModel extends layer.LeafletTileLayerModel {
-  defaults() {
-    return {
-      ...super.defaults(),
-      _view_name: 'LeafletGeoportalWMTSView',
-      _model_name: 'LeafletGeoportalWMTSModel',
-      layer : 'ORTHOIMAGERY.ORTHOPHOTOS',
-      apiKey : 'essentiels',
-      format : 'image/jpeg'
-    };
-  }
-}
-
-export class LeafletGeoportalWMTSView extends layer.LeafletTileLayerView {
-  create_obj() {
-    this.obj = L.geoportalLayer.WMTS({layer : this.model.get('layer'), apiKey : this.model.get('api_key')}, {format : this.model.get('format')})
-  }
-}
 
 export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlModel {
   defaults() {
@@ -49,8 +29,18 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
     defaults() {
       return {
         ...super.defaults(),
-       _view_name: 'LeafletGeoportalSearchEngineView',
-        _model_name: 'LeafletGeoportalSearchEngineModel'
+        _view_name: 'LeafletGeoportalSearchEngineView',
+        _model_name: 'LeafletGeoportalSearchEngineModel',
+        position : 'topleft',
+        collapsed : true,
+        zoomTo : 'auto',
+        displayInfo : true,
+        apiKey : 'cartes',
+        displayAdvancedSearch : true,
+        resources : ["PositionOfInterest", "StreetAddress"],
+        advancedSearch : {},
+        geocodeOptions : {},
+        autocompleteOptions : {}
         };
       }
     }
@@ -61,22 +51,7 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
         this.map_view = this.options.map_view;
       }
       create_obj() {
-        this.obj = L.geoportalControl.SearchEngine({
-                position : "topleft",
-                collapsed : true,
-                zoomTo : "auto",
-                displayInfo : true,
-                displayAdvancedSearch : true,
-                resources : ["PositionOfInterest", "StreetAddress"],
-                advancedSearch : {
-                    PositionOfInterest : [{name : "municipality", title : "Ville"}],
-                    StreetAddress : [{}],
-                    CadastralParcel : null,
-                },
-                apiKey : "cartes",
-                geocodeOptions : {},
-                autocompleteOptions : {}
-           })
+        this.obj = L.geoportalControl.SearchEngine(this.get_options())
       }
     }
 
@@ -84,8 +59,17 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
       defaults() {
         return {
           ...super.defaults(),
-         _view_name: 'LeafletGeoportalLayerSwitcherView',
-          _model_name: 'LeafletGeoportalLayerSwitcherModel'
+          _view_name: 'LeafletGeoportalRouteView',
+          _model_name: 'LeafletGeoportalRouteModel',
+          position : "bottomleft",
+          collapsed : true,
+          exclusions : {"toll" : true,
+                        "bridge" : false,
+                        "tunnel" : true
+                      },
+          graphs : ['Pieton', 'Voiture'],
+          autocompleteOptions : {},
+          routeOptions : {}
           };
         }
       }
@@ -96,18 +80,7 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
           this.map_view = this.options.map_view;
         }
         create_obj() {
-          this.obj = L.geoportalControl.Route({
-                  position : "bottomleft",
-                  collapsed : true,
-                  exclusions : {
-                      "toll" : true,
-                     "bridge" : false,
-                     "tunnel" : true
-                  },
-                  graphs : ['Pieton', 'Voiture'],
-                  autocompleteOptions : {},
-                  routeOptions : {}
-              })
+          this.obj = L.geoportalControl.Route(this.get_options())
         }
       }
 
@@ -115,8 +88,37 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
         defaults() {
           return {
             ...super.defaults(),
-           _view_name: 'LeafletGeoportalMousePositionView',
-            _model_name: 'LeafletGeoportalMousePositionModel'
+            _view_name: 'LeafletGeoportalMousePositionView',
+            _model_name: 'LeafletGeoportalMousePositionModel',
+            position : 'bottomleft',
+            collapsed : false,
+            displayAltitude : true,
+            displayCoordinates : true,
+            editCoordinates : false,
+            crs : '',
+            label : '',
+            selectedtype: '',
+            altitude : {
+              triggerDelay : 100,
+              responseDelay : 500,
+              noDataValue : -99999,
+              noDataValueTolerance : 90000,
+              serviceOptions : {}
+           },
+          systems : [
+           {
+              crs : L.CRS.EPSG4326,
+              label : "Lon,Lat",
+              selectedtype : "Geographical"
+            },
+           {
+             crs : L.geoportalCRS.EPSG2154,
+              label : "Lambert 93",
+              selectedtype : "Metric"
+            }
+          ],
+          units : ["DEC", "DMS"]
+
             };
           }
         }
@@ -155,11 +157,22 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
             defaults() {
               return {
                 ...super.defaults(),
-               _view_name: 'LeafletGeoportalIsocurve',
-                _model_name: 'LeafletGeoportalIsocurveModel'
-                };
+                _view_name: 'LeafletGeoportalIsocurve',
+                _model_name: 'LeafletGeoportalIsocurveModel',
+                collapsed : false,
+                methods : ["time", "distance"],
+                exclusions : {
+                     toll : true,
+                     bridge : false,
+                     tunnel : true
+                  },
+                graphs : ["Pieton", "Voiture"],
+                isocurveOptions : {},
+                autocompleteOptions : {}
+
               }
             }
+          }
 
             export class LeafletGeoportalIsocurveView extends control.LeafletControlView {
               initialize(parameters) {
@@ -167,17 +180,7 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
                 this.map_view = this.options.map_view;
               }
               create_obj() {
-                this.obj = L.geoportalControl.Isocurve({
-                        collapsed : false,
-                        methods : ["time", "distance"],
-                        exclusions : {
-                           toll : true,
-                           bridge : false,
-                           tunnel : true
-                        },
-                        graphs : ["Pieton", "Voiture"],
-                        isocurveOptions : {},
-                        autocompleteOptions : {}})
+                this.obj = L.geoportalControl.Isocurve(this.get_options())
               }
             }
 

@@ -55,6 +55,9 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
     this.popup_content_promise = Promise.resolve();
   }
 
+
+
+
   render() {
     return Promise.resolve(this.create_obj()).then(() => {
       this.leaflet_events();
@@ -64,8 +67,10 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
         this.bind_popup(value);
       });
       this.update_pane();
+      this
     });
   }
+
 
   update_pane() {
     const pane = this.model.get('pane');

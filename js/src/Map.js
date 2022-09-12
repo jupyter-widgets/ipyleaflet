@@ -223,7 +223,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       this.obj.removeLayer(child_view.obj);
     } else {
       this.obj.removeControl(child_view.obj);
-    }
+  }
     child_view.remove();
   }
 

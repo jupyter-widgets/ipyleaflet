@@ -58,7 +58,8 @@ setup_args = dict(
         'ipywidgets>=7.6.0,<9',
         'traittypes>=0.2.1,<3',
         'xyzservices>=2021.8.1',
-        'branca>=0.5.0'
+        'branca>=0.5.0',
+        'pandas>=1.4.4'
     ],
     packages=find_packages(),
     zip_safe=False,

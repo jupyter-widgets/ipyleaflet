@@ -66,7 +66,7 @@ class GeoportalRoute(Control):
     """GeoportalRoute class, with Control as parent class
 
     Attributes
-        ----------
+    ----------
     """
 
     _view_name = Unicode("LeafletGeoportalRouteView").tag(sync=True)

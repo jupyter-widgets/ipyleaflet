@@ -113,7 +113,7 @@ class GeoportalElevationPath(Control):
     """GeoportalElevationPath class, with Control as parent class
 
     Attributes
-        ----------
+    ----------
     """
 
     _view_name = Unicode("LeafletGeoportalElevationPathView").tag(sync=True)

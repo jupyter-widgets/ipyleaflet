@@ -110,7 +110,7 @@ class GeoportalMousePosition(Control):
 
 
 class GeoportalElevationPath(Control):
-    """GeoportalMousePosition class, with Control as parent class
+    """GeoportalElevationPath class, with Control as parent class
 
     Attributes
         ----------

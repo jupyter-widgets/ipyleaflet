@@ -184,6 +184,3 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
               }
             }
 
-
-
-

@@ -124,7 +124,7 @@ class GeoportalIsocurve(Control):
     """GeoportalIsocurve class, with Control as parent class
 
     Attributes
-        ----------
+    ----------
     """
 
     _view_name = Unicode("LeafletGeoportalIsocurveView").tag(sync=True)

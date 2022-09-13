@@ -9,8 +9,11 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
   defaults() {
     return {
       ...super.defaults(),
-     _view_name: 'LeafletGeoportalLayerSwitcherView',
-      _model_name: 'LeafletGeoportalLayerSwitcherModel'
+      _view_name: 'LeafletGeoportalLayerSwitcherView',
+      _model_name: 'LeafletGeoportalLayerSwitcherModel',
+      position : "bottomleft",
+      collapsed : false,
+      layers : []
       };
     }
   }
@@ -21,7 +24,7 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
       this.map_view = this.options.map_view;
     }
     create_obj() {
-      this.obj = L.geoportalControl.LayerSwitcher()
+      this.obj = L.geoportalControl.LayerSwitcher(this.get_options())
     }
   }
 
@@ -31,11 +34,11 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
         ...super.defaults(),
         _view_name: 'LeafletGeoportalSearchEngineView',
         _model_name: 'LeafletGeoportalSearchEngineModel',
+        apiKey : 'essentiels',
         position : 'topleft',
         collapsed : true,
         zoomTo : 'auto',
         displayInfo : true,
-        apiKey : 'cartes',
         displayAdvancedSearch : true,
         resources : ["PositionOfInterest", "StreetAddress"],
         advancedSearch : {},
@@ -61,8 +64,11 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
           ...super.defaults(),
           _view_name: 'LeafletGeoportalRouteView',
           _model_name: 'LeafletGeoportalRouteModel',
+          apiKey : 'essentiels',
           position : "bottomleft",
           collapsed : true,
+          ssl : true,
+          disableReverse : false,
           exclusions : {"toll" : true,
                         "bridge" : false,
                         "tunnel" : true
@@ -90,35 +96,15 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
             ...super.defaults(),
             _view_name: 'LeafletGeoportalMousePositionView',
             _model_name: 'LeafletGeoportalMousePositionModel',
+            apiKey : 'essentiels',
             position : 'bottomleft',
             collapsed : false,
-            displayAltitude : true,
+            displayAltitude : false,
             displayCoordinates : true,
-            editCoordinates : false,
-            crs : '',
-            label : '',
-            selectedtype: '',
-            altitude : {
-              triggerDelay : 100,
-              responseDelay : 500,
-              noDataValue : -99999,
-              noDataValueTolerance : 90000,
-              serviceOptions : {}
-           },
-          systems : [
-           {
-              crs : L.CRS.EPSG4326,
-              label : "Lon,Lat",
-              selectedtype : "Geographical"
-            },
-           {
-             crs : L.geoportalCRS.EPSG2154,
-              label : "Lambert 93",
-              selectedtype : "Metric"
-            }
-          ],
-          units : ["DEC", "DMS"]
-
+            editCoordinates : true,
+            altitude : {},
+            systems : [],
+            units : []
             };
           }
         }
@@ -129,7 +115,7 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
             this.map_view = this.options.map_view;
           }
           create_obj() {
-            this.obj = L.geoportalControl.MousePosition({})
+            this.obj = L.geoportalControl.MousePosition(this.get_options())
           }
         }
 
@@ -137,8 +123,15 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
           defaults() {
             return {
               ...super.defaults(),
-             _view_name: 'LeafletGeoportalElevationPathView',
-              _model_name: 'LeafletGeoportalElevationPathModel'
+              _view_name: 'LeafletGeoportalElevationPathView',
+              _model_name: 'LeafletGeoportalElevationPathModel',
+              apiKey : 'essentiels',
+              position : 'bottomleft',
+              openssl : true,
+              active : false,
+              stylesOptions : 'DEFAULT_STYLES',
+              elevationPathOptions: {},
+              displayProfileOptions : {},
               };
             }
           }
@@ -149,7 +142,7 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
               this.map_view = this.options.map_view;
             }
             create_obj() {
-              this.obj = L.geoportalControl.ElevationPath({})
+              this.obj = L.geoportalControl.ElevationPath(this.get_options())
             }
           }
 
@@ -159,6 +152,7 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
                 ...super.defaults(),
                 _view_name: 'LeafletGeoportalIsocurve',
                 _model_name: 'LeafletGeoportalIsocurveModel',
+                apiKey : 'essentiels',
                 collapsed : false,
                 methods : ["time", "distance"],
                 exclusions : {

@@ -31,7 +31,7 @@ class GeoportalLayerSwitcher(Control):
     """GeoportalLayerSwitcher class, with Control as parent class
 
     Attributes
-        ----------
+    ----------
     """
 
     _view_name = Unicode("LeafletGeoportalLayerSwitcherView").tag(sync=True)

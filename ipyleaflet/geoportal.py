@@ -83,7 +83,7 @@ class GeoportalMousePosition(Control):
     """GeoportalMousePosition class, with Control as parent class
 
     Attributes
-        ----------
+    ----------
     """
 
     _view_name = Unicode("LeafletGeoportalMousePositionView").tag(sync=True)

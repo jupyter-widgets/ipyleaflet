@@ -36,17 +36,9 @@ class GeoportalLayerSwitcher(Control):
 
     _view_name = Unicode("LeafletGeoportalLayerSwitcherView").tag(sync=True)
     _model_name = Unicode("LeafletGeoportalLayerSwitcherModel").tag(sync=True)
-    position = Unicode("bottomleft").tag(sync=True, o=True)
+    position = Unicode("topright").tag(sync=True, o=True)
     collapsed = Bool(False).tag(sync=True, o=True)
     layers = List([]).tag(sync=True, o=True)
-    layer = Instance(TileLayer).tag(sync=True, o=True)
-    display = Bool(True).tag(sync=True, o=True)
-    config = Any().tag(sync=True, o=True)
-    visibility = Unicode("").tag(sync=True, o=True)
-    title = Unicode("").tag(sync=True, o=True)
-    description = Unicode("").tag(sync=True, o=True)
-    quicklook_url = Unicode("").tag(sync=True, o=True)
-    legends = List([]).tag(sync=True, o=True)
 
 
 class GeoportalSearchEngine(Control):

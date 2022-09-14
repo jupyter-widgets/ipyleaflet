@@ -11,7 +11,7 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
       ...super.defaults(),
       _view_name: 'LeafletGeoportalLayerSwitcherView',
       _model_name: 'LeafletGeoportalLayerSwitcherModel',
-      position : "bottomleft",
+      position : "topright",
       collapsed : false,
       layers : []
       };

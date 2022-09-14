@@ -140,3 +140,21 @@ class GeoportalIsocurve(Control):
     graphs = List(["Pieton", "Voiture"]).tag(sync=True, o=True)
     isocurveOptions = Dict({}).tag(sync=True, o=True)
     autocompleteOptions = Dict({}).tag(sync=True).tag(sync=True, o=True)
+
+
+class GeoportalReverseGeocode(Control):
+    """GeoportalReverseGeocode class, with Control as parent class
+
+    Attributes
+    ----------
+    """
+
+    _view_name = Unicode("LeafletGeoportalReverseGeocodeView").tag(sync=True, o=True)
+    _model_name = Unicode("LeafletGeoportalReverseGeocodeModel").tag(sync=True, o=True)
+    api_key = Unicode("essentiels").tag(sync=True, o=True)
+    position = Unicode("bottomleft").tag(sync=True, o=True)
+    collapsed = Bool(False).tag(sync=True, o=True)
+    ssl = Bool(True).tag(sync=True, o=True)
+    resources = List([]).tag(sync=True, o=True)
+    delimitations = List([]).tag(sync=True, o=True)
+    ReverseGeocodeOptions = Dict({}).tag(sync=True).tag(sync=True, o=True)

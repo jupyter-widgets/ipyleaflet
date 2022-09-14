@@ -177,3 +177,31 @@ export class LeafletGeoportalLayerSwitcherModel extends control.LeafletControlMo
                 this.obj = L.geoportalControl.Isocurve(this.get_options())
               }
             }
+
+
+            export class LeafletGeoportalReverseGeocodeModel extends control.LeafletControlModel {
+              defaults() {
+                return {
+                  ...super.defaults(),
+                  _view_name: 'LeafletGeoportalReverseGeocodeView',
+                  _model_name: 'LeafletGeoportalReverseGeocodeModel',
+                  apiKey : 'essentiels',
+                  position : 'bottomleft',
+                  collapsed : false,
+                  ssl : true,
+                  resources : [],
+                  delimitations : [],
+                  ReverseGeocodeOptions : {}
+                }
+              }
+            }
+
+              export class LeafletGeoportalReverseGeocodeView extends control.LeafletControlView {
+                initialize(parameters) {
+                  super.initialize(parameters);
+                  this.map_view = this.options.map_view;
+                }
+                create_obj() {
+                  this.obj = L.geoportalControl.ReverseGeocode(this.get_options())
+                }
+              }

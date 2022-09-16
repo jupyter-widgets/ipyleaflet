@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 
 
-from traitlets import Unicode, Bool, List, Dict, Instance, Any
+from traitlets import Unicode, Bool, List, Dict, Any
 from .leaflet import TileLayer, Control
 
 

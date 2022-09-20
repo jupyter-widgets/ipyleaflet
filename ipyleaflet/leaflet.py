@@ -2304,6 +2304,8 @@ class Map(DOMWidget, InteractMixin):
 
     panes = Dict().tag(sync=True)
     layers = Tuple().tag(trait=Instance(Layer), sync=True, **widget_serialization)
+    controls = Tuple().tag(trait=Instance(Control), sync=True, **widget_serialization)
+
 
     @default('layers')
     def _default_layers(self):

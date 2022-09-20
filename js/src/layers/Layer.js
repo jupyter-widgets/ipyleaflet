@@ -55,8 +55,32 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
     this.popup_content_promise = Promise.resolve();
   }
 
+  remove_subitem_view(child_view) {
+    if(child_view instanceof(LeafletLayerView)){
+      this.map_view.obj.removeLayer(child_view.obj);
+   } else {
+      this.map_view.obj.removeControl(child_view.obj);
+  }
+    child_view.remove();
+  }
 
+  add_subitem_model(child_model) {
+    return this.create_child_view(child_model, {
+      layer_view: this
+      }).then(view => {
+        if (child_model instanceof LeafletLayerModel) {
+          this.map_view.obj.addLayer(view.obj);
+        } else {
+          this.map_view.obj.addControl(view.obj);
+        }
 
+    //Trigger the displayed event of the child view.
+      this.displayed.then(() => {
+        view.trigger('displayed', this);
+      });
+    return view;
+    });
+  }
 
   render() {
     return Promise.resolve(this.create_obj()).then(() => {
@@ -67,10 +91,14 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
         this.bind_popup(value);
       });
       this.update_pane();
-      this
+      this;
+      this.subitem_views = new widgets.ViewList(
+        this.add_subitem_model,
+        this.remove_subitem_view,
+        this
+      );
     });
   }
-
 
   update_pane() {
     const pane = this.model.get('pane');
@@ -78,6 +106,7 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
       L.setOptions(this.obj, {pane});
     }
   }
+
 
   leaflet_events() {
     // If the layer is interactive
@@ -134,6 +163,16 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
       'change:pane',
       function() {
         this.map_view.rerender();
+      },
+      this
+    );
+
+    this.listenTo(
+      this.model,
+      'change:subitems',
+      function () {
+        console.log('Here we are')
+        this.subitem_views.update(this.subitems);
       },
       this
     );

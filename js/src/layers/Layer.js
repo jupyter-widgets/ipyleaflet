@@ -66,7 +66,7 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
 
   add_subitem_model(child_model) {
     return this.create_child_view(child_model, {
-      layer_view: this
+      map_view: this
       }).then(view => {
         if (child_model instanceof LeafletLayerModel) {
           this.map_view.obj.addLayer(view.obj);
@@ -91,12 +91,12 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
         this.bind_popup(value);
       });
       this.update_pane();
-      this;
       this.subitem_views = new widgets.ViewList(
         this.add_subitem_model,
         this.remove_subitem_view,
         this
       );
+      this.subitem_views.update(this.model.get('subitems'));
     });
   }
 
@@ -171,7 +171,6 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
       this.model,
       'change:subitems',
       function () {
-        console.log('Here we are')
         this.subitem_views.update(this.subitems);
       },
       this
@@ -180,6 +179,7 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
 
   remove() {
     super.remove();
+    this.subitem_views.remove();
     this.popup_content_promise.then(() => {
       if (this.popup_content) {
         this.popup_content.remove();

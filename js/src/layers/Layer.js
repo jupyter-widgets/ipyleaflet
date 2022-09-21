@@ -56,11 +56,11 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
   }
 
   remove_subitem_view(child_view) {
-    if(child_view instanceof(LeafletLayerView)){
+    if(child_view instanceof LeafletLayerView) {
       this.map_view.obj.removeLayer(child_view.obj);
-   } else {
+    } else {
       this.map_view.obj.removeControl(child_view.obj);
-  }
+    }
     child_view.remove();
   }
 
@@ -106,7 +106,6 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
       L.setOptions(this.obj, {pane});
     }
   }
-
 
   leaflet_events() {
     // If the layer is interactive
@@ -166,7 +165,6 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
       },
       this
     );
-
     this.listenTo(
       this.model,
       'change:subitems',

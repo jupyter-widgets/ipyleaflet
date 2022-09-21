@@ -235,7 +235,6 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       this.remove_control_view,
       this
     );
-
     this.displayed.then(this.render_leaflet.bind(this));
   }
 

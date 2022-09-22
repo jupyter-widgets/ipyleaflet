@@ -47,6 +47,7 @@ jobs:
       - name: Install JS deps
         run: |
           jlpm
+          jlpm playwright install chromium
           jlpm build
         working-directory: js
 

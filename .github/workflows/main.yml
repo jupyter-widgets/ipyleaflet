@@ -48,8 +48,14 @@ jobs:
         test -d $CONDA_PREFIX/share/jupyter/labextensions/jupyter-leaflet
         test -f $CONDA_PREFIX/share/jupyter/labextensions/jupyter-leaflet/package.json
 
-    - name: Flake8 check
+    - name: Python Linters
       run: flake8 ipyleaflet --ignore=E501,E731
+
+    - name: JS Linters
+      run: |
+        yarn install
+        yarn run lint:check
+      working-directory: js
 
     - name: Import check
       run: python -c 'import ipyleaflet'

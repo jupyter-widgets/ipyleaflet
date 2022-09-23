@@ -25,14 +25,14 @@ export class LeafletMarkerModel extends layer.LeafletUILayerModel {
       rise_offset: 250,
       rotation_angle: 0,
       rotation_origin: '',
-      icon: null
+      icon: null,
     };
   }
 }
 
 LeafletMarkerModel.serializers = {
   ...layer.LeafletUILayerModel.serializers,
-  icon: { deserialize: widgets.unpack_models }
+  icon: { deserialize: widgets.unpack_models },
 };
 
 export class LeafletMarkerView extends layer.LeafletUILayerView {
@@ -44,7 +44,7 @@ export class LeafletMarkerView extends layer.LeafletUILayerView {
   create_obj() {
     this.obj = L.marker(this.model.get('location'), this.get_options());
 
-    this.obj.on('dragend', event => {
+    this.obj.on('dragend', (event) => {
       var marker = event.target;
       var position = marker.getLatLng();
       this.model.set('location', [position.lat, position.lng]);
@@ -67,7 +67,7 @@ export class LeafletMarkerView extends layer.LeafletUILayerView {
     }
     if (value) {
       this.icon_promise = this.icon_promise.then(() => {
-        return this.create_child_view(value).then(view => {
+        return this.create_child_view(value).then((view) => {
           this.obj.setIcon(view.obj);
           this.icon = view;
         });
@@ -80,11 +80,11 @@ export class LeafletMarkerView extends layer.LeafletUILayerView {
     this.listenTo(
       this.model,
       'change:location',
-      function() {
+      function () {
         this.obj.setLatLng(this.model.get('location'));
         this.send({
           event: 'move',
-          location: this.model.get('location')
+          location: this.model.get('location'),
         });
       },
       this
@@ -92,7 +92,7 @@ export class LeafletMarkerView extends layer.LeafletUILayerView {
     this.listenTo(
       this.model,
       'change:z_index_offset',
-      function() {
+      function () {
         this.obj.setZIndexOffset(this.model.get('z_index_offset'));
       },
       this
@@ -100,7 +100,7 @@ export class LeafletMarkerView extends layer.LeafletUILayerView {
     this.listenTo(
       this.model,
       'change:opacity',
-      function() {
+      function () {
         if (this.model.get('visible')) {
           this.obj.setOpacity(this.model.get('opacity'));
         }
@@ -110,7 +110,7 @@ export class LeafletMarkerView extends layer.LeafletUILayerView {
     this.listenTo(
       this.model,
       'change:visible',
-      function() {
+      function () {
         if (this.model.get('visible')) {
           this.obj.setOpacity(this.model.get('opacity'));
         } else {
@@ -122,7 +122,7 @@ export class LeafletMarkerView extends layer.LeafletUILayerView {
     this.listenTo(
       this.model,
       'change:rotation_angle',
-      function() {
+      function () {
         this.obj.setRotationAngle(this.model.get('rotation_angle'));
       },
       this
@@ -130,7 +130,7 @@ export class LeafletMarkerView extends layer.LeafletUILayerView {
     this.listenTo(
       this.model,
       'change:rotation_origin',
-      function() {
+      function () {
         this.obj.setRotationOrigin(this.model.get('rotation_origin'));
       },
       this
@@ -148,7 +148,7 @@ export class LeafletMarkerView extends layer.LeafletUILayerView {
     this.listenTo(
       this.model,
       'change:icon',
-      function() {
+      function () {
         this.set_icon(this.model.get('icon'));
       },
       this

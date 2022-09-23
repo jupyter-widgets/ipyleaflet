@@ -16,21 +16,21 @@ export class LeafletVectorTileLayerModel extends layer.LeafletLayerModel {
 }
 
 export class LeafletVectorTileLayerView extends layer.LeafletLayerView {
-   create_obj() {
-        var options = {
-            ...this.get_options(),
-            rendererFactory: L.canvas.tile,
-            }
-        this.obj = L.vectorGrid.protobuf(this.model.get('url'), options);
-        this.model.on('msg:custom', this.handle_message.bind(this));
-    }
+  create_obj() {
+    var options = {
+      ...this.get_options(),
+      rendererFactory: L.canvas.tile,
+    };
+    this.obj = L.vectorGrid.protobuf(this.model.get('url'), options);
+    this.model.on('msg:custom', this.handle_message.bind(this));
+  }
 
-   model_events() {
+  model_events() {
     super.model_events();
     this.listenTo(
       this.model,
       'change:url',
-      function() {
+      function () {
         this.obj.setUrl(this.model.get('url'));
       },
       this

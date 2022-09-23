@@ -13,7 +13,7 @@ export class LeafletZoomControlModel extends control.LeafletControlModel {
       zoom_in_text: '+',
       zoom_in_title: 'Zoom in',
       zoom_out_text: '-',
-      zoom_out_title: 'Zoom out'
+      zoom_out_title: 'Zoom out',
     };
   }
 }

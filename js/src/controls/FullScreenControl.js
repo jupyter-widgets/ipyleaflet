@@ -9,7 +9,7 @@ export class LeafletFullScreenControlModel extends control.LeafletControlModel {
     return {
       ...super.defaults(),
       _view_name: 'LeafletFullScreenControlView',
-      _model_name: 'LeafletFullScreenControlModel'
+      _model_name: 'LeafletFullScreenControlModel',
     };
   }
 }

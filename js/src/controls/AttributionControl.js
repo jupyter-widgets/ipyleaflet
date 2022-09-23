@@ -9,7 +9,7 @@ export class LeafletAttributionControlModel extends control.LeafletControlModel 
     return {
       ...super.defaults(),
       _view_name: 'LeafletAttributionControlView',
-      _model_name: 'LeafletAttributionControlModel'
+      _model_name: 'LeafletAttributionControlModel',
     };
   }
 }

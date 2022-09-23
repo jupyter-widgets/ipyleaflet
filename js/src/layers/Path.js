@@ -18,7 +18,7 @@ export class LeafletPathModel extends vectorlayer.LeafletVectorLayerModel {
       dash_array: null,
       line_cap: 'round',
       line_join: 'round',
-      pointer_events: ''
+      pointer_events: '',
     };
   }
 }
@@ -33,7 +33,7 @@ export class LeafletPathView extends vectorlayer.LeafletVectorLayerView {
       this.listenTo(
         this.model,
         'change:' + key,
-        function() {
+        function () {
           this.obj.setStyle(this.get_options());
         },
         this

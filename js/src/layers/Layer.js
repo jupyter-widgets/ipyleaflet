@@ -25,7 +25,7 @@ export class LeafletLayerModel extends widgets.WidgetModel {
       popup_max_width: 300,
       popup_max_height: null,
       pane: '',
-      subitems: []
+      subitems: [],
     };
   }
 }
@@ -33,17 +33,15 @@ export class LeafletLayerModel extends widgets.WidgetModel {
 LeafletLayerModel.serializers = {
   ...widgets.WidgetModel.serializers,
   popup: { deserialize: widgets.unpack_models },
-  subitems: { deserialize: widgets.unpack_models }
+  subitems: { deserialize: widgets.unpack_models },
 };
-
-
 
 export class LeafletUILayerModel extends LeafletLayerModel {
   defaults() {
     return {
       ...super.defaults(),
       _view_name: 'LeafletUILayerView',
-      _model_name: 'LeafletUILayerModel'
+      _model_name: 'LeafletUILayerModel',
     };
   }
 }
@@ -56,7 +54,7 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
   }
 
   remove_subitem_view(child_view) {
-    if(child_view instanceof LeafletLayerView) {
+    if (child_view instanceof LeafletLayerView) {
       this.map_view.obj.removeLayer(child_view.obj);
     } else {
       this.map_view.obj.removeControl(child_view.obj);
@@ -66,19 +64,19 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
 
   add_subitem_model(child_model) {
     return this.create_child_view(child_model, {
-      map_view: this
-      }).then(view => {
-        if (child_model instanceof LeafletLayerModel) {
-          this.map_view.obj.addLayer(view.obj);
-        } else {
-          this.map_view.obj.addControl(view.obj);
-        }
+      map_view: this,
+    }).then((view) => {
+      if (child_model instanceof LeafletLayerModel) {
+        this.map_view.obj.addLayer(view.obj);
+      } else {
+        this.map_view.obj.addControl(view.obj);
+      }
 
-    //Trigger the displayed event of the child view.
+      //Trigger the displayed event of the child view.
       this.displayed.then(() => {
         view.trigger('displayed', this);
       });
-    return view;
+      return view;
     });
   }
 
@@ -87,7 +85,7 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
       this.leaflet_events();
       this.model_events();
       this.bind_popup(this.model.get('popup'));
-      this.listenTo(this.model, 'change:popup', function(model, value) {
+      this.listenTo(this.model, 'change:popup', function (model, value) {
         this.bind_popup(value);
       });
       this.update_pane();
@@ -103,7 +101,7 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
   update_pane() {
     const pane = this.model.get('pane');
     if (pane !== '') {
-      L.setOptions(this.obj, {pane});
+      L.setOptions(this.obj, { pane });
     }
   }
 
@@ -112,15 +110,15 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
     if (this.obj.on) {
       this.obj.on(
         'click dblclick mousedown mouseup mouseover mouseout',
-        event => {
+        (event) => {
           this.send({
             event: 'interaction',
             type: event.type,
-            coordinates: [event.latlng.lat, event.latlng.lng]
+            coordinates: [event.latlng.lat, event.latlng.lng],
           });
         }
       );
-      this.obj.on('popupopen', event => {
+      this.obj.on('popupopen', () => {
         // This is a workaround for making maps rendered correctly in popups
         window.dispatchEvent(new Event('resize'));
       });
@@ -146,7 +144,7 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
       this.listenTo(
         this.model,
         'change:' + key,
-        function() {
+        function () {
           L.setOptions(this.obj, this.get_options());
         },
         this
@@ -160,7 +158,7 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
     this.listenTo(
       this.model,
       'change:pane',
-      function() {
+      function () {
         this.map_view.rerender();
       },
       this
@@ -192,9 +190,8 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
     }
     if (value) {
       this.popup_content_promise = this.popup_content_promise.then(() => {
-        return this
-          .create_child_view(value, { map_view: this.map_view })
-          .then(view => {
+        return this.create_child_view(value, { map_view: this.map_view }).then(
+          (view) => {
             // If it's a Popup widget
             if (value.name == 'LeafletPopupModel') {
               this.obj.bindPopup(view.obj, this.popup_options());
@@ -211,7 +208,8 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
             }
             this.popup_content = view;
             this.trigger('popup_content:created');
-          });
+          }
+        );
       });
     }
     return this.popup_content_promise;
@@ -221,7 +219,7 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
     return {
       minWidth: this.model.get('popup_min_width'),
       maxWidth: this.model.get('popup_max_width'),
-      maxHeight: this.model.get('popup_max_height')
+      maxHeight: this.model.get('popup_max_height'),
     };
   }
 

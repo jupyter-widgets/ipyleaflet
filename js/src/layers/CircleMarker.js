@@ -12,7 +12,7 @@ export class LeafletCircleMarkerModel extends path.LeafletPathModel {
       ...super.defaults(),
       _view_name: 'LeafletCircleMarkerView',
       _model_name: 'LeafletCircleMarkerModel',
-      location: DEFAULT_LOCATION
+      location: DEFAULT_LOCATION,
     };
   }
 }
@@ -27,7 +27,7 @@ export class LeafletCircleMarkerView extends path.LeafletPathView {
     this.listenTo(
       this.model,
       'change:location',
-      function() {
+      function () {
         this.obj.setLatLng(this.model.get('location'));
       },
       this

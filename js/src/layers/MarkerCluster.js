@@ -4,7 +4,6 @@
 const widgets = require('@jupyter-widgets/base');
 const L = require('../leaflet.js');
 const layer = require('./Layer.js');
-const utils = require('../utils');
 
 export class LeafletMarkerClusterModel extends layer.LeafletLayerModel {
   defaults() {
@@ -12,7 +11,7 @@ export class LeafletMarkerClusterModel extends layer.LeafletLayerModel {
       ...super.defaults(),
       _view_name: 'LeafletMarkerClusterView',
       _model_name: 'LeafletMarkerClusterModel',
-      markers: [],	
+      markers: [],
       disableClusteringAtZoom: 18,
       maxClusterRadius: 80,
     };
@@ -21,17 +20,16 @@ export class LeafletMarkerClusterModel extends layer.LeafletLayerModel {
 
 LeafletMarkerClusterModel.serializers = {
   ...widgets.WidgetModel.serializers,
-  markers: { deserialize: widgets.unpack_models }
+  markers: { deserialize: widgets.unpack_models },
 };
 
 export class LeafletMarkerClusterView extends layer.LeafletLayerView {
-
   model_events() {
     super.model_events();
     this.listenTo(
       this.model,
       'change:markers',
-      function(model, value) {
+      (model) => {
         this.marker_views.update(model.get('markers'));
       },
       this
@@ -44,7 +42,9 @@ export class LeafletMarkerClusterView extends layer.LeafletLayerView {
   }
 
   add_layer_model(child_model) {
-    return this.create_child_view(child_model, { map_view: this.map_view }).then(child_view => {
+    return this.create_child_view(child_model, {
+      map_view: this.map_view,
+    }).then((child_view) => {
       this.obj.addLayer(child_view.obj);
       return child_view;
     });
@@ -61,4 +61,3 @@ export class LeafletMarkerClusterView extends layer.LeafletLayerView {
     this.marker_views.update(this.model.get('markers'));
   }
 }
-

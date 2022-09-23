@@ -8,7 +8,7 @@ export class LeafletVectorLayerModel extends layer.LeafletLayerModel {
     return {
       ...super.defaults(),
       _view_name: 'LeafletVectorLayerView',
-      _model_name: 'LeafletVectorLayerModel'
+      _model_name: 'LeafletVectorLayerModel',
     };
   }
 }

@@ -1,0 +1,11 @@
+name: ipyleaflet-dev
+channels:
+  - conda-forge
+dependencies:
+  - pip
+  - wheel
+  - flake8
+  - jupyterlab
+  - ipywidgets
+  - jupyter-packaging~=0.7.9
+  - pandas

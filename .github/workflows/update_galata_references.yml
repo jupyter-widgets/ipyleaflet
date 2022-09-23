@@ -39,7 +39,7 @@ jobs:
           channels: conda-forge
 
       - name: Mamba install dependencies
-        run: mamba install python=${{ matrix.python-version }} pip nodejs flake8 jupyterlab ipywidgets jupyter-packaging~=0.7.9 pandas
+        run: mamba install python=${{ matrix.python-version }} pip nodejs flake8 jupyterlab ipywidgets pandas jupyter-packaging~=0.7.9
 
       - name: Install ipyleaflet
         run: pip install .
@@ -47,7 +47,6 @@ jobs:
       - name: Install JS deps
         run: |
           jlpm
-          jlpm playwright install chromium
           jlpm build
         working-directory: js
 
@@ -55,7 +54,9 @@ jobs:
         run: jupyter labextension develop . --overwrite
 
       - name: Install ui-tests
-        run: jlpm install --frozen-lockfile
+        run: |
+          jlpm install --frozen-lockfile
+          jlpm playwright install chromium
         working-directory: ui-tests
 
       - uses: jupyterlab/maintainer-tools/.github/actions/update-snapshots@main

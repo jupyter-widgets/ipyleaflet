@@ -14,7 +14,7 @@ export class LeafletImageOverlayModel extends rasterlayer.LeafletRasterLayerMode
       _model_name: 'LeafletImageOverlayModel',
       url: '',
       bounds: [DEFAULT_LOCATION, DEFAULT_LOCATION],
-      attribution: ''
+      attribution: '',
     };
   }
 }
@@ -34,7 +34,7 @@ export class LeafletImageOverlayView extends rasterlayer.LeafletRasterLayerView 
     this.listenTo(
       this.model,
       'change:url',
-      function() {
+      function () {
         const url = this.model.get('url');
         this.obj.setUrl(url);
       },
@@ -44,7 +44,7 @@ export class LeafletImageOverlayView extends rasterlayer.LeafletRasterLayerView 
     this.listenTo(
       this.model,
       'change:bounds',
-      function() {
+      function () {
         const bounds = this.model.get('bounds');
         this.obj.setBounds(bounds);
       },

@@ -12,7 +12,7 @@ export class LeafletSplitMapControlModel extends control.LeafletControlModel {
       _view_name: 'LeafletSplitMapControlView',
       _model_name: 'LeafletSplitMapControlModel',
       left_layer: undefined,
-      right_layer: undefined
+      right_layer: undefined,
     };
   }
 }
@@ -20,7 +20,7 @@ export class LeafletSplitMapControlModel extends control.LeafletControlModel {
 LeafletSplitMapControlModel.serializers = {
   ...control.LeafletControlModel,
   left_layer: { deserialize: widgets.unpack_models },
-  right_layer: { deserialize: widgets.unpack_models }
+  right_layer: { deserialize: widgets.unpack_models },
 };
 
 function asArray(arg) {
@@ -39,10 +39,10 @@ export class LeafletSplitMapControlView extends control.LeafletControlView {
     var layersModel = this.map_view.model.get('layers');
     layersModel = layersModel.concat(left_models, right_models);
 
-    return this.map_view.layer_views.update(layersModel).then(views => {
+    return this.map_view.layer_views.update(layersModel).then((views) => {
       var left_views = [];
       var right_views = [];
-      views.forEach(view => {
+      views.forEach((view) => {
         if (left_models.includes(view.model)) {
           left_views.push(view.obj);
         }

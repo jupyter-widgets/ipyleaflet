@@ -10,7 +10,7 @@ export class LeafletRectangleModel extends polygon.LeafletPolygonModel {
       ...super.defaults(),
       _view_name: 'LeafletRectangleView',
       _model_name: 'LeafletRectangleModel',
-      bounds: []
+      bounds: [],
     };
   }
 }

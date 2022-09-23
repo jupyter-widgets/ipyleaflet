@@ -9,7 +9,7 @@ export class LeafletRasterLayerModel extends layer.LeafletLayerModel {
       ...super.defaults(),
       _view_name: 'LeafletRasterLayerView',
       _model_name: 'LeafletRasterLayerModel',
-      visible: true
+      visible: true,
     };
   }
 }
@@ -20,7 +20,7 @@ export class LeafletRasterLayerView extends layer.LeafletLayerView {
     this.listenTo(
       this.model,
       'change:opacity',
-      function() {
+      function () {
         if (this.model.get('visible')) {
           this.obj.setOpacity(this.model.get('opacity'));
         }
@@ -30,7 +30,7 @@ export class LeafletRasterLayerView extends layer.LeafletLayerView {
     this.listenTo(
       this.model,
       'change:visible',
-      function() {
+      function () {
         if (this.model.get('visible')) {
           this.obj.setOpacity(this.model.get('opacity'));
         } else {

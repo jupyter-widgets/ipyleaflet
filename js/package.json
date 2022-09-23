@@ -22,7 +22,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "run-p watch:src watch:labextension",
     "watch:src": "webpack --watch",
-    "watch:labextension": "jupyter labextension watch ."
+    "watch:labextension": "jupyter labextension watch .",
+    "lint": "eslint . --fix && prettier --write .",
+    "lint:check": "eslint . && prettier ."
   },
   "dependencies": {
     "@jupyter-widgets/base": "^2 || ^3 || ^4 || ^5 || ^6",
@@ -50,11 +52,16 @@
   "devDependencies": {
     "@jupyterlab/builder": "^3.0.0",
     "css-loader": "^3.4.2",
-    "eslint": "^7.0.0",
+    "eslint": "^8.23.1",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-promise": "^6.0.1",
     "file-loader": "^5.0.2",
     "install": "^0.13.0",
     "npm": "^6.14.5",
     "npm-run-all": "^4.1.5",
+    "prettier": "^2.7.1",
     "rimraf": "^2.6.1",
     "style-loader": "^1.1.2",
     "webpack": "^5",

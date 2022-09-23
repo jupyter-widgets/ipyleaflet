@@ -8,14 +8,12 @@ const proj = require('./projections.js');
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
-
-
 export class LeafletMapStyleModel extends widgets.StyleModel {
   defaults() {
     return {
       ...super.defaults(),
       _model_name: 'LeafletMapStyleModel',
-      _model_module: 'jupyter-leaflet'
+      _model_module: 'jupyter-leaflet',
     };
   }
 }
@@ -24,8 +22,8 @@ LeafletMapStyleModel.styleProperties = {
   cursor: {
     selector: '.leaflet-grab',
     attribute: 'cursor',
-    default: 'grab'
-  }
+    default: 'grab',
+  },
 };
 
 export class LeafletMapModel extends widgets.DOMWidgetModel {
@@ -77,7 +75,7 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       controls: [],
       crs: {
         name: 'EPSG3857',
-        custom: false
+        custom: false,
       },
       style: null,
       default_style: null,
@@ -88,7 +86,7 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
   initialize(attributes, options) {
     super.initialize(attributes, options);
     this.set('window_url', window.location.href);
-    this._dragging = false
+    this._dragging = false;
   }
 
   update_style() {
@@ -102,40 +100,43 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
   }
 
   update_bounds() {
-    return widgets.resolvePromisesDict(this.views).then(views => {
+    return widgets.resolvePromisesDict(this.views).then((views) => {
       // default bounds if the projection is latlon
       var bounds = {
         north: -90,
         south: 90,
         east: -180,
-        west: 180
+        west: 180,
       };
       var pixel_bounds = {
         top: 9007199254740991,
         bottom: 0,
         right: 0,
-        left: 9007199254740991
+        left: 9007199254740991,
       };
-      Object.keys(views).reduce(function (bnds_pixbnds, key) {
-        var bnds = bnds_pixbnds[0];
-        var pixbnds = bnds_pixbnds[1];
-        var obj = views[key].obj;
-        if (obj) {
-          var view_bounds = obj.getBounds();
-          bnds.north = Math.max(bnds.north, view_bounds.getNorth());
-          bnds.south = Math.min(bnds.south, view_bounds.getSouth());
-          bnds.east = Math.max(bnds.east, view_bounds.getEast());
-          bnds.west = Math.min(bnds.west, view_bounds.getWest());
-          var view_pixel_bounds = obj.getPixelBounds();
-          var top_left = view_pixel_bounds.getTopLeft();
-          var bottom_right = view_pixel_bounds.getBottomRight();
-          pixbnds.top = Math.min(pixbnds.top, top_left.y);
-          pixbnds.bottom = Math.max(pixbnds.bottom, bottom_right.y);
-          pixbnds.right = Math.max(pixbnds.right, bottom_right.x);
-          pixbnds.left = Math.min(pixbnds.left, top_left.x);
-        }
-        return [bnds, pixbnds];
-      }, [bounds, pixel_bounds]);
+      Object.keys(views).reduce(
+        function (bnds_pixbnds, key) {
+          var bnds = bnds_pixbnds[0];
+          var pixbnds = bnds_pixbnds[1];
+          var obj = views[key].obj;
+          if (obj) {
+            var view_bounds = obj.getBounds();
+            bnds.north = Math.max(bnds.north, view_bounds.getNorth());
+            bnds.south = Math.min(bnds.south, view_bounds.getSouth());
+            bnds.east = Math.max(bnds.east, view_bounds.getEast());
+            bnds.west = Math.min(bnds.west, view_bounds.getWest());
+            var view_pixel_bounds = obj.getPixelBounds();
+            var top_left = view_pixel_bounds.getTopLeft();
+            var bottom_right = view_pixel_bounds.getBottomRight();
+            pixbnds.top = Math.min(pixbnds.top, top_left.y);
+            pixbnds.bottom = Math.max(pixbnds.bottom, bottom_right.y);
+            pixbnds.right = Math.max(pixbnds.right, bottom_right.x);
+            pixbnds.left = Math.min(pixbnds.left, top_left.x);
+          }
+          return [bnds, pixbnds];
+        },
+        [bounds, pixel_bounds]
+      );
       this.set('north', bounds.north);
       this.set('south', bounds.south);
       this.set('east', bounds.east);
@@ -154,9 +155,8 @@ LeafletMapModel.serializers = {
   controls: { deserialize: widgets.unpack_models },
   style: { deserialize: widgets.unpack_models },
   default_style: { deserialize: widgets.unpack_models },
-  dragging_style: { deserialize: widgets.unpack_models }
+  dragging_style: { deserialize: widgets.unpack_models },
 };
-
 
 export class LeafletMapView extends utils.LeafletDOMWidgetView {
   initialize(options) {
@@ -184,15 +184,14 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
 
   add_layer_model(child_model) {
     return this.create_child_view(child_model, {
-      map_view: this
-    }).then(view => {
+      map_view: this,
+    }).then((view) => {
       this.obj.addLayer(view.obj);
 
       this.displayed.then(() => {
         view.trigger('displayed', this);
       });
       return view;
-
     });
   }
 
@@ -203,10 +202,9 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
 
   add_control_model(child_model) {
     return this.create_child_view(child_model, {
-      map_view: this
-    }).then(view => {
+      map_view: this,
+    }).then((view) => {
       this.obj.addControl(view.obj);
-
 
       // Trigger the displayed event of the child view.
       this.displayed.then(() => {
@@ -259,7 +257,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
         ...this.get_options(),
         crs: proj.getProjection(this.model.get('crs')),
         zoomControl: false,
-        attributionControl: false
+        attributionControl: false,
       };
       this.obj = L.map(this.map_container, options);
     });
@@ -273,7 +271,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
   }
 
   leaflet_events() {
-    this.obj.on('moveend', e => {
+    this.obj.on('moveend', (e) => {
       if (!this.dirty) {
         this.dirty = true;
         var c = e.target.getCenter();
@@ -292,7 +290,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       this.model.update_style();
     });
 
-    this.obj.on('zoomend', e => {
+    this.obj.on('zoomend', (e) => {
       if (!this.dirty) {
         this.dirty = true;
         var z = e.target.getZoom();
@@ -306,12 +304,12 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
 
     this.obj.on(
       'click dblclick mousedown mouseup mouseover mouseout mousemove contextmenu preclick',
-      event => {
+      (event) => {
         this.send({
           event: 'interaction',
           type: event.type,
           coordinates: [event.latlng.lat, event.latlng.lng],
-          location: this.model.get('location')
+          location: this.model.get('location'),
         });
       }
     );
@@ -329,27 +327,21 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       this.listenTo(
         this.model,
         'change:' + key,
-        function() {
+        function () {
           L.setOptions(this.obj, this.get_options());
         },
         this
       );
     }
     this.listenTo(this.model, 'msg:custom', this.handle_msg, this);
-    this.listenTo(
-      this.model,
-      'change:panes',
-      this.rerender,
-      this
-    );
+    this.listenTo(this.model, 'change:panes', this.rerender, this);
     this.listenTo(
       this.model,
       'change:dragging',
       function () {
         if (this.model.get('dragging')) {
           this.obj.dragging.enable();
-        }
-        else {
+        } else {
           this.obj.dragging.disable();
         }
       },
@@ -385,7 +377,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
           // which causes the center to bounce despite of the dirty flag
           // which is set back to false synchronously.
           this.obj.flyTo(this.model.get('center'), this.model.get('zoom'), {
-            animate: false
+            animate: false,
           });
           this.dirty = false;
         }
@@ -468,7 +460,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
         // unchanged.
         this.obj.invalidateSize({
           animate: false,
-          pan: true
+          pan: true,
         });
         this.dirty = false;
         break;
@@ -476,7 +468,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
         this.dirty = true;
         this.obj.invalidateSize({
           animate: false,
-          pan: true
+          pan: true,
         });
         this.dirty = false;
         break;

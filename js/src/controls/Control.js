@@ -14,7 +14,7 @@ export class LeafletControlModel extends widgets.WidgetModel {
       _view_module: 'jupyter-leaflet',
       _model_module: 'jupyter-leaflet',
       options: [],
-      position: 'topleft'
+      position: 'topleft',
     };
   }
 }
@@ -42,7 +42,7 @@ export class LeafletControlView extends utils.LeafletWidgetView {
       this.listenTo(
         this.model,
         'change:' + key,
-        function() {
+        function () {
           L.setOptions(this.obj, this.get_options());
         },
         this

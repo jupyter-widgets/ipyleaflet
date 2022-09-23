@@ -4,7 +4,7 @@
 const L = require('../leaflet.js');
 const layer = require('./Layer.js');
 
-export class LeafletDivIconModel extends layer.LeafletUILayerModel  {
+export class LeafletDivIconModel extends layer.LeafletUILayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -14,13 +14,13 @@ export class LeafletDivIconModel extends layer.LeafletUILayerModel  {
       bg_pos: [0, 0],
       icon_size: null,
       icon_anchor: null,
-      popup_anchor: [0, 0]
+      popup_anchor: [0, 0],
     };
   }
 }
 
 export class LeafletDivIconView extends layer.LeafletUILayerView {
   create_obj() {
-    this.obj =  L.divIcon(this.get_options());
+    this.obj = L.divIcon(this.get_options());
   }
 }

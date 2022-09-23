@@ -22,14 +22,14 @@ jobs:
       - name: Setup conda
         uses: conda-incubator/setup-miniconda@v2
         with:
+          environment-file: environment-dev.yml
+          activate-environment: ipyleaflet-dev
           mamba-version: "*"
+          python-version: ${{ matrix.python-version }}
           channels: conda-forge
 
-      - name: Mamba install dependencies
-        run: mamba install python=${{ matrix.python-version }} pip nodejs=16 flake8 jupyterlab ipywidgets>=8.0.1 jupyter-packaging~=0.7.9 pandas
-
       - name: Install ipyleaflet
-        run: pip install .
+        run: pip install . --no-deps
 
       - name: Install browser
         run: |

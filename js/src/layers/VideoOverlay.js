@@ -14,7 +14,7 @@ export class LeafletVideoOverlayModel extends rasterlayer.LeafletRasterLayerMode
       _model_name: 'LeafletVideoOverlayModel',
       url: '',
       bounds: [DEFAULT_LOCATION, DEFAULT_LOCATION],
-      attribution: ''
+      attribution: '',
     };
   }
 }
@@ -35,7 +35,7 @@ export class LeafletVideoOverlayView extends rasterlayer.LeafletRasterLayerView 
             this.obj.getElement().pause();
           });
           return button;
-        }
+        },
       });
       var MyPlayControl = L.Control.extend({
         onAdd: () => {
@@ -45,7 +45,7 @@ export class LeafletVideoOverlayView extends rasterlayer.LeafletRasterLayerView 
             this.obj.getElement().play();
           });
           return button;
-        }
+        },
       });
       new MyPauseControl().addTo(this.map_view.obj);
       new MyPlayControl().addTo(this.map_view.obj);
@@ -57,7 +57,7 @@ export class LeafletVideoOverlayView extends rasterlayer.LeafletRasterLayerView 
     this.listenTo(
       this.model,
       'change:url',
-      function() {
+      function () {
         const url = this.model.get('url');
         const bounds = this.model.get('bounds');
         const options = this.get_options();
@@ -71,7 +71,7 @@ export class LeafletVideoOverlayView extends rasterlayer.LeafletRasterLayerView 
     this.listenTo(
       this.model,
       'change:bounds',
-      function() {
+      function () {
         const url = this.model.get('url');
         const bounds = this.model.get('bounds');
         const options = this.get_options();

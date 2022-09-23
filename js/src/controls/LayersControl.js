@@ -9,7 +9,7 @@ export class LeafletLayersControlModel extends control.LeafletControlModel {
     return {
       ...super.defaults(),
       _view_name: 'LeafletLayersControlView',
-      _model_name: 'LeafletLayersControlModel'
+      _model_name: 'LeafletLayersControlModel',
     };
   }
 }
@@ -43,14 +43,14 @@ export class LeafletLayersControlView extends control.LeafletControlView {
 
   create_obj() {
     return Promise.all(this.map_view.layer_views.views)
-      .then(views => {
-        var baselayers = views.reduce(function(ov, view) {
+      .then((views) => {
+        var baselayers = views.reduce(function (ov, view) {
           if (view.model.get('base')) {
             ov[view.model.get('name')] = view.obj;
           }
           return ov;
         }, {});
-        var overlays = views.reduce(function(ov, view) {
+        var overlays = views.reduce(function (ov, view) {
           if (!view.model.get('base')) {
             ov[view.model.get('name')] = view.obj;
           }

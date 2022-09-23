@@ -12,7 +12,7 @@ class WidgetControl extends L.Control {
     if (!this._container) {
       return;
     }
-    Object.keys(options).forEach(option => {
+    Object.keys(options).forEach((option) => {
       this._container.style[option] = options[option] + 'px';
     });
   }
@@ -32,11 +32,9 @@ class WidgetControl extends L.Control {
     return this;
   }
 
-  onAdd(map) {
-    if(this.options.transparentBg)
-      this._container = L.DomUtil.create('div');
-    else
-      this._container = L.DomUtil.create('div', 'leaflet-widgetcontrol');
+  onAdd() {
+    if (this.options.transparentBg) this._container = L.DomUtil.create('div');
+    else this._container = L.DomUtil.create('div', 'leaflet-widgetcontrol');
 
     L.DomEvent.disableClickPropagation(this._container);
     L.DomEvent.disableScrollPropagation(this._container);
@@ -47,7 +45,7 @@ class WidgetControl extends L.Control {
 
 L.Control.WidgetControl = WidgetControl;
 
-L.control.widgetcontrol = function(options) {
+L.control.widgetcontrol = function (options) {
   return new L.Control.WidgetControl(options);
 };
 
@@ -68,7 +66,7 @@ export class LeafletWidgetControlModel extends control.LeafletControlModel {
 
 LeafletWidgetControlModel.serializers = {
   ...control.LeafletControlModel.serializers,
-  widget: { deserialize: widgets.unpack_models }
+  widget: { deserialize: widgets.unpack_models },
 };
 
 export class LeafletWidgetControlView extends control.LeafletControlView {
@@ -84,7 +82,7 @@ export class LeafletWidgetControlView extends control.LeafletControlView {
       this.widget_view = undefined;
     }
     if (widget_model) {
-      return this.create_child_view(widget_model).then(view => {
+      return this.create_child_view(widget_model).then((view) => {
         this.widget_view = view;
         // Trigger the displayed event of the child view.
         this.displayed.then(() => {
@@ -120,7 +118,7 @@ export class LeafletWidgetControlView extends control.LeafletControlView {
         this.updateLayout();
       }
     );
-    this.listenTo(this.model, 'change:widget', function(model) {
+    this.listenTo(this.model, 'change:widget', () => {
       this.set_widget(this.model.get('widget'));
     });
   }
@@ -130,7 +128,7 @@ export class LeafletWidgetControlView extends control.LeafletControlView {
       maxWidth: this.model.get('max_width'),
       minWidth: this.model.get('min_width'),
       maxHeight: this.model.get('max_height'),
-      minHeight: this.model.get('min_height')
+      minHeight: this.model.get('min_height'),
     });
   }
 }

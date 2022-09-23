@@ -16,7 +16,7 @@ export class LeafletWMSLayerModel extends tilelayer.LeafletTileLayerModel {
       format: 'image/jpeg',
       transparent: false,
       crs: null,
-      uppercase: false
+      uppercase: false,
     };
   }
 }

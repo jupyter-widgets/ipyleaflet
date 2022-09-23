@@ -6,20 +6,20 @@ const L = require('../leaflet.js');
 const control = require('./Control.js');
 
 export class LeafletSearchControlModel extends control.LeafletControlModel {
-  defaults(){
-    return{
+  defaults() {
+    return {
       ...super.defaults(),
       _view_name: 'LeafletSearchControlView',
       _model_name: 'LeafletSearchControlModel',
       url: null,
       jsonp_param: 'json_callback',
       property_name: 'display_name',
-      property_loc: ['lat','lon'],
+      property_loc: ['lat', 'lon'],
       auto_type: false,
       auto_collapse: false,
-      zoom:null,
-      animate_location:false,
-      found_style: {fillColor: "#3f0", color: "#0f0"},
+      zoom: null,
+      animate_location: false,
+      found_style: { fillColor: '#3f0', color: '#0f0' },
       marker: null,
       layer: null,
     };
@@ -32,15 +32,16 @@ LeafletSearchControlModel.serializers = {
   layer: { deserialize: widgets.unpack_models },
 };
 
-
 export class LeafletSearchControlView extends control.LeafletControlView {
   create_obj() {
     const layer = this.model.get('layer');
     const marker = this.model.get('marker');
-    const layer_promise = layer !== null ? this.create_child_view(layer) : Promise.resolve(null);
-    const marker_promise = marker !== null ? this.create_child_view(marker) : Promise.resolve(null);
+    const layer_promise =
+      layer !== null ? this.create_child_view(layer) : Promise.resolve(null);
+    const marker_promise =
+      marker !== null ? this.create_child_view(marker) : Promise.resolve(null);
 
-    return Promise.all([layer_promise, marker_promise]).then(result => {
+    return Promise.all([layer_promise, marker_promise]).then((result) => {
       const layer_view = result[0];
       const marker_view = result[1];
       const options = this.get_options();
@@ -64,7 +65,7 @@ export class LeafletSearchControlView extends control.LeafletControlView {
         event: 'locationfound',
         text: e.text,
         feature: e.layer !== null ? e.layer.feature : null,
-        location: [e.latlng.lat, e.latlng.lng]
+        location: [e.latlng.lat, e.latlng.lng],
       });
     });
   }

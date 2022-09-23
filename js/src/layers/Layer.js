@@ -24,15 +24,19 @@ export class LeafletLayerModel extends widgets.WidgetModel {
       popup_min_width: 50,
       popup_max_width: 300,
       popup_max_height: null,
-      pane: ''
+      pane: '',
+      subitems: []
     };
   }
 }
 
 LeafletLayerModel.serializers = {
   ...widgets.WidgetModel.serializers,
-  popup: { deserialize: widgets.unpack_models }
+  popup: { deserialize: widgets.unpack_models },
+  subitems: { deserialize: widgets.unpack_models }
 };
+
+
 
 export class LeafletUILayerModel extends LeafletLayerModel {
   defaults() {
@@ -51,6 +55,33 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
     this.popup_content_promise = Promise.resolve();
   }
 
+  remove_subitem_view(child_view) {
+    if(child_view instanceof LeafletLayerView) {
+      this.map_view.obj.removeLayer(child_view.obj);
+    } else {
+      this.map_view.obj.removeControl(child_view.obj);
+    }
+    child_view.remove();
+  }
+
+  add_subitem_model(child_model) {
+    return this.create_child_view(child_model, {
+      map_view: this
+      }).then(view => {
+        if (child_model instanceof LeafletLayerModel) {
+          this.map_view.obj.addLayer(view.obj);
+        } else {
+          this.map_view.obj.addControl(view.obj);
+        }
+
+    //Trigger the displayed event of the child view.
+      this.displayed.then(() => {
+        view.trigger('displayed', this);
+      });
+    return view;
+    });
+  }
+
   render() {
     return Promise.resolve(this.create_obj()).then(() => {
       this.leaflet_events();
@@ -60,6 +91,12 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
         this.bind_popup(value);
       });
       this.update_pane();
+      this.subitem_views = new widgets.ViewList(
+        this.add_subitem_model,
+        this.remove_subitem_view,
+        this
+      );
+      this.subitem_views.update(this.model.get('subitems'));
     });
   }
 
@@ -128,10 +165,19 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
       },
       this
     );
+    this.listenTo(
+      this.model,
+      'change:subitems',
+      function () {
+        this.subitem_views.update(this.subitems);
+      },
+      this
+    );
   }
 
   remove() {
     super.remove();
+    this.subitem_views.remove();
     this.popup_content_promise.then(() => {
       if (this.popup_content) {
         this.popup_content.remove();

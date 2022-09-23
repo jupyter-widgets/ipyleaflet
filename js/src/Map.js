@@ -1,7 +1,6 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-
 const widgets = require('@jupyter-widgets/base');
 const L = require('./leaflet.js');
 const utils = require('./utils.js');
@@ -158,6 +157,7 @@ LeafletMapModel.serializers = {
   dragging_style: { deserialize: widgets.unpack_models }
 };
 
+
 export class LeafletMapView extends utils.LeafletDOMWidgetView {
   initialize(options) {
     super.initialize(options);
@@ -188,12 +188,11 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     }).then(view => {
       this.obj.addLayer(view.obj);
 
-      // Trigger the displayed event of the child view.
       this.displayed.then(() => {
         view.trigger('displayed', this);
       });
-
       return view;
+
     });
   }
 
@@ -208,11 +207,11 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     }).then(view => {
       this.obj.addControl(view.obj);
 
+
       // Trigger the displayed event of the child view.
       this.displayed.then(() => {
         view.trigger('displayed', this);
       });
-
       return view;
     });
   }

@@ -140,6 +140,19 @@ class Layer(Widget, InteractMixin):
     pane = Unicode('').tag(sync=True)
 
     options = List(trait=Unicode()).tag(sync=True)
+    subitems = Tuple().tag(trait=Instance(Widget), sync=True, **widget_serialization)
+
+    @validate('subitems')
+    def _validate_subitems(self, proposal):
+        '''Validate subitems list.
+
+        Makes sure only one instance of any given subitem can exist in the
+        subitem list.
+        '''
+        subitem_ids = [subitem.model_id for subitem in proposal.value]
+        if len(set(subitem_ids)) != len(subitem_ids):
+            raise Exception('duplicate subitem detected, only use each subitem once')
+        return proposal.value
 
     def __init__(self, **kwargs):
         super(Layer, self).__init__(**kwargs)
@@ -2537,6 +2550,7 @@ class Map(DOMWidget, InteractMixin):
             if item.model_id in self._control_ids:
                 raise ControlException('control already on map: %r' % item)
             self.controls = tuple([control for control in self.controls] + [item])
+
         return self
 
     def remove(self, item):
@@ -2635,4 +2649,5 @@ class Map(DOMWidget, InteractMixin):
                 else:
                     self.zoom -= 1
                     await wait_for_change(self, 'bounds')
+
                     break

@@ -7,5 +7,8 @@ dependencies:
   - flake8
   - jupyterlab
   - ipywidgets
+  - xyzservices
+  - branca
+  - traittypes
   - jupyter-packaging~=0.7.9
   - pandas

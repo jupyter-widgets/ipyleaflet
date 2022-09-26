@@ -26,7 +26,6 @@ export class LeafletVelocityModel extends layer.LeafletLayerModel {
       maxVelocity: 10,
       velocityScale: 0.005,
       colorScale: [],
-      caption:''
     };
   }
 }

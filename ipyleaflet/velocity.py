@@ -78,7 +78,6 @@ class Velocity(Layer):
     velocity_scale = Float(0.005).tag(sync=True, o=True)
     colormap = Any(linear.OrRd_06)
     color_scale = List([]).tag(sync=True, o=True)
-    caption = Unicode("").tag(sync=True, o=True)
 
     @default("color_scale")
     def _default_color_scale(self):
@@ -90,7 +89,6 @@ class Velocity(Layer):
     @default("subitems")
     def _default_subitems(self):
         colormap_control = ColormapControl(
-            caption=self.caption,
             colormap=self.colormap,
             value_min=self.min_velocity,
             value_max=self.max_velocity,

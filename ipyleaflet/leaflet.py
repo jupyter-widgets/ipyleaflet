@@ -2049,8 +2049,6 @@ class ColormapControl(WidgetControl):
 
     Attributes
     ----------
-    caption : str, default 'caption'
-        The caption of the colormap.
     colormap: branca.colormap.ColorMap instance, default linear.OrRd_06
         The colormap used for the effect.
     value_min : float, default 0.0
@@ -2058,7 +2056,6 @@ class ColormapControl(WidgetControl):
     value_max : float, default 1.0
         The maximal value taken by the data to be represented by the colormap.
     """
-    caption = Unicode('caption')
     colormap = Instance(ColorMap, default_value=linear.OrRd_06)
     value_min = CFloat(0.0)
     value_max = CFloat(1.0)
@@ -2068,7 +2065,6 @@ class ColormapControl(WidgetControl):
         widget = Output(layout={'height': '40px', 'width': '520px', 'margin': '0px -19px 0px 0px'})
         with widget:
             colormap = self.colormap.scale(self.value_min, self.value_max)
-            colormap.caption = self.caption
             display(colormap)
 
         return widget

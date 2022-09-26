@@ -101,5 +101,4 @@ class Velocity(Layer):
             position="topright",
             transparent_bg=False,
         )
-        self.subitems = (colormap_control,)
-        return self.subitems
+        return (colormap_control,)

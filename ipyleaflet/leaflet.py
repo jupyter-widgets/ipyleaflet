@@ -900,6 +900,7 @@ class ImageService(Layer):
         if event_type == 'click':
             self._click_callbacks(**content)
 
+
 class Heatmap(RasterLayer):
     """Heatmap class, with RasterLayer as parent class.
 

@@ -48,7 +48,7 @@ projections = Bunch(
         )
     ),
     EPSG5936=Bunch(
-        Basemap=dict(
+        ESRIBasemap=dict(
             name='EPSG:5936',
             custom=True,
             proj4def="""+proj=stere +lat_0=90 +lat_ts=90 +lon_0=-150 +k=0.994
@@ -107,7 +107,7 @@ projections = Bunch(
                 [4194304, 4194304]
             ]
         ),
-        Basemap=dict(
+        ESRIBasemap=dict(
             name='EPSG:3031',
             custom=True,
             proj4def="""+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1
@@ -129,7 +129,7 @@ projections = Bunch(
                 [4524449.4877656475, 4524583.193633042]
             ]
         ),
-        Imagery=dict(
+        ESRIImagery=dict(
             name='EPSG:3031',
             custom=True,
             proj4def="""+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1

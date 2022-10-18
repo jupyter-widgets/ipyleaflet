@@ -105,8 +105,8 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       var bounds = {
         north: -90,
         south: 90,
-        east: -180,
-        west: 180,
+        east: -Infinity,
+        west: Infinity,
       };
       var pixel_bounds = {
         top: 9007199254740991,

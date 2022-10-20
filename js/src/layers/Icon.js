@@ -16,7 +16,7 @@ export class LeafletIconModel extends layer.LeafletUILayerModel {
       shadow_size: null,
       icon_anchor: null,
       shadow_anchor: null,
-      popup_anchor: [0, 0]
+      popup_anchor: [0, 0],
     };
   }
 }

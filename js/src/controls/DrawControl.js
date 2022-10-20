@@ -19,14 +19,14 @@ export class LeafletDrawControlModel extends control.LeafletControlModel {
       marker: {},
       data: [],
       edit: true,
-      remove: true
+      remove: true,
     };
   }
 }
 
 LeafletDrawControlModel.serializers = {
   ...control.LeafletControlModel.serializers,
-  layer: { deserialize: widgets.unpack_models }
+  layer: { deserialize: widgets.unpack_models },
 };
 
 export class LeafletDrawControlView extends control.LeafletControlView {
@@ -36,10 +36,10 @@ export class LeafletDrawControlView extends control.LeafletControlView {
   }
 
   create_obj() {
-    this.feature_group = L.geoJson([],{
+    this.feature_group = L.geoJson([], {
       style: function (feature) {
         return feature.properties.style;
-      }
+      },
     });
     this.data_to_layers();
     this.map_view.obj.addLayer(this.feature_group);
@@ -72,7 +72,7 @@ export class LeafletDrawControlView extends control.LeafletControlView {
       edit: {
         featureGroup: this.feature_group,
         edit: this.model.get('edit'),
-        remove: this.model.get('remove')
+        remove: this.model.get('remove'),
       },
       draw: {
         polyline: polyline,
@@ -80,40 +80,40 @@ export class LeafletDrawControlView extends control.LeafletControlView {
         circle: circle,
         circlemarker: circlemarker,
         rectangle: rectangle,
-        marker: marker
-      }
+        marker: marker,
+      },
     });
-    this.map_view.obj.on('draw:created', e => {
+    this.map_view.obj.on('draw:created', (e) => {
       var layer = e.layer;
       var geo_json = layer.toGeoJSON();
       geo_json.properties.style = layer.options;
       this.send({
         event: 'draw:created',
-        geo_json: geo_json
+        geo_json: geo_json,
       });
       this.feature_group.addLayer(layer);
       this.layers_to_data();
     });
-    this.map_view.obj.on('draw:edited', e => {
+    this.map_view.obj.on('draw:edited', (e) => {
       var layers = e.layers;
-      layers.eachLayer(layer => {
+      layers.eachLayer((layer) => {
         var geo_json = layer.toGeoJSON();
         geo_json.properties.style = layer.options;
         this.send({
           event: 'draw:edited',
-          geo_json: geo_json
+          geo_json: geo_json,
         });
       });
       this.layers_to_data();
     });
-    this.map_view.obj.on('draw:deleted', e => {
+    this.map_view.obj.on('draw:deleted', (e) => {
       var layers = e.layers;
-      layers.eachLayer(layer => {
+      layers.eachLayer((layer) => {
         var geo_json = layer.toGeoJSON();
         geo_json.properties.style = layer.options;
         this.send({
           event: 'draw:deleted',
-          geo_json: geo_json
+          geo_json: geo_json,
         });
       });
       this.layers_to_data();
@@ -139,7 +139,7 @@ export class LeafletDrawControlView extends control.LeafletControlView {
 
   layers_to_data() {
     let newData = [];
-    this.feature_group.eachLayer(layer => {
+    this.feature_group.eachLayer((layer) => {
       const geoJson = layer.toGeoJSON();
       geoJson.properties.style = layer.options;
       newData.push(geoJson);
@@ -150,46 +150,46 @@ export class LeafletDrawControlView extends control.LeafletControlView {
 
   handle_message(content) {
     if (content.msg == 'clear') {
-      this.feature_group.eachLayer(layer => {
+      this.feature_group.eachLayer((layer) => {
         this.feature_group.removeLayer(layer);
       });
     } else if (content.msg == 'clear_polylines') {
-      this.feature_group.eachLayer(layer => {
+      this.feature_group.eachLayer((layer) => {
         if (layer instanceof L.Polyline && !(layer instanceof L.Polygon)) {
           this.feature_group.removeLayer(layer);
         }
       });
     } else if (content.msg == 'clear_polygons') {
-      this.feature_group.eachLayer(layer => {
+      this.feature_group.eachLayer((layer) => {
         if (layer instanceof L.Polygon && !(layer instanceof L.Rectangle)) {
           this.feature_group.removeLayer(layer);
         }
       });
     } else if (content.msg == 'clear_circles') {
-      this.feature_group.eachLayer(layer => {
+      this.feature_group.eachLayer((layer) => {
         if (layer instanceof L.CircleMarker) {
           this.feature_group.removeLayer(layer);
         }
       });
     } else if (content.msg == 'clear_circle_markers') {
-      this.feature_group.eachLayer(layer => {
+      this.feature_group.eachLayer((layer) => {
         if (layer instanceof L.CircleMarker && !(layer instanceof L.Circle)) {
           this.feature_group.removeLayer(layer);
         }
       });
     } else if (content.msg == 'clear_rectangles') {
-      this.feature_group.eachLayer(layer => {
+      this.feature_group.eachLayer((layer) => {
         if (layer instanceof L.Rectangle) {
           this.feature_group.removeLayer(layer);
         }
       });
     } else if (content.msg == 'clear_markers') {
-      this.feature_group.eachLayer(layer => {
+      this.feature_group.eachLayer((layer) => {
         if (layer instanceof L.Marker) {
           this.feature_group.removeLayer(layer);
         }
       });
     }
-    this.layers_to_data()
+    this.layers_to_data();
   }
 }

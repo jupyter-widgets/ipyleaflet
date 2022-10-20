@@ -11,14 +11,14 @@ export class LeafletLayerGroupModel extends layer.LeafletLayerModel {
       ...super.defaults(),
       _view_name: 'LeafletLayerGroupView',
       _model_name: 'LeafletLayerGroupModel',
-      layers: []
+      layers: [],
     };
   }
 }
 
 LeafletLayerGroupModel.serializers = {
-  ...widgets.WidgetModel.serializers,
-  layers: { deserialize: widgets.unpack_models }
+  ...layer.LeafletLayerModel.serializers,
+  layers: { deserialize: widgets.unpack_models },
 };
 
 export class LeafletLayerGroupView extends layer.LeafletLayerView {
@@ -38,7 +38,7 @@ export class LeafletLayerGroupView extends layer.LeafletLayerView {
   }
 
   add_layer_model(child_model) {
-    return this.create_child_view(child_model).then(child_view => {
+    return this.create_child_view(child_model).then((child_view) => {
       this.obj.addLayer(child_view.obj);
       return child_view;
     });
@@ -48,7 +48,7 @@ export class LeafletLayerGroupView extends layer.LeafletLayerView {
     this.listenTo(
       this.model,
       'change:layers',
-      function() {
+      function () {
         this.layer_views.update(this.model.get('layers'));
       },
       this

@@ -26,7 +26,7 @@ L.patchGridLayer = function (layer) {
       L.Util.requestAnimFrame(function () {
         tile.el.src = url;
       });
-    }
+    };
     img.src = url;
   };
 
@@ -48,22 +48,24 @@ L.patchGridLayer = function (layer) {
     }
 
     if (wasAnimated) {
-      setTimeout(function () {this._map._fadeAnimated = wasAnimated;}, 5000);
+      setTimeout(function () {
+        this._map._fadeAnimated = wasAnimated;
+      }, 5000);
     }
-  }
-}
+  };
+};
 
 var oldTileLayer = L.tileLayer;
 L.tileLayer = function (url, options) {
   var obj = oldTileLayer(url, options);
   L.patchGridLayer(obj);
   return obj;
-}
+};
 
 L.tileLayer.wms = function (url, options) {
   var obj = oldTileLayer.wms(url, options);
   L.patchGridLayer(obj);
   return obj;
-}
+};
 
 module.exports = L;

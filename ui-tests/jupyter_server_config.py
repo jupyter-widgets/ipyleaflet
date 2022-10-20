@@ -5,4 +5,3 @@ c.ServerApp.disable_check_xsrf = True
 c.ServerApp.open_browser = False
 c.LabApp.open_browser = False
 c.LabApp.expose_app_in_browser = True
-c.ServerApp.notebook_dir = './notebooks' 

@@ -9,7 +9,7 @@ export class LeafletCircleModel extends circlemarker.LeafletCircleMarkerModel {
     return {
       ...super.defaults(),
       _view_name: 'LeafletCircleView',
-      _model_name: 'LeafletCircleModel'
+      _model_name: 'LeafletCircleModel',
     };
   }
 }
@@ -25,7 +25,7 @@ export class LeafletCircleView extends circlemarker.LeafletCircleMarkerView {
     this.listenTo(
       this.model,
       'change:radius',
-      function() {
+      function () {
         this.obj.setRadius(this.get_options().radius);
       },
       this

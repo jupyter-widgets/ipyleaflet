@@ -13,7 +13,7 @@ export class LeafletAwesomeIconModel extends layer.LeafletUILayerModel {
       name: 'home',
       marker_color: 'blue',
       icon_color: 'blue',
-      spin: false
+      spin: false,
     };
   }
 }
@@ -25,7 +25,7 @@ export class LeafletAwesomeIconView extends layer.LeafletUILayerView {
       icon: this.model.get('name'),
       markerColor: this.model.get('marker_color'),
       iconColor: this.model.get('icon_color'),
-      spin: this.model.get('spin')
+      spin: this.model.get('spin'),
     });
   }
 }

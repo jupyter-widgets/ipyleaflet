@@ -1,5 +1,6 @@
 Introduction to ipyleaflet
 ==========================
+
 Ipyleaflet is a `Jupyter widget <https://ipywidgets.readthedocs.io>`_ for
 `Leaflet.js <https://leafletjs.com/>`_ , enabling interactive maps in the
 Jupyter notebook. Every object in ipyleaflet (including the Map, TileLayers, Layers,
@@ -15,10 +16,13 @@ Try it online
 .. image:: https://jupyterlite.rtfd.io/en/latest/_static/badge.svg
    :target: ./lite/lab?path=ipyleaflet.ipynb
 
-You can try ipyleaflet below, or open many other live examples in a new browser tab with
-`JupyterLite <./lite/lab?path=ipyleaflet.ipynb>`_ or `RetroLite <./lite/retro/tree>`_.
+You can try ipyleaflet below, or open many other live examples in a new browser tab with : `JupyterLite <./lite/lab?path=ipyleaflet.ipynb>`_ or `RetroLite <./lite/retro/tree>`_.
 
 .. retrolite:: ipyleaflet.ipynb
+   :width: 100%
+   :height: 810px
+   :prompt: Try ipyleaflet!
+
 
 Table of Contents
 -----------------

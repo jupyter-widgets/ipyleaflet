@@ -28,17 +28,14 @@ jobs:
     - name: Setup conda
       uses: conda-incubator/setup-miniconda@v2
       with:
+        environment-file: environment-dev.yml
+        activate-environment: ipyleaflet-dev
         mamba-version: "*"
+        python-version: ${{ matrix.python-version }}
         channels: conda-forge
 
-    - name: Mamba install dependencies
-      run: mamba install python=${{ matrix.python-version }} pip nodejs flake8
-
-    - name: Mamba install dependencies
-      run: mamba install jupyterlab ipywidgets openssl=1.1.1l jupyter-packaging~=0.7.9
-
     - name: Install ipyleaflet
-      run: pip install .
+      run: pip install . --no-deps
 
     - name: Check installation files
       run: |
@@ -48,8 +45,14 @@ jobs:
         test -d $CONDA_PREFIX/share/jupyter/labextensions/jupyter-leaflet
         test -f $CONDA_PREFIX/share/jupyter/labextensions/jupyter-leaflet/package.json
 
-    - name: Flake8 check
+    - name: Python Linters
       run: flake8 ipyleaflet --ignore=E501,E731
+
+    - name: JS Linters
+      run: |
+        yarn install
+        yarn run lint:check
+      working-directory: js
 
     - name: Import check
       run: python -c 'import ipyleaflet'

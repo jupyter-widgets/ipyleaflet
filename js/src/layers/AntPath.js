@@ -20,7 +20,7 @@ export class LeafletAntPathModel extends vectorlayer.LeafletVectorLayerModel {
       paused: false,
       reverse: false,
       hardware_accelerated: false,
-      radius: 10
+      radius: 10,
     };
   }
 }
@@ -35,7 +35,7 @@ export class LeafletAntPathView extends vectorlayer.LeafletVectorLayerView {
     this.listenTo(
       this.model,
       'change:locations',
-      function() {
+      function () {
         this.obj.setLatLngs(this.model.get('locations'));
       },
       this

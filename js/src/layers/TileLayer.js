@@ -24,7 +24,8 @@ export class LeafletTileLayerModel extends rasterlayer.LeafletRasterLayerModel {
       no_wrap: false,
       tms: false,
       show_loading: false,
-      loading: false
+      loading: false,
+      zoom_offset: 0,
     };
   }
 }
@@ -37,28 +38,28 @@ export class LeafletTileLayerView extends rasterlayer.LeafletRasterLayerView {
 
   leaflet_events() {
     super.leaflet_events();
-    this.obj.on('loading', event => {
+    this.obj.on('loading', () => {
       this.model.set('loading', true);
       this.model.save_changes();
       if (this.model.get('show_loading')) {
         this.spinner = new Spinner().spin(this.map_view.el);
       }
     });
-    this.obj.on('load', event => {
+    this.obj.on('load', () => {
       this.model.set('loading', false);
       this.model.save_changes();
       this.send({
-        event: 'load'
+        event: 'load',
       });
       if (this.model.get('show_loading')) {
         this.spinner.stop();
       }
     });
-    this.obj.on("remove", event => {
+    this.obj.on('remove', () => {
       if (this.model.get('show_loading')) {
         this.spinner.stop();
       }
-    })
+    });
   }
 
   model_events() {

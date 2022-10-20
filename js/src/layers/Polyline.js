@@ -12,7 +12,7 @@ export class LeafletPolylineModel extends path.LeafletPathModel {
       _model_name: 'LeafletPolylineModel',
       locations: [],
       smooth_factor: 1.0,
-      no_clip: true
+      no_clip: true,
     };
   }
 }
@@ -27,7 +27,7 @@ export class LeafletPolylineView extends path.LeafletPathView {
     this.listenTo(
       this.model,
       'change:locations',
-      function() {
+      function () {
         this.obj.setLatLngs(this.model.get('locations'));
         if (this.obj.transform) {
           this.obj.transform.reset();
@@ -72,7 +72,7 @@ export class LeafletPolylineView extends path.LeafletPathView {
         .setOptions({
           scaling: this.model.get('scaling'),
           uniformScaling: this.model.get('uniform_scaling'),
-          rotation: this.model.get('rotation')
+          rotation: this.model.get('rotation'),
         })
         .enable();
     }

@@ -19,13 +19,13 @@ export class LeafletVelocityModel extends layer.LeafletLayerModel {
         angleConvention: 'bearingCW',
         displayPosition: 'bottomleft',
         displayEmptyString: 'No velocity data',
-        speedUnit: 'kt'
+        speedUnit: 'kt',
       },
       data: [],
       minVelocity: 0,
       maxVelocity: 10,
       velocityScale: 0.005,
-      colorScale: []
+      colorScale: [],
     };
   }
 }
@@ -42,7 +42,7 @@ export class LeafletVelocityView extends layer.LeafletLayerView {
     this.listenTo(
       this.model,
       'change:data',
-      function() {
+      function () {
         const data = this.model.get('data');
         this.obj.setData(data);
       },
@@ -53,7 +53,7 @@ export class LeafletVelocityView extends layer.LeafletLayerView {
     this.listenTo(
       this.model,
       'change:' + key,
-      function() {
+      function () {
         var options = {};
         options[utils.camel_case(key)] = { ...this.model.get(key) };
         L.setOptions(this.obj, options);

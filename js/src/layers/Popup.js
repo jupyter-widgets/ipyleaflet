@@ -19,14 +19,14 @@ export class LeafletPopupModel extends layer.LeafletUILayerModel {
       child: null,
       min_width: 50,
       max_width: 300,
-      max_height: null
+      max_height: null,
     };
   }
 }
 
 LeafletPopupModel.serializers = {
   ...layer.LeafletUILayerModel.serializers,
-  child: { deserialize: widgets.unpack_models }
+  child: { deserialize: widgets.unpack_models },
 };
 
 export class LeafletPopupView extends layer.LeafletUILayerView {
@@ -62,7 +62,7 @@ export class LeafletPopupView extends layer.LeafletUILayerView {
     }
     if (value) {
       this.child_promise = this.child_promise.then(() => {
-        return this.create_child_view(value).then(view => {
+        return this.create_child_view(value).then((view) => {
           PMessaging.MessageLoop.sendMessage(
             view.pWidget,
             PWidgets.Widget.Msg.BeforeAttach
@@ -83,7 +83,7 @@ export class LeafletPopupView extends layer.LeafletUILayerView {
 
   leaflet_events() {
     super.leaflet_events();
-    this.obj.on('add', event => {
+    this.obj.on('add', () => {
       // This is a workaround for making maps rendered correctly in popups
       window.dispatchEvent(new Event('resize'));
     });

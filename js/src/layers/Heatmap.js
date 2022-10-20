@@ -22,8 +22,8 @@ export class LeafletHeatmapModel extends rasterlayer.LeafletRasterLayerModel {
         0.6: 'cyan',
         0.7: 'lime',
         0.8: 'yellow',
-        1.0: 'red'
-      }
+        1.0: 'red',
+      },
     };
   }
 }
@@ -39,7 +39,7 @@ export class LeafletHeatmapView extends layer.LeafletLayerView {
     this.listenTo(
       this.model,
       'change:locations',
-      function() {
+      function () {
         this.obj.setLatLngs(this.model.get('locations'));
       },
       this

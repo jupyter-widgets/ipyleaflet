@@ -140,6 +140,19 @@ class Layer(Widget, InteractMixin):
     pane = Unicode('').tag(sync=True)
 
     options = List(trait=Unicode()).tag(sync=True)
+    subitems = Tuple().tag(trait=Instance(Widget), sync=True, **widget_serialization)
+
+    @validate('subitems')
+    def _validate_subitems(self, proposal):
+        '''Validate subitems list.
+
+        Makes sure only one instance of any given subitem can exist in the
+        subitem list.
+        '''
+        subitem_ids = [subitem.model_id for subitem in proposal.value]
+        if len(set(subitem_ids)) != len(subitem_ids):
+            raise Exception('duplicate subitem detected, only use each subitem once')
+        return proposal.value
 
     def __init__(self, **kwargs):
         super(Layer, self).__init__(**kwargs)
@@ -577,6 +590,8 @@ class TileLayer(RasterLayer):
         Whether the layer is wrapped around the antimeridian.
     tms: boolean, default False
         If true, inverses Y axis numbering for tiles (turn this on for TMS services).
+    zoom_offset: int, default 0
+        The zoom number used in tile URLs will be offset with this value.
     show_loading: boolean, default False
         Whether to show a spinner when tiles are loading.
     loading: boolean, default False (dynamically updated)
@@ -601,6 +616,7 @@ class TileLayer(RasterLayer):
     detect_retina = Bool(False).tag(sync=True, o=True)
     no_wrap = Bool(False).tag(sync=True, o=True)
     tms = Bool(False).tag(sync=True, o=True)
+    zoom_offset = Int(0).tag(sync=True, o=True)
     show_loading = Bool(False).tag(sync=True)
     loading = Bool(False, read_only=True).tag(sync=True)
 
@@ -1281,7 +1297,9 @@ class LayerGroup(Layer):
         Parameters
         ----------
         layer: layer instance
-            The new layer to include in the group.
+            The new layer to include in the group. This can also be an object
+            with an ``as_leaflet_layer`` method which generates a compatible
+            layer type.
         """
 
         if isinstance(layer, dict):
@@ -2637,6 +2655,9 @@ class Map(DOMWidget, InteractMixin):
         item: Layer or Control instance
             The layer or control to add.
         """
+        if hasattr(item, 'as_leaflet_layer'):
+            item = item.as_leaflet_layer()
+
         if isinstance(item, Layer):
             if isinstance(item, dict):
                 item = basemap_to_tiles(item)
@@ -2648,6 +2669,7 @@ class Map(DOMWidget, InteractMixin):
             if item.model_id in self._control_ids:
                 raise ControlException('control already on map: %r' % item)
             self.controls = tuple([control for control in self.controls] + [item])
+
         return self
 
     def remove(self, item):
@@ -2746,4 +2768,5 @@ class Map(DOMWidget, InteractMixin):
                 else:
                     self.zoom -= 1
                     await wait_for_change(self, 'bounds')
+
                     break

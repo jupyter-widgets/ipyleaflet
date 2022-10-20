@@ -9,7 +9,7 @@ export class LeafletLocalTileLayerModel extends tilelayer.LeafletTileLayerModel 
       ...super.defaults(),
       _view_name: 'LeafletLocalTileLayerView',
       _model_name: 'LeafletLocalTileLayerModel',
-      path: ''
+      path: '',
     };
   }
 }

@@ -14,26 +14,26 @@ export class LeafletGeoJSONModel extends featuregroup.LeafletFeatureGroupModel {
       style: {},
       visible: true,
       hover_style: {},
-      point_style: {}
+      point_style: {},
     };
   }
 }
 
 export class LeafletGeoJSONView extends featuregroup.LeafletFeatureGroupView {
   create_obj() {
-    var style = feature => {
+    var style = (feature) => {
       const model_style = this.model.get('style');
       const feature_style = feature.properties.style || {};
       return {
-         ...feature_style,
-         ...model_style
+        ...feature_style,
+        ...model_style,
       };
     };
 
     var options = {
       style: style,
       onEachFeature: (feature, layer) => {
-        var mouseevent = e => {
+        var mouseevent = (e) => {
           if (e.type == 'mouseover') {
             layer.setStyle(this.model.get('hover_style'));
             layer.once('mouseout', () => {
@@ -44,20 +44,20 @@ export class LeafletGeoJSONView extends featuregroup.LeafletFeatureGroupView {
             event: e.type,
             feature: feature,
             properties: feature.properties,
-            id: feature.id
+            id: feature.id,
           });
         };
         layer.on({
           mouseover: mouseevent,
-          click: mouseevent
+          click: mouseevent,
         });
-      }
+      },
     };
 
     var point_style = this.model.get('point_style');
 
     if (Object.keys(point_style).length !== 0) {
-      options.pointToLayer = function(feature, latlng) {
+      options.pointToLayer = function (feature, latlng) {
         return new L.CircleMarker(latlng, point_style);
       };
     }
@@ -69,7 +69,7 @@ export class LeafletGeoJSONView extends featuregroup.LeafletFeatureGroupView {
     this.listenTo(
       this.model,
       'change:style',
-      function() {
+      function () {
         this.obj.setStyle(this.model.get('style'));
       },
       this
@@ -77,7 +77,7 @@ export class LeafletGeoJSONView extends featuregroup.LeafletFeatureGroupView {
     this.listenTo(
       this.model,
       'change:data',
-      function() {
+      function () {
         this.obj.clearLayers();
         this.obj.addData(this.model.get('data'));
       },
@@ -86,7 +86,7 @@ export class LeafletGeoJSONView extends featuregroup.LeafletFeatureGroupView {
     this.listenTo(
       this.model,
       'change:visible',
-      function() {
+      function () {
         if (this.model.get('visible')) {
           this.obj.addData(this.model.get('data'));
         } else {

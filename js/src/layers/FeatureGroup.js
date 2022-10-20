@@ -9,7 +9,7 @@ export class LeafletFeatureGroupModel extends layergroup.LeafletLayerGroupModel 
     return {
       ...super.defaults(),
       _view_name: 'LeafletFeatureGroupView',
-      _model_name: 'LeafletFeatureGroupModel'
+      _model_name: 'LeafletFeatureGroupModel',
     };
   }
 }

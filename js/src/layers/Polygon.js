@@ -9,7 +9,7 @@ export class LeafletPolygonModel extends polyline.LeafletPolylineModel {
     return {
       ...super.defaults(),
       _view_name: 'LeafletPolygonView',
-      _model_name: 'LeafletPolygonModel'
+      _model_name: 'LeafletPolygonModel',
     };
   }
 }

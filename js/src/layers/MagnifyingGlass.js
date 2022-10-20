@@ -17,14 +17,14 @@ export class LeafletMagnifyingGlassModel extends rasterlayer.LeafletRasterLayerM
       fixedZoom: -1,
       fixedPosition: false,
       latLng: [],
-      layers: []
+      layers: [],
     };
   }
 }
 
 LeafletMagnifyingGlassModel.serializers = {
   ...widgets.WidgetModel.serializers,
-  layers: { deserialize: widgets.unpack_models }
+  layers: { deserialize: widgets.unpack_models },
 };
 
 export class LeafletMagnifyingGlassView extends layer.LeafletLayerView {
@@ -33,7 +33,7 @@ export class LeafletMagnifyingGlassView extends layer.LeafletLayerView {
   }
 
   add_layer_model(child_model) {
-    return this.create_child_view(child_model).then(child_view => {
+    return this.create_child_view(child_model).then((child_view) => {
       return child_view.obj;
     });
   }
@@ -45,7 +45,7 @@ export class LeafletMagnifyingGlassView extends layer.LeafletLayerView {
       this
     );
     var layers = this.get_options().layers;
-    return this.layer_views.update(layers).then(layers => {
+    return this.layer_views.update(layers).then((layers) => {
       var options = this.get_options();
       options.layers = layers;
       this.obj = L.magnifyingGlass(options);
@@ -61,7 +61,7 @@ export class LeafletMagnifyingGlassView extends layer.LeafletLayerView {
       this.listenTo(
         this.model,
         'change:' + key,
-        function() {
+        function () {
           this.map_view.obj.removeLayer(this.obj);
           this.create_obj().then(() => {
             this.map_view.obj.addLayer(this.obj);

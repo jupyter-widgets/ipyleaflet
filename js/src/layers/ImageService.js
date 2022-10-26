@@ -50,6 +50,6 @@ export class LeafletImageServiceView extends layer.LeafletLayerView {
       this.model.on('change:' + option, () => {
         this.obj._update();
       });
-    };
+    }
   }
 }

@@ -55,7 +55,7 @@ L.ImageService = L.Layer.extend({
     this._reset();
   },
 
-  onRemove: function (map) {
+  onRemove: function () {
     L.DomUtil.remove(this._image);
     if (this.options.interactive) {
       this.removeInteractiveTarget(this._image);

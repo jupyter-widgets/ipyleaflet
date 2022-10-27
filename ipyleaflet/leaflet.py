@@ -2356,7 +2356,7 @@ class Map(DOMWidget, InteractMixin):
 
     # Map options
     center = List(def_loc).tag(sync=True, o=True)
-    zoom = CFloat(default_value=None, allow_none=True).tag(sync=True, o=True)
+    zoom = CFloat(12).tag(sync=True, o=True)
     max_zoom = CFloat(default_value=None, allow_none=True).tag(sync=True, o=True)
     min_zoom = CFloat(default_value=None, allow_none=True).tag(sync=True, o=True)
     zoom_delta = CFloat(1).tag(sync=True, o=True)

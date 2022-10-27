@@ -808,67 +808,67 @@ class ImageService(Layer):
     url: string, default ""
         URL to the image service
     f: string, default "image"
-        response format (use `'image'` to stream as bytes)
+        response format (use ``"image"`` to stream as bytes)
     format: string, default "jpgpng"
         format of exported image
 
-        - ``jpgpng``
-        - ``png``
-        - ``png8``
-        - ``png24``
-        - ``jpg``
-        - ``bmp``
-        - ``gif``
-        - ``tiff``
-        - ``png32``
-        - ``bip``
-        - ``bsq``
-        - ``lerc``
+        - ``"jpgpng"``
+        - ``"png"``
+        - ``"png8"``
+        - ``"png24"``
+        - ``"jpg"``
+        - ``"bmp"``
+        - ``"gif"``
+        - ``"tiff"``
+        - ``"png32"``
+        - ``"bip"``
+        - ``"bsq"``
+        - ``"lerc"``
     pixel_type: string, default "UNKNOWN"
         data type of the raster image
 
-        - ``C128``
-        - ``C64``
-        - ``F32``
-        - ``F64``
-        - ``S16``
-        - ``S32``
-        - ``S8``
-        - ``U1``
-        - ``U16``
-        - ``U2``
-        - ``U32``
-        - ``U4``
-        - ``U8``
-        - ``UNKNOWN``
-    no_data: list, default []
+        - ``"C128"``
+        - ``"C64"``
+        - ``"F32"``
+        - ``"F64"``
+        - ``"S16"``
+        - ``"S32"``
+        - ``"S8"``
+        - ``"U1"``
+        - ``"U16"``
+        - ``"U2"``
+        - ``"U32"``
+        - ``"U4"``
+        - ``"U8"``
+        - ``"UNKNOWN"``
+    no_data: List[int], default []
         pixel values representing no data
     no_data_interpretation: string, default ""
         how to interpret no data values
 
-        - ``esriNoDataMatchAny``
-        - ``esriNoDataMatchAll``
+        - ``"esriNoDataMatchAny"``
+        - ``"esriNoDataMatchAll"``
     interpolation: string, default ""
         resampling process for interpolating the pixel values
 
-        - ``RSP_BilinearInterpolation``
-        - ``RSP_CubicConvolution``
-        - ``RSP_Majority``
-        - ``RSP_NearestNeighbor``
+        - ``"RSP_BilinearInterpolation"``
+        - ``"RSP_CubicConvolution"``
+        - ``"RSP_Majority"``
+        - ``"RSP_NearestNeighbor"``
     compression_quality: int, default 100
         lossy quality for image compression
-    band_ids: List, default []
+    band_ids: List[int], default []
         order of bands to export for multiple band images
-    time: List, default []
+    time: List[string], default []
         time range for image
     rendering_rule: dict, default {}
         rules for rendering
     mosaic_rule: dict, default {}
         rules for mosaicking
-    endpoint: str, default "Esri"
+    endpoint: string, default "Esri"
         endpoint format for building the export image URL
 
-        - ``Esri``
+        - ``"Esri"``
     attribution: string, default ""
         include image service attribution
     crs: dict, default ipyleaflet.projections.EPSG3857

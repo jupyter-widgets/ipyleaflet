@@ -14,6 +14,7 @@ Layers
     popup
     wms_layer
     image_video_overlay
+    image_service
     antpath
     polyline
     polygon

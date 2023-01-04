@@ -4,7 +4,9 @@
         "https://files.pythonhosted.org/packages/py3/j/jupyterlab-widgets/jupyterlab_widgets-1.1.1-py3-none-any.whl",
         "https://files.pythonhosted.org/packages/py2.py3/i/ipyleaflet/ipyleaflet-0.17.0-py2.py3-none-any.whl"
       ],
-      "ignore_sys_prefix": true,
+      "ignore_sys_prefix": true
+    },
+    "PipliteAddon": {
       "piplite_urls": [
         "https://files.pythonhosted.org/packages/py2.py3/i/ipyleaflet/ipyleaflet-0.17.0-py2.py3-none-any.whl",
         "https://files.pythonhosted.org/packages/py2.py3/i/ipython-genutils/ipython_genutils-0.2.0-py2.py3-none-any.whl",

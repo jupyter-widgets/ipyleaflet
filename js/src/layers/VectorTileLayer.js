@@ -11,6 +11,7 @@ export class LeafletVectorTileLayerModel extends layer.LeafletLayerModel {
       _model_name: 'LeafletVectorTileLayerModel',
       url: '',
       vectorTileLayerStyles: {},
+      fetchOptions: {},
     };
   }
 }

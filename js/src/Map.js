@@ -466,6 +466,9 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
         break;
       case 'after-show':
         this.dirty = true;
+        // If we are in a jupyter-widget tab, we get an after-show before
+        // this.displayed is resolved. In this case, obj is not created yet.
+        if(!this.obj) return;
         this.obj.invalidateSize({
           animate: false,
           pan: true,

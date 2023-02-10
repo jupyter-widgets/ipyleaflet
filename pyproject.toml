@@ -1,3 +1,4 @@
 [build-system]
-requires = ["jupyter_packaging~=0.12", "jupyterlab>=3.0.0,==3.*", "setuptools>=40.8.0", "wheel"]
+# avoid 3.6 so we don't need the rust buildchain
+requires = ["jupyter_packaging~=0.12", "jupyterlab>=3.0.0,<3.6", "setuptools>=40.8.0", "wheel"]
 build-backend = "setuptools.build_meta"

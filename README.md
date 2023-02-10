@@ -77,7 +77,7 @@ If you are using the classic Jupyter Notebook you need to install the nbextensio
 
 ```
 jupyter nbextension install --py --symlink --sys-prefix --overwrite ipyleaflet
-jupyter nbextension enable --py --sys-prefix --overwrite ipyleaflet
+jupyter nbextension enable --py --sys-prefix ipyleaflet
 ```
 
 Note for developers:

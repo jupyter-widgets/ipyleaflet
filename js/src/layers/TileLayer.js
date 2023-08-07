@@ -12,7 +12,7 @@ export class LeafletTileLayerModel extends rasterlayer.LeafletRasterLayerModel {
       _view_name: 'LeafletTileLayerView',
       _model_name: 'LeafletTileLayerModel',
       bottom: true,
-      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
       min_zoom: 0,
       max_zoom: 18,
       min_native_zoom: null,

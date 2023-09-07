@@ -4523,10 +4523,10 @@ leaflet-search@2.9.8:
   dependencies:
     leaflet "*"
 
-leaflet-splitmap@^1.0.1:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/leaflet-splitmap/-/leaflet-splitmap-1.0.2.tgz#4224ca8397d18327d6b1cd2bf23baaf11a1ba228"
-  integrity sha512-8uBO6xA2qQ2jceUDsZbco1pInXW0NqHPj5DdCqmBshGy2npRrRWS52zovqjAIWLk4dF+kIwwQyjCLH+XpTHhTw==
+leaflet-splitmap@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/leaflet-splitmap/-/leaflet-splitmap-1.0.3.tgz#93b84c8ab976a2c9cf5edd1d7bdb05fde17e86c2"
+  integrity sha512-wIxLBT8tkL7yhP8ppgFxaMftstW5KcyrcoZEetH19clOR6ol9b4c3dAHAYGVIWdju2ZAuBB+EEd0RyygzmNO1w==
   dependencies:
     css-img-datauri-stream "^0.1.5"
     cssify "^0.8.0"

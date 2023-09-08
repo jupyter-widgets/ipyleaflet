@@ -5,8 +5,8 @@ channels:
 
 dependencies:
   - yarn
-  - jupyterlab
-  - jupyter-packaging
+  - jupyterlab>=3.0.0,<3.6
+  - jupyter-packaging~=0.12
   - jupyter-sphinx
   - scipy
   - netcdf4

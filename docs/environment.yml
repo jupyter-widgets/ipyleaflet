@@ -5,7 +5,7 @@ channels:
 
 dependencies:
   - yarn
-  - jupyterlab~=3.0
+  - jupyterlab~=3.6.0
   - jupyter-packaging~=0.12
   - jupyter-sphinx
   - scipy

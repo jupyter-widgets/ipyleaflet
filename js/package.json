@@ -38,7 +38,7 @@
     "leaflet-measure": "^3.1.0",
     "leaflet-rotatedmarker": "^0.2.0",
     "leaflet-search": "2.9.8",
-    "leaflet-splitmap": "^1.0.1",
+    "leaflet-splitmap": "^1.0.3",
     "leaflet-transform": "^1.0.3",
     "leaflet-velocity": "^1.2.4",
     "leaflet.awesome-markers": "^2.0.5",
@@ -50,7 +50,7 @@
     "stream-browserify": "^3.0.0"
   },
   "devDependencies": {
-    "@jupyterlab/builder": "^3.0.0",
+    "@jupyterlab/builder": "^3.6.0",
     "css-loader": "^3.4.2",
     "eslint": "^8.23.1",
     "eslint-config-prettier": "^8.5.0",

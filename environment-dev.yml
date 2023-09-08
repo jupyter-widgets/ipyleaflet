@@ -5,10 +5,10 @@ dependencies:
   - pip
   - wheel
   - flake8
-  - jupyterlab
+  - jupyterlab~=3.6.0
+  - jupyter-packaging~=0.12
   - ipywidgets
   - xyzservices
   - branca
   - traittypes
-  - jupyter-packaging~=0.7.9
   - pandas

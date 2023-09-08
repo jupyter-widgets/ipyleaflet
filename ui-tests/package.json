@@ -4,7 +4,7 @@
   "description": "ipyleaflet UI Tests",
   "private": true,
   "scripts": {
-    "start": "jupyter lab --config ./jupyter_server_config.py",
+    "start": "jupyter labextension disable '@jupyterlab/apputils-extension:announcements' && jupyter lab --config ./jupyter_server_config.py",
     "start:detached": "yarn run start&",
     "clean": "rimraf tests/notebooks/.ipynb_checkpoints && rimraf test-output",
     "test": "yarn run clean && playwright test",

@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 #
 
-version_info = (0, 17, 3)
+version_info = (0, 17, 4)
 
 __version__ = '%s.%s.%s' % (version_info[0], version_info[1], version_info[2])
 

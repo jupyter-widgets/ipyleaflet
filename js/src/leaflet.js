@@ -18,7 +18,6 @@ require('leaflet.awesome-markers');
 require('leaflet-search');
 require('pmtiles');
 require('maplibre-gl');
-require('maplibre-gl-leaflet');
 
 // Monkey patch GridLayer for smoother URL updates
 L.patchGridLayer = function (layer) {

@@ -9,6 +9,7 @@ export * from './layers/AwesomeIcon.js';
 export * from './layers/Popup.js';
 export * from './layers/RasterLayer.js';
 export * from './layers/TileLayer.js';
+export * from './layers/PMTilesLayer.js';
 export * from './layers/VectorTileLayer.js';
 export * from './layers/LocalTileLayer.js';
 export * from './layers/WMSLayer.js';

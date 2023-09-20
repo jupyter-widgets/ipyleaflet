@@ -982,6 +982,30 @@ class VectorTileLayer(Layer):
         self.send({'msg': 'redraw'})
 
 
+class PMTilesLayer(Layer):
+    """PMTilesLayer class, with Layer as parent class.
+
+    PMTiles layer.
+
+
+    Attributes
+    ----------
+    url: string, default ""
+        Url to the vector tile service.
+    attribution: string, default ""
+        Vector tile service attribution.
+    style: dict, default {}
+        CSS Styles to apply to the vector data.
+    """
+
+    _view_name = Unicode('LeafletPMTilesLayerView').tag(sync=True)
+    _model_name = Unicode('LeafletPMTilesLayerModel').tag(sync=True)
+
+    url = Unicode().tag(sync=True, o=True)
+    attribution = Unicode().tag(sync=True, o=True)
+    style = Dict().tag(sync=True, o=True)
+
+
 class VectorLayer(Layer):
     """VectorLayer abstract class."""
 

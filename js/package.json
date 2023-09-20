@@ -49,8 +49,8 @@
     "spin.js": "^4.1.0",
     "stream-browserify": "^3.0.0",
     "pmtiles": "^2.5.0",
-    "maplibre-lib": "^2.2.1",
-    "maplibre-leaflet": "^0.0.17"
+    "maplibre-gl": "^2.2.1",
+    "maplibre-gl-leaflet": "^0.0.17"
   },
   "devDependencies": {
     "@jupyterlab/builder": "^3.6.0",

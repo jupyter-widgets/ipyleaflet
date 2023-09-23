@@ -991,9 +991,9 @@ class PMTilesLayer(Layer):
     Attributes
     ----------
     url: string, default ""
-        Url to the vector tile service.
+        Url to the PMTiles archive.
     attribution: string, default ""
-        Vector tile service attribution.
+        PMTiles archive attribution.
     style: dict, default {}
         CSS Styles to apply to the vector data.
     """

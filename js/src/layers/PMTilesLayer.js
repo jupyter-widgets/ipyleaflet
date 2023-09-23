@@ -23,31 +23,21 @@ export class LeafletPMTilesLayerView extends layer.LeafletLayerView {
     }
 
     create_obj() {
-        var protocol = new pmtiles.Protocol();
-        maplibregl.addProtocol("pmtiles", protocol.tile);
+        this.obj = protomapsL.leafletLayer({url:this.model.get('url')})
         
-        var mapStyle = {
-            ...this.model.get('style'),
-            sources: {
-                ...this.model.get('style').sources,
-                "pmtiles_source": {
-                    "type": "vector",
-                    "url": "pmtiles://" + this.model.get('url')
-                }
-            }
-        };
-        
-        this.obj = L.maplibreGL({
-            style: mapStyle
-        });
     }
 
-    url_changed() {
-        var newUrl = "pmtiles://" + this.model.get('url');
-        var currentStyle = this.obj.getStyle();
-        currentStyle.sources["pmtiles_source"].url = newUrl;
-        this.obj.setStyle(currentStyle);
-    }
+    model_events() {
+        super.model_events();
+        this.listenTo(
+          this.model,
+          'change:url',
+          function () {
+            this.obj.setUrl(this.model.get('url'));
+          },
+          this
+        );
+      }
 
     style_changed() {
         this.obj.setStyle(this.model.get('style'));

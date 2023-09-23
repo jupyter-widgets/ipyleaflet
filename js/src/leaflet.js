@@ -16,8 +16,7 @@ require('leaflet-fullscreen');
 require('leaflet-transform');
 require('leaflet.awesome-markers');
 require('leaflet-search');
-require('pmtiles');
-require('maplibre-gl');
+require('protomaps-leaflet');
 
 // Monkey patch GridLayer for smoother URL updates
 L.patchGridLayer = function (layer) {

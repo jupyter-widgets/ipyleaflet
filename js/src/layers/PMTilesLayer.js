@@ -23,7 +23,9 @@ export class LeafletPMTilesLayerView extends layer.LeafletLayerView {
     }
 
     create_obj() {
-        this.obj = L.protomapsL.leafletLayer({url:this.model.get('url')})
+        this.obj = L.protomapsL.leafletLayer({
+            url:this.model.get('url')
+        })
     }
 
     model_events() {

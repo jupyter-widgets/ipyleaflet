@@ -1005,6 +1005,10 @@ class PMTilesLayer(Layer):
     attribution = Unicode().tag(sync=True, o=True)
     style = Dict().tag(sync=True, o=True)
 
+    def add_inspector(self):
+        """Add an inspector to the layer.
+        """
+        self.send({'msg': 'add_inspector'})
 
 class VectorLayer(Layer):
     """VectorLayer abstract class."""

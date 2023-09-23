@@ -10,25 +10,19 @@ export class LeafletPMTilesLayerModel extends layer.LeafletLayerModel {
             _view_name: 'LeafletPMTilesLayerView',
             _model_name: 'LeafletPMTilesLayerModel',
             url: '',
+            attribution: '',
             style: {},
         };
     }
 }
 
 export class LeafletPMTilesLayerView extends layer.LeafletLayerView {
-    render() {
-        this.create_obj();
-        this.listenTo(this.model, 'change:url', this.url_changed.bind(this));
-        this.listenTo(this.model, 'change:style', this.style_changed.bind(this));
-    }
-
     create_obj() {
-        this.obj = L.protomapsL.leafletLayer({
-            url:this.model.get('url')
-        })
-    }
-
-    model_events() {
+        this.obj = L.protomapsL.leafletLayer(this.model.get('url'), this.get_options());
+        // this.model.on('msg:custom', this.handle_message.bind(this));
+      }
+    
+      model_events() {
         super.model_events();
         this.listenTo(
           this.model,
@@ -40,7 +34,10 @@ export class LeafletPMTilesLayerView extends layer.LeafletLayerView {
         );
       }
 
-    style_changed() {
-        this.obj.setStyle(this.model.get('style'));
+      handle_message(content) {
+        if (content.msg == 'add_inspector') {
+          this.obj.addInspector(this.map_view.obj);
+        }
+      }
     }
-}
+    

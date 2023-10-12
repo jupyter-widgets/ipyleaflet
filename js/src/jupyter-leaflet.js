@@ -31,6 +31,7 @@ export * from './layers/LayerGroup.js';
 export * from './layers/FeatureGroup.js';
 export * from './layers/GeoJSON.js';
 export * from './layers/DivIcon.js';
+export * from './layers/GeoportalLayers.js';
 
 //Controls
 export * from './controls/AttributionControl.js';
@@ -45,6 +46,7 @@ export * from './controls/ZoomControl.js';
 export * from './controls/ScaleControl.js';
 export * from './controls/LegendControl.js';
 export * from './controls/SearchControl.js';
+export * from './controls/GeoportalControls.js';
 
 //Map
 export * from './Map.js';
@@ -61,3 +63,6 @@ require('leaflet.awesome-markers/dist/leaflet.awesome-markers.css');
 require('spin.js/spin.css');
 require('./jupyter-leaflet.css');
 require('leaflet-search/dist/leaflet-search.src.css');
+require('geoportal-extensions-leaflet/dist/GpPluginLeaflet-map.css');
+require('geoportal-extensions-leaflet/dist/GpPluginLeaflet-src.css');
+require('geoportal-extensions-leaflet/dist/GpPluginLeaflet.css');

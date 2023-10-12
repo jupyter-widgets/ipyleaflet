@@ -30,6 +30,7 @@
     "@jupyter-widgets/base": "^2 || ^3 || ^4 || ^5 || ^6",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
+    "geoportal-extensions-leaflet": "^2.2.4",
     "leaflet": "^1.7.1",
     "leaflet-ant-path": "^1.3.0",
     "leaflet-defaulticon-compatibility": "^0.1.1",

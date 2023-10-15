@@ -2,6 +2,7 @@
 // Distributed under the terms of the Modified BSD License.
 
 const layer = require('./Layer.js');
+const protomapsL = require('protomaps-leaflet');
 
 export class LeafletPMTilesLayerModel extends layer.LeafletLayerModel {
     defaults() {
@@ -18,8 +19,12 @@ export class LeafletPMTilesLayerModel extends layer.LeafletLayerModel {
 
 export class LeafletPMTilesLayerView extends layer.LeafletLayerView {
     create_obj() {
-        this.obj = L.protomapsL.leafletLayer(this.model.get('url'), this.get_options());
-        // this.model.on('msg:custom', this.handle_message.bind(this));
+      var options = {
+        ...this.get_options(),
+        url: this.model.get('url'),
+        ...protomapsL.json_style(this.model.get('style')),
+      };
+      this.obj = protomapsL.leafletLayer(options);
       }
     
       model_events() {

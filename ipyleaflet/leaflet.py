@@ -1010,6 +1010,7 @@ class PMTilesLayer(Layer):
         """
         self.send({'msg': 'add_inspector'})
 
+
 class VectorLayer(Layer):
     """VectorLayer abstract class."""
 

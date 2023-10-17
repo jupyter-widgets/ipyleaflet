@@ -1578,8 +1578,14 @@ class Choropleth(GeoJSON):
     def _get_data(self):
         if not self.geo_data:
             return {}
+        if not self.choro_data:
+            self.choro_data = {}
+            for i in range(len(self.geo_data['features'])):
+                key = self.geo_data['features'][i][self.key_on]
+                self.choro_data[key] = 0
 
         choro_data_values_list = [x for x in self.choro_data.values() if not isnan(x)]
+        check_identical = len(choro_data_values_list) > 0 and all(elem == choro_data_values_list[0] for elem in choro_data_values_list)
 
         if self.value_min is None:
             self.value_min = min(choro_data_values_list)
@@ -1593,7 +1599,10 @@ class Choropleth(GeoJSON):
         for feature in data['features']:
             feature['properties']['style'] = self.style_callback(feature, colormap,
                                                                  self.choro_data[feature[self.key_on]])
-
+            if check_identical:  # check if all values of choro_data are the same
+                feature['properties']['style']['fillColor'] = self.nan_color
+                feature['properties']['style']['fillOpacity'] = self.nan_opacity
+                warnings.warn("All the values of choro_data are identical, affected style is nan style", UserWarning)
         return data
 
     def __init__(self, **kwargs):

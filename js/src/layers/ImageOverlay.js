@@ -26,6 +26,7 @@ export class LeafletImageOverlayView extends rasterlayer.LeafletRasterLayerView 
       this.model.get('bounds'),
       this.get_options()
     );
+    this.model.on('msg:custom', this.handle_message.bind(this));
   }
 
   model_events() {
@@ -50,5 +51,11 @@ export class LeafletImageOverlayView extends rasterlayer.LeafletRasterLayerView 
       },
       this
     );
+  }
+
+  handle_message(content) {
+    if (content.msg == 'redraw') {
+      this.obj.redraw();
+    }
   }
 }

@@ -772,6 +772,8 @@ class ImageOverlay(RasterLayer):
     # Options
     attribution = Unicode().tag(sync=True, o=True)
 
+    def redraw(self):
+        self.send({'msg':'redraw'})
 
 class VideoOverlay(RasterLayer):
     """VideoOverlay class.

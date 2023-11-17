@@ -448,6 +448,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
 
   _processLuminoMessage(msg, _super) {
     _super.call(this, msg);
+    if(!this.obj) return;
     switch (msg.type) {
       case 'resize':
         // We set the dirty flag to true to prevent the sub-pixel error
@@ -468,7 +469,6 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
         this.dirty = true;
         // If we are in a jupyter-widget tab, we get an after-show before
         // this.displayed is resolved. In this case, obj is not created yet.
-        if(!this.obj) return;
         this.obj.invalidateSize({
           animate: false,
           pan: true,

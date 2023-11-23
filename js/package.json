@@ -50,7 +50,7 @@
     "stream-browserify": "^3.0.0"
   },
   "devDependencies": {
-    "@jupyterlab/builder": "^3.6.0",
+    "@jupyterlab/builder": "^4.0.8",
     "css-loader": "^3.4.2",
     "eslint": "^8.23.1",
     "eslint-config-prettier": "^8.5.0",
@@ -65,7 +65,7 @@
     "rimraf": "^2.6.1",
     "style-loader": "^1.1.2",
     "webpack": "^5",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^5.1.4"
   },
   "jupyterlab": {
     "extension": "src/jupyterlab-plugin",

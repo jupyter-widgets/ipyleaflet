@@ -6,6 +6,7 @@ extensions = [
 
 templates_path = ['_templates']
 
+jupyterlite_dir = "."
 jupyterlite_contents = [
     "../../examples/europe_110.geo.json",
     "../../examples/bars.json",

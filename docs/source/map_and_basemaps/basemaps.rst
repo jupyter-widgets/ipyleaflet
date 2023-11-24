@@ -135,18 +135,3 @@ These basemaps are coming from the `xyzservices <https://xyzservices.readthedocs
 .. jupyter-execute::
 
     Map(basemap=basemaps.Strava.Winter, center=center, zoom=zoom)
-
-
-.. jupyter-execute::
-
-    Map(basemap=basemaps.Stamen.Terrain, center=center, zoom=zoom)
-
-
-.. jupyter-execute::
-
-    Map(basemap=basemaps.Stamen.Toner, center=center, zoom=zoom)
-
-
-.. jupyter-execute::
-
-    Map(basemap=basemaps.Stamen.Watercolor, center=center, zoom=zoom)

@@ -43,7 +43,7 @@ These layers can then be passed in an array to ``Map(layers)``:
 
     mapnik = basemap_to_tiles(basemaps.OpenStreetMap.Mapnik)
     mapnik.base = True
-    toner = basemap_to_tiles(basemaps.Stamen.Toner)
+    toner = basemap_to_tiles(basemaps.Stadia.StamenTerrain)
     toner.base = True
 
     m = Map(layers=[mapnik, toner], center=(52.204793, 360.121558), zoom=9)

@@ -9,7 +9,7 @@ Example
 
     from ipyleaflet import Map, basemaps, basemap_to_tiles, DrawControl
 
-    watercolor = basemap_to_tiles(basemaps.Stamen.Watercolor)
+    watercolor = basemap_to_tiles(basemaps.Stadia.StamenTerrain)
 
     m = Map(layers=(watercolor, ), center=(50, 354), zoom=5)
 

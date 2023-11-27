@@ -11,7 +11,7 @@ Example
         Circle, Marker, Rectangle, LayerGroup
     )
 
-    toner = basemap_to_tiles(basemaps.Stamen.Toner)
+    toner = basemap_to_tiles(basemaps.Stadia.StamenTerrain)
 
     m = Map(layers=(toner, ), center=(50, 354), zoom=5)
 

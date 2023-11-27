@@ -5,6 +5,7 @@ build/
 *.py[cod]
 node_modules/
 *package-lock.json
+js/.yarn/
 
 # Compiled javascript
 ipyleaflet/nbextension/

@@ -8,7 +8,7 @@ Example
 
     from ipyleaflet import Map, basemaps, basemap_to_tiles, Circle
 
-    watercolor = basemap_to_tiles(basemaps.Stamen.Watercolor)
+    watercolor = basemap_to_tiles(basemaps.Stadia.StamenTerrain)
 
     m = Map(layers=(watercolor, ), center=(53, 354), zoom=5)
 

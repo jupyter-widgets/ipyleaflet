@@ -1,0 +1,21 @@
+name: ipyleaflet-docs
+
+channels:
+  - conda-forge
+
+dependencies:
+  - yarn~=1.0
+  - jupyterlab~=3.6.0
+  - jupyter-packaging~=0.12
+  - jupyter-sphinx
+  - scipy
+  - netcdf4
+  - geopandas
+  - xarray
+  - branca
+  - shapely
+  - pydata-sphinx-theme
+  - jupyterlite-sphinx
+  - jupyterlite-xeus-python >=0.9.2,<0.10
+  - pip:
+    - ..

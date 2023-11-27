@@ -4,4 +4,5 @@ channels:
   - https://repo.mamba.pm/conda-forge
 dependencies:
   - numpy
-  - ipyleaflet
+  - pip:
+    - ..

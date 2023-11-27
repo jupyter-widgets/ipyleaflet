@@ -526,6 +526,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mapbox/point-geometry@npm:^0.1.0, @mapbox/point-geometry@npm:~0.1.0":
+  version: 0.1.0
+  resolution: "@mapbox/point-geometry@npm:0.1.0"
+  checksum: ed41c1ce0140de81039424415d9a199abba72cdb2287314e1b8c3e295da3224f7e8c1b0ae99a9b097703e7abe63e1978a518e29896989cc8bba3d482360bc22f
+  languageName: node
+  linkType: hard
+
+"@mapbox/unitbezier@npm:^0.0.0":
+  version: 0.0.0
+  resolution: "@mapbox/unitbezier@npm:0.0.0"
+  checksum: 22ae6d56f743570fb222a5b0d323398e342007f689ae6445b6238d60a2faaa312b41c1de1fb2553bca4ccdb2d3f7006af04d94457c54b44a6454ce0198eebf9e
+  languageName: node
+  linkType: hard
+
+"@mapbox/vector-tile@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "@mapbox/vector-tile@npm:1.3.1"
+  dependencies:
+    "@mapbox/point-geometry": ~0.1.0
+  checksum: 7093d4fa7d0382a0eae9d79526c5ad57c32099300b013d3afb4ab7499ac2a096f6f0a487cc81151ef81e0432a4b157513666b1592a4a4c1497341cde835551aa
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -660,6 +683,13 @@ __metadata:
     "@types/jquery": "*"
     "@types/underscore": "*"
   checksum: 4f44bfb71d75332b5de610be7687f4ae523ad4ef02da844a828403b534b6a94a6288b32cab64371d0ad526e35cfed511652ac53af22d0b9caaac3f4cfb4375dd
+  languageName: node
+  linkType: hard
+
+"@types/css-font-loading-module@npm:^0.0.7":
+  version: 0.0.7
+  resolution: "@types/css-font-loading-module@npm:0.0.7"
+  checksum: a074d3b824b2232160f2353daf1cc62937e4a24154d13607f14f93feaaac6abcf069c8ae02c1396840950fa02c1b3f19ce0f119321f9735905bfb3cd4b9b2021
   languageName: node
   linkType: hard
 
@@ -1949,6 +1979,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"color2k@npm:^1.2.4":
+  version: 1.2.5
+  resolution: "color2k@npm:1.2.5"
+  checksum: f72d2e8788e11b5b0fdfd7e30ef58a94ed413e9f54d4b2d3e300856736cf0ae42473e6346bc1e569d851c58d4e46e7b44f72bdc3f851ffbcb8cce338ad6bc607
+  languageName: node
+  linkType: hard
+
 "colorette@npm:^2.0.14":
   version: 2.0.20
   resolution: "colorette@npm:2.0.20"
@@ -3101,6 +3138,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fflate@npm:^0.7.3":
+  version: 0.7.4
+  resolution: "fflate@npm:0.7.4"
+  checksum: b812ab26047432db70ff4c73eb45ad53bd0774575b4818b9c61c2921e89ec65d1259f06ec1618f2ac55e6a2f2e29b6dc09173d213b46580bc69efae5344bf8f1
+  languageName: node
+  linkType: hard
+
 "figgy-pudding@npm:^3.4.1, figgy-pudding@npm:^3.5.1, figgy-pudding@npm:^3.5.2":
   version: 3.5.2
   resolution: "figgy-pudding@npm:3.5.2"
@@ -3196,6 +3240,13 @@ __metadata:
   bin:
     flat: cli.js
   checksum: 12a1536ac746db74881316a181499a78ef953632ddd28050b7a3a43c62ef5462e3357c8c29d76072bb635f147f7a9a1f0c02efef6b4be28f8db62ceb3d5c7f5d
+  languageName: node
+  linkType: hard
+
+"flatqueue@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "flatqueue@npm:1.2.1"
+  checksum: 39516b6a00ac7edf99deded26f605c87db058df8cd5a097c70b4cd38377022c67280a2b1fd494142667667ed82426f8cb5469563e6da9101ceb20b018c83cf84
   languageName: node
   linkType: hard
 
@@ -4541,6 +4592,7 @@ __metadata:
     prettier: ^2.7.1
     proj4: ^2.6.0
     proj4leaflet: ^1.0.1
+    protomaps-leaflet: ^1.24.0
     rimraf: ^2.6.1
     spin.js: ^4.1.0
     stream-browserify: ^3.0.0
@@ -6350,7 +6402,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pbf@npm:^3.0.2":
+"pbf@npm:^3.0.2, pbf@npm:^3.2.1":
   version: 3.2.1
   resolution: "pbf@npm:3.2.1"
   dependencies:
@@ -6421,10 +6473,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pmtiles@npm:2.7.0":
+  version: 2.7.0
+  resolution: "pmtiles@npm:2.7.0"
+  dependencies:
+    fflate: ^0.7.3
+  checksum: e24b22fea2858048b2c0f2cd320a370ea47b4155bdd450a12093b717e8d97bdbb0b16f374fba270a47033964d5bbd3ab74763a0057620082ca65480d4b33cdbf
+  languageName: node
+  linkType: hard
+
 "point-geometry@npm:0.0.0":
   version: 0.0.0
   resolution: "point-geometry@npm:0.0.0"
   checksum: 7862f5abd7c7faf7e23fb1aad3c513dd83423800b71cdb6b445a16f2e43162507d4723d6e2a1ede70efe8eb23dfb54706122f077038b4c3bf4ca404e26a60993
+  languageName: node
+  linkType: hard
+
+"polylabel@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "polylabel@npm:1.1.0"
+  dependencies:
+    tinyqueue: ^2.0.3
+  checksum: 637ab098034b95e41c88c5af3657c4c52ce16e7cb5fda25a4d00bfb848c3fb9c52b04e2d0718483e667febecc1413a5c9fa734df8263e4ad6e209b73d9d1f0fc
   languageName: node
   linkType: hard
 
@@ -6551,6 +6621,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"potpack@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "potpack@npm:1.0.2"
+  checksum: 9dfdbbce012ce80842249abcdd89e20222eb8ae96beba8d578b7e41e78feefc7e33b5c72d46fb8dd3a1e382cb4da9c34574764d88aa8849ab36f542fd2088b42
+  languageName: node
+  linkType: hard
+
 "prelude-ls@npm:^1.2.1":
   version: 1.2.1
   resolution: "prelude-ls@npm:1.2.1"
@@ -6673,6 +6750,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"protomaps-leaflet@npm:^1.24.0":
+  version: 1.24.0
+  resolution: "protomaps-leaflet@npm:1.24.0"
+  dependencies:
+    "@mapbox/point-geometry": ^0.1.0
+    "@mapbox/unitbezier": ^0.0.0
+    "@mapbox/vector-tile": ^1.3.1
+    "@types/css-font-loading-module": ^0.0.7
+    color2k: ^1.2.4
+    flatqueue: ^1.2.1
+    pbf: ^3.2.1
+    pmtiles: 2.7.0
+    polylabel: ^1.1.0
+    potpack: ^1.0.2
+    rbush: ^3.0.1
+  checksum: a1120656582752ef16991f8c5781f28b823acd2c7d11ca564d257ab34cc3fb5cecfabde693e6f2b21a08725fe6207515d284279e42517ae7a27ddc55d6f09301
+  languageName: node
+  linkType: hard
+
 "prr@npm:~1.0.1":
   version: 1.0.1
   resolution: "prr@npm:1.0.1"
@@ -6788,6 +6884,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"quickselect@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "quickselect@npm:2.0.0"
+  checksum: ed2e78431050d223fb75da20ee98011aef1a03f7cb04e1a32ee893402e640be3cfb76d72e9dbe01edf3bb457ff6a62e5c2d85748424d1aa531f6ba50daef098c
+  languageName: node
+  linkType: hard
+
 "qw@npm:^1.0.2":
   version: 1.0.2
   resolution: "qw@npm:1.0.2"
@@ -6811,6 +6914,15 @@ __metadata:
     randombytes: ^2.0.5
     safe-buffer: ^5.1.0
   checksum: 33734bb578a868d29ee1b8555e21a36711db084065d94e019a6d03caa67debef8d6a1bfd06a2b597e32901ddc761ab483a85393f0d9a75838f1912461d4dbfc7
+  languageName: node
+  linkType: hard
+
+"rbush@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "rbush@npm:3.0.1"
+  dependencies:
+    quickselect: ^2.0.0
+  checksum: b7def5ba762ca01b6c7c032098ef61b86bd4fef4afb82e4a1d70a07a929b39e779290446c2d4730f577e8a1c8fd0dfd349605b5ea0229258d5f013debdffa65a
   languageName: node
   linkType: hard
 
@@ -8054,6 +8166,13 @@ __metadata:
   version: 1.3.0
   resolution: "tiny-relative-date@npm:1.3.0"
   checksum: 82a1fa2f3b00cd77c3ff0cf45380dad9e5befa8ee344d8de8076525efda4e6bd6af8f7f483e103b5834dc34bbed337fab7ac151f1d1a429a20f434a3744057b4
+  languageName: node
+  linkType: hard
+
+"tinyqueue@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "tinyqueue@npm:2.0.3"
+  checksum: 0b6bda46b680dca072f84aef1acd22a7085a2ff2aa8e222bb41045c61a056943805056d77d7f976587ed6a0597872beb5c416043f65f0314304432d6c178dd20
   languageName: node
   linkType: hard
 

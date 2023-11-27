@@ -4,5 +4,8 @@ channels:
   - https://repo.mamba.pm/conda-forge
 dependencies:
   - numpy
+  - traittypes
+  - xyzservices
+  - branca
   - pip:
     - ..

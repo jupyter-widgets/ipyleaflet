@@ -34,6 +34,30 @@ export class LeafletMarkerClusterView extends layer.LeafletLayerView {
       },
       this
     );
+    this.listenTo(
+      this.model,
+      'change:opacity',
+      function () {
+        if (this.model.get('visible')) {
+          document.querySelector('.test-icon').style.opacity =
+            this.model.get('opacity');
+        }
+      },
+      this
+    );
+    this.listenTo(
+      this.model,
+      'change:visible',
+      function () {
+        if (this.model.get('visible')) {
+          document.querySelector('.test-icon').style.opacity =
+            this.model.get('opacity');
+        } else {
+          document.querySelector('.test-icon').style.opacity = 0;
+        }
+      },
+      this
+    );
   }
 
   remove_layer_view(child_view) {
@@ -52,12 +76,35 @@ export class LeafletMarkerClusterView extends layer.LeafletLayerView {
 
   create_obj() {
     var options = this.get_options();
-    this.obj = L.markerClusterGroup(options);
+    this.obj = L.markerClusterGroup({
+      disableClusteringAtZoom: options['disableClusteringAtZoom'],
+      maxClusterRadius: options['maxClusterRadius'],
+      iconCreateFunction: function (cluster) {
+        var childCount = cluster.getChildCount();
+
+        var c = ' marker-cluster-';
+        if (childCount < 10) {
+          c += 'small';
+        } else if (childCount < 100) {
+          c += 'medium';
+        } else {
+          c += 'large';
+        }
+
+        return new L.DivIcon({
+          html: '<div><span>' + childCount + '</span></div>',
+          className: 'test-icon marker-cluster' + c,
+          iconSize: new L.Point(40, 40),
+        });
+      },
+    });
+
     this.marker_views = new widgets.ViewList(
       this.add_layer_model,
       this.remove_layer_view,
       this
     );
+
     this.marker_views.update(this.model.get('markers'));
   }
 }

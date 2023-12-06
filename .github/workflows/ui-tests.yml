@@ -34,21 +34,11 @@ jobs:
       - name: Install browser
         run: |
           jlpm install
-          jlpm playwright install chromium
+          npx playwright install chromium
         working-directory: ui-tests
-
-      - name: Launch JupyterLab
-        run: jlpm start:detached > /tmp/jupyterlab_server.log 2>&1
-        working-directory: ui-tests
-
-      - name: Wait for JupyterLab
-        uses: ifaxity/wait-on-action@v1
-        with:
-          resource: http-get://localhost:8888/
-          timeout: 360000
 
       - name: Widget rendering tests
-        run: jlpm run test
+        run: npx playwright test
         working-directory: ui-tests
 
       - name: Upload Playwright Test assets

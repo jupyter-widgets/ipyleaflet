@@ -959,7 +959,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.16.2":
+"@playwright/test@npm:^1.16.2, @playwright/test@npm:^1.32.0":
   version: 1.40.1
   resolution: "@playwright/test@npm:1.40.1"
   dependencies:
@@ -2619,8 +2619,8 @@ __metadata:
   resolution: "ipyleaflet-ui-tests@workspace:."
   dependencies:
     "@jupyterlab/galata": ^4.3.5
+    "@playwright/test": ^1.32.0
     klaw-sync: ^6.0.0
-    playwright: ^1.40.1
     rimraf: ^3.0.2
   languageName: unknown
   linkType: soft
@@ -3367,7 +3367,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright@npm:1.40.1, playwright@npm:^1.40.1":
+"playwright@npm:1.40.1":
   version: 1.40.1
   resolution: "playwright@npm:1.40.1"
   dependencies:

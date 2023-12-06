@@ -1366,9 +1366,28 @@ class MarkerCluster(Layer):
     _model_name = Unicode("LeafletMarkerClusterModel").tag(sync=True)
 
     markers = Tuple().tag(trait=Instance(Layer), sync=True, **widget_serialization)
+
     # Options
+    show_coverage_on_hover = Bool(True).tag(sync=True, o=True)
+    zoom_to_bounds_on_click = Bool(True).tag(sync=True, o=True)
+    spiderfy_on_max_zoom = Bool(True).tag(sync=True, o=True)
+    remove_outside_visible_bounds = Bool(True).tag(sync=True, o=True)
+    animate = Bool(True).tag(sync=True, o=True)
+    animate_adding_markers = Bool(False).tag(sync=True, o=True)
     disable_clustering_at_zoom = Int(18).tag(sync=True, o=True)
     max_cluster_radius = Int(80).tag(sync=True, o=True)
+    polygon_options = Dict({}).tag(sync=True, o=True)
+
+    single_marker_mode = Bool(False).tag(sync=True, o=True)
+    spider_leg_polyline_options = Dict({"weight": 1.5, "color": "#222", "opacity": 0.5}).tag(sync=True, o=True)
+    spiderfy_distance_multiplier = Int(1).tag(sync=True, o=True)
+
+    chunked_loading = Bool(False).tag(sync=True, o=True)
+    chunk_interval =  Int(200).tag(sync=True, o=True)
+    chunk_delay = Int(50).tag(sync=True, o=True)
+
+    
+
 
 
 class LayerGroup(Layer):

@@ -12,8 +12,26 @@ export class LeafletMarkerClusterModel extends layer.LeafletLayerModel {
       _view_name: 'LeafletMarkerClusterView',
       _model_name: 'LeafletMarkerClusterModel',
       markers: [],
+      show_coverage_on_hover: true,
+      zoom_to_bounds_on_click: true,
+      spiderfy_on_max_zoom: true,
+      remove_outside_visible_bounds: true,
+      animate: true,
+      animate_adding_markers: false,
       disableClusteringAtZoom: 18,
       maxClusterRadius: 80,
+      single_marker_mode: false,
+      spiderfy_distance_multiplier: 1,
+      polygon_options: {},
+      chunked_loading: false,
+      chunk_interval: 200,
+      chunk_delay: 50,
+
+      spider_leg_polyline_options: {
+        weight: 1.5,
+        color: '#333',
+        opacity: 0.5,
+      },
     };
   }
 }

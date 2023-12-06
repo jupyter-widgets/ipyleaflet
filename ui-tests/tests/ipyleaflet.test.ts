@@ -1,18 +1,24 @@
-import { expect, IJupyterLabPageFixture, test } from '@jupyterlab/galata';
-import * as path from 'path';
-const klaw = require('klaw-sync');
+import { expect, IJupyterLabPageFixture, test } from "@jupyterlab/galata";
+import * as path from "path";
+const klaw = require("klaw-sync");
 
-
-const filterUpdateNotebooks = item => {
+const filterUpdateNotebooks = (item) => {
   const basename = path.basename(item.path);
-  return basename.includes('_update');
-}
+  return basename.includes("_update");
+};
 
-const testCellOutputs = async (page: IJupyterLabPageFixture, tmpPath: string, theme: 'JupyterLab Light' | 'JupyterLab Dark') => {
-  const paths = klaw(path.resolve(__dirname, '../notebooks'), {filter: item => !filterUpdateNotebooks(item), nodir: true});
-  const notebooks = paths.map(item => path.basename(item.path));
+const testCellOutputs = async (
+  page: IJupyterLabPageFixture,
+  tmpPath: string,
+  theme: "JupyterLab Light" | "JupyterLab Dark"
+) => {
+  const paths = klaw(path.resolve(__dirname, "../notebooks"), {
+    filter: (item) => !filterUpdateNotebooks(item),
+    nodir: true,
+  });
+  const notebooks = paths.map((item) => path.basename(item.path));
 
-  const contextPrefix = theme == 'JupyterLab Light' ? 'light_' : 'dark_';
+  const contextPrefix = theme == "JupyterLab Light" ? "light_" : "dark_";
   page.theme.setTheme(theme);
 
   for (const notebook of notebooks) {
@@ -23,7 +29,11 @@ const testCellOutputs = async (page: IJupyterLabPageFixture, tmpPath: string, th
 
     let numCellImages = 0;
 
-    const getCaptureImageName = (contextPrefix: string, notebook: string, id: number): string => {
+    const getCaptureImageName = (
+      contextPrefix: string,
+      notebook: string,
+      id: number
+    ): string => {
       return `${contextPrefix}-${notebook}-cell-${id}.png`;
     };
 
@@ -46,39 +56,35 @@ const testCellOutputs = async (page: IJupyterLabPageFixture, tmpPath: string, th
           results.push(await cell.screenshot());
           numCellImages++;
         }
-      }
+      },
     });
 
     await page.notebook.save();
 
     for (let c = 0; c < numCellImages; ++c) {
-      expect(results[c]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, c));
+      expect(results[c]).toMatchSnapshot(
+        getCaptureImageName(contextPrefix, notebook, c)
+      );
     }
 
     await page.notebook.close(true);
   }
-}
+};
 
-test.describe('ipyleaflet Visual Regression', () => {
+test.describe("ipyleaflet Visual Regression", () => {
   test.beforeEach(async ({ page, tmpPath }) => {
     await page.contents.uploadDirectory(
-      path.resolve(__dirname, '../notebooks'),
+      path.resolve(__dirname, "../../notebooks"),
       tmpPath
     );
     await page.filebrowser.openDirectory(tmpPath);
   });
 
-  test('Light theme: Check ipyleaflet renders', async ({
-    page,
-    tmpPath,
-  }) => {
-    await testCellOutputs(page, tmpPath, 'JupyterLab Light');
+  test("Light theme: Check ipyleaflet renders", async ({ page, tmpPath }) => {
+    await testCellOutputs(page, tmpPath, "JupyterLab Light");
   });
 
-  test('Dark theme: Check ipyleaflet renders', async ({
-    page,
-    tmpPath,
-  }) => {
-    await testCellOutputs(page, tmpPath, 'JupyterLab Dark');
+  test("Dark theme: Check ipyleaflet renders", async ({ page, tmpPath }) => {
+    await testCellOutputs(page, tmpPath, "JupyterLab Dark");
   });
 });

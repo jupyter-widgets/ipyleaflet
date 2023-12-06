@@ -30,6 +30,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@jupyterlab/galata", "npm:4.5.6"],\
             ["klaw-sync", "npm:6.0.0"],\
+            ["playwright", "npm:1.40.1"],\
             ["rimraf", "npm:3.0.2"]\
           ],\
           "linkType": "SOFT"\
@@ -3094,6 +3095,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ipyleaflet-ui-tests", "workspace:."],\
             ["@jupyterlab/galata", "npm:4.5.6"],\
             ["klaw-sync", "npm:6.0.0"],\
+            ["playwright", "npm:1.40.1"],\
             ["rimraf", "npm:3.0.2"]\
           ],\
           "linkType": "SOFT"\

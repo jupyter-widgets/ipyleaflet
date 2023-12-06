@@ -16,6 +16,7 @@
   "dependencies": {
     "@jupyterlab/galata": "^4.3.5",
     "klaw-sync": "^6.0.0",
+    "playwright": "^1.40.1",
     "rimraf": "^3.0.2"
   }
 }

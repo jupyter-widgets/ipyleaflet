@@ -6,6 +6,7 @@ build/
 node_modules/
 *package-lock.json
 js/.yarn/
+ui-tests/.yarn/
 
 # Compiled javascript
 ipyleaflet/nbextension/

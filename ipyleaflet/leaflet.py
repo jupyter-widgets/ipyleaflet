@@ -1360,6 +1360,29 @@ class MarkerCluster(Layer):
     ----------
     markers: list, default []
         List of markers to include in the cluster.
+    show_coverage_on_hover: bool, default True
+        Mouse over a cluster to show the bounds of its markers.
+    zoom_to_bounds_on_click: bool, default True
+        Click a cluster to zoom in to its bounds.
+    spiderfy_on_max_zoom: bool, default True
+        When you click a cluster at the bottom zoom level, spiderfy it so you can see all of its markers. (Note: the spiderfy occurs at the current zoom level if all items within the cluster are still clustered at the maximum zoom level or at zoom specified by ``disableClusteringAtZoom`` option)
+    remove_outside_visible_bounds: bool, default True
+        Clusters and markers too far from the viewport are removed from the map for performance.
+    animate: bool, default True
+        Smoothly split / merge cluster children when zooming and spiderfying. If L.DomUtil.TRANSITION is false, this option has no effect (no animation is possible).
+    animate_adding_markers: bool, default False
+        If set to true (and animate option is also true) then adding individual markers to the MarkerClusterGroup after it has been added to the map will add the marker and animate it into the cluster. Defaults to false as this gives better performance when bulk adding markers.
+    disable_clustering_at_zoom: int, default 18
+        Markers will not be clustered at or below this zoom level. Note: you may be interested in disabling ``spiderfyOnMaxZoom`` option when using ``disableClusteringAtZoom``.
+    max_cluster_radius: int, default 80
+        The maximum radius that a cluster will cover from the central marker (in pixels). Decreasing will make more, smaller clusters.
+    polygon_options: dict, default {}
+        Options to pass when creating the L.Polygon(points, options) to show the bounds of a cluster. Defaults to empty, which lets Leaflet use the default `Path options <https://leafletjs.com/reference.html#path>`_.
+    
+    spider_leg_polyline_options: dict, default {"weight": 1.5, "color": "#222", "opacity": 0.5}
+        Allows you to specify `PolylineOptions <https://leafletjs.com/reference.html#polyline>`_ to style spider legs.
+    spiderfy_distance_multiplier: int, default 1
+        Scale the distance away from the center that spiderfied markers are placed. Use if you are using big marker icons.
     """
 
     _view_name = Unicode("LeafletMarkerClusterView").tag(sync=True)
@@ -1377,14 +1400,8 @@ class MarkerCluster(Layer):
     disable_clustering_at_zoom = Int(18).tag(sync=True, o=True)
     max_cluster_radius = Int(80).tag(sync=True, o=True)
     polygon_options = Dict({}).tag(sync=True, o=True)
-
-    single_marker_mode = Bool(False).tag(sync=True, o=True)
     spider_leg_polyline_options = Dict({"weight": 1.5, "color": "#222", "opacity": 0.5}).tag(sync=True, o=True)
     spiderfy_distance_multiplier = Int(1).tag(sync=True, o=True)
-
-    chunked_loading = Bool(False).tag(sync=True, o=True)
-    chunk_interval =  Int(200).tag(sync=True, o=True)
-    chunk_delay = Int(50).tag(sync=True, o=True)
 
     
 

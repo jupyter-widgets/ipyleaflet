@@ -1378,7 +1378,6 @@ class MarkerCluster(Layer):
         The maximum radius that a cluster will cover from the central marker (in pixels). Decreasing will make more, smaller clusters.
     polygon_options: dict, default {}
         Options to pass when creating the L.Polygon(points, options) to show the bounds of a cluster. Defaults to empty, which lets Leaflet use the default `Path options <https://leafletjs.com/reference.html#path>`_.
-    
     spider_leg_polyline_options: dict, default {"weight": 1.5, "color": "#222", "opacity": 0.5}
         Allows you to specify `PolylineOptions <https://leafletjs.com/reference.html#polyline>`_ to style spider legs.
     spiderfy_distance_multiplier: int, default 1
@@ -1404,9 +1403,6 @@ class MarkerCluster(Layer):
     spiderfy_distance_multiplier = Int(1).tag(sync=True, o=True)
 
     
-
-
-
 class LayerGroup(Layer):
     """LayerGroup class.
 

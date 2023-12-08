@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -32,35 +32,25 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup conda
-        uses: conda-incubator/setup-miniconda@v2
+      - name: Install Conda environment with Micromamba
+        uses: mamba-org/setup-micromamba@main
         with:
           environment-file: environment-dev.yml
-          activate-environment: ipyleaflet-dev
-          mamba-version: "*"
-          python-version: ${{ matrix.python-version }}
           channels: conda-forge
 
       - name: Install ipyleaflet
-        run: pip install . --no-deps
+        run: pip install .
 
-      - name: Install JS deps
-        run: |
-          jlpm
-          jlpm build
-        working-directory: js
-
-      - name: Install labextension
-        run: jupyter labextension develop . --overwrite
-
-      - name: Install ui-tests
-        run: |
-          jlpm install --frozen-lockfile
-          jlpm playwright install chromium
+      - name: Install dependencies
+        shell: bash -l {0}
         working-directory: ui-tests
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+        run: jlpm install
 
       - uses: jupyterlab/maintainer-tools/.github/actions/update-snapshots@main
         with:
+          npm_client: jlpm
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          server_url: http-get://localhost:8888/
+          start_server_script: 'null'
           test_folder: ui-tests

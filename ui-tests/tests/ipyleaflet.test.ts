@@ -74,7 +74,7 @@ const testCellOutputs = async (
 test.describe("ipyleaflet Visual Regression", () => {
   test.beforeEach(async ({ page, tmpPath }) => {
     await page.contents.uploadDirectory(
-      path.resolve(__dirname, "../../notebooks"),
+      path.resolve(__dirname, "../notebooks"),
       tmpPath
     );
     await page.filebrowser.openDirectory(tmpPath);

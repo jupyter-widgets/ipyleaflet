@@ -16,6 +16,15 @@ const testCellOutputs = async (
     filter: (item) => !filterUpdateNotebooks(item),
     nodir: true,
   });
+
+  await page.contents.uploadFile(
+    path.resolve(__dirname, "../../examples/US_Unemployment_Oct2012.csv")
+  );
+
+  await page.contents.uploadFile(
+    path.resolve(__dirname, "../../examples/us-states.json")
+  );
+
   const notebooks = paths.map((item) => path.basename(item.path));
 
   const contextPrefix = theme == "JupyterLab Light" ? "light_" : "dark_";

@@ -15,6 +15,7 @@
   "license": "MIT",
   "author": "Project Jupyter",
   "main": "src/index.js",
+  "browser": "dist/index.js",
   "scripts": {
     "build": "webpack && jupyter labextension build .",
     "clean": "rimraf dist/ && rimraf ../ipyleaflet/labextension/ && rimraf ../ipyleaflet/nbextension",

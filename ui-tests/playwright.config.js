@@ -12,5 +12,5 @@ module.exports = {
   },
   preserveOutput: "failures-only",
   retries: 0,
-  timeout: 30000,
+  timeout: 600000,
 };

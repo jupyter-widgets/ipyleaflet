@@ -62,7 +62,3 @@ jobs:
           # generate new snapshots
           jlpm run test:update
         working-directory: ui-tests
-
-      - name: Print JupyterLab logs
-        if: always()
-        run: cat /tmp/jupyterlab_server.log

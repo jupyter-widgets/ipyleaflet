@@ -1,4 +1,8 @@
-.wy-nav-content{
-    max-width: 1000px;
-    margin: auto;
+.wy-nav-content {
+  max-width: 1000px;
+  margin: auto;
+}
+
+.leaflet-image-layer {
+  padding: 0 !important;
 }

@@ -963,6 +963,8 @@ class VectorTileLayer(Layer):
         Vector tile service attribution.
     vector_tile_layer_styles: dict, default {}
         CSS Styles to apply to the vector data.
+    fetch_options: dict, default {}
+        Options passed to `fetch`, e.g. {credentials: 'same-origin'} to send cookie for the current domain.
     """
 
     _view_name = Unicode('LeafletVectorTileLayerView').tag(sync=True)
@@ -972,6 +974,8 @@ class VectorTileLayer(Layer):
     attribution = Unicode().tag(sync=True, o=True)
 
     vector_tile_layer_styles = Dict().tag(sync=True, o=True)
+
+    fetch_options = Dict().tag(sync=True, o=True)
 
     def redraw(self):
         """Force redrawing the tiles.

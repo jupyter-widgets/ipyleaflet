@@ -62,6 +62,14 @@ jupyterlite_contents = [
 #    "../../examples/WealthOfNations.ipynb", # did not install bqplot widget as a federated extension?
     "../../examples/WidgetControl.ipynb",
 ]
+
+# Output file base name for HTML help builder.
+html_theme = "pydata_sphinx_theme"
+#html_theme_path = [pydata_sphinx_theme.get_html_theme_path()]
+htmlhelp_basename = 'ipyleafletdoc'
+html_static_path = ['_static']
+
+
 def setup(app):
     app.add_css_file("main_stylesheet.css")
 
@@ -77,8 +85,3 @@ exclude_patterns = []
 highlight_language = 'python'
 pygments_style = 'sphinx'
 
-# Output file base name for HTML help builder.
-html_theme = "pydata_sphinx_theme"
-#html_theme_path = [pydata_sphinx_theme.get_html_theme_path()]
-htmlhelp_basename = 'ipyleafletdoc'
-html_static_path = ['_static']

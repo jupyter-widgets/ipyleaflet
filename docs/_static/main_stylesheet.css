@@ -3,6 +3,8 @@
   margin: auto;
 }
 
-.leaflet-image-layer {
+/* Undo img background from pydata-sphinx-theme dark theme */
+html[data-theme="dark"] img:not(.only-dark):not(.dark-light) {
+  background-color: transparent !important;
   padding: 0 !important;
 }

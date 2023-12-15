@@ -2676,15 +2676,15 @@ class Map(DOMWidget, InteractMixin):
     def __add__(self, item):
         return self.add(item)
 
-    def add(self, item, position=None):
+    def add(self, item, index=None):
         """Add an item on the map: either a layer or a control.
 
         Parameters
         ----------
         item: Layer or Control instance
             The layer or control to add.
-        position: int
-            The position to insert a Layer. If not specified, the layer is added to the end (on top).
+        index: int
+            The index to insert a Layer. If not specified, the layer is added to the end (on top).
         """
         if hasattr(item, 'as_leaflet_layer'):
             item = item.as_leaflet_layer()
@@ -2692,13 +2692,14 @@ class Map(DOMWidget, InteractMixin):
         if isinstance(item, Layer):
             if isinstance(item, dict):
                 item = basemap_to_tiles(item)
+
             if item.model_id in self._layer_ids:
                 raise LayerException('layer already on map: %r' % item)
-
-            if position is not None:
-                if not isinstance(position, int) or position < 0 or position > len(self.layers):
-                    raise ValueError("Invalid position value")
-                self.layers = tuple(list(self.layers)[:position] + [item] + list(self.layers)[position:])
+                
+            if index is not None:
+                if not isinstance(index, int) or index < 0 or index > len(self.layers):
+                    raise ValueError("Invalid index value")
+                self.layers = tuple(list(self.layers)[:index] + [item] + list(self.layers)[index:])
             else:
                 self.layers = tuple([layer for layer in self.layers] + [item])
 

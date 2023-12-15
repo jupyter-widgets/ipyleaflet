@@ -1758,10 +1758,16 @@ class LayersControl(Control):
     """LayersControl class, with Control as parent class.
 
     A control which allows hiding/showing different layers on the Map.
+    Attributes
+    ----------------------
+    collapsed: bool, default True
+        Set whether control should be open or closed by default
     """
 
     _view_name = Unicode('LeafletLayersControlView').tag(sync=True)
     _model_name = Unicode('LeafletLayersControlModel').tag(sync=True)
+
+    collapsed = Bool(True).tag(sync=True, o=True)
 
 
 class MeasureControl(Control):
@@ -2676,13 +2682,15 @@ class Map(DOMWidget, InteractMixin):
     def __add__(self, item):
         return self.add(item)
 
-    def add(self, item):
+    def add(self, item, index=None):
         """Add an item on the map: either a layer or a control.
 
         Parameters
         ----------
         item: Layer or Control instance
             The layer or control to add.
+        index: int
+            The index to insert a Layer. If not specified, the layer is added to the end (on top).
         """
         if hasattr(item, 'as_leaflet_layer'):
             item = item.as_leaflet_layer()
@@ -2690,9 +2698,15 @@ class Map(DOMWidget, InteractMixin):
         if isinstance(item, Layer):
             if isinstance(item, dict):
                 item = basemap_to_tiles(item)
+
             if item.model_id in self._layer_ids:
                 raise LayerException('layer already on map: %r' % item)
-            self.layers = tuple([layer for layer in self.layers] + [item])
+            if index is not None:
+                if not isinstance(index, int) or index < 0 or index > len(self.layers):
+                    raise ValueError("Invalid index value")
+                self.layers = tuple(list(self.layers)[:index] + [item] + list(self.layers)[index:])
+            else:
+                self.layers = tuple([layer for layer in self.layers] + [item])
 
         elif isinstance(item, Control):
             if item.model_id in self._control_ids:

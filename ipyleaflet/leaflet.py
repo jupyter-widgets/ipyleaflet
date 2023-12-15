@@ -1220,15 +1220,25 @@ class MarkerCluster(Layer):
     ----------
     markers: list, default []
         List of markers to include in the cluster.
+    visible: bool, default True
+        the visibility of the layer on the map
     """
 
     _view_name = Unicode('LeafletMarkerClusterView').tag(sync=True)
     _model_name = Unicode('LeafletMarkerClusterModel').tag(sync=True)
 
     markers = Tuple().tag(trait=Instance(Layer), sync=True, **widget_serialization)
+    visible = Bool(True).tag(sync=True)
+
     # Options
     disable_clustering_at_zoom = Int(18).tag(sync=True, o=True)
     max_cluster_radius = Int(80).tag(sync=True, o=True)
+
+    @observe("visible")
+    def toggle_markers(self, visible):
+        """Switch the markers visibility according to the master cluster."""
+        for marker in self.markers:
+            marker.visible = visible["new"]
 
 
 class LayerGroup(Layer):

@@ -2701,7 +2701,6 @@ class Map(DOMWidget, InteractMixin):
 
             if item.model_id in self._layer_ids:
                 raise LayerException('layer already on map: %r' % item)
-                
             if index is not None:
                 if not isinstance(index, int) or index < 0 or index > len(self.layers):
                     raise ValueError("Invalid index value")

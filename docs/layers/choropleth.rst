@@ -88,6 +88,12 @@ The ``Choropleth`` layer is then created specifying on which key the colormap is
     )
 
 
+Other options for the colormap can be found by running ``linear`` in the notebook cell. Refer to the `Branca docs <https://python-visualization.github.io/branca/>`_ for more information about colormaps:
+
+.. jupyter-execute::
+
+    linear
+
 Attributes
 ----------
 

@@ -6,7 +6,7 @@ import sys
 from ._version import version_info, __version__  # noqa
 
 from .leaflet import *  # noqa
-from .basemaps import basemaps   # noqa
+from .basemaps import basemaps  # noqa
 
 if "google.colab" in sys.modules:
     from google.colab import output
@@ -15,16 +15,15 @@ if "google.colab" in sys.modules:
 
 
 def _jupyter_labextension_paths():
-    return [{
-        'src': 'labextension',
-        'dest': 'jupyter-leaflet'
-    }]
+    return [{"src": "labextension", "dest": "jupyter-leaflet"}]
 
 
 def _jupyter_nbextension_paths():
-    return [{
-        'section': 'notebook',
-        'src': 'nbextension',
-        'dest': 'jupyter-leaflet',
-        'require': 'jupyter-leaflet/extension'
-    }]
+    return [
+        {
+            "section": "notebook",
+            "src": "nbextension",
+            "dest": "jupyter-leaflet",
+            "require": "jupyter-leaflet/extension",
+        }
+    ]

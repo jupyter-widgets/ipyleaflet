@@ -1,6 +1,6 @@
 const L = require('./leaflet.ts');
 
-export function getProjection(proj) {
+export function getProjection(proj: any) {
   if (proj.custom === false) {
     return L.CRS[proj.name];
   } else {

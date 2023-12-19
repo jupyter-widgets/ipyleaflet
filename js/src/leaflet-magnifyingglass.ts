@@ -1,5 +1,6 @@
 // The code below was copied from the following source:
 // https://github.com/bbecquet/Leaflet.MagnifyingGlass
+//@ts-nocheck
 
 L.MagnifyingGlass = L.Layer.extend({
   options: {

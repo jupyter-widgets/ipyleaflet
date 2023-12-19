@@ -1,6 +1,6 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
-
+//@ts-nocheck
 L.ImageService = L.Layer.extend({
   options: {
     url: '',
@@ -19,14 +19,14 @@ L.ImageService = L.Layer.extend({
     attribution: '',
     crs: null,
     interactive: false,
-    updateInterval: 200
+    updateInterval: 200,
   },
 
   initialize: function (options) {
     L.Util.setOptions(this, options);
   },
 
-  updateUrl: function() {
+  updateUrl: function () {
     // update the url for the current bounds
     if (this.options.endpoint === 'Esri') {
       this._url = this.options.url + '/exportImage' + this._buildParams();
@@ -45,7 +45,7 @@ L.ImageService = L.Layer.extend({
       this._initImage();
     }
     this._map.on('moveend', () => {
-      L.Util.throttle(this._update(),this.options.updateInterval,this);
+      L.Util.throttle(this._update(), this.options.updateInterval, this);
     });
     if (this.options.interactive) {
       L.DomUtil.addClass(this._image, 'leaflet-interactive');
@@ -94,7 +94,7 @@ L.ImageService = L.Layer.extend({
   getEvents: function () {
     var events = {
       zoom: this._reset,
-      viewreset: this._reset
+      viewreset: this._reset,
     };
     return events;
   },
@@ -104,7 +104,7 @@ L.ImageService = L.Layer.extend({
     return this._bounds;
   },
 
-  toLatLngBounds: function(a, b) {
+  toLatLngBounds: function (a, b) {
     // convert bounds to LatLngBounds object
     if (a instanceof L.LatLngBounds) {
       return a;
@@ -122,7 +122,7 @@ L.ImageService = L.Layer.extend({
     return this._bounds.getCenter();
   },
 
-  _getBBox: function() {
+  _getBBox: function () {
     // get the bounding box of the current map formatted for exportImage
     var pixelbounds = this._map.getPixelBounds();
     var sw = this._map.unproject(pixelbounds.getBottomLeft());
@@ -131,37 +131,39 @@ L.ImageService = L.Layer.extend({
       this._map.options.crs.project(ne).x,
       this._map.options.crs.project(ne).y,
       this._map.options.crs.project(sw).x,
-      this._map.options.crs.project(sw).y
+      this._map.options.crs.project(sw).y,
     ];
   },
 
-  _getBounds: function() {
+  _getBounds: function () {
     // get the bounds of the current map
-    return [[this._map.getBounds().getSouth(),this._map.getBounds().getWest()],
-      [this._map.getBounds().getNorth(),this._map.getBounds().getEast()]];
+    return [
+      [this._map.getBounds().getSouth(), this._map.getBounds().getWest()],
+      [this._map.getBounds().getNorth(), this._map.getBounds().getEast()],
+    ];
   },
 
-  _getSize: function() {
+  _getSize: function () {
     // get the size of the current map
     var size = this._map.getSize();
     return [size.x, size.y];
   },
 
-  _getEPSG: function() {
+  _getEPSG: function () {
     // get the EPSG code (numeric) of the current map
     var epsg = this.options.crs.code;
     var spatial_reference = parseInt(epsg.split(':')[1], 10);
     return spatial_reference;
   },
 
-  _getTime: function() {
+  _getTime: function () {
     // get start and end times and convert to seconds since epoch
     var st = new Date(this.options.time[0]).getTime().valueOf();
     var et = new Date(this.options.time[1]).getTime().valueOf();
     return [st, et];
   },
 
-  _buildParams: function() {
+  _buildParams: function () {
     // parameters for image server query
     var params = {
       bbox: this._getBBox().join(','),
@@ -209,7 +211,7 @@ L.ImageService = L.Layer.extend({
 
   _initImage: function () {
     var wasElementSupplied = this._url.tagName === 'IMG';
-    var img = this._image = L.DomUtil.create('img');
+    var img = (this._image = L.DomUtil.create('img'));
     L.DomUtil.addClass(img, 'leaflet-image-layer');
     img.onselectstart = L.Util.falseFn;
     img.onmousemove = L.Util.falseFn;
@@ -224,12 +226,13 @@ L.ImageService = L.Layer.extend({
   _reset: function () {
     var img = this._image;
     var size = this._getSize();
-    img.style.width  = size[0] + 'px';
+    img.style.width = size[0] + 'px';
     img.style.height = size[1] + 'px';
     if (this._getEPSG() === 3857) {
       var bounds = new L.Bounds(
         this._map.latLngToLayerPoint(this._bounds.getNorthWest()),
-        this._map.latLngToLayerPoint(this._bounds.getSouthEast()));
+        this._map.latLngToLayerPoint(this._bounds.getSouthEast())
+      );
       L.DomUtil.setPosition(img, bounds.min);
     } else {
       var pixelorigin = this._topLeft.subtract(this._map.getPixelOrigin());
@@ -246,14 +249,13 @@ L.ImageService = L.Layer.extend({
       return;
     }
     // update the url for the current bounds
-    this.updateUrl()
+    this.updateUrl();
     // update image source
     if (this._image && this._map) {
       this._image.src = this._url;
       this._reset();
     }
   },
-
 });
 
 L.imageService = function (options) {

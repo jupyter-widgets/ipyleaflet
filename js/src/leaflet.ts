@@ -19,8 +19,8 @@ require('leaflet-search');
 require('protomaps-leaflet');
 
 // Monkey patch GridLayer for smoother URL updates
-L.patchGridLayer = function (layer) {
-  layer._refreshTileUrl = function (tile, url) {
+L.patchGridLayer = function (layer: any) {
+  layer._refreshTileUrl = function (tile: any, url: any) {
     //use a image in background, so that only replace the actual tile, once image is loaded in cache!
     var img = new Image();
     img.onload = function () {
@@ -50,6 +50,7 @@ L.patchGridLayer = function (layer) {
 
     if (wasAnimated) {
       setTimeout(function () {
+        //@ts-ignore
         this._map._fadeAnimated = wasAnimated;
       }, 5000);
     }
@@ -57,13 +58,13 @@ L.patchGridLayer = function (layer) {
 };
 
 var oldTileLayer = L.tileLayer;
-L.tileLayer = function (url, options) {
+L.tileLayer = function (url: any, options: any) {
   var obj = oldTileLayer(url, options);
   L.patchGridLayer(obj);
   return obj;
 };
 
-L.tileLayer.wms = function (url, options) {
+L.tileLayer.wms = function (url: any, options: any) {
   var obj = oldTileLayer.wms(url, options);
   L.patchGridLayer(obj);
   return obj;

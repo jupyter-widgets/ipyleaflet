@@ -7,17 +7,24 @@ crypto.createHash = (algorithm) =>
   cryptoOrigCreateHash(algorithm == 'md4' ? 'sha256' : algorithm);
 
 var rules = [
+  { test: /\.ts$/, loader: 'ts-loader' },
+  { test: /\.js$/, loader: 'source-map-loader' },
   { test: /\.css$/, use: ['style-loader', 'css-loader'] },
   { test: /\.(jpg|png|gif|svg)$/i, type: 'asset' },
 ];
 
 var resolve = {
+  // Add '.ts' and '.tsx' as resolvable extensions.
+  extensions: ['.webpack.js', '.web.js', '.ts', '.js'],
   fallback: {
     crypto: require.resolve('crypto-browserify'),
     buffer: require.resolve('buffer/'),
     stream: require.resolve('stream-browserify'),
   },
 };
+
+// Packages that shouldn't be bundled but loaded at runtime
+const externals = ['@jupyter-widgets/base'];
 
 module.exports = [
   {
@@ -34,7 +41,12 @@ module.exports = [
       path: path.resolve(__dirname, '..', 'ipyleaflet', 'nbextension'),
       libraryTarget: 'amd',
     },
-    resolve: resolve,
+    module: {
+      rules: rules,
+    },
+    devtool: 'source-map',
+    externals,
+    resolve,
   },
   {
     // Bundle for the notebook containing the custom widget views and models
@@ -54,7 +66,7 @@ module.exports = [
       rules: rules,
     },
     // 'module' is the magic requirejs dependency used to set the publicPath
-    externals: ['@jupyter-widgets/base', 'module'],
+    externals: [...externals, 'module'],
     resolve: resolve,
   },
   {
@@ -79,7 +91,7 @@ module.exports = [
       rules: rules,
     },
     // 'module' is the magic requirejs dependency used to set the publicPath
-    externals: ['@jupyter-widgets/base', 'module'],
+    externals: [...externals, 'module'],
     resolve: resolve,
   },
 ];

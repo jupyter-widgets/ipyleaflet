@@ -3,10 +3,10 @@ name: Tests
 on:
   push:
     branches:
-    - master
+      - master
   pull_request:
     branches:
-    - master
+      - master
 
 defaults:
   run:
@@ -23,35 +23,37 @@ jobs:
         python-version: [3.8]
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Setup conda
-      uses: mamba-org/setup-micromamba@v1
-      with:
-        environment-file: environment-dev.yml
-        condarc: |
-          dependencies:
-            - python==${{ matrix.python-version }}
+      - name: Setup conda
+        uses: mamba-org/setup-micromamba@v1
+        with:
+          environment-file: environment-dev.yml
+          condarc: |
+            dependencies:
+              - python==${{ matrix.python-version }}
 
-    - name: Install ipyleaflet
-      run: pip install . --no-deps
+      - name: Install ipyleaflet
+        run: pip install . --no-deps
 
-    - name: Check installation files
-      run: |
-        test -d $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet
-        test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet/extension.js
-        test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet/index.js
-        test -d $CONDA_PREFIX/share/jupyter/labextensions/jupyter-leaflet
-        test -f $CONDA_PREFIX/share/jupyter/labextensions/jupyter-leaflet/package.json
+      - name: Check installation files
+        run: |
+          test -d $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet
+          test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet/extension.js
+          test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet/index.js
+          test -d $CONDA_PREFIX/share/jupyter/labextensions/jupyter-leaflet
+          test -f $CONDA_PREFIX/share/jupyter/labextensions/jupyter-leaflet/package.json
 
-    - name: Python Linters
-      run: flake8 ipyleaflet --ignore=E501,E731
+      - name: Python Linters
+        uses: psf/black@stable
+        with:
+          source: "./ipyleaflet"
 
-    - name: JS Linters
-      run: |
-        yarn install
-        yarn run lint:check
-      working-directory: js
+      - name: JS Linters
+        run: |
+          yarn install
+          yarn run lint:check
+        working-directory: js
 
-    - name: Import check
-      run: python -c 'import ipyleaflet'
+      - name: Import check
+        run: python -c 'import ipyleaflet'

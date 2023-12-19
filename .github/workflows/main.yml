@@ -45,9 +45,7 @@ jobs:
           test -f $CONDA_PREFIX/share/jupyter/labextensions/jupyter-leaflet/package.json
 
       - name: Python Linters
-        uses: psf/black@stable
-        with:
-          jupyter: true
+        run: ruff check --output-format=github .
 
       - name: JS Linters
         run: |

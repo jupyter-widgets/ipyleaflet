@@ -47,6 +47,7 @@ jobs:
       - name: Python Linters
         uses: psf/black@stable
         with:
+          jupyter: true
           source: "./ipyleaflet"
 
       - name: JS Linters

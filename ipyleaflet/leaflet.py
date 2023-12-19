@@ -115,7 +115,7 @@ def basemap_to_tiles(basemap, day=yesterday, **kwargs):
         attribution=basemap.get("html_attribution", "")
         or basemap.get("attribution", ""),
         name=basemap.get("name", ""),
-        **kwargs
+        **kwargs,
     )
 
 

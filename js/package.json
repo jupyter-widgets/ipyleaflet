@@ -8,13 +8,16 @@
     "jupyterlab-extension",
     "widgets"
   ],
+  "browser": {
+    "[module-name]": false
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/jupyter-widgets/ipyleaflet.git"
   },
   "license": "MIT",
   "author": "Project Jupyter",
-  "main": "src/index.js",
+  "main": "src/index.ts",
   "scripts": {
     "build": "webpack && jupyter labextension build .",
     "clean": "rimraf dist/ && rimraf ../ipyleaflet/labextension/ && rimraf ../ipyleaflet/nbextension",

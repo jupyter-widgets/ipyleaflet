@@ -4,23 +4,23 @@
 const L = require('../leaflet.ts');
 const control = require('./Control.ts');
 
-export class LeafletFullScreenControlModel extends control.LeafletControlModel {
+export class LeafletAttributionControlModel extends control.LeafletControlModel {
   defaults() {
     return {
       ...super.defaults(),
-      _view_name: 'LeafletFullScreenControlView',
-      _model_name: 'LeafletFullScreenControlModel',
+      _view_name: 'LeafletAttributionControlView',
+      _model_name: 'LeafletAttributionControlModel',
     };
   }
 }
 
-export class LeafletFullScreenControlView extends control.LeafletControlView {
+export class LeafletAttributionControlView extends control.LeafletControlView {
   initialize(parameters) {
     super.initialize(parameters);
     this.map_view = this.options.map_view;
   }
 
   create_obj() {
-    this.obj = L.control.fullscreen(this.get_options());
+    this.obj = L.control.attribution(this.get_options());
   }
 }

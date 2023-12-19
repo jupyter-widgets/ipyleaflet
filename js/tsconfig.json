@@ -17,6 +17,6 @@
     "target": "es2015",
     "types": ["node", "webpack-env"]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/index.js"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/index.ts"],
   "exclude": ["src/**/__tests__"]
 }

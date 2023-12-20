@@ -87,7 +87,7 @@
     "webpack-cli": "^5.1.4"
   },
   "jupyterlab": {
-    "extension": "lib/jupyterlab-plugin",
+    "extension": "src/jupyterlab-plugin",
     "outputDir": "../ipyleaflet/labextension",
     "webpackConfig": "webpack.lab.config.js",
     "sharedPackages": {

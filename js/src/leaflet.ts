@@ -1,3 +1,4 @@
+//@ts-ignore
 const L = require('leaflet');
 require('proj4');
 require('proj4leaflet');

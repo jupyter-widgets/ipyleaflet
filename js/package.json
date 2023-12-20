@@ -17,17 +17,26 @@
   },
   "license": "MIT",
   "author": "Project Jupyter",
-  "main": "src/index.ts",
+  "main": "lib/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
-    "build": "webpack && jupyter labextension build .",
-    "clean": "rimraf dist/ && rimraf ../ipyleaflet/labextension/ && rimraf ../ipyleaflet/nbextension",
-    "prepublish": "npm run clean && npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "run-p watch:src watch:labextension",
-    "watch:src": "webpack --watch",
-    "watch:labextension": "jupyter labextension watch .",
-    "lint": "eslint . --fix && prettier --write .",
-    "lint:check": "eslint . && prettier ."
+    "build": "yarn run build:lib && yarn run build:nbextension && yarn run build:labextension",
+    "build:lib": "tsc",
+    "build:nbextension": "webpack --no-devtool",
+    "build:labextension": "jupyter labextension build .",
+    "build:extensions": "yarn run build && yarn run build:labextension",
+    "clean": "yarn run clean:lib && yarn run clean:nbextension && yarn run clean:labextension",
+    "clean:lib": "rimraf lib",
+    "clean:nbextension": "rimraf ../ipyleaflet/nbextension/index.js",
+    "clean:labextension": "rimraf ../ipyleaflet/labextension",
+    "lint": "yarn prettier && yarn eslint",
+    "lint:check": "yarn prettier:check && yarn eslint:check",
+    "prettier": "yarn prettier:base --write --list-different",
+    "prettier:base": "prettier \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}\"",
+    "prettier:check": "yarn prettier:base --check",
+    "prepack": "yarn run build",
+    "watch:lib": "tsc -w",
+    "watch:nbextension": "webpack --watch"
   },
   "dependencies": {
     "@jupyter-widgets/base": "^2 || ^3 || ^4 || ^5 || ^6",
@@ -78,7 +87,7 @@
     "webpack-cli": "^5.1.4"
   },
   "jupyterlab": {
-    "extension": "src/jupyterlab-plugin",
+    "extension": "lib/jupyterlab-plugin",
     "outputDir": "../ipyleaflet/labextension",
     "webpackConfig": "webpack.lab.config.js",
     "sharedPackages": {

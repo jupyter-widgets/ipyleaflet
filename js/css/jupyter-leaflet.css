@@ -1,0 +1,183 @@
+/* Copyright (c) Jupyter Development Team.
+ * Distributed under the terms of the Modified BSD License.
+ */
+
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+}
+
+.jupyter-widgets.leaflet-widgets {
+  height: 400px;
+  overflow: hidden;
+  flex: 1 1 auto;
+}
+
+.jp-LinkedOutputView .jupyter-widgets.leaflet-widgets {
+  min-height: 360px; /* Min-height required for mirred output in jlab < 0.31.6 */
+  height: 100%;
+}
+
+/* Leaflet crispness override */
+.crisp-image {
+  /* Preserve crisp pixels with scaled up images */
+  image-rendering: optimizeSpeed; /* Legal fallback */
+  image-rendering: -moz-crisp-edges; /* Firefox        */
+  image-rendering: -o-crisp-edges; /* Opera          */
+  image-rendering: -webkit-optimize-contrast; /* Safari         */
+  image-rendering: optimize-contrast; /* CSS3 Proposed  */
+  image-rendering: crisp-edges; /* CSS4 Proposed  */
+  image-rendering: pixelated; /* CSS4 Proposed  */
+  -ms-interpolation-mode: nearest-neighbor; /* IE8+           */
+}
+
+/* JupyterLab themes support */
+/* Popup */
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background-color: var(--jp-layout-color1);
+  color: var(--jp-ui-font-color1);
+  border-width: var(--jp-border-width);
+  border-color: var(--jp-border-color1);
+}
+
+/* Basic controls */
+.leaflet-bar a,
+.leaflet-bar a:hover {
+  background-color: var(--jp-layout-color1);
+  color: var(--jp-ui-font-color1);
+  border-width: var(--jp-border-width);
+  border-color: var(--jp-border-color1);
+}
+
+.leaflet-bar a:hover {
+  background-color: var(--jp-layout-color2);
+  color: var(--jp-ui-font-color2);
+}
+
+.leaflet-bar a.leaflet-disabled {
+  background-color: var(--jp-layout-color3);
+  color: var(--jp-ui-font-color3);
+}
+
+/* Widget control */
+.leaflet-widgetcontrol {
+  background: var(--jp-layout-color1);
+  border-radius: 4.5px;
+  box-shadow: 4px 5px 8px 0px #9e9e9e;
+}
+
+/* SplitMap control */
+.leaflet-sbs-divider {
+  background-color: var(--jp-layout-color1);
+}
+
+.leaflet-sbs-range::-webkit-slider-thumb {
+  background-color: var(--jp-layout-color1);
+  border-width: var(--jp-border-width);
+  border-color: var(--jp-border-color1);
+}
+
+.leaflet-sbs-range::-ms-thumb {
+  background-color: var(--jp-layout-color1);
+  border-width: var(--jp-border-width);
+  border-color: var(--jp-border-color1);
+}
+
+.leaflet-sbs-range::-moz-range-thumb {
+  background-color: var(--jp-layout-color1);
+  border-width: var(--jp-border-width);
+  border-color: var(--jp-border-color1);
+}
+
+/* Measure control */
+.leaflet-control-measure {
+  background-color: var(--jp-layout-color1);
+  border-width: var(--jp-border-width);
+  border-color: var(--jp-border-color1);
+  color: var(--jp-ui-font-color1);
+}
+
+/* Layers control */
+.leaflet-control-layers {
+  background-color: var(--jp-layout-color1);
+  border-width: var(--jp-border-width);
+  border-color: var(--jp-border-color1);
+  color: var(--jp-ui-font-color1);
+}
+
+.leaflet-control-layers-expanded {
+  background-color: var(--jp-layout-color1);
+  border-width: var(--jp-border-width);
+  border-color: var(--jp-border-color1);
+  color: var(--jp-ui-font-color1);
+}
+
+/* Attribution control */
+.leaflet-container .leaflet-control-attribution {
+  background-color: var(--jp-layout-color1);
+  border-width: var(--jp-border-width);
+  border-color: var(--jp-border-color1);
+  color: var(--jp-ui-font-color1);
+}
+
+.leaflet-control-velocity.leaflet-control {
+  background: var(--jp-layout-color1);
+  margin: 0;
+  padding: 0 5px;
+  color: var(--jp-ui-font-color1);
+  font-size: 11px;
+}
+
+/* Legend Control */
+div.leaflet-control-legend {
+  color: var(--jp-ui-font-color1);
+  line-height: 18px;
+  width: auto;
+  background-color: var(--jp-layout-color1);
+  border-width: var(--jp-border-width);
+  border-color: var(--jp-border-color1);
+  border-radius: 4.5px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+  padding: 6px 10px 6px 6px;
+}
+
+div.leaflet-control-legend > h4 {
+  padding: 0;
+  margin: 0;
+  margin-bottom: 5px;
+}
+
+div.leaflet-control-legend > i {
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+}
+
+div.leaflet-control-legend > p {
+  display: inline-block;
+}
+
+/* Magnifying Glass */
+.leaflet-magnifying-glass {
+  border-radius: 50%;
+  border: 1px solid gray;
+  box-shadow: 0 0 5px gray;
+  position: absolute;
+  overflow: hidden;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.leaflet-magnifying-glass > .leaflet-container {
+  height: 100%;
+  width: 100%;
+}
+
+/* Webkit-only workaround for the border-radius clipping bug,
+applied to the map container */
+.leaflet-magnifying-glass-webkit {
+  border-radius: 50%;
+  -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
+}

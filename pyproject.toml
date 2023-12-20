@@ -2,3 +2,13 @@
 # avoid 3.6 so we don't need the rust buildchain
 requires = ["jupyter_packaging~=0.12", "jupyterlab~=4.0.8", "setuptools>=40.8.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+extend-include = ["*.ipynb"]
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+]
+ignore = ["E501", "E731"] 

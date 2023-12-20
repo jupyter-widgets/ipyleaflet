@@ -10,11 +10,11 @@ def ds_x_to_json(ds, widget):
         widget.meridional_speed,
         widget.latitude_dimension,
         widget.longitude_dimension,
-        widget.units
+        widget.units,
     )
 
 
-def ds2json(ds, u_var, v_var, lat_dim='latitude', lon_dim='longitude', units=None):
+def ds2json(ds, u_var, v_var, lat_dim="latitude", lon_dim="longitude", units=None):
     """
     Assumes that the velocity components are given on a regular grid
     (fixed spacing in latitude and longitude).
@@ -36,6 +36,7 @@ def ds2json(ds, u_var, v_var, lat_dim='latitude', lon_dim='longitude', units=Non
         'units' attributes of `u_var` and `v_var`).
     """
     import numpy as np
+
     ds = ds.copy()
     for var_name in (u_var, v_var):
         var_dims = ds[var_name].dims
@@ -43,27 +44,30 @@ def ds2json(ds, u_var, v_var, lat_dim='latitude', lon_dim='longitude', units=Non
         if set(var_dims) != set([lat_dim, lon_dim]):
             raise ValueError(
                 "Invalid dimensions for variable '{}' in Dataset: "
-                "should include only {}, found {}."
-                .format(var_name, (lat_dim, lon_dim), var_dims)
+                "should include only {}, found {}.".format(
+                    var_name, (lat_dim, lon_dim), var_dims
+                )
             )
 
         # If dataset contains nans replace with 0
         ds[var_name] = ds[var_name].fillna(0)
 
     if units is None:
-        u_var_units = ds[u_var].attrs.get('units')
-        v_var_units = ds[v_var].attrs.get('units')
+        u_var_units = ds[u_var].attrs.get("units")
+        v_var_units = ds[v_var].attrs.get("units")
 
         if u_var_units != v_var_units:
             raise ValueError(
                 "Different units found for U-component '{}' and "
-                "V-component '{}' variables: '{}' and '{}'"
-                .format(u_var, v_var, u_var_units, v_var_units))
+                "V-component '{}' variables: '{}' and '{}'".format(
+                    u_var, v_var, u_var_units, v_var_units
+                )
+            )
 
         units = u_var_units
 
     if units is None:
-        units = ''
+        units = ""
 
     # Data should be in gaussian grid format (latitudes descending)
     if np.any(np.diff(ds[lat_dim].values) >= 0):
@@ -84,29 +88,30 @@ def ds2json(ds, u_var, v_var, lat_dim='latitude', lon_dim='longitude', units=Non
     nx = lon.size
     ny = lat.size
 
-    u_v_spec = ([2, 3],
-                ["Eastward current", "Northward current"],
-                [u_var, v_var])
+    u_v_spec = ([2, 3], ["Eastward current", "Northward current"], [u_var, v_var])
 
     velocity_data = []
 
     for p_number, p_name, var_name in zip(*u_v_spec):
-        velocity_data.append({
-            "header": {
-                "parameterUnit": units,
-                "parameterNumber": p_number,
-                "dx": dx, "dy": dy,
-                "parameterNumberName": p_name,
-                "la1": lat_upper,
-                "la2": lat_lower,
-                "parameterCategory": 2,
-                "lo2": lon_right,
-                "nx": nx,
-                "ny": ny,
-                "refTime": "2017-02-01 23:00:00",
-                "lo1": lon_left
-            },
-            "data": ds[var_name].values.flatten().tolist()
-        })
+        velocity_data.append(
+            {
+                "header": {
+                    "parameterUnit": units,
+                    "parameterNumber": p_number,
+                    "dx": dx,
+                    "dy": dy,
+                    "parameterNumberName": p_name,
+                    "la1": lat_upper,
+                    "la2": lat_lower,
+                    "parameterCategory": 2,
+                    "lo2": lon_right,
+                    "nx": nx,
+                    "ny": ny,
+                    "refTime": "2017-02-01 23:00:00",
+                    "lo1": lon_left,
+                },
+                "data": ds[var_name].values.flatten().tolist(),
+            }
+        )
 
     return velocity_data

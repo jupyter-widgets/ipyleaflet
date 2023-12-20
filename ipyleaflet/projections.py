@@ -2,58 +2,32 @@ from traitlets.utils.bunch import Bunch
 
 projections = Bunch(
     EPSG3857=dict(
-        name='EPSG3857',
+        name="EPSG3857",
         custom=False,
     ),
-    Earth=dict(
-        name='Earth',
-        custom=False
-    ),
-    EPSG3395=dict(
-        name='EPSG3395',
-        custom=False
-    ),
-    EPSG4326=dict(
-        name='EPSG4326',
-        custom=False
-    ),
-    Base=dict(
-        name='Base',
-        custom=False
-    ),
-    Simple=dict(
-        name='Simple',
-        custom=False
-    ),
+    Earth=dict(name="Earth", custom=False),
+    EPSG3395=dict(name="EPSG3395", custom=False),
+    EPSG4326=dict(name="EPSG4326", custom=False),
+    Base=dict(name="Base", custom=False),
+    Simple=dict(name="Simple", custom=False),
     EPSG3413=Bunch(
         NASAGIBS=dict(
-            name='EPSG:3413',
+            name="EPSG:3413",
             custom=True,
             proj4def="""+proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +k=1 +x_0=0 +y_0=0
                     +ellps=WGS84 +datum=WGS84 +units=m +no_defs""",
             origin=[-4194304, 4194304],
-            resolutions=[
-                16384.0,
-                8192.0,
-                4096.0,
-                2048.0,
-                1024.0,
-                512.0,
-                256.0
-            ],
-            bounds=[
-                [-4194304, -4194304],
-                [4194304, 4194304]
-            ]
+            resolutions=[16384.0, 8192.0, 4096.0, 2048.0, 1024.0, 512.0, 256.0],
+            bounds=[[-4194304, -4194304], [4194304, 4194304]],
         )
     ),
     EPSG5936=Bunch(
         ESRIBasemap=dict(
-            name='EPSG:5936',
+            name="EPSG:5936",
             custom=True,
             proj4def="""+proj=stere +lat_0=90 +lat_ts=90 +lon_0=-150 +k=0.994
                 +x_0=2000000 +y_0=2000000 +datum=WGS84 +units=m +no_defs""",
-            origin=[-2.8567784109255e+07, 3.2567784109255e+07],
+            origin=[-2.8567784109255e07, 3.2567784109255e07],
             resolutions=[
                 238810.813354,
                 119405.406677,
@@ -78,41 +52,30 @@ projections = Bunch(
                 0.227747739130895,
                 0.113873869697739,
                 0.05693693484887,
-                0.028468467424435
+                0.028468467424435,
             ],
             bounds=[
                 [-2623285.8808999992907047, -2623285.8808999992907047],
-                [6623285.8803000003099442, 6623285.8803000003099442]
-            ]
+                [6623285.8803000003099442, 6623285.8803000003099442],
+            ],
         )
     ),
     EPSG3031=Bunch(
         NASAGIBS=dict(
-            name='EPSG:3031',
+            name="EPSG:3031",
             custom=True,
             proj4def="""+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1
                 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs""",
             origin=[-4194304, 4194304],
-            resolutions=[
-                16384.0,
-                8192.0,
-                4096.0,
-                2048.0,
-                1024.0,
-                512.0,
-                256.0
-            ],
-            bounds=[
-                [-4194304, -4194304],
-                [4194304, 4194304]
-            ]
+            resolutions=[16384.0, 8192.0, 4096.0, 2048.0, 1024.0, 512.0, 256.0],
+            bounds=[[-4194304, -4194304], [4194304, 4194304]],
         ),
         ESRIBasemap=dict(
-            name='EPSG:3031',
+            name="EPSG:3031",
             custom=True,
             proj4def="""+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1
                 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs""",
-            origin=[-3.06361E7, 3.0636099999999993E7],
+            origin=[-3.06361e7, 3.0636099999999993e7],
             resolutions=[
                 67733.46880027094,
                 33866.73440013547,
@@ -126,15 +89,15 @@ projections = Bunch(
             ],
             bounds=[
                 [-4524583.19363305, -4524449.487765655],
-                [4524449.4877656475, 4524583.193633042]
-            ]
+                [4524449.4877656475, 4524583.193633042],
+            ],
         ),
         ESRIImagery=dict(
-            name='EPSG:3031',
+            name="EPSG:3031",
             custom=True,
             proj4def="""+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1
                 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs""",
-            origin=[-3.369955099203E7, 3.369955101703E7],
+            origin=[-3.369955099203e7, 3.369955101703e7],
             resolutions=[
                 238810.81335399998,
                 119405.40667699999,
@@ -159,12 +122,12 @@ projections = Bunch(
                 0.227747739130895,
                 0.113873869697739,
                 0.05693693484887,
-                0.028468467424435
+                0.028468467424435,
             ],
             bounds=[
                 [-9913957.327914657, -5730886.461772691],
-                [9913957.327914657, 5730886.461773157]
-            ]
-        )
-    )
+                [9913957.327914657, 5730886.461773157],
+            ],
+        ),
+    ),
 )

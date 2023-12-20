@@ -13,16 +13,38 @@ from IPython.display import display
 import warnings
 
 from ipywidgets import (
-    Widget, DOMWidget, Box, Color, CallbackDispatcher, widget_serialization,
-    interactive, Style, Output
+    Widget,
+    DOMWidget,
+    Box,
+    Color,
+    CallbackDispatcher,
+    widget_serialization,
+    interactive,
+    Style,
+    Output,
 )
 
 from ipywidgets.widgets.trait_types import InstanceDict
 from ipywidgets.embed import embed_minimal_html
 
 from traitlets import (
-    CFloat, Float, Unicode, Int, Tuple, List, Instance, Bool, Dict, Enum,
-    link, observe, default, validate, TraitError, Union, Any
+    CFloat,
+    Float,
+    Unicode,
+    Int,
+    Tuple,
+    List,
+    Instance,
+    Bool,
+    Dict,
+    Enum,
+    link,
+    observe,
+    default,
+    validate,
+    TraitError,
+    Union,
+    Any,
 )
 from ._version import EXTENSION_VERSION
 
@@ -30,12 +52,38 @@ from .projections import projections
 
 
 def_loc = [0.0, 0.0]
-allowed_cursor = ['alias', 'cell', 'grab', 'move', 'crosshair', 'context-menu',
-                  'n-resize', 'ne-resize', 'e-resize', 'se-resize', 's-resize',
-                  'sw-resize', 'w-resize', 'nw-resize', 'nesw-resize',
-                  'nwse-resize', 'row-resize', 'col-resize', 'copy', 'default',
-                  'grabbing', 'help', 'no-drop', 'not-allowed', 'pointer',
-                  'progress', 'text', 'wait', 'zoom-in', 'zoom-out']
+allowed_cursor = [
+    "alias",
+    "cell",
+    "grab",
+    "move",
+    "crosshair",
+    "context-menu",
+    "n-resize",
+    "ne-resize",
+    "e-resize",
+    "se-resize",
+    "s-resize",
+    "sw-resize",
+    "w-resize",
+    "nw-resize",
+    "nesw-resize",
+    "nwse-resize",
+    "row-resize",
+    "col-resize",
+    "copy",
+    "default",
+    "grabbing",
+    "help",
+    "no-drop",
+    "not-allowed",
+    "pointer",
+    "progress",
+    "text",
+    "wait",
+    "zoom-in",
+    "zoom-out",
+]
 
 yesterday = (date.today() - timedelta(days=1)).strftime("%Y-%m-%d")
 
@@ -62,11 +110,12 @@ def basemap_to_tiles(basemap, day=yesterday, **kwargs):
 
     return TileLayer(
         url=url,
-        max_zoom=basemap.get('max_zoom', 18),
-        min_zoom=basemap.get('min_zoom', 1),
-        attribution=basemap.get('html_attribution', '') or basemap.get('attribution', ''),
-        name=basemap.get('name', ''),
-        **kwargs
+        max_zoom=basemap.get("max_zoom", 18),
+        min_zoom=basemap.get("min_zoom", 1),
+        attribution=basemap.get("html_attribution", "")
+        or basemap.get("attribution", ""),
+        name=basemap.get("name", ""),
+        **kwargs,
     )
 
 
@@ -83,11 +132,13 @@ def wait_for_change(widget, value):
 
 class PaneException(TraitError):
     """Custom PaneException class."""
+
     pass
 
 
 class LayerException(TraitError):
     """Custom LayerException class."""
+
     pass
 
 
@@ -101,7 +152,7 @@ class InteractMixin(object):
             widget = interactive.widget_from_abbrev(abbrev, default)
             if not widget.description:
                 widget.description = name
-            widget.link = link((widget, 'value'), (self, name))
+            widget.link = link((widget, "value"), (self, name))
             c.append(widget)
         cont = Box(children=c)
         return cont
@@ -122,43 +173,45 @@ class Layer(Widget, InteractMixin):
         Name of the pane to use for the layer.
     """
 
-    _view_name = Unicode('LeafletLayerView').tag(sync=True)
-    _model_name = Unicode('LeafletLayerModel').tag(sync=True)
-    _view_module = Unicode('jupyter-leaflet').tag(sync=True)
-    _model_module = Unicode('jupyter-leaflet').tag(sync=True)
+    _view_name = Unicode("LeafletLayerView").tag(sync=True)
+    _model_name = Unicode("LeafletLayerModel").tag(sync=True)
+    _view_module = Unicode("jupyter-leaflet").tag(sync=True)
+    _model_module = Unicode("jupyter-leaflet").tag(sync=True)
 
     _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
 
-    name = Unicode('').tag(sync=True)
+    name = Unicode("").tag(sync=True)
     base = Bool(False).tag(sync=True)
     bottom = Bool(False).tag(sync=True)
-    popup = Instance(Widget, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
+    popup = Instance(Widget, allow_none=True, default_value=None).tag(
+        sync=True, **widget_serialization
+    )
     popup_min_width = Int(50).tag(sync=True)
     popup_max_width = Int(300).tag(sync=True)
     popup_max_height = Int(default_value=None, allow_none=True).tag(sync=True)
-    pane = Unicode('').tag(sync=True)
+    pane = Unicode("").tag(sync=True)
 
     options = List(trait=Unicode()).tag(sync=True)
     subitems = Tuple().tag(trait=Instance(Widget), sync=True, **widget_serialization)
 
-    @validate('subitems')
+    @validate("subitems")
     def _validate_subitems(self, proposal):
-        '''Validate subitems list.
+        """Validate subitems list.
 
         Makes sure only one instance of any given subitem can exist in the
         subitem list.
-        '''
+        """
         subitem_ids = [subitem.model_id for subitem in proposal.value]
         if len(set(subitem_ids)) != len(subitem_ids):
-            raise Exception('duplicate subitem detected, only use each subitem once')
+            raise Exception("duplicate subitem detected, only use each subitem once")
         return proposal.value
 
     def __init__(self, **kwargs):
         super(Layer, self).__init__(**kwargs)
         self.on_msg(self._handle_mouse_events)
 
-    @default('options')
+    @default("options")
     def _default_options(self):
         return [name for name in self.traits(o=True)]
 
@@ -171,18 +224,18 @@ class Layer(Widget, InteractMixin):
     _mouseout_callbacks = Instance(CallbackDispatcher, ())
 
     def _handle_mouse_events(self, _, content, buffers):
-        event_type = content.get('type', '')
-        if event_type == 'click':
+        event_type = content.get("type", "")
+        if event_type == "click":
             self._click_callbacks(**content)
-        if event_type == 'dblclick':
+        if event_type == "dblclick":
             self._dblclick_callbacks(**content)
-        if event_type == 'mousedown':
+        if event_type == "mousedown":
             self._mousedown_callbacks(**content)
-        if event_type == 'mouseup':
+        if event_type == "mouseup":
             self._mouseup_callbacks(**content)
-        if event_type == 'mouseover':
+        if event_type == "mouseover":
             self._mouseover_callbacks(**content)
-        if event_type == 'mouseout':
+        if event_type == "mouseout":
             self._mouseout_callbacks(**content)
 
     def on_click(self, callback, remove=False):
@@ -261,8 +314,8 @@ class Layer(Widget, InteractMixin):
 class UILayer(Layer):
     """Abstract UILayer class."""
 
-    _view_name = Unicode('LeafletUILayerView').tag(sync=True)
-    _model_name = Unicode('LeafletUILayerModel').tag(sync=True)
+    _view_name = Unicode("LeafletUILayerView").tag(sync=True)
+    _model_name = Unicode("LeafletUILayerModel").tag(sync=True)
 
 
 class Icon(UILayer):
@@ -292,10 +345,10 @@ class Icon(UILayer):
         icon anchor.
     """
 
-    _view_name = Unicode('LeafletIconView').tag(sync=True)
-    _model_name = Unicode('LeafletIconModel').tag(sync=True)
+    _view_name = Unicode("LeafletIconView").tag(sync=True)
+    _model_name = Unicode("LeafletIconModel").tag(sync=True)
 
-    icon_url = Unicode('').tag(sync=True, o=True)
+    icon_url = Unicode("").tag(sync=True, o=True)
     shadow_url = Unicode(None, allow_none=True).tag(sync=True, o=True)
     icon_size = List(default_value=None, allow_none=True).tag(sync=True, o=True)
     shadow_size = List(default_value=None, allow_none=True).tag(sync=True, o=True)
@@ -303,16 +356,20 @@ class Icon(UILayer):
     shadow_anchor = List(default_value=None, allow_none=True).tag(sync=True, o=True)
     popup_anchor = List([0, 0], allow_none=True).tag(sync=True, o=True)
 
-    @validate('icon_size', 'shadow_size', 'icon_anchor', 'shadow_anchor', 'popup_anchor')
+    @validate(
+        "icon_size", "shadow_size", "icon_anchor", "shadow_anchor", "popup_anchor"
+    )
     def _validate_attr(self, proposal):
-        value = proposal['value']
+        value = proposal["value"]
 
         # Workaround Traitlets which does not respect the None default value
         if value is None or len(value) == 0:
             return None
 
         if len(value) != 2:
-            raise TraitError('The value should be of size 2, but {} was given'.format(value))
+            raise TraitError(
+                "The value should be of size 2, but {} was given".format(value)
+            )
 
         return value
 
@@ -341,25 +398,27 @@ class DivIcon(UILayer):
         icon anchor.
     """
 
-    _view_name = Unicode('LeafletDivIconView').tag(sync=True)
-    _model_name = Unicode('LeafletDivIconModel').tag(sync=True)
+    _view_name = Unicode("LeafletDivIconView").tag(sync=True)
+    _model_name = Unicode("LeafletDivIconModel").tag(sync=True)
 
-    html = Unicode('').tag(sync=True, o=True)
+    html = Unicode("").tag(sync=True, o=True)
     bg_pos = List([0, 0], allow_none=True).tag(sync=True, o=True)
     icon_size = List(default_value=None, allow_none=True).tag(sync=True, o=True)
     icon_anchor = List(default_value=None, allow_none=True).tag(sync=True, o=True)
     popup_anchor = List([0, 0], allow_none=True).tag(sync=True, o=True)
 
-    @validate('icon_size', 'icon_anchor', 'popup_anchor')
+    @validate("icon_size", "icon_anchor", "popup_anchor")
     def _validate_attr(self, proposal):
-        value = proposal['value']
+        value = proposal["value"]
 
         # Workaround Traitlets which does not respect the None default value
         if value is None or len(value) == 0:
             return None
 
         if len(value) != 2:
-            raise TraitError('The value should be of size 2, but {} was given'.format(value))
+            raise TraitError(
+                "The value should be of size 2, but {} was given".format(value)
+            )
 
         return value
 
@@ -382,17 +441,36 @@ class AwesomeIcon(UILayer):
         Whether the icon is spinning or not.
     """
 
-    _view_name = Unicode('LeafletAwesomeIconView').tag(sync=True)
-    _model_name = Unicode('LeafletAwesomeIconModel').tag(sync=True)
+    _view_name = Unicode("LeafletAwesomeIconView").tag(sync=True)
+    _model_name = Unicode("LeafletAwesomeIconModel").tag(sync=True)
 
-    name = Unicode('home').tag(sync=True)
+    name = Unicode("home").tag(sync=True)
     marker_color = Enum(
-        values=['white', 'red', 'darkred', 'lightred', 'orange', 'beige', 'green', 'darkgreen', 'lightgreen', 'blue',
-                'darkblue', 'lightblue', 'purple', 'darkpurple', 'pink', 'cadetblue', 'white', 'gray', 'lightgray',
-                'black'],
-        default_value='blue'
+        values=[
+            "white",
+            "red",
+            "darkred",
+            "lightred",
+            "orange",
+            "beige",
+            "green",
+            "darkgreen",
+            "lightgreen",
+            "blue",
+            "darkblue",
+            "lightblue",
+            "purple",
+            "darkpurple",
+            "pink",
+            "cadetblue",
+            "white",
+            "gray",
+            "lightgray",
+            "black",
+        ],
+        default_value="blue",
     ).tag(sync=True)
-    icon_color = Color('white').tag(sync=True)
+    icon_color = Color("white").tag(sync=True)
     spin = Bool(False).tag(sync=True)
 
 
@@ -430,24 +508,28 @@ class Marker(UILayer):
         The z-index offset used for the rise_on_hover feature
     """
 
-    _view_name = Unicode('LeafletMarkerView').tag(sync=True)
-    _model_name = Unicode('LeafletMarkerModel').tag(sync=True)
+    _view_name = Unicode("LeafletMarkerView").tag(sync=True)
+    _model_name = Unicode("LeafletMarkerModel").tag(sync=True)
 
     location = List(def_loc).tag(sync=True)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True)
     visible = Bool(True).tag(sync=True)
-    icon = Union((Instance(Icon), Instance(AwesomeIcon), Instance(DivIcon)), allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
+    icon = Union(
+        (Instance(Icon), Instance(AwesomeIcon), Instance(DivIcon)),
+        allow_none=True,
+        default_value=None,
+    ).tag(sync=True, **widget_serialization)
 
     # Options
     z_index_offset = Int(0).tag(sync=True, o=True)
     draggable = Bool(True).tag(sync=True, o=True)
     keyboard = Bool(True).tag(sync=True, o=True)
-    title = Unicode('').tag(sync=True, o=True)
-    alt = Unicode('').tag(sync=True, o=True)
+    title = Unicode("").tag(sync=True, o=True)
+    alt = Unicode("").tag(sync=True, o=True)
     rise_on_hover = Bool(False).tag(sync=True, o=True)
     rise_offset = Int(250).tag(sync=True, o=True)
     rotation_angle = Float(0).tag(sync=True, o=True)
-    rotation_origin = Unicode('').tag(sync=True, o=True)
+    rotation_origin = Unicode("").tag(sync=True, o=True)
 
     _move_callbacks = Instance(CallbackDispatcher, ())
 
@@ -456,7 +538,7 @@ class Marker(UILayer):
         self.on_msg(self._handle_leaflet_event)
 
     def _handle_leaflet_event(self, _, content, buffers):
-        if content.get('event', '') == 'move':
+        if content.get("event", "") == "move":
             self._move_callbacks(**content)
 
     def on_move(self, callback, remove=False):
@@ -505,21 +587,25 @@ class Popup(UILayer):
         Whether to close the popup when clicking the escape key or not.
     """
 
-    _view_name = Unicode('LeafletPopupView').tag(sync=True)
-    _model_name = Unicode('LeafletPopupModel').tag(sync=True)
+    _view_name = Unicode("LeafletPopupView").tag(sync=True)
+    _model_name = Unicode("LeafletPopupModel").tag(sync=True)
 
     location = List(def_loc).tag(sync=True)
-    child = Instance(
-        DOMWidget, allow_none=True, default_value=None
-    ).tag(sync=True, **widget_serialization)
+    child = Instance(DOMWidget, allow_none=True, default_value=None).tag(
+        sync=True, **widget_serialization
+    )
 
     # Options
     min_width = Int(50).tag(sync=True, o=True)
     max_width = Int(300).tag(sync=True, o=True)
     max_height = Int(default_value=None, allow_none=True).tag(sync=True, o=True)
     auto_pan = Bool(True).tag(sync=True, o=True)
-    auto_pan_padding_top_left = List(allow_none=True, default_value=None).tag(sync=True, o=True)
-    auto_pan_padding_bottom_right = List(allow_none=True, default_value=None).tag(sync=True, o=True)
+    auto_pan_padding_top_left = List(allow_none=True, default_value=None).tag(
+        sync=True, o=True
+    )
+    auto_pan_padding_bottom_right = List(allow_none=True, default_value=None).tag(
+        sync=True, o=True
+    )
     auto_pan_padding = List([5, 5]).tag(sync=True, o=True)
     keep_in_view = Bool(False).tag(sync=True, o=True)
     close_button = Bool(True).tag(sync=True, o=True)
@@ -537,12 +623,14 @@ class Popup(UILayer):
 
         if location is not None:
             self.location = location
-        self.send({'msg': 'open', 'location': self.location if location is None else location})
+        self.send(
+            {"msg": "open", "location": self.location if location is None else location}
+        )
 
     def close_popup(self):
         """Close the popup on the bound map."""
 
-        self.send({'msg': 'close'})
+        self.send({"msg": "close"})
 
 
 class RasterLayer(Layer):
@@ -556,8 +644,8 @@ class RasterLayer(Layer):
         Whether the layer is visible or not.
     """
 
-    _view_name = Unicode('LeafletRasterLayerView').tag(sync=True)
-    _model_name = Unicode('LeafletRasterLayerModel').tag(sync=True)
+    _view_name = Unicode("LeafletRasterLayerView").tag(sync=True)
+    _model_name = Unicode("LeafletRasterLayerModel").tag(sync=True)
 
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True)
     visible = Bool(True).tag(sync=True)
@@ -601,16 +689,18 @@ class TileLayer(RasterLayer):
     visible: boolean, default True
     """
 
-    _view_name = Unicode('LeafletTileLayerView').tag(sync=True)
-    _model_name = Unicode('LeafletTileLayerModel').tag(sync=True)
+    _view_name = Unicode("LeafletTileLayerView").tag(sync=True)
+    _model_name = Unicode("LeafletTileLayerModel").tag(sync=True)
 
     bottom = Bool(True).tag(sync=True)
-    url = Unicode('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').tag(sync=True)
+    url = Unicode("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").tag(sync=True)
     min_zoom = Int(0).tag(sync=True, o=True)
     max_zoom = Int(18).tag(sync=True, o=True)
     min_native_zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)
     max_native_zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)
-    bounds = List(default_value=None, allow_none=True, help='list of SW and NE location tuples').tag(sync=True, o=True)
+    bounds = List(
+        default_value=None, allow_none=True, help="list of SW and NE location tuples"
+    ).tag(sync=True, o=True)
     tile_size = Int(256).tag(sync=True, o=True)
     attribution = Unicode(default_value=None, allow_none=True).tag(sync=True, o=True)
     detect_retina = Bool(False).tag(sync=True, o=True)
@@ -627,7 +717,7 @@ class TileLayer(RasterLayer):
         self.on_msg(self._handle_leaflet_event)
 
     def _handle_leaflet_event(self, _, content, buffers):
-        if content.get('event', '') == 'load':
+        if content.get("event", "") == "load":
             self._load_callbacks(**content)
 
     def on_load(self, callback, remove=False):
@@ -648,7 +738,7 @@ class TileLayer(RasterLayer):
         This is especially useful when you are sure the server updated the tiles and you
         need to refresh the layer.
         """
-        self.send({'msg': 'redraw'})
+        self.send({"msg": "redraw"})
 
 
 class LocalTileLayer(TileLayer):
@@ -664,10 +754,10 @@ class LocalTileLayer(TileLayer):
         (where you started JupyterLab) and you need to prefix the path with “files/”.
     """
 
-    _view_name = Unicode('LeafletLocalTileLayerView').tag(sync=True)
-    _model_name = Unicode('LeafletLocalTileLayerModel').tag(sync=True)
+    _view_name = Unicode("LeafletLocalTileLayerView").tag(sync=True)
+    _model_name = Unicode("LeafletLocalTileLayerModel").tag(sync=True)
 
-    path = Unicode('').tag(sync=True)
+    path = Unicode("").tag(sync=True)
 
 
 class WMSLayer(TileLayer):
@@ -687,13 +777,13 @@ class WMSLayer(TileLayer):
         Projection used for this WMS service.
     """
 
-    _view_name = Unicode('LeafletWMSLayerView').tag(sync=True)
-    _model_name = Unicode('LeafletWMSLayerModel').tag(sync=True)
+    _view_name = Unicode("LeafletWMSLayerView").tag(sync=True)
+    _model_name = Unicode("LeafletWMSLayerModel").tag(sync=True)
 
     # Options
     layers = Unicode().tag(sync=True, o=True)
     styles = Unicode().tag(sync=True, o=True)
-    format = Unicode('image/jpeg').tag(sync=True, o=True)
+    format = Unicode("image/jpeg").tag(sync=True, o=True)
     transparent = Bool(False).tag(sync=True, o=True)
     crs = Dict(default_value=projections.EPSG3857).tag(sync=True)
     uppercase = Bool(False).tag(sync=True, o=True)
@@ -722,8 +812,8 @@ class MagnifyingGlass(RasterLayer):
         These layers shouldn't be already added to a map instance.
     """
 
-    _view_name = Unicode('LeafletMagnifyingGlassView').tag(sync=True)
-    _model_name = Unicode('LeafletMagnifyingGlassModel').tag(sync=True)
+    _view_name = Unicode("LeafletMagnifyingGlassView").tag(sync=True)
+    _model_name = Unicode("LeafletMagnifyingGlassModel").tag(sync=True)
 
     # Options
     radius = Int(100).tag(sync=True, o=True)
@@ -731,20 +821,22 @@ class MagnifyingGlass(RasterLayer):
     fixed_zoom = Int(-1).tag(sync=True, o=True)
     fixed_position = Bool(False).tag(sync=True, o=True)
     lat_lng = List(def_loc).tag(sync=True, o=True)
-    layers = Tuple().tag(trait=Instance(Layer), sync=True, o=True, **widget_serialization)
+    layers = Tuple().tag(
+        trait=Instance(Layer), sync=True, o=True, **widget_serialization
+    )
 
     _layer_ids = List()
 
-    @validate('layers')
+    @validate("layers")
     def _validate_layers(self, proposal):
-        '''Validate layers list.
+        """Validate layers list.
 
         Makes sure only one instance of any given layer can exist in the
         layers list.
-        '''
+        """
         self._layer_ids = [layer.model_id for layer in proposal.value]
         if len(set(self._layer_ids)) != len(self._layer_ids):
-            raise LayerException('duplicate layer detected, only use each layer once')
+            raise LayerException("duplicate layer detected, only use each layer once")
         return proposal.value
 
 
@@ -763,11 +855,13 @@ class ImageOverlay(RasterLayer):
         Image attribution.
     """
 
-    _view_name = Unicode('LeafletImageOverlayView').tag(sync=True)
-    _model_name = Unicode('LeafletImageOverlayModel').tag(sync=True)
+    _view_name = Unicode("LeafletImageOverlayView").tag(sync=True)
+    _model_name = Unicode("LeafletImageOverlayModel").tag(sync=True)
 
     url = Unicode().tag(sync=True)
-    bounds = List([def_loc, def_loc], help='SW and NE corners of the image').tag(sync=True)
+    bounds = List([def_loc, def_loc], help="SW and NE corners of the image").tag(
+        sync=True
+    )
 
     # Options
     attribution = Unicode().tag(sync=True, o=True)
@@ -788,11 +882,13 @@ class VideoOverlay(RasterLayer):
         Video attribution.
     """
 
-    _view_name = Unicode('LeafletVideoOverlayView').tag(sync=True)
-    _model_name = Unicode('LeafletVideoOverlayModel').tag(sync=True)
+    _view_name = Unicode("LeafletVideoOverlayView").tag(sync=True)
+    _model_name = Unicode("LeafletVideoOverlayModel").tag(sync=True)
 
     url = Unicode().tag(sync=True)
-    bounds = List([def_loc, def_loc], help='SW and NE corners of the image').tag(sync=True)
+    bounds = List([def_loc, def_loc], help="SW and NE corners of the image").tag(
+        sync=True
+    )
 
     # Options
     attribution = Unicode().tag(sync=True, o=True)
@@ -879,28 +975,65 @@ class ImageService(Layer):
         minimum time interval to query for updates when panning (ms)
     """
 
-    _view_name = Unicode('LeafletImageServiceView').tag(sync=True)
-    _model_name = Unicode('LeafletImageServiceModel').tag(sync=True)
+    _view_name = Unicode("LeafletImageServiceView").tag(sync=True)
+    _model_name = Unicode("LeafletImageServiceModel").tag(sync=True)
 
-    _formats = ['jpgpng', 'png', 'png8', 'png24', 'jpg', 'bmp', 'gif', 'tiff', 'png32', 'bip', 'bsq', 'lerc']
-    _pixel_types = ['C128', 'C64', 'F32', 'F64', 'S16', 'S32', 'S8', 'U1', 'U16', 'U2', 'U32', 'U4', 'U8', 'UNKNOWN']
-    _no_data_interpretations = ['esriNoDataMatchAny', 'esriNoDataMatchAll']
-    _interpolations = ['RSP_BilinearInterpolation', 'RSP_CubicConvolution', 'RSP_Majority', 'RSP_NearestNeighbor']
+    _formats = [
+        "jpgpng",
+        "png",
+        "png8",
+        "png24",
+        "jpg",
+        "bmp",
+        "gif",
+        "tiff",
+        "png32",
+        "bip",
+        "bsq",
+        "lerc",
+    ]
+    _pixel_types = [
+        "C128",
+        "C64",
+        "F32",
+        "F64",
+        "S16",
+        "S32",
+        "S8",
+        "U1",
+        "U16",
+        "U2",
+        "U32",
+        "U4",
+        "U8",
+        "UNKNOWN",
+    ]
+    _no_data_interpretations = ["esriNoDataMatchAny", "esriNoDataMatchAll"]
+    _interpolations = [
+        "RSP_BilinearInterpolation",
+        "RSP_CubicConvolution",
+        "RSP_Majority",
+        "RSP_NearestNeighbor",
+    ]
 
     url = Unicode().tag(sync=True)
-    f = Unicode('image').tag(sync=True, o=True)
-    format = Enum(values=_formats, default_value='jpgpng').tag(sync=True, o=True)
-    pixel_type = Enum(values=_pixel_types, default_value='UNKNOWN').tag(sync=True, o=True)
+    f = Unicode("image").tag(sync=True, o=True)
+    format = Enum(values=_formats, default_value="jpgpng").tag(sync=True, o=True)
+    pixel_type = Enum(values=_pixel_types, default_value="UNKNOWN").tag(
+        sync=True, o=True
+    )
     no_data = List(allow_none=True).tag(sync=True, o=True)
-    no_data_interpretation = Enum(values=_no_data_interpretations, allow_none=True).tag(sync=True, o=True)
+    no_data_interpretation = Enum(values=_no_data_interpretations, allow_none=True).tag(
+        sync=True, o=True
+    )
     interpolation = Enum(values=_interpolations, allow_none=True).tag(sync=True, o=True)
     compression_quality = Unicode().tag(sync=True, o=True)
     band_ids = List(allow_none=True).tag(sync=True, o=True)
     time = List(allow_none=True).tag(sync=True, o=True)
     rendering_rule = Dict({}).tag(sync=True, o=True)
     mosaic_rule = Dict({}).tag(sync=True, o=True)
-    endpoint = Unicode('Esri').tag(sync=True, o=True)
-    attribution = Unicode('').tag(sync=True, o=True)
+    endpoint = Unicode("Esri").tag(sync=True, o=True)
+    attribution = Unicode("").tag(sync=True, o=True)
     crs = Dict(default_value=projections.EPSG3857).tag(sync=True)
     interactive = Bool(False).tag(sync=True, o=True)
     update_interval = Int(200).tag(sync=True, o=True)
@@ -912,8 +1045,8 @@ class ImageService(Layer):
         self.on_msg(self._handle_mouse_events)
 
     def _handle_mouse_events(self, _, content, buffers):
-        event_type = content.get('type', '')
-        if event_type == 'click':
+        event_type = content.get("type", "")
+        if event_type == "click":
             self._click_callbacks(**content)
 
 
@@ -935,8 +1068,8 @@ class Heatmap(RasterLayer):
         Colors used for the color-mapping from low to high heatmap intensity.
     """
 
-    _view_name = Unicode('LeafletHeatmapView').tag(sync=True)
-    _model_name = Unicode('LeafletHeatmapModel').tag(sync=True)
+    _view_name = Unicode("LeafletHeatmapView").tag(sync=True)
+    _model_name = Unicode("LeafletHeatmapModel").tag(sync=True)
 
     locations = List().tag(sync=True)
 
@@ -946,7 +1079,9 @@ class Heatmap(RasterLayer):
     max = Float(1.0).tag(sync=True, o=True)
     radius = Float(25.0).tag(sync=True, o=True)
     blur = Float(15.0).tag(sync=True, o=True)
-    gradient = Dict({0.4: 'blue', 0.6: 'cyan', 0.7: 'lime', 0.8: 'yellow', 1.0: 'red'}).tag(sync=True, o=True)
+    gradient = Dict(
+        {0.4: "blue", 0.6: "cyan", 0.7: "lime", 0.8: "yellow", 1.0: "red"}
+    ).tag(sync=True, o=True)
 
 
 class VectorTileLayer(Layer):
@@ -965,8 +1100,8 @@ class VectorTileLayer(Layer):
         CSS Styles to apply to the vector data.
     """
 
-    _view_name = Unicode('LeafletVectorTileLayerView').tag(sync=True)
-    _model_name = Unicode('LeafletVectorTileLayerModel').tag(sync=True)
+    _view_name = Unicode("LeafletVectorTileLayerView").tag(sync=True)
+    _model_name = Unicode("LeafletVectorTileLayerModel").tag(sync=True)
 
     url = Unicode().tag(sync=True, o=True)
     attribution = Unicode().tag(sync=True, o=True)
@@ -979,7 +1114,7 @@ class VectorTileLayer(Layer):
         This is especially useful when you are sure the server updated the tiles and you
         need to refresh the layer.
         """
-        self.send({'msg': 'redraw'})
+        self.send({"msg": "redraw"})
 
 
 class PMTilesLayer(Layer):
@@ -998,24 +1133,23 @@ class PMTilesLayer(Layer):
         CSS Styles to apply to the vector data.
     """
 
-    _view_name = Unicode('LeafletPMTilesLayerView').tag(sync=True)
-    _model_name = Unicode('LeafletPMTilesLayerModel').tag(sync=True)
+    _view_name = Unicode("LeafletPMTilesLayerView").tag(sync=True)
+    _model_name = Unicode("LeafletPMTilesLayerModel").tag(sync=True)
 
     url = Unicode().tag(sync=True, o=True)
     attribution = Unicode().tag(sync=True, o=True)
     style = Dict().tag(sync=True, o=True)
 
     def add_inspector(self):
-        """Add an inspector to the layer.
-        """
-        self.send({'msg': 'add_inspector'})
+        """Add an inspector to the layer."""
+        self.send({"msg": "add_inspector"})
 
 
 class VectorLayer(Layer):
     """VectorLayer abstract class."""
 
-    _view_name = Unicode('LeafletVectorLayerView').tag(sync=True)
-    _model_name = Unicode('LeafletVectorLayerModel').tag(sync=True)
+    _view_name = Unicode("LeafletVectorLayerView").tag(sync=True)
+    _model_name = Unicode("LeafletVectorLayerModel").tag(sync=True)
 
 
 class Path(VectorLayer):
@@ -1046,20 +1180,24 @@ class Path(VectorLayer):
         Possible values are 'arcs', 'bevel', 'miter', 'miter-clip' or 'round'.
     """
 
-    _view_name = Unicode('LeafletPathView').tag(sync=True)
-    _model_name = Unicode('LeafletPathModel').tag(sync=True)
+    _view_name = Unicode("LeafletPathView").tag(sync=True)
+    _model_name = Unicode("LeafletPathModel").tag(sync=True)
 
     # Options
     stroke = Bool(True).tag(sync=True, o=True)
-    color = Color('#0033FF').tag(sync=True, o=True)
+    color = Color("#0033FF").tag(sync=True, o=True)
     weight = Int(5).tag(sync=True, o=True)
     fill = Bool(True).tag(sync=True, o=True)
     fill_color = Color(None, allow_none=True).tag(sync=True, o=True)
     fill_opacity = Float(0.2).tag(sync=True, o=True)
     dash_array = Unicode(allow_none=True, default_value=None).tag(sync=True, o=True)
-    line_cap = Enum(values=['round', 'butt', 'square'], default_value='round').tag(sync=True, o=True)
-    line_join = Enum(values=['arcs', 'bevel', 'miter', 'miter-clip', 'round'], default_value='round').tag(sync=True, o=True)
-    pointer_events = Unicode('').tag(sync=True, o=True)
+    line_cap = Enum(values=["round", "butt", "square"], default_value="round").tag(
+        sync=True, o=True
+    )
+    line_join = Enum(
+        values=["arcs", "bevel", "miter", "miter-clip", "round"], default_value="round"
+    ).tag(sync=True, o=True)
+    pointer_events = Unicode("").tag(sync=True, o=True)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True, o=True)
 
 
@@ -1095,18 +1233,20 @@ class AntPath(VectorLayer):
         Radius of the circle, if use is set to ‘circle’
     """
 
-    _view_name = Unicode('LeafletAntPathView').tag(sync=True)
-    _model_name = Unicode('LeafletAntPathModel').tag(sync=True)
+    _view_name = Unicode("LeafletAntPathView").tag(sync=True)
+    _model_name = Unicode("LeafletAntPathModel").tag(sync=True)
 
     locations = List().tag(sync=True)
 
     # Options
-    use = Enum(values=['polyline', 'polygon', 'rectangle', 'circle'], default_value='polyline').tag(sync=True, o=True)
+    use = Enum(
+        values=["polyline", "polygon", "rectangle", "circle"], default_value="polyline"
+    ).tag(sync=True, o=True)
     delay = Int(400).tag(sync=True, o=True)
     weight = Int(5).tag(sync=True, o=True)
     dash_array = List([10, 20]).tag(sync=True, o=True)
-    color = Color('#0000FF').tag(sync=True, o=True)
-    pulse_color = Color('#FFFFFF').tag(sync=True, o=True)
+    color = Color("#0000FF").tag(sync=True, o=True)
+    pulse_color = Color("#FFFFFF").tag(sync=True, o=True)
     paused = Bool(False).tag(sync=True, o=True)
     reverse = Bool(False).tag(sync=True, o=True)
     hardware_accelerated = Bool(False).tag(sync=True, o=True)
@@ -1134,8 +1274,8 @@ class Polyline(Path):
         Whether you can drag the shape on the map or not.
     """
 
-    _view_name = Unicode('LeafletPolylineView').tag(sync=True)
-    _model_name = Unicode('LeafletPolylineModel').tag(sync=True)
+    _view_name = Unicode("LeafletPolylineView").tag(sync=True)
+    _model_name = Unicode("LeafletPolylineModel").tag(sync=True)
 
     locations = List().tag(sync=True)
     scaling = Bool(True).tag(sync=True)
@@ -1155,8 +1295,8 @@ class Polygon(Polyline):
     Polygon layer.
     """
 
-    _view_name = Unicode('LeafletPolygonView').tag(sync=True)
-    _model_name = Unicode('LeafletPolygonModel').tag(sync=True)
+    _view_name = Unicode("LeafletPolygonView").tag(sync=True)
+    _model_name = Unicode("LeafletPolygonModel").tag(sync=True)
 
 
 class Rectangle(Polygon):
@@ -1170,10 +1310,10 @@ class Rectangle(Polygon):
         List of SW and NE location tuples. e.g. [(50, 75), (75, 120)].
     """
 
-    _view_name = Unicode('LeafletRectangleView').tag(sync=True)
-    _model_name = Unicode('LeafletRectangleModel').tag(sync=True)
+    _view_name = Unicode("LeafletRectangleView").tag(sync=True)
+    _model_name = Unicode("LeafletRectangleModel").tag(sync=True)
 
-    bounds = List(help='list of SW and NE location tuples').tag(sync=True)
+    bounds = List(help="list of SW and NE location tuples").tag(sync=True)
 
 
 class CircleMarker(Path):
@@ -1189,13 +1329,13 @@ class CircleMarker(Path):
         Radius of the circle marker in pixels.
     """
 
-    _view_name = Unicode('LeafletCircleMarkerView').tag(sync=True)
-    _model_name = Unicode('LeafletCircleMarkerModel').tag(sync=True)
+    _view_name = Unicode("LeafletCircleMarkerView").tag(sync=True)
+    _model_name = Unicode("LeafletCircleMarkerModel").tag(sync=True)
 
     location = List(def_loc).tag(sync=True)
 
     # Options
-    radius = Int(10, help='radius of circle in pixels').tag(sync=True, o=True)
+    radius = Int(10, help="radius of circle in pixels").tag(sync=True, o=True)
 
 
 class Circle(CircleMarker):
@@ -1204,11 +1344,11 @@ class Circle(CircleMarker):
     Circle layer.
     """
 
-    _view_name = Unicode('LeafletCircleView').tag(sync=True)
-    _model_name = Unicode('LeafletCircleModel').tag(sync=True)
+    _view_name = Unicode("LeafletCircleView").tag(sync=True)
+    _model_name = Unicode("LeafletCircleModel").tag(sync=True)
 
     # Options
-    radius = Int(1000, help='radius of circle in meters').tag(sync=True, o=True)
+    radius = Int(1000, help="radius of circle in meters").tag(sync=True, o=True)
 
 
 class MarkerCluster(Layer):
@@ -1222,8 +1362,8 @@ class MarkerCluster(Layer):
         List of markers to include in the cluster.
     """
 
-    _view_name = Unicode('LeafletMarkerClusterView').tag(sync=True)
-    _model_name = Unicode('LeafletMarkerClusterModel').tag(sync=True)
+    _view_name = Unicode("LeafletMarkerClusterView").tag(sync=True)
+    _model_name = Unicode("LeafletMarkerClusterModel").tag(sync=True)
 
     markers = Tuple().tag(trait=Instance(Layer), sync=True, **widget_serialization)
     # Options
@@ -1242,23 +1382,23 @@ class LayerGroup(Layer):
         List of layers to include in the group.
     """
 
-    _view_name = Unicode('LeafletLayerGroupView').tag(sync=True)
-    _model_name = Unicode('LeafletLayerGroupModel').tag(sync=True)
+    _view_name = Unicode("LeafletLayerGroupView").tag(sync=True)
+    _model_name = Unicode("LeafletLayerGroupModel").tag(sync=True)
 
     layers = Tuple().tag(trait=Instance(Layer), sync=True, **widget_serialization)
 
     _layer_ids = List()
 
-    @validate('layers')
+    @validate("layers")
     def _validate_layers(self, proposal):
-        '''Validate layers list.
+        """Validate layers list.
 
         Makes sure only one instance of any given layer can exist in the
         layers list.
-        '''
+        """
         self._layer_ids = [layer.model_id for layer in proposal.value]
         if len(set(self._layer_ids)) != len(self._layer_ids):
-            raise LayerException('duplicate layer detected, only use each layer once')
+            raise LayerException("duplicate layer detected, only use each layer once")
         return proposal.value
 
     def add_layer(self, layer):
@@ -1287,7 +1427,9 @@ class LayerGroup(Layer):
         layer: layer instance
             The layer to remove from the group.
         """
-        warnings.warn("remove_layer is deprecated, use remove instead", DeprecationWarning)
+        warnings.warn(
+            "remove_layer is deprecated, use remove instead", DeprecationWarning
+        )
 
         self.remove(rm_layer)
 
@@ -1304,7 +1446,9 @@ class LayerGroup(Layer):
         new: layer instance
             The new layer to include in the group.
         """
-        warnings.warn("substitute_layer is deprecated, use substitute instead", DeprecationWarning)
+        warnings.warn(
+            "substitute_layer is deprecated, use substitute instead", DeprecationWarning
+        )
 
         self.substitute(old, new)
 
@@ -1316,7 +1460,9 @@ class LayerGroup(Layer):
 
         """
 
-        warnings.warn("clear_layers is deprecated, use clear instead", DeprecationWarning)
+        warnings.warn(
+            "clear_layers is deprecated, use clear instead", DeprecationWarning
+        )
 
         self.layers = ()
 
@@ -1334,7 +1480,7 @@ class LayerGroup(Layer):
         if isinstance(layer, dict):
             layer = basemap_to_tiles(layer)
         if layer.model_id in self._layer_ids:
-            raise LayerException('layer already in layergroup: %r' % layer)
+            raise LayerException("layer already in layergroup: %r" % layer)
         self.layers = tuple([layer for layer in self.layers] + [layer])
 
     def remove(self, rm_layer):
@@ -1347,8 +1493,10 @@ class LayerGroup(Layer):
         """
 
         if rm_layer.model_id not in self._layer_ids:
-            raise LayerException('layer not on in layergroup: %r' % rm_layer)
-        self.layers = tuple([layer for layer in self.layers if layer.model_id != rm_layer.model_id])
+            raise LayerException("layer not on in layergroup: %r" % rm_layer)
+        self.layers = tuple(
+            [layer for layer in self.layers if layer.model_id != rm_layer.model_id]
+        )
 
     def substitute(self, old, new):
         """Substitute a layer with another one in the group.
@@ -1363,8 +1511,10 @@ class LayerGroup(Layer):
         if isinstance(new, dict):
             new = basemap_to_tiles(new)
         if old.model_id not in self._layer_ids:
-            raise LayerException('Could not substitute layer: layer not in layergroup.')
-        self.layers = tuple([new if layer.model_id == old.model_id else layer for layer in self.layers])
+            raise LayerException("Could not substitute layer: layer not in layergroup.")
+        self.layers = tuple(
+            [new if layer.model_id == old.model_id else layer for layer in self.layers]
+        )
 
     def clear(self):
         """Remove all layers from the group."""
@@ -1374,8 +1524,8 @@ class LayerGroup(Layer):
 class FeatureGroup(LayerGroup):
     """FeatureGroup abstract class."""
 
-    _view_name = Unicode('LeafletFeatureGroupView').tag(sync=True)
-    _model_name = Unicode('LeafletFeatureGroupModel').tag(sync=True)
+    _view_name = Unicode("LeafletFeatureGroupView").tag(sync=True)
+    _model_name = Unicode("LeafletFeatureGroupModel").tag(sync=True)
 
 
 class GeoJSON(FeatureGroup):
@@ -1398,8 +1548,8 @@ class GeoJSON(FeatureGroup):
         input and return the feature style.
     """
 
-    _view_name = Unicode('LeafletGeoJSONView').tag(sync=True)
-    _model_name = Unicode('LeafletGeoJSONModel').tag(sync=True)
+    _view_name = Unicode("LeafletGeoJSONView").tag(sync=True)
+    _model_name = Unicode("LeafletGeoJSONModel").tag(sync=True)
 
     data = Dict().tag(sync=True)
     style = Dict().tag(sync=True)
@@ -1419,13 +1569,15 @@ class GeoJSON(FeatureGroup):
         self.data = self._get_data()
         self.updating = False
 
-    @validate('style_callback')
+    @validate("style_callback")
     def _validate_style_callback(self, proposal):
         if not callable(proposal.value):
-            raise TraitError('style_callback should be callable (functor/function/lambda)')
+            raise TraitError(
+                "style_callback should be callable (functor/function/lambda)"
+            )
         return proposal.value
 
-    @observe('data', 'style', 'style_callback')
+    @observe("data", "style", "style_callback")
     def _update_data(self, change):
         if self.updating:
             return
@@ -1435,11 +1587,11 @@ class GeoJSON(FeatureGroup):
         self.updating = False
 
     def _get_data(self):
-        if 'type' not in self.data:
+        if "type" not in self.data:
             # We can't apply a style we don't know what the data look like
             return self.data
 
-        datatype = self.data['type']
+        datatype = self.data["type"]
 
         style_callback = None
         if self.style_callback:
@@ -1453,10 +1605,10 @@ class GeoJSON(FeatureGroup):
         # We need to make a deep copy for ipywidgets to see the change
         data = copy.deepcopy(self.data)
 
-        if datatype == 'Feature':
+        if datatype == "Feature":
             self._apply_style(data, style_callback)
-        elif datatype == 'FeatureCollection':
-            for feature in data['features']:
+        elif datatype == "FeatureCollection":
+            for feature in data["features"]:
                 self._apply_style(feature, style_callback)
 
         return data
@@ -1472,21 +1624,21 @@ class GeoJSON(FeatureGroup):
         return self.data
 
     def _apply_style(self, feature, style_callback):
-        if 'properties' not in feature:
-            feature['properties'] = {}
+        if "properties" not in feature:
+            feature["properties"] = {}
 
-        properties = feature['properties']
-        if 'style' in properties:
-            style = properties['style'].copy()
+        properties = feature["properties"]
+        if "style" in properties:
+            style = properties["style"].copy()
             style.update(style_callback(feature))
-            properties['style'] = style
+            properties["style"] = style
         else:
-            properties['style'] = style_callback(feature)
+            properties["style"] = style_callback(feature)
 
     def _handle_mouse_events(self, _, content, buffers):
-        if content.get('event', '') == 'click':
+        if content.get("event", "") == "click":
             self._click_callbacks(**content)
-        if content.get('event', '') == 'mouseover':
+        if content.get("event", "") == "mouseover":
             self._hover_callbacks(**content)
 
     def on_click(self, callback, remove=False):
@@ -1527,13 +1679,13 @@ class GeoData(GeoJSON):
         The GeoPandas dataframe to use.
     """
 
-    geo_dataframe = Instance('geopandas.GeoDataFrame')
+    geo_dataframe = Instance("geopandas.GeoDataFrame")
 
     def __init__(self, **kwargs):
         super(GeoData, self).__init__(**kwargs)
         self.data = self._get_data()
 
-    @observe('geo_dataframe', 'style', 'style_callback')
+    @observe("geo_dataframe", "style", "style_callback")
     def _update_data(self, change):
         self.data = self._get_data()
 
@@ -1583,23 +1735,36 @@ class Choropleth(GeoJSON):
     value_min = CFloat(None, allow_none=True)
     value_max = CFloat(None, allow_none=True)
     colormap = Instance(ColorMap, default_value=linear.OrRd_06)
-    key_on = Unicode('id')
-    nan_color = Unicode('black')
+    key_on = Unicode("id")
+    nan_color = Unicode("black")
     nan_opacity = CFloat(0.4)
     default_opacity = CFloat(1.0)
 
-    @observe('style', 'style_callback', 'value_min', 'value_max', 'nan_color', 'nan_opacity', 'default_opacity', 'geo_data', 'choro_data', 'colormap')
+    @observe(
+        "style",
+        "style_callback",
+        "value_min",
+        "value_max",
+        "nan_color",
+        "nan_opacity",
+        "default_opacity",
+        "geo_data",
+        "choro_data",
+        "colormap",
+    )
     def _update_data(self, change):
         self.data = self._get_data()
 
-    @default('style_callback')
+    @default("style_callback")
     def _default_style_callback(self):
         def compute_style(feature, colormap, choro_data):
             return dict(
                 fillColor=self.nan_color if isnan(choro_data) else colormap(choro_data),
-                fillOpacity=self.nan_opacity if isnan(choro_data) else self.default_opacity,
-                color='black',
-                weight=0.9
+                fillOpacity=self.nan_opacity
+                if isnan(choro_data)
+                else self.default_opacity,
+                color="black",
+                weight=0.9,
             )
 
         return compute_style
@@ -1619,9 +1784,10 @@ class Choropleth(GeoJSON):
 
         data = copy.deepcopy(self.geo_data)
 
-        for feature in data['features']:
-            feature['properties']['style'] = self.style_callback(feature, colormap,
-                                                                 self.choro_data[feature[self.key_on]])
+        for feature in data["features"]:
+            feature["properties"]["style"] = self.style_callback(
+                feature, colormap, self.choro_data[feature[self.key_on]]
+            )
 
         return data
 
@@ -1643,14 +1809,14 @@ class WKTLayer(GeoJSON):
       WKT string.
     """
 
-    path = Unicode('')
-    wkt_string = Unicode('')
+    path = Unicode("")
+    wkt_string = Unicode("")
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.data = self._get_data()
 
-    @observe('path', 'wkt_string', 'style', 'style_callback')
+    @observe("path", "wkt_string", "style", "style_callback")
     def _update_data(self, change):
         self.data = self._get_data()
 
@@ -1658,7 +1824,9 @@ class WKTLayer(GeoJSON):
         try:
             from shapely import geometry, wkt
         except ImportError:
-            raise RuntimeError("The WKTLayer needs shapely to be installed, please run `pip install shapely`")
+            raise RuntimeError(
+                "The WKTLayer needs shapely to be installed, please run `pip install shapely`"
+            )
 
         if self.path:
             with open(self.path) as f:
@@ -1670,7 +1838,10 @@ class WKTLayer(GeoJSON):
 
         geo = geometry.mapping(parsed_wkt)
         if geo["type"] == "GeometryCollection":
-            features = [{"geometry": g, "properties": {}, "type": "Feature"} for g in geo["geometries"]]
+            features = [
+                {"geometry": g, "properties": {}, "type": "Feature"}
+                for g in geo["geometries"]
+            ]
             feature_collection = {"type": "FeatureCollection", "features": features}
             return feature_collection
         else:
@@ -1680,6 +1851,7 @@ class WKTLayer(GeoJSON):
 
 class ControlException(TraitError):
     """Custom LayerException class."""
+
     pass
 
 
@@ -1696,10 +1868,10 @@ class Control(Widget):
         'topleft', 'bottomright' and 'bottomleft'.
     """
 
-    _view_name = Unicode('LeafletControlView').tag(sync=True)
-    _model_name = Unicode('LeafletControlModel').tag(sync=True)
-    _view_module = Unicode('jupyter-leaflet').tag(sync=True)
-    _model_module = Unicode('jupyter-leaflet').tag(sync=True)
+    _view_name = Unicode("LeafletControlView").tag(sync=True)
+    _model_name = Unicode("LeafletControlModel").tag(sync=True)
+    _view_module = Unicode("jupyter-leaflet").tag(sync=True)
+    _model_module = Unicode("jupyter-leaflet").tag(sync=True)
 
     _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
@@ -1707,13 +1879,13 @@ class Control(Widget):
     options = List(trait=Unicode()).tag(sync=True)
 
     position = Enum(
-        ['topright', 'topleft', 'bottomright', 'bottomleft'],
-        default_value='topleft',
+        ["topright", "topleft", "bottomright", "bottomleft"],
+        default_value="topleft",
         help="""Possible values are topleft, topright, bottomleft
-                or bottomright"""
+                or bottomright""",
     ).tag(sync=True, o=True)
 
-    @default('options')
+    @default("options")
     def _default_options(self):
         return [name for name in self.traits(o=True)]
 
@@ -1730,8 +1902,8 @@ class WidgetControl(Control):
         a third-party library like bqplot.
     """
 
-    _view_name = Unicode('LeafletWidgetControlView').tag(sync=True)
-    _model_name = Unicode('LeafletWidgetControlModel').tag(sync=True)
+    _view_name = Unicode("LeafletWidgetControlView").tag(sync=True)
+    _model_name = Unicode("LeafletWidgetControlModel").tag(sync=True)
 
     widget = Instance(DOMWidget).tag(sync=True, **widget_serialization)
 
@@ -1750,8 +1922,8 @@ class FullScreenControl(Control):
     full-screen when clicked.
     """
 
-    _view_name = Unicode('LeafletFullScreenControlView').tag(sync=True)
-    _model_name = Unicode('LeafletFullScreenControlModel').tag(sync=True)
+    _view_name = Unicode("LeafletFullScreenControlView").tag(sync=True)
+    _model_name = Unicode("LeafletFullScreenControlModel").tag(sync=True)
 
 
 class LayersControl(Control):
@@ -1764,8 +1936,8 @@ class LayersControl(Control):
         Set whether control should be open or closed by default
     """
 
-    _view_name = Unicode('LeafletLayersControlView').tag(sync=True)
-    _model_name = Unicode('LeafletLayersControlModel').tag(sync=True)
+    _view_name = Unicode("LeafletLayersControlView").tag(sync=True)
+    _model_name = Unicode("LeafletLayersControlModel").tag(sync=True)
 
     collapsed = Bool(True).tag(sync=True, o=True)
 
@@ -1791,19 +1963,19 @@ class MeasureControl(Control):
         The color used for the completed measurements.
     """
 
-    _view_name = Unicode('LeafletMeasureControlView').tag(sync=True)
-    _model_name = Unicode('LeafletMeasureControlModel').tag(sync=True)
+    _view_name = Unicode("LeafletMeasureControlView").tag(sync=True)
+    _model_name = Unicode("LeafletMeasureControlModel").tag(sync=True)
 
-    _length_units = ['feet', 'meters', 'miles', 'kilometers']
-    _area_units = ['acres', 'hectares', 'sqfeet', 'sqmeters', 'sqmiles']
+    _length_units = ["feet", "meters", "miles", "kilometers"]
+    _area_units = ["acres", "hectares", "sqfeet", "sqmeters", "sqmiles"]
     _custom_units_dict = {}
     _custom_units = Dict().tag(sync=True)
 
     primary_length_unit = Enum(
         values=_length_units,
-        default_value='feet',
+        default_value="feet",
         help="""Possible values are feet, meters, miles, kilometers or any user
-                defined unit"""
+                defined unit""",
     ).tag(sync=True, o=True)
 
     secondary_length_unit = Enum(
@@ -1811,14 +1983,14 @@ class MeasureControl(Control):
         default_value=None,
         allow_none=True,
         help="""Possible values are feet, meters, miles, kilometers or any user
-                defined unit"""
+                defined unit""",
     ).tag(sync=True, o=True)
 
     primary_area_unit = Enum(
         values=_area_units,
-        default_value='acres',
+        default_value="acres",
         help="""Possible values are acres, hectares, sqfeet, sqmeters, sqmiles
-                or any user defined unit"""
+                or any user defined unit""",
     ).tag(sync=True, o=True)
 
     secondary_area_unit = Enum(
@@ -1826,16 +1998,15 @@ class MeasureControl(Control):
         default_value=None,
         allow_none=True,
         help="""Possible values are acres, hectares, sqfeet, sqmeters, sqmiles
-                or any user defined unit"""
+                or any user defined unit""",
     ).tag(sync=True, o=True)
 
-    active_color = Color('#ABE67E').tag(sync=True, o=True)
-    completed_color = Color('#C8F2BE').tag(sync=True, o=True)
+    active_color = Color("#ABE67E").tag(sync=True, o=True)
+    completed_color = Color("#C8F2BE").tag(sync=True, o=True)
 
-    popup_options = Dict({
-        'className': 'leaflet-measure-resultpopup',
-        'autoPanPadding': [10, 10]
-    }).tag(sync=True, o=True)
+    popup_options = Dict(
+        {"className": "leaflet-measure-resultpopup", "autoPanPadding": [10, 10]}
+    ).tag(sync=True, o=True)
 
     capture_z_index = Int(10000).tag(sync=True, o=True)
 
@@ -1873,9 +2044,9 @@ class MeasureControl(Control):
 
     def _add_unit(self, name, factor, decimals):
         self._custom_units_dict[name] = {
-            'factor': factor,
-            'display': name,
-            'decimals': decimals
+            "factor": factor,
+            "display": name,
+            "decimals": decimals,
         }
         self._custom_units = dict(**self._custom_units_dict)
 
@@ -1893,18 +2064,22 @@ class SplitMapControl(Control):
         The right layer(s) for comparison.
     """
 
-    _view_name = Unicode('LeafletSplitMapControlView').tag(sync=True)
-    _model_name = Unicode('LeafletSplitMapControlModel').tag(sync=True)
+    _view_name = Unicode("LeafletSplitMapControlView").tag(sync=True)
+    _model_name = Unicode("LeafletSplitMapControlModel").tag(sync=True)
 
-    left_layer = Union((Instance(Layer), List(Instance(Layer)))).tag(sync=True, **widget_serialization)
-    right_layer = Union((Instance(Layer), List(Instance(Layer)))).tag(sync=True, **widget_serialization)
+    left_layer = Union((Instance(Layer), List(Instance(Layer)))).tag(
+        sync=True, **widget_serialization
+    )
+    right_layer = Union((Instance(Layer), List(Instance(Layer)))).tag(
+        sync=True, **widget_serialization
+    )
 
-    @default('left_layer')
+    @default("left_layer")
     def _default_left_layer(self):
         # TODO: Shouldn't this be None?
         return TileLayer()
 
-    @default('right_layer')
+    @default("right_layer")
     def _default_right_layer(self):
         # TODO: Shouldn't this be None?
         return TileLayer()
@@ -1914,8 +2089,8 @@ class SplitMapControl(Control):
         self.on_msg(self._handle_leaflet_event)
 
     def _handle_leaflet_event(self, _, content, buffers):
-        if content.get('event', '') == 'dividermove':
-            event = content.get('event')
+        if content.get("event", "") == "dividermove":
+            event = content.get("event")
             # TODO: Add x trait?
             self.x = event.x
 
@@ -1926,18 +2101,18 @@ class DrawControl(Control):
     Drawing tools for drawing on the map.
     """
 
-    _view_name = Unicode('LeafletDrawControlView').tag(sync=True)
-    _model_name = Unicode('LeafletDrawControlModel').tag(sync=True)
+    _view_name = Unicode("LeafletDrawControlView").tag(sync=True)
+    _model_name = Unicode("LeafletDrawControlModel").tag(sync=True)
 
     # Enable each of the following drawing by giving them a non empty dict of options
     # You can add Leaflet style options in the shapeOptions sub-dict
     # See https://github.com/Leaflet/Leaflet.draw#polylineoptions
     # TODO: mutable default value!
-    polyline = Dict({'shapeOptions': {}}).tag(sync=True)
+    polyline = Dict({"shapeOptions": {}}).tag(sync=True)
     # See https://github.com/Leaflet/Leaflet.draw#polygonoptions
     # TODO: mutable default value!
-    polygon = Dict({'shapeOptions': {}}).tag(sync=True)
-    circlemarker = Dict({'shapeOptions': {}}).tag(sync=True)
+    polygon = Dict({"shapeOptions": {}}).tag(sync=True)
+    circlemarker = Dict({"shapeOptions": {}}).tag(sync=True)
 
     # Leave empty to disable these
     circle = Dict().tag(sync=True)
@@ -1951,10 +2126,7 @@ class DrawControl(Control):
     # Layer data
     data = List().tag(sync=True)
 
-    last_draw = Dict({
-        'type': 'Feature',
-        'geometry': None
-    })
+    last_draw = Dict({"type": "Feature", "geometry": None})
     last_action = Unicode()
 
     _draw_callbacks = Instance(CallbackDispatcher, ())
@@ -1964,9 +2136,9 @@ class DrawControl(Control):
         self.on_msg(self._handle_leaflet_event)
 
     def _handle_leaflet_event(self, _, content, buffers):
-        if content.get('event', '').startswith('draw'):
-            event, action = content.get('event').split(':')
-            self.last_draw = content.get('geo_json')
+        if content.get("event", "").startswith("draw"):
+            event, action = content.get("event").split(":")
+            self.last_draw = content.get("geo_json")
             self.last_action = action
             self._draw_callbacks(self, action=action, geo_json=self.last_draw)
 
@@ -1984,31 +2156,31 @@ class DrawControl(Control):
 
     def clear(self):
         """Clear all drawings."""
-        self.send({'msg': 'clear'})
+        self.send({"msg": "clear"})
 
     def clear_polylines(self):
         """Clear all polylines."""
-        self.send({'msg': 'clear_polylines'})
+        self.send({"msg": "clear_polylines"})
 
     def clear_polygons(self):
         """Clear all polygons."""
-        self.send({'msg': 'clear_polygons'})
+        self.send({"msg": "clear_polygons"})
 
     def clear_circles(self):
         """Clear all circles."""
-        self.send({'msg': 'clear_circles'})
+        self.send({"msg": "clear_circles"})
 
     def clear_circle_markers(self):
         """Clear all circle markers."""
-        self.send({'msg': 'clear_circle_markers'})
+        self.send({"msg": "clear_circle_markers"})
 
     def clear_rectangles(self):
         """Clear all rectangles."""
-        self.send({'msg': 'clear_rectangles'})
+        self.send({"msg": "clear_rectangles"})
 
     def clear_markers(self):
         """Clear all markers."""
-        self.send({'msg': 'clear_markers'})
+        self.send({"msg": "clear_markers"})
 
 
 class ZoomControl(Control):
@@ -2030,13 +2202,13 @@ class ZoomControl(Control):
         is over the button.
     """
 
-    _view_name = Unicode('LeafletZoomControlView').tag(sync=True)
-    _model_name = Unicode('LeafletZoomControlModel').tag(sync=True)
+    _view_name = Unicode("LeafletZoomControlView").tag(sync=True)
+    _model_name = Unicode("LeafletZoomControlModel").tag(sync=True)
 
-    zoom_in_text = Unicode('+').tag(sync=True, o=True)
-    zoom_in_title = Unicode('Zoom in').tag(sync=True, o=True)
-    zoom_out_text = Unicode('-').tag(sync=True, o=True)
-    zoom_out_title = Unicode('Zoom out').tag(sync=True, o=True)
+    zoom_in_text = Unicode("+").tag(sync=True, o=True)
+    zoom_in_title = Unicode("Zoom in").tag(sync=True, o=True)
+    zoom_out_text = Unicode("-").tag(sync=True, o=True)
+    zoom_out_title = Unicode("Zoom out").tag(sync=True, o=True)
 
 
 class ScaleControl(Control):
@@ -2054,8 +2226,8 @@ class ScaleControl(Control):
         Whether to show imperial units.
     """
 
-    _view_name = Unicode('LeafletScaleControlView').tag(sync=True)
-    _model_name = Unicode('LeafletScaleControlModel').tag(sync=True)
+    _view_name = Unicode("LeafletScaleControlView").tag(sync=True)
+    _model_name = Unicode("LeafletScaleControlModel").tag(sync=True)
 
     max_width = Int(100).tag(sync=True, o=True)
     metric = Bool(True).tag(sync=True, o=True)
@@ -2069,10 +2241,10 @@ class AttributionControl(Control):
     A control which contains the layers attribution.
     """
 
-    _view_name = Unicode('LeafletAttributionControlView').tag(sync=True)
-    _model_name = Unicode('LeafletAttributionControlModel').tag(sync=True)
+    _view_name = Unicode("LeafletAttributionControlView").tag(sync=True)
+    _model_name = Unicode("LeafletAttributionControlModel").tag(sync=True)
 
-    prefix = Unicode('ipyleaflet').tag(sync=True, o=True)
+    prefix = Unicode("ipyleaflet").tag(sync=True, o=True)
 
 
 class LegendControl(Control):
@@ -2092,22 +2264,23 @@ class LegendControl(Control):
         A dictionary containing names as keys and CSS colors as values.
     """
 
-    _view_name = Unicode('LeafletLegendControlView').tag(sync=True)
-    _model_name = Unicode('LeafletLegendControlModel').tag(sync=True)
+    _view_name = Unicode("LeafletLegendControlView").tag(sync=True)
+    _model_name = Unicode("LeafletLegendControlModel").tag(sync=True)
 
-    title = Unicode('Legend').tag(sync=True)
-    legend = Dict(default_value={
-        "value 1": "#AAF",
-        "value 2": "#55A",
-        "value 3": "#005"}).tag(sync=True)
+    title = Unicode("Legend").tag(sync=True)
+    legend = Dict(
+        default_value={"value 1": "#AAF", "value 2": "#55A", "value 3": "#005"}
+    ).tag(sync=True)
 
     def __init__(self, legend, *args, **kwargs):
         kwargs["legend"] = legend
         # For backwards compatibility with ipyleaflet<=0.16.0
-        if 'name' in kwargs:
-            warnings.warn("the name argument is deprecated, use title instead", DeprecationWarning)
-            kwargs.setdefault('title', kwargs['name'])
-            del kwargs['name']
+        if "name" in kwargs:
+            warnings.warn(
+                "the name argument is deprecated, use title instead", DeprecationWarning
+            )
+            kwargs.setdefault("title", kwargs["name"])
+            del kwargs["name"]
         super().__init__(*args, **kwargs)
 
     @property
@@ -2148,12 +2321,16 @@ class LegendControl(Control):
         .. deprecated :: 0.17.0
            Use position attribute instead.
         """
-        warnings.warn(".positioning is deprecated, use .position instead", DeprecationWarning)
+        warnings.warn(
+            ".positioning is deprecated, use .position instead", DeprecationWarning
+        )
         return self.position
 
     @positioning.setter
     def positioning(self, position):
-        warnings.warn(".positioning is deprecated, use .position instead", DeprecationWarning)
+        warnings.warn(
+            ".positioning is deprecated, use .position instead", DeprecationWarning
+        )
         self.position = position
 
     @property
@@ -2163,12 +2340,16 @@ class LegendControl(Control):
         .. deprecated :: 0.17.0
            Use position attribute instead.
         """
-        warnings.warn(".positionning is deprecated, use .position instead", DeprecationWarning)
+        warnings.warn(
+            ".positionning is deprecated, use .position instead", DeprecationWarning
+        )
         return self.position
 
     @positionning.setter
     def positionning(self, position):
-        warnings.warn(".positionning is deprecated, use .position instead", DeprecationWarning)
+        warnings.warn(
+            ".positionning is deprecated, use .position instead", DeprecationWarning
+        )
         self.position = position
 
     def add_legend_element(self, key, value):
@@ -2212,14 +2393,17 @@ class ColormapControl(WidgetControl):
     value_max : float, default 1.0
         The maximal value taken by the data to be represented by the colormap.
     """
-    caption = Unicode('caption')
+
+    caption = Unicode("caption")
     colormap = Instance(ColorMap, default_value=linear.OrRd_06)
     value_min = CFloat(0.0)
     value_max = CFloat(1.0)
 
-    @default('widget')
+    @default("widget")
     def _default_widget(self):
-        widget = Output(layout={'height': '40px', 'width': '520px', 'margin': '0px -19px 0px 0px'})
+        widget = Output(
+            layout={"height": "40px", "width": "520px", "margin": "0px -19px 0px 0px"}
+        )
         with widget:
             colormap = self.colormap.scale(self.value_min, self.value_max)
             colormap.caption = self.caption
@@ -2229,7 +2413,7 @@ class ColormapControl(WidgetControl):
 
 
 class SearchControl(Control):
-    """ SearchControl class, with Control as parent class.
+    """SearchControl class, with Control as parent class.
 
     Attributes
     ----------
@@ -2245,21 +2429,28 @@ class SearchControl(Control):
     found_style: default {‘fillColor’: ‘#3f0’, ‘color’: ‘#0f0’}
         Style for searched feature when searching in LayerGroup.
     """
-    _view_name = Unicode('LeafletSearchControlView').tag(sync=True)
-    _model_name = Unicode('LeafletSearchControlModel').tag(sync=True)
+
+    _view_name = Unicode("LeafletSearchControlView").tag(sync=True)
+    _model_name = Unicode("LeafletSearchControlModel").tag(sync=True)
 
     url = Unicode().tag(sync=True, o=True)
     zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)
-    property_name = Unicode('display_name').tag(sync=True, o=True)
-    property_loc = List(['lat', 'lon']).tag(sync=True, o=True)
-    jsonp_param = Unicode('json_callback').tag(sync=True, o=True)
+    property_name = Unicode("display_name").tag(sync=True, o=True)
+    property_loc = List(["lat", "lon"]).tag(sync=True, o=True)
+    jsonp_param = Unicode("json_callback").tag(sync=True, o=True)
     auto_type = Bool(False).tag(sync=True, o=True)
     auto_collapse = Bool(False).tag(sync=True, o=True)
     animate_location = Bool(False).tag(sync=True, o=True)
-    found_style = Dict(default_value={"fillColor": "#3f0", "color": "#0f0"}).tag(sync=True, o=True)
+    found_style = Dict(default_value={"fillColor": "#3f0", "color": "#0f0"}).tag(
+        sync=True, o=True
+    )
 
-    marker = Instance(Marker, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
-    layer = Instance(LayerGroup, allow_none=True, default_value=None).tag(sync=True, **widget_serialization)
+    marker = Instance(Marker, allow_none=True, default_value=None).tag(
+        sync=True, **widget_serialization
+    )
+    layer = Instance(LayerGroup, allow_none=True, default_value=None).tag(
+        sync=True, **widget_serialization
+    )
 
     _location_found_callbacks = Instance(CallbackDispatcher, ())
 
@@ -2268,7 +2459,7 @@ class SearchControl(Control):
         self.on_msg(self._handle_leaflet_event)
 
     def _handle_leaflet_event(self, _, content, buffers):
-        if content.get('event', '') == 'locationfound':
+        if content.get("event", "") == "locationfound":
             self._location_found_callbacks(**content)
 
     def on_feature_found(self, callback, remove=False):
@@ -2308,12 +2499,12 @@ class MapStyle(Style, Widget):
         cursor value.
     """
 
-    _model_name = Unicode('LeafletMapStyleModel').tag(sync=True)
+    _model_name = Unicode("LeafletMapStyleModel").tag(sync=True)
     _model_module = Unicode("jupyter-leaflet").tag(sync=True)
 
     _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
 
-    cursor = Enum(values=allowed_cursor, default_value='grab').tag(sync=True)
+    cursor = Enum(values=allowed_cursor, default_value="grab").tag(sync=True)
 
 
 class Map(DOMWidget, InteractMixin):
@@ -2378,10 +2569,10 @@ class Map(DOMWidget, InteractMixin):
     zoom_animation_threshold: int, default 4
     """
 
-    _view_name = Unicode('LeafletMapView').tag(sync=True)
-    _model_name = Unicode('LeafletMapModel').tag(sync=True)
-    _view_module = Unicode('jupyter-leaflet').tag(sync=True)
-    _model_module = Unicode('jupyter-leaflet').tag(sync=True)
+    _view_name = Unicode("LeafletMapView").tag(sync=True)
+    _model_name = Unicode("LeafletMapModel").tag(sync=True)
+    _view_module = Unicode("jupyter-leaflet").tag(sync=True)
+    _model_module = Unicode("jupyter-leaflet").tag(sync=True)
 
     _view_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
     _model_module_version = Unicode(EXTENSION_VERSION).tag(sync=True)
@@ -2396,15 +2587,18 @@ class Map(DOMWidget, InteractMixin):
     min_zoom = CFloat(default_value=None, allow_none=True).tag(sync=True, o=True)
     zoom_delta = CFloat(1).tag(sync=True, o=True)
     zoom_snap = CFloat(1).tag(sync=True, o=True)
-    interpolation = Unicode('bilinear').tag(sync=True, o=True)
+    interpolation = Unicode("bilinear").tag(sync=True, o=True)
     crs = Dict(default_value=projections.EPSG3857).tag(sync=True)
     prefer_canvas = Bool(False).tag(sync=True, o=True)
 
     # Specification of the basemap
     basemap = Union(
         (Dict(), Instance(xyzservices.lib.TileProvider), Instance(TileLayer)),
-        default_value=xyzservices.providers.OpenStreetMap.Mapnik)
-    modisdate = Unicode((date.today() - timedelta(days=1)).strftime("%Y-%m-%d")).tag(sync=True)
+        default_value=xyzservices.providers.OpenStreetMap.Mapnik,
+    )
+    modisdate = Unicode((date.today() - timedelta(days=1)).strftime("%Y-%m-%d")).tag(
+        sync=True
+    )
     # Interaction options
     dragging = Bool(True).tag(sync=True, o=True)
     touch_zoom = Bool(True).tag(sync=True, o=True)
@@ -2438,11 +2632,11 @@ class Map(DOMWidget, InteractMixin):
     zoom_control = Bool(True)
     attribution_control = Bool(True)
 
-    @default('dragging_style')
+    @default("dragging_style")
     def _default_dragging_style(self):
-        return {'cursor': 'move'}
+        return {"cursor": "move"}
 
-    @default('options')
+    @default("options")
     def _default_options(self):
         return [name for name in self.traits(o=True)]
 
@@ -2459,10 +2653,13 @@ class Map(DOMWidget, InteractMixin):
     panes = Dict().tag(sync=True)
     layers = Tuple().tag(trait=Instance(Layer), sync=True, **widget_serialization)
 
-    @default('layers')
+    @default("layers")
     def _default_layers(self):
-        basemap = self.basemap if isinstance(self.basemap, TileLayer) else basemap_to_tiles(self.basemap,
-                                                                                            day=self.modisdate)
+        basemap = (
+            self.basemap
+            if isinstance(self.basemap, TileLayer)
+            else basemap_to_tiles(self.basemap, day=self.modisdate)
+        )
 
         basemap.base = True
 
@@ -2472,19 +2669,24 @@ class Map(DOMWidget, InteractMixin):
     bounds_polygon = Tuple(read_only=True)
     pixel_bounds = Tuple(read_only=True)
 
-    @observe('south', 'north', 'east', 'west')
+    @observe("south", "north", "east", "west")
     def _observe_bounds(self, change):
-        self.set_trait('bounds', ((self.south, self.west),
-                                  (self.north, self.east)))
-        self.set_trait('bounds_polygon', ((self.north, self.west),
-                                          (self.north, self.east),
-                                          (self.south, self.east),
-                                          (self.south, self.west)))
+        self.set_trait("bounds", ((self.south, self.west), (self.north, self.east)))
+        self.set_trait(
+            "bounds_polygon",
+            (
+                (self.north, self.west),
+                (self.north, self.east),
+                (self.south, self.east),
+                (self.south, self.west),
+            ),
+        )
 
-    @observe('bottom', 'top', 'right', 'left')
+    @observe("bottom", "top", "right", "left")
     def _observe_pixel_bounds(self, change):
-        self.set_trait('pixel_bounds', ((self.left, self.top),
-                                        (self.right, self.bottom)))
+        self.set_trait(
+            "pixel_bounds", ((self.left, self.top), (self.right, self.bottom))
+        )
 
     def __init__(self, **kwargs):
         self.zoom_control_instance = None
@@ -2498,31 +2700,40 @@ class Map(DOMWidget, InteractMixin):
             self.add(self.zoom_control_instance)
 
         if self.attribution_control:
-            self.attribution_control_instance = AttributionControl(position='bottomright')
+            self.attribution_control_instance = AttributionControl(
+                position="bottomright"
+            )
             self.add(self.attribution_control_instance)
 
-    @observe('zoom_control')
+    @observe("zoom_control")
     def observe_zoom_control(self, change):
-        if change['new']:
+        if change["new"]:
             self.zoom_control_instance = ZoomControl()
             self.add(self.zoom_control_instance)
         else:
-            if self.zoom_control_instance is not None and self.zoom_control_instance in self.controls:
+            if (
+                self.zoom_control_instance is not None
+                and self.zoom_control_instance in self.controls
+            ):
                 self.remove(self.zoom_control_instance)
 
-    @observe('attribution_control')
+    @observe("attribution_control")
     def observe_attribution_control(self, change):
-        if change['new']:
-            self.attribution_control_instance = AttributionControl(position='bottomright')
+        if change["new"]:
+            self.attribution_control_instance = AttributionControl(
+                position="bottomright"
+            )
             self.add(self.attribution_control_instance)
         else:
-            if self.attribution_control_instance is not None and self.attribution_control_instance in self.controls:
+            if (
+                self.attribution_control_instance is not None
+                and self.attribution_control_instance in self.controls
+            ):
                 self.remove(self.attribution_control_instance)
 
-    @validate('panes')
+    @validate("panes")
     def _validate_panes(self, proposal):
-        '''Validate panes.
-        '''
+        """Validate panes."""
         error_msg = "Panes should look like: {'pane_name': {'zIndex': 650, 'pointerEvents': 'none'}, ...}"
         for k1, v1 in proposal.value.items():
             if not isinstance(k1, str) or not isinstance(v1, dict):
@@ -2534,16 +2745,16 @@ class Map(DOMWidget, InteractMixin):
 
     _layer_ids = List()
 
-    @validate('layers')
+    @validate("layers")
     def _validate_layers(self, proposal):
-        '''Validate layers list.
+        """Validate layers list.
 
         Makes sure only one instance of any given layer can exist in the
         layers list.
-        '''
+        """
         self._layer_ids = [layer.model_id for layer in proposal.value]
         if len(set(self._layer_ids)) != len(self._layer_ids):
-            raise LayerException('duplicate layer detected, only use each layer once')
+            raise LayerException("duplicate layer detected, only use each layer once")
         return proposal.value
 
     def add_layer(self, layer):
@@ -2571,7 +2782,9 @@ class Map(DOMWidget, InteractMixin):
         layer: Layer instance
             The layer to remove.
         """
-        warnings.warn("remove_layer is deprecated, use remove instead", DeprecationWarning)
+        warnings.warn(
+            "remove_layer is deprecated, use remove instead", DeprecationWarning
+        )
 
         self.remove(rm_layer)
 
@@ -2588,7 +2801,9 @@ class Map(DOMWidget, InteractMixin):
         new: Layer instance
             The new layer to add.
         """
-        warnings.warn("substitute_layer is deprecated, use substitute instead", DeprecationWarning)
+        warnings.warn(
+            "substitute_layer is deprecated, use substitute instead", DeprecationWarning
+        )
 
         self.substitute(old, new)
 
@@ -2599,23 +2814,27 @@ class Map(DOMWidget, InteractMixin):
            Use add method instead.
 
         """
-        warnings.warn("clear_layers is deprecated, use clear instead", DeprecationWarning)
+        warnings.warn(
+            "clear_layers is deprecated, use clear instead", DeprecationWarning
+        )
 
         self.layers = ()
 
     controls = Tuple().tag(trait=Instance(Control), sync=True, **widget_serialization)
     _control_ids = List()
 
-    @validate('controls')
+    @validate("controls")
     def _validate_controls(self, proposal):
-        '''Validate controls list.
+        """Validate controls list.
 
         Makes sure only one instance of any given layer can exist in the
         controls list.
-        '''
+        """
         self._control_ids = [c.model_id for c in proposal.value]
         if len(set(self._control_ids)) != len(self._control_ids):
-            raise ControlException('duplicate control detected, only use each control once')
+            raise ControlException(
+                "duplicate control detected, only use each control once"
+            )
         return proposal.value
 
     def add_control(self, control):
@@ -2645,7 +2864,9 @@ class Map(DOMWidget, InteractMixin):
         control: Control instance
             The control to remove.
         """
-        warnings.warn("remove_control is deprecated, use remove instead", DeprecationWarning)
+        warnings.warn(
+            "remove_control is deprecated, use remove instead", DeprecationWarning
+        )
 
         self.remove(control)
 
@@ -2655,7 +2876,9 @@ class Map(DOMWidget, InteractMixin):
         .. deprecated :: 0.17.0
            Use clear method instead.
         """
-        warnings.warn("clear_controls is deprecated, use clear instead", DeprecationWarning)
+        warnings.warn(
+            "clear_controls is deprecated, use clear instead", DeprecationWarning
+        )
 
         self.controls = ()
 
@@ -2692,7 +2915,7 @@ class Map(DOMWidget, InteractMixin):
         index: int
             The index to insert a Layer. If not specified, the layer is added to the end (on top).
         """
-        if hasattr(item, 'as_leaflet_layer'):
+        if hasattr(item, "as_leaflet_layer"):
             item = item.as_leaflet_layer()
 
         if isinstance(item, Layer):
@@ -2700,17 +2923,19 @@ class Map(DOMWidget, InteractMixin):
                 item = basemap_to_tiles(item)
 
             if item.model_id in self._layer_ids:
-                raise LayerException('layer already on map: %r' % item)
+                raise LayerException("layer already on map: %r" % item)
             if index is not None:
                 if not isinstance(index, int) or index < 0 or index > len(self.layers):
                     raise ValueError("Invalid index value")
-                self.layers = tuple(list(self.layers)[:index] + [item] + list(self.layers)[index:])
+                self.layers = tuple(
+                    list(self.layers)[:index] + [item] + list(self.layers)[index:]
+                )
             else:
                 self.layers = tuple([layer for layer in self.layers] + [item])
 
         elif isinstance(item, Control):
             if item.model_id in self._control_ids:
-                raise ControlException('control already on map: %r' % item)
+                raise ControlException("control already on map: %r" % item)
             self.controls = tuple([control for control in self.controls] + [item])
 
         return self
@@ -2725,13 +2950,21 @@ class Map(DOMWidget, InteractMixin):
         """
         if isinstance(item, Layer):
             if item.model_id not in self._layer_ids:
-                raise LayerException('layer not on map: %r' % item)
-            self.layers = tuple([layer for layer in self.layers if layer.model_id != item.model_id])
+                raise LayerException("layer not on map: %r" % item)
+            self.layers = tuple(
+                [layer for layer in self.layers if layer.model_id != item.model_id]
+            )
 
         elif isinstance(item, Control):
             if item.model_id not in self._control_ids:
-                raise ControlException('control not on map: %r' % item)
-            self.controls = tuple([control for control in self.controls if control.model_id != item.model_id])
+                raise ControlException("control not on map: %r" % item)
+            self.controls = tuple(
+                [
+                    control
+                    for control in self.controls
+                    if control.model_id != item.model_id
+                ]
+            )
         return self
 
     def clear(self):
@@ -2750,23 +2983,35 @@ class Map(DOMWidget, InteractMixin):
         new: Layer or control instance
             The new layer or control to add.
         """
-        if (isinstance(new, Layer)):
+        if isinstance(new, Layer):
             if isinstance(new, dict):
                 new = basemap_to_tiles(new)
             if old.model_id not in self._layer_ids:
-                raise LayerException('Could not substitute layer: layer not on map.')
-            self.layers = tuple([new if layer.model_id == old.model_id else layer for layer in self.layers])
-        elif (isinstance(new, Control)):
+                raise LayerException("Could not substitute layer: layer not on map.")
+            self.layers = tuple(
+                [
+                    new if layer.model_id == old.model_id else layer
+                    for layer in self.layers
+                ]
+            )
+        elif isinstance(new, Control):
             if old.model_id not in self._control_ids:
-                raise ControlException('Could not substitute control: control not on map.')
-            self.controls = tuple([new if control.model_id == old.model_id else control for control in self.controls])
+                raise ControlException(
+                    "Could not substitute control: control not on map."
+                )
+            self.controls = tuple(
+                [
+                    new if control.model_id == old.model_id else control
+                    for control in self.controls
+                ]
+            )
         return self
 
     # Event handling
     _interaction_callbacks = Instance(CallbackDispatcher, ())
 
     def _handle_leaflet_event(self, _, content, buffers):
-        if content.get('event', '') == 'interaction':
+        if content.get("event", "") == "interaction":
             self._interaction_callbacks(**content)
 
     def on_interaction(self, callback, remove=False):
@@ -2788,7 +3033,7 @@ class Map(DOMWidget, InteractMixin):
         center = b_south + (b_north - b_south) / 2, b_west + (b_east - b_west) / 2
         if center != self.center:
             self.center = center
-            await wait_for_change(self, 'bounds')
+            await wait_for_change(self, "bounds")
         zoomed_out = False
         # zoom out
         while True:
@@ -2797,7 +3042,7 @@ class Map(DOMWidget, InteractMixin):
             (south, west), (north, east) = self.bounds
             if south > b_south or north < b_north or west > b_west or east < b_east:
                 self.zoom -= 1
-                await wait_for_change(self, 'bounds')
+                await wait_for_change(self, "bounds")
                 zoomed_out = True
             else:
                 break
@@ -2805,11 +3050,16 @@ class Map(DOMWidget, InteractMixin):
             # zoom in
             while True:
                 (south, west), (north, east) = self.bounds
-                if south < b_south and north > b_north and west < b_west and east > b_east:
+                if (
+                    south < b_south
+                    and north > b_north
+                    and west < b_west
+                    and east > b_east
+                ):
                     self.zoom += 1
-                    await wait_for_change(self, 'bounds')
+                    await wait_for_change(self, "bounds")
                 else:
                     self.zoom -= 1
-                    await wait_for_change(self, 'bounds')
+                    await wait_for_change(self, "bounds")
 
                     break

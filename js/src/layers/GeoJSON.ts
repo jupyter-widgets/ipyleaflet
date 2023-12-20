@@ -2,8 +2,9 @@
 // Distributed under the terms of the Modified BSD License.
 // @ts-nocheck
 
-const L = require('../leaflet.ts');
-const featuregroup = require('./FeatureGroup.ts');
+import * as L from '../leaflet';
+
+import * as featuregroup from '/FeatureGroup';
 
 export class LeafletGeoJSONModel extends featuregroup.LeafletFeatureGroupModel {
   defaults() {

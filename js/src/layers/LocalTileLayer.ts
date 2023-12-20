@@ -1,7 +1,7 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const tilelayer = require('./TileLayer.ts');
+import * as tilelayer from './TileLayer';
 
 export class LeafletLocalTileLayerModel extends tilelayer.LeafletTileLayerModel {
   defaults() {

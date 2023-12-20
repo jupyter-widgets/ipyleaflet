@@ -1,8 +1,8 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const L = require('../leaflet.ts');
-const layer = require('./Layer.ts');
+import * as L from '../leaflet';
+import * as layer from './Layer';
 
 export class LeafletAwesomeIconModel extends layer.LeafletUILayerModel {
   defaults() {
@@ -20,6 +20,7 @@ export class LeafletAwesomeIconModel extends layer.LeafletUILayerModel {
 
 export class LeafletAwesomeIconView extends layer.LeafletUILayerView {
   create_obj() {
+    //@ts-ignore
     this.obj = L.AwesomeMarkers.icon({
       prefix: 'fa',
       icon: this.model.get('name'),

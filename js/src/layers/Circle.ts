@@ -1,8 +1,8 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const L = require('../leaflet.ts');
-const circlemarker = require('./CircleMarker.ts');
+import * as L from '../leaflet';
+import * as circlemarker from './CircleMarker';
 
 export class LeafletCircleModel extends circlemarker.LeafletCircleMarkerModel {
   defaults() {
@@ -16,6 +16,7 @@ export class LeafletCircleModel extends circlemarker.LeafletCircleMarkerModel {
 
 export class LeafletCircleView extends circlemarker.LeafletCircleMarkerView {
   create_obj() {
+    //@ts-ignore
     this.obj = L.circle(this.model.get('location'), this.get_options());
   }
 

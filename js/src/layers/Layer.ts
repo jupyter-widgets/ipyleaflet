@@ -1,11 +1,12 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
+//@ts-nocheck
 
-const widgets = require('@jupyter-widgets/base');
-const PMessaging = require('@lumino/messaging');
-const PWidgets = require('@lumino/widgets');
-const L = require('../leaflet.ts');
-const utils = require('../utils.ts');
+import * as widgets from '@jupyter-widgets/base';
+import * as L from '../leaflet';
+import * as utils from '../utils';
+import * as PMessaging from '@lumino/messaging';
+import * as PWidgets from '@lumino/widgets';
 
 export class LeafletLayerModel extends widgets.WidgetModel {
   defaults() {

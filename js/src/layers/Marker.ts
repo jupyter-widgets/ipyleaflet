@@ -1,9 +1,9 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
-
-const widgets = require('@jupyter-widgets/base');
-const L = require('../leaflet.ts');
-const layer = require('./Layer.ts');
+//@ts-nocheck
+import * as widgets from '@jupyter-widgets/base';
+import * as L from '../leaflet';
+import * as layer from './Layer';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 

@@ -1,10 +1,11 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const widgets = require('@jupyter-widgets/base');
-const L = require('../leaflet.ts');
-const rasterlayer = require('./RasterLayer.ts');
-const layer = require('./Layer.ts');
+//@ts-nocheck
+import * as widgets from '@jupyter-widgets/base';
+import * as rasterlayer from './RasterLayer';
+import * as L from '../leaflet';
+import * as layer from './Layer';
 
 export class LeafletMagnifyingGlassModel extends rasterlayer.LeafletRasterLayerModel {
   defaults() {
@@ -48,6 +49,7 @@ export class LeafletMagnifyingGlassView extends layer.LeafletLayerView {
     return this.layer_views.update(layers).then((layers) => {
       var options = this.get_options();
       options.layers = layers;
+      //@ts-ignore
       this.obj = L.magnifyingGlass(options);
     });
   }

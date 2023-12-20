@@ -1,8 +1,8 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const L = require('../leaflet.ts');
-const path = require('./Path.ts');
+import * as L from '../leaflet';
+import * as path from './Path';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
@@ -19,6 +19,7 @@ export class LeafletCircleMarkerModel extends path.LeafletPathModel {
 
 export class LeafletCircleMarkerView extends path.LeafletPathView {
   create_obj() {
+    //@ts-ignore
     this.obj = L.circleMarker(this.model.get('location'), this.get_options());
   }
 

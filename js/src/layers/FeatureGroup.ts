@@ -1,8 +1,8 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const L = require('../leaflet.ts');
-const layergroup = require('./LayerGroup.ts');
+import * as L from '../leaflet';
+import * as layergroup from './LayerGroup';
 
 export class LeafletFeatureGroupModel extends layergroup.LeafletLayerGroupModel {
   defaults() {
@@ -16,6 +16,7 @@ export class LeafletFeatureGroupModel extends layergroup.LeafletLayerGroupModel 
 
 export class LeafletFeatureGroupView extends layergroup.LeafletLayerGroupView {
   create_obj() {
+    //@ts-ignore
     this.obj = L.featureGroup();
   }
 }

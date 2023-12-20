@@ -1,9 +1,9 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const L = require('../leaflet.ts');
-const layer = require('./Layer.ts');
-const proj = require('../projections.ts');
+import * as L from '../leaflet';
+import * as layer from './Layer';
+import * as proj from '../projections';
 
 export class LeafletImageServiceModel extends layer.LeafletLayerModel {
   defaults() {
@@ -34,6 +34,7 @@ export class LeafletImageServiceModel extends layer.LeafletLayerModel {
 
 export class LeafletImageServiceView extends layer.LeafletLayerView {
   create_obj() {
+    //@ts-ignore
     this.obj = L.imageService({
       url: this.model.get('url'),
       ...this.get_options(),

@@ -1,9 +1,9 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const L = require('../leaflet.ts');
-const rasterlayer = require('./RasterLayer.ts');
-const layer = require('./Layer.ts');
+import * as L from '../leaflet';
+import * as layer from './Layer';
+import * as rasterlayer from './RasterLayer' 
 
 export class LeafletHeatmapModel extends rasterlayer.LeafletRasterLayerModel {
   defaults() {
@@ -30,6 +30,7 @@ export class LeafletHeatmapModel extends rasterlayer.LeafletRasterLayerModel {
 
 export class LeafletHeatmapView extends layer.LeafletLayerView {
   create_obj() {
+    //@ts-ignore
     this.obj = L.heatLayer(this.model.get('locations'), this.get_options());
   }
 

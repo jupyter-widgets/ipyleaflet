@@ -1,9 +1,10 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
+//@ts-nocheck
 
-const widgets = require('@jupyter-widgets/base');
-const L = require('../leaflet.ts');
-const layer = require('./Layer.ts');
+import * as widgets from '@jupyter-widgets/base'
+import * as L from '../leaflet';
+import * as layer from './Layer';
 
 export class LeafletLayerGroupModel extends layer.LeafletLayerModel {
   defaults() {

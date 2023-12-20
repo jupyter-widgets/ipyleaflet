@@ -1,9 +1,9 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const L = require('../leaflet.ts');
-const vectorlayer = require('./VectorLayer.ts');
-const { antPath } = require('leaflet-ant-path');
+import * as L from '../leaflet';
+import * as vectorlayer from './VectorLayer';
+import { antPath } from 'leaflet-ant-path';
 
 export class LeafletAntPathModel extends vectorlayer.LeafletVectorLayerModel {
   defaults() {

@@ -1,9 +1,9 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const widgets = require('@jupyter-widgets/base');
-const L = require('../leaflet.ts');
-const layer = require('./Layer.ts');
+import * as widgets from '@jupyter-widgets/base';
+import * as L from '../leaflet';
+import * as layer from './Layer';
 
 export class LeafletMarkerClusterModel extends layer.LeafletLayerModel {
   defaults() {
@@ -35,7 +35,7 @@ export class LeafletMarkerClusterModel extends layer.LeafletLayerModel {
     };
   }
 }
-
+//@ts-ignore
 LeafletMarkerClusterModel.serializers = {
   ...widgets.WidgetModel.serializers,
   markers: { deserialize: widgets.unpack_models },
@@ -70,6 +70,7 @@ export class LeafletMarkerClusterView extends layer.LeafletLayerView {
 
   create_obj() {
     var options = this.get_options();
+    //@ts-ignore
     this.obj = L.markerClusterGroup(options);
     this.marker_views = new widgets.ViewList(
       this.add_layer_model,

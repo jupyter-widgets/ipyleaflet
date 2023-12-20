@@ -1,8 +1,8 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const L = require('../leaflet.ts');
-const layer = require('./Layer.ts');
+import * as L from '../leaflet';
+import * as layer from './Layer';
 
 export class LeafletDivIconModel extends layer.LeafletUILayerModel {
   defaults() {
@@ -21,6 +21,7 @@ export class LeafletDivIconModel extends layer.LeafletUILayerModel {
 
 export class LeafletDivIconView extends layer.LeafletUILayerView {
   create_obj() {
+    //@ts-ignore
     this.obj = L.divIcon(this.get_options());
   }
 }

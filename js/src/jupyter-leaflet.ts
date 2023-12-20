@@ -61,5 +61,5 @@ require('leaflet-measure/dist/leaflet-measure.css');
 require('leaflet-fullscreen/dist/leaflet.fullscreen.css');
 require('leaflet.awesome-markers/dist/leaflet.awesome-markers.css');
 require('spin.js/spin.css');
-require('./jupyter-leaflet.css');
+require('../css/jupyter-leaflet.css');
 require('leaflet-search/dist/leaflet-search.src.css');

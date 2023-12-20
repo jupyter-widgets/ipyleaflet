@@ -3,8 +3,8 @@
 // @ts-nocheck
 // Export everything from jupyter-leaflet and the npm package version number.
 var _oldL = window.L;
-module.exports = require('./jupyter-leaflet.ts');
-module.exports['version'] = require('../package.json').version;
+// module.exports = require('./jupyter-leaflet.ts');
+// module.exports['version'] = require('../package.json').version;
 
 // if previous L existed and it got changed while loading this module
 if (_oldL !== undefined && _oldL !== window.L) {
@@ -13,3 +13,10 @@ if (_oldL !== undefined && _oldL !== window.L) {
   );
   ipyL = L.noConflict(); // eslint-disable-line no-undef
 }
+
+import packageJson from '../package.json';
+
+const { version } = packageJson;
+
+export * from './jupyter-leaflet.ts';
+export { version };

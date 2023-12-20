@@ -2,8 +2,7 @@
 // Distributed under the terms of the Modified BSD License.
 
 // @ts-nocheck
-
-const widgets = require('@jupyter-widgets/base');
+import * as widgets from '@jupyter-widgets/base';
 
 function camel_case(input) {
   // Convert from foo_bar to fooBar

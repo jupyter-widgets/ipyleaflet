@@ -1,23 +1,24 @@
-//@ts-ignore
-const L = require('leaflet');
-require('proj4');
-require('proj4leaflet');
-require('leaflet-defaulticon-compatibility');
-require('leaflet.vectorgrid');
-require('leaflet-splitmap');
-require('leaflet-draw');
-require('leaflet.markercluster');
-require('leaflet-velocity');
-require('leaflet-measure');
-require('./leaflet-heat.ts');
-require('./leaflet-imageservice.ts');
-require('./leaflet-magnifyingglass.ts');
-require('leaflet-rotatedmarker');
-require('leaflet-fullscreen');
-require('leaflet-transform');
-require('leaflet.awesome-markers');
-require('leaflet-search');
-require('protomaps-leaflet');
+//@ts-nocheck
+// const L = require('leaflet');
+import * as L from 'leaflet';
+import 'proj4';
+import 'proj4leaflet';
+import 'leaflet-defaulticon-compatibility';
+import 'leaflet.vectorgrid';
+import 'leaflet-splitmap';
+import 'leaflet-draw';
+import 'leaflet.markercluster';
+import 'leaflet-velocity';
+import 'leaflet-measure';
+import './leaflet-heat.ts';
+import './leaflet-imageservice.ts';
+import './leaflet-magnifyingglass.ts';
+import 'leaflet-rotatedmarker';
+import 'leaflet-fullscreen';
+import 'leaflet-transform';
+import 'leaflet.awesome-markers';
+import 'leaflet-search';
+import 'protomaps-leaflet';
 
 // Monkey patch GridLayer for smoother URL updates
 L.patchGridLayer = function (layer: any) {
@@ -71,4 +72,4 @@ L.tileLayer.wms = function (url: any, options: any) {
   return obj;
 };
 
-module.exports = L;
+export default L;

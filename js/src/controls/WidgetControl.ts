@@ -5,7 +5,7 @@ import * as widgets from '@jupyter-widgets/base';
 import * as L from '../leaflet';
 import * as control from './Control';
 import * as PMessaging from '@lumino/messaging';
-import * as PWidget from '@lumino/widgets';
+import * as PWidgets from '@lumino/widgets';
 
 class WidgetControl extends L.Control {
   updateLayout(options) {

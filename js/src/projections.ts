@@ -1,4 +1,5 @@
-const L = require('./leaflet.ts');
+//@ts-nocheck
+import * as L from './leaflet';
 
 export function getProjection(proj: any) {
   if (proj.custom === false) {

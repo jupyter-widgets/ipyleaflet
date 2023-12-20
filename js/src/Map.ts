@@ -2,10 +2,10 @@
 // Distributed under the terms of the Modified BSD License.
 // @ts-nocheck
 
-const widgets = require('@jupyter-widgets/base');
-const L = require('./leaflet.ts');
-const utils = require('./utils.ts');
-const proj = require('./projections.ts');
+import * as widgets from '@jupyter-widgets/base';
+import * as L from './leaflet.ts';
+import * as utils from './utils.ts';
+import * as proj from './projections.ts';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 

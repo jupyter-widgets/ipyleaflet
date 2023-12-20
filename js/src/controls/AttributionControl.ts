@@ -3,7 +3,7 @@
 //@ts-nocheck
 
 import * as L from '../leaflet';
-const control = require('./Control.ts');
+import * as control from './Control';
 
 export class LeafletAttributionControlModel extends control.LeafletControlModel {
   defaults() {

@@ -3,63 +3,64 @@
 
 //@ts-nocheck
 // Layers
-export * from './layers/Layer.ts';
-export * from './layers/Marker.ts';
-export * from './layers/Icon.ts';
-export * from './layers/AwesomeIcon.ts';
-export * from './layers/Popup.ts';
-export * from './layers/RasterLayer.ts';
-export * from './layers/TileLayer.ts';
-export * from './layers/PMTilesLayer.ts';
-export * from './layers/VectorTileLayer.ts';
-export * from './layers/LocalTileLayer.ts';
-export * from './layers/WMSLayer.ts';
-export * from './layers/MagnifyingGlass.ts';
-export * from './layers/ImageOverlay.ts';
-export * from './layers/VideoOverlay.ts';
-export * from './layers/ImageService.ts';
-export * from './layers/Velocity.ts';
-export * from './layers/Heatmap.ts';
-export * from './layers/VectorLayer.ts';
-export * from './layers/Path.ts';
-export * from './layers/AntPath.ts';
-export * from './layers/Polyline.ts';
-export * from './layers/Polygon.ts';
-export * from './layers/Rectangle.ts';
-export * from './layers/CircleMarker.ts';
-export * from './layers/Circle.ts';
-export * from './layers/MarkerCluster.ts';
-export * from './layers/LayerGroup.ts';
-export * from './layers/FeatureGroup.ts';
-export * from './layers/GeoJSON.ts';
-export * from './layers/DivIcon.ts';
+export * from './layers/AntPath';
+export * from './layers/AwesomeIcon';
+export * from './layers/Circle';
+export * from './layers/CircleMarker';
+export * from './layers/DivIcon';
+export * from './layers/FeatureGroup';
+export * from './layers/GeoJSON';
+export * from './layers/Heatmap';
+export * from './layers/Icon';
+export * from './layers/ImageOverlay';
+export * from './layers/ImageService';
+export * from './layers/Layer';
+export * from './layers/LayerGroup';
+export * from './layers/LocalTileLayer';
+export * from './layers/MagnifyingGlass';
+export * from './layers/Marker';
+export * from './layers/MarkerCluster';
+export * from './layers/PMTilesLayer';
+export * from './layers/Path';
+export * from './layers/Polygon';
+export * from './layers/Polyline';
+export * from './layers/Popup';
+export * from './layers/RasterLayer';
+export * from './layers/Rectangle';
+export * from './layers/TileLayer';
+export * from './layers/VectorLayer';
+export * from './layers/VectorTileLayer';
+export * from './layers/Velocity';
+export * from './layers/VideoOverlay';
+export * from './layers/WMSLayer';
 
 //Controls
-export * from './controls/AttributionControl.ts';
-export * from './controls/Control.ts';
-export * from './controls/SplitMapControl.ts';
-export * from './controls/LayersControl.ts';
-export * from './controls/MeasureControl.ts';
-export * from './controls/DrawControl.ts';
-export * from './controls/FullScreenControl.ts';
-export * from './controls/WidgetControl.ts';
-export * from './controls/ZoomControl.ts';
-export * from './controls/ScaleControl.ts';
-export * from './controls/LegendControl.ts';
-export * from './controls/SearchControl.ts';
+export * from './controls/AttributionControl';
+export * from './controls/Control';
+export * from './controls/DrawControl';
+export * from './controls/FullScreenControl';
+export * from './controls/LayersControl';
+export * from './controls/LegendControl';
+export * from './controls/MeasureControl';
+export * from './controls/ScaleControl';
+export * from './controls/SearchControl';
+export * from './controls/SplitMapControl';
+export * from './controls/WidgetControl';
+export * from './controls/ZoomControl';
 
 //Map
-export * from './Map.ts';
+export * from './Map';
 
 // Load css
-require('leaflet/dist/leaflet.css');
-require('leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css'); // Re-uses images from ~leaflet package
-require('leaflet-draw/dist/leaflet.draw.css');
-require('leaflet.markercluster/dist/MarkerCluster.css');
-require('leaflet.markercluster/dist/MarkerCluster.Default.css');
-require('leaflet-measure/dist/leaflet-measure.css');
-require('leaflet-fullscreen/dist/leaflet.fullscreen.css');
-require('leaflet.awesome-markers/dist/leaflet.awesome-markers.css');
-require('spin.js/spin.css');
-require('../css/jupyter-leaflet.css');
-require('leaflet-search/dist/leaflet-search.src.css');
+import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css';
+import 'leaflet/dist/leaflet.css';
+// Re-uses images from ~leaflet package
+import 'leaflet-draw/dist/leaflet.draw.css';
+import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
+import 'leaflet-measure/dist/leaflet-measure.css';
+import 'leaflet-search/dist/leaflet-search.src.css';
+import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'spin.js/spin.css';
+import '../css/jupyter-leaflet.css';

@@ -32,14 +32,9 @@ export class LeafletAntPathView extends vectorlayer.LeafletVectorLayerView {
 
   model_events() {
     super.model_events();
-    this.listenTo(
-      this.model,
-      'change:locations',
-      function () {
-        this.obj.setLatLngs(this.model.get('locations'));
-      },
-      this
-    );
+    this.listenTo(this.model, 'change:locations', function () {
+      this.obj.setLatLngs(this.model.get('locations'));
+    });
     this.model.on_some_change(this.model.get('options'), () => {
       this.obj.setStyle(this.get_ant_options());
     });

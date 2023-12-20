@@ -1,6 +1,6 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
-
+//@ts-nocheck
 import * as L from '../leaflet';
 import * as vectorlayer from './VectorLayer';
 import { antPath } from 'leaflet-ant-path';

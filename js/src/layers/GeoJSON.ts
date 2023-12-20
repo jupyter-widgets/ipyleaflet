@@ -4,7 +4,7 @@
 
 import * as L from '../leaflet';
 
-import * as featuregroup from '/FeatureGroup';
+import * as featuregroup from './FeatureGroup';
 
 export class LeafletGeoJSONModel extends featuregroup.LeafletFeatureGroupModel {
   defaults() {

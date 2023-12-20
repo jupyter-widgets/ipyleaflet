@@ -1,6 +1,7 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
+//@ts-nocheck
 import * as layer from './Layer';
 import * as protomapsL from 'protomaps-leaflet';
 

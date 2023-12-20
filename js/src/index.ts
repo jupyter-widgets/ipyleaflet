@@ -18,5 +18,5 @@ import packageJson from '../package.json';
 
 const { version } = packageJson;
 
-export * from './jupyter-leaflet.ts';
+export * from './jupyter-leaflet';
 export { version };

@@ -3,9 +3,9 @@
 // @ts-nocheck
 
 import * as widgets from '@jupyter-widgets/base';
-import * as L from './leaflet.ts';
-import * as utils from './utils.ts';
-import * as proj from './projections.ts';
+import * as L from './leaflet';
+import * as utils from './utils';
+import * as proj from './projections';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 

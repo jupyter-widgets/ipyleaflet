@@ -1,4 +1,5 @@
 // Copyright (c) Jupyter Development Team.
+//@ts-nocheck
 // Distributed under the terms of the Modified BSD License.
 
 import * as L from '../leaflet';

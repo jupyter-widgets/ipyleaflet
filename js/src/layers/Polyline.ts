@@ -2,7 +2,7 @@
 // Distributed under the terms of the Modified BSD License.
 //@ts-nocheck
 import * as L from '../leaflet';
-import * as path from '/Path';
+import * as path from './Path';
 
 export class LeafletPolylineModel extends path.LeafletPathModel {
   defaults() {

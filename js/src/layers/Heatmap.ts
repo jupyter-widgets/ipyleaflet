@@ -1,9 +1,10 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
+//@ts-nocheck
 import * as L from '../leaflet';
 import * as layer from './Layer';
-import * as rasterlayer from './RasterLayer' 
+import * as rasterlayer from './RasterLayer';
 
 export class LeafletHeatmapModel extends rasterlayer.LeafletRasterLayerModel {
   defaults() {

@@ -1,7 +1,7 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const vectorlayer = require('./VectorLayer.ts');
+import * as vectorlayer from './VectorLayer';
 
 export class LeafletPathModel extends vectorlayer.LeafletVectorLayerModel {
   defaults() {

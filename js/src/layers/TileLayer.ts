@@ -1,9 +1,9 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const L = require('../leaflet.ts');
-const rasterlayer = require('./RasterLayer.ts');
-const Spinner = require('spin.js').Spinner;
+import * as L from '../leaflet';
+import * as rasterlayer from './RasterLayer';
+import { Spinner } from 'spin.js';
 
 export class LeafletTileLayerModel extends rasterlayer.LeafletRasterLayerModel {
   defaults() {
@@ -32,6 +32,7 @@ export class LeafletTileLayerModel extends rasterlayer.LeafletRasterLayerModel {
 
 export class LeafletTileLayerView extends rasterlayer.LeafletRasterLayerView {
   create_obj() {
+    //@ts-ignore
     this.obj = L.tileLayer(this.model.get('url'), this.get_options());
     this.model.on('msg:custom', this.handle_message.bind(this));
   }

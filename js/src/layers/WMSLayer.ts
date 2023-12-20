@@ -1,9 +1,9 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const L = require('../leaflet.ts');
-const tilelayer = require('./TileLayer.ts');
-const proj = require('../projections.ts');
+import * as L from '../leaflet';
+import * as tilelayer from './TileLayer';
+import * as proj from '../projections';
 
 export class LeafletWMSLayerModel extends tilelayer.LeafletTileLayerModel {
   defaults() {
@@ -23,6 +23,7 @@ export class LeafletWMSLayerModel extends tilelayer.LeafletTileLayerModel {
 
 export class LeafletWMSLayerView extends tilelayer.LeafletTileLayerView {
   create_obj() {
+    //@ts-ignore
     this.obj = L.tileLayer.wms(this.model.get('url'), {
       ...this.get_options(),
       crs: proj.getProjection(this.model.get('crs')),

@@ -1,8 +1,8 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const layer = require('./Layer.ts');
-const protomapsL = require('protomaps-leaflet');
+import * as layer from './Layer';
+import * as protomapsL from 'protomaps-leaflet';
 
 export class LeafletPMTilesLayerModel extends layer.LeafletLayerModel {
   defaults() {
@@ -22,6 +22,7 @@ export class LeafletPMTilesLayerView extends layer.LeafletLayerView {
     var options = {
       ...this.get_options(),
       url: this.model.get('url'),
+      //@ts-ignore
       ...protomapsL.json_style(this.model.get('style')),
     };
     this.obj = protomapsL.leafletLayer(options);

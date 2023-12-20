@@ -1,11 +1,13 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const widgets = require('@jupyter-widgets/base');
-const L = require('../leaflet.ts');
-const layer = require('./Layer.ts');
-const PMessaging = require('@lumino/messaging');
-const PWidgets = require('@lumino/widgets');
+
+import * as layer from './Layer'
+import * as L from '../leaflet'
+import * as widgets from '@jupyter-widgets/base';
+import * as PMessaging from '@lumino/messaging';
+import * as PWidgets from '@lumino/widgets';
+
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
@@ -31,6 +33,7 @@ LeafletPopupModel.serializers = {
 
 export class LeafletPopupView extends layer.LeafletUILayerView {
   create_obj() {
+    //@ts-ignore
     this.obj = L.popup(this.get_options()).setLatLng(
       this.model.get('location')
     );
@@ -102,6 +105,7 @@ export class LeafletPopupView extends layer.LeafletUILayerView {
   }
 
   update_popup() {
+    //@ts-ignore
     L.setOptions(this.obj, this.get_options());
     this.force_update();
   }

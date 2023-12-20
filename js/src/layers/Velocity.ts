@@ -1,9 +1,9 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const L = require('../leaflet.ts');
-const layer = require('./Layer');
-const utils = require('../utils');
+import * as L from '../leaflet';
+import * as layer from './Layer';
+import * as utils from '../utils';
 
 export class LeafletVelocityModel extends layer.LeafletLayerModel {
   defaults() {
@@ -34,6 +34,7 @@ export class LeafletVelocityView extends layer.LeafletLayerView {
   create_obj() {
     var options = this.get_options();
     options.data = this.model.get('data');
+    //@ts-ignore
     this.obj = L.velocityLayer(options);
   }
 
@@ -55,7 +56,9 @@ export class LeafletVelocityView extends layer.LeafletLayerView {
       'change:' + key,
       function () {
         var options = {};
+        //@ts-ignore
         options[utils.camel_case(key)] = { ...this.model.get(key) };
+        //@ts-ignore
         L.setOptions(this.obj, options);
       },
       this

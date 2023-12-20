@@ -1,8 +1,8 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
-
-const L = require('../leaflet.ts');
-const rasterlayer = require('./RasterLayer.ts');
+//@ts-nocheck
+import * as L from '../leaflet'
+import * as rasterlayer from './RasterLayer'
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 

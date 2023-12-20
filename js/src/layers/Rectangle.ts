@@ -1,8 +1,8 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const L = require('../leaflet.ts');
-const polygon = require('./Polygon.ts');
+import * as L from '../leaflet';
+import * as polygon from './Polygon';
 
 export class LeafletRectangleModel extends polygon.LeafletPolygonModel {
   defaults() {
@@ -17,6 +17,7 @@ export class LeafletRectangleModel extends polygon.LeafletPolygonModel {
 
 export class LeafletRectangleView extends polygon.LeafletPolygonView {
   create_obj() {
+    //@ts-ignore
     this.obj = L.rectangle(this.model.get('bounds'), this.get_options());
   }
 }

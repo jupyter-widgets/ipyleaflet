@@ -1,7 +1,8 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
+//@ts-nocheck
 
-const L = require('../leaflet.ts');
+import * as L from '../leaflet';
 const control = require('./Control.ts');
 
 export class LeafletAttributionControlModel extends control.LeafletControlModel {

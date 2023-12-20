@@ -1,9 +1,11 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const widgets = require('@jupyter-widgets/base');
-const L = require('../leaflet.ts');
-const control = require('./Control.ts');
+//@ts-nocheck
+
+import * as widgets from '@jupyter-widgets/base';
+import * as L from '../leaflet';
+import * as control from './Control';
 
 export class LeafletDrawControlModel extends control.LeafletControlModel {
   defaults() {

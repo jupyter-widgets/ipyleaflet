@@ -1,9 +1,9 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const widgets = require('@jupyter-widgets/base');
-const L = require('../leaflet.ts');
-const control = require('./Control.ts');
+import * as widgets from '@jupyter-widgets/base';
+import * as L from '../leaflet';
+import * as control from './Control';
 
 export class LeafletSearchControlModel extends control.LeafletControlModel {
   defaults() {
@@ -47,6 +47,7 @@ export class LeafletSearchControlView extends control.LeafletControlView {
       const options = this.get_options();
       options.layer = layer_view !== null ? layer_view.obj : null;
       options.marker = marker_view !== null ? marker_view.obj : false;
+      //@ts-ignore
       this.obj = L.control.search(options);
     });
   }

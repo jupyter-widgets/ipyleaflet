@@ -1,8 +1,7 @@
 // @ts-nocheck
 
-const L = require('../leaflet.ts');
-const control = require('./Control.ts');
-
+import * as L from '../leaflet';
+import * as control from './Control';
 export class LeafletLegendControlModel extends control.LeafletControlModel {
   defaults() {
     return {

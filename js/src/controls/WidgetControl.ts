@@ -1,11 +1,11 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
-
-const widgets = require('@jupyter-widgets/base');
-const L = require('../leaflet.ts');
-const control = require('./Control.ts');
-const PMessaging = require('@lumino/messaging');
-const PWidgets = require('@lumino/widgets');
+//@ts-nocheck
+import * as widgets from '@jupyter-widgets/base';
+import * as L from '../leaflet';
+import * as control from './Control';
+import * as PMessaging from '@lumino/messaging';
+import * as PWidget from '@lumino/widgets';
 
 class WidgetControl extends L.Control {
   updateLayout(options) {

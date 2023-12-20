@@ -1,9 +1,9 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const widgets = require('@jupyter-widgets/base');
-const L = require('../leaflet.ts');
-const control = require('./Control.ts');
+import * as widgets from '@jupyter-widgets/base';
+import * as L from '../leaflet';
+import * as control from './Control';
 
 export class LeafletSplitMapControlModel extends control.LeafletControlModel {
   default() {
@@ -50,6 +50,7 @@ export class LeafletSplitMapControlView extends control.LeafletControlView {
           right_views.push(view.obj);
         }
       });
+      //@ts-ignore
       this.obj = L.control.splitMap(left_views, right_views);
     });
   }

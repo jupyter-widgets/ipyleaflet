@@ -1,9 +1,8 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const L = require('../leaflet.ts');
-const control = require('./Control.ts');
-
+import * as L from '../leaflet';
+import * as control from './Control';
 export class LeafletScaleControlModel extends control.LeafletControlModel {
   defaults() {
     return {
@@ -21,6 +20,7 @@ export class LeafletScaleControlView extends control.LeafletControlView {
   }
 
   create_obj() {
+    //@ts-ignore
     this.obj = L.control.scale(this.get_options());
   }
 }

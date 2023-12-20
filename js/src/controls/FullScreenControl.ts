@@ -1,9 +1,8 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-const L = require('../leaflet.ts');
-const control = require('./Control.ts');
-
+import * as L from '../leaflet';
+import * as control from './Control';
 export class LeafletFullScreenControlModel extends control.LeafletControlModel {
   defaults() {
     return {
@@ -21,6 +20,8 @@ export class LeafletFullScreenControlView extends control.LeafletControlView {
   }
 
   create_obj() {
+    //@ts-ignore
+
     this.obj = L.control.fullscreen(this.get_options());
   }
 }

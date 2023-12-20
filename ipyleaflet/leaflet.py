@@ -1366,6 +1366,8 @@ class MarkerCluster(Layer):
     _model_name = Unicode("LeafletMarkerClusterModel").tag(sync=True)
 
     markers = Tuple().tag(trait=Instance(Layer), sync=True, **widget_serialization)
+    visible = Bool(True).tag(sync=True)
+
     # Options
     disable_clustering_at_zoom = Int(18).tag(sync=True, o=True)
     max_cluster_radius = Int(80).tag(sync=True, o=True)

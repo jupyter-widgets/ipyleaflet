@@ -13,9 +13,4 @@ if (window.require) {
   });
 }
 
-// Export the required load_ipython_extention
-// module.exports = {
-//   load_ipython_extension: function () {},
-// };
-
 export const load_ipython_extension = function () {};

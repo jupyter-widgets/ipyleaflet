@@ -3,7 +3,6 @@
 // Since 'module' is a requirejs magic module, we must include 'module' in the webpack externals configuration.
 // @ts-nocheck
 
-// var module = require('module');
 import * as module from 'module';
 var url = new URL(module.uri, document.location);
 // Using lastIndexOf('/')+1 gives us the empty string if there is no '/', so pathname becomes '/'

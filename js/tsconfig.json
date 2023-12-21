@@ -18,6 +18,5 @@
     "noImplicitAny": false,
     "types": ["node", "webpack-env"]
   },
-  //"include": ["src/**/*.ts", "src/**/*.tsx", "src/index.ts"],
   "exclude": ["src/**/__tests__", "lib/**"]
 }

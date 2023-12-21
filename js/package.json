@@ -31,7 +31,7 @@
     "clean:nbextension": "rimraf ../ipyleaflet/nbextension/index.js",
     "clean:labextension": "rimraf ../ipyleaflet/labextension",
     "lint": "yarn prettier && yarn eslint",
-    "lint:check": "yarn prettier:check && yarn eslint:check",
+    "lint:check": "yarn prettier:check && yarn eslint",
     "prettier": "yarn prettier:base --write --list-different",
     "prettier:base": "prettier \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}\"",
     "prettier:check": "yarn prettier:base --check",

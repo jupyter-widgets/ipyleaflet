@@ -12,6 +12,7 @@ ui-tests/.yarn/
 ipyleaflet/nbextension/
 ipyleaflet/labextension/
 js/dist/
+js/lib/
 
 # OS X
 .DS_Store

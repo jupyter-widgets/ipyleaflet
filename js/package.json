@@ -11,6 +11,10 @@
   "browser": {
     "[module-name]": false
   },
+  "files": [
+    "css/",
+    "lib/"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/jupyter-widgets/ipyleaflet.git"

@@ -1,11 +1,11 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-//@ts-nocheck
+import { WidgetView } from '@jupyter-widgets/base';
 import L from '../leaflet';
-import * as control from './Control';
+import { LeafletControlModel, LeafletControlView } from './Control';
 
-export class LeafletLayersControlModel extends control.LeafletControlModel {
+export class LeafletLayersControlModel extends LeafletControlModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -15,7 +15,7 @@ export class LeafletLayersControlModel extends control.LeafletControlModel {
   }
 }
 
-export class LeafletLayersControlView extends control.LeafletControlView {
+export class LeafletLayersControlView extends LeafletControlView {
   /**
    * Core leaflet layers control maintains its own list of layers internally
    * causing issues when the layers of the underlying map changes
@@ -25,7 +25,9 @@ export class LeafletLayersControlView extends control.LeafletControlView {
    * destroy the layers control object and create a new one.
    */
 
-  initialize(parameters) {
+  initialize(
+    parameters: WidgetView.IInitializeParameters<LeafletControlModel>
+  ) {
     super.initialize(parameters);
     this.map_view = this.options.map_view;
   }

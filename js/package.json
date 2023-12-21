@@ -8,9 +8,6 @@
     "jupyterlab-extension",
     "widgets"
   ],
-  "browser": {
-    "[module-name]": false
-  },
   "files": [
     "css/",
     "lib/"

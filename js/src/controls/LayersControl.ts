@@ -59,7 +59,6 @@ export class LeafletLayersControlView extends LeafletControlView {
           }
           return ov;
         }, {});
-        //@ts-ignore
         this.obj = L.control.layers(baselayers, overlays, this.get_options());
         return this;
       })

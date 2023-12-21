@@ -4,7 +4,7 @@
 //@ts-nocheck
 
 import * as widgets from '@jupyter-widgets/base';
-import * as L from '../leaflet';
+import L from '../leaflet';
 import * as control from './Control';
 
 export class LeafletDrawControlModel extends control.LeafletControlModel {

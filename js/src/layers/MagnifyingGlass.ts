@@ -3,9 +3,9 @@
 
 //@ts-nocheck
 import * as widgets from '@jupyter-widgets/base';
-import * as rasterlayer from './RasterLayer';
-import * as L from '../leaflet';
+import L from '../leaflet';
 import * as layer from './Layer';
+import * as rasterlayer from './RasterLayer';
 
 export class LeafletMagnifyingGlassModel extends rasterlayer.LeafletRasterLayerModel {
   defaults() {

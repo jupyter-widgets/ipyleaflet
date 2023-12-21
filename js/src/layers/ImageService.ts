@@ -2,9 +2,9 @@
 // Distributed under the terms of the Modified BSD License.
 
 //@ts-nocheck
-import * as L from '../leaflet';
-import * as layer from './Layer';
+import L from '../leaflet';
 import * as proj from '../projections';
+import * as layer from './Layer';
 
 export class LeafletImageServiceModel extends layer.LeafletLayerModel {
   defaults() {

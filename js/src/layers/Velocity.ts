@@ -2,9 +2,9 @@
 // Distributed under the terms of the Modified BSD License.
 
 //@ts-nocheck
-import * as L from '../leaflet';
-import * as layer from './Layer';
+import L from '../leaflet';
 import * as utils from '../utils';
+import * as layer from './Layer';
 
 export class LeafletVelocityModel extends layer.LeafletLayerModel {
   defaults() {

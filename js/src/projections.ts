@@ -1,5 +1,5 @@
 //@ts-nocheck
-import * as L from './leaflet';
+import L from './leaflet';
 
 export function getProjection(proj: any) {
   if (proj.custom === false) {

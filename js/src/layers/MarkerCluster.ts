@@ -3,7 +3,7 @@
 
 //@ts-nocheck
 import * as widgets from '@jupyter-widgets/base';
-import * as L from '../leaflet';
+import L from '../leaflet';
 import * as layer from './Layer';
 
 export class LeafletMarkerClusterModel extends layer.LeafletLayerModel {

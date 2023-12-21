@@ -2,7 +2,7 @@
 // Distributed under the terms of the Modified BSD License.
 //@ts-nocheck
 
-import * as L from '../leaflet';
+import L from '../leaflet';
 import * as path from './Path';
 
 const DEFAULT_LOCATION = [0.0, 0.0];

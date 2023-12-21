@@ -4,7 +4,7 @@
 //@ts-nocheck
 
 import * as widgets from '@jupyter-widgets/base';
-import * as L from '../leaflet';
+import L from '../leaflet';
 import * as utils from '../utils';
 export class LeafletControlModel extends widgets.WidgetModel {
   defaults() {

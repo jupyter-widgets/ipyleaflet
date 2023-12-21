@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import * as L from '../leaflet';
+import L from '../leaflet';
 import * as control from './Control';
 export class LeafletLegendControlModel extends control.LeafletControlModel {
   defaults() {

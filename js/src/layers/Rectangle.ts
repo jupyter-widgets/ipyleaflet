@@ -1,7 +1,7 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-import * as L from '../leaflet';
+import L from '../leaflet';
 import * as polygon from './Polygon';
 
 export class LeafletRectangleModel extends polygon.LeafletPolygonModel {

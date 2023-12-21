@@ -2,10 +2,10 @@
 // Distributed under the terms of the Modified BSD License.
 //@ts-nocheck
 import * as widgets from '@jupyter-widgets/base';
-import * as L from '../leaflet';
-import * as control from './Control';
 import * as PMessaging from '@lumino/messaging';
 import * as PWidgets from '@lumino/widgets';
+import L from '../leaflet';
+import * as control from './Control';
 
 class WidgetControl extends L.Control {
   updateLayout(options) {

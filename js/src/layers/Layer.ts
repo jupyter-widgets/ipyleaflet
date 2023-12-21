@@ -3,10 +3,10 @@
 //@ts-nocheck
 
 import * as widgets from '@jupyter-widgets/base';
-import * as L from '../leaflet';
-import * as utils from '../utils';
 import * as PMessaging from '@lumino/messaging';
 import * as PWidgets from '@lumino/widgets';
+import L from '../leaflet';
+import * as utils from '../utils';
 
 export class LeafletLayerModel extends widgets.WidgetModel {
   defaults() {

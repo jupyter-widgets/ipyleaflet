@@ -2,9 +2,9 @@
 // Distributed under the terms of the Modified BSD License.
 
 //@ts-nocheck
-import * as L from '../leaflet';
-import * as rasterlayer from './RasterLayer';
 import { Spinner } from 'spin.js';
+import L from '../leaflet';
+import * as rasterlayer from './RasterLayer';
 
 export class LeafletTileLayerModel extends rasterlayer.LeafletRasterLayerModel {
   defaults() {

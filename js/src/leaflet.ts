@@ -1,6 +1,6 @@
-//@ts-nocheck
 // const L = require('leaflet');
-import * as L from 'leaflet';
+//@ts-nocheck
+import L from 'leaflet';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-draw';
 import 'leaflet-fullscreen';
@@ -59,17 +59,17 @@ L.patchGridLayer = function (layer: any) {
   };
 };
 
-// var oldTileLayer = L.tileLayer;
-// L.tileLayer = function (url: any, options: any) {
-//   var obj = oldTileLayer(url, options);
-//   L.patchGridLayer(obj);
-//   return obj;
-// };
+var oldTileLayer = L.tileLayer;
+L.tileLayer = function (url: any, options: any) {
+  var obj = oldTileLayer(url, options);
+  L.patchGridLayer(obj);
+  return obj;
+};
 
-// L.tileLayer.wms = function (url: any, options: any) {
-//   var obj = oldTileLayer.wms(url, options);
-//   L.patchGridLayer(obj);
-//   return obj;
-// };
+L.tileLayer.wms = function (url: any, options: any) {
+  var obj = oldTileLayer.wms(url, options);
+  L.patchGridLayer(obj);
+  return obj;
+};
 
 export default L;

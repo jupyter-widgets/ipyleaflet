@@ -3,7 +3,7 @@
 // @ts-nocheck
 
 import * as widgets from '@jupyter-widgets/base';
-import * as L from './leaflet';
+import L from './leaflet';
 import * as utils from './utils';
 import * as proj from './projections';
 

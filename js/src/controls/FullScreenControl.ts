@@ -2,7 +2,7 @@
 // Distributed under the terms of the Modified BSD License.
 
 //@ts-nocheck
-import * as L from '../leaflet';
+import L from '../leaflet';
 import * as control from './Control';
 export class LeafletFullScreenControlModel extends control.LeafletControlModel {
   defaults() {

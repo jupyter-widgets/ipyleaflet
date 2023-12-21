@@ -2,7 +2,7 @@
 //@ts-nocheck
 // Distributed under the terms of the Modified BSD License.
 
-import * as L from '../leaflet';
+import L from '../leaflet';
 import * as circlemarker from './CircleMarker';
 
 export class LeafletCircleModel extends circlemarker.LeafletCircleMarkerModel {

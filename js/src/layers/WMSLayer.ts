@@ -3,7 +3,7 @@
 
 //@ts-nocheck
 
-import * as L from '../leaflet';
+import L from '../leaflet';
 import * as proj from '../projections';
 import * as tilelayer from './TileLayer';
 

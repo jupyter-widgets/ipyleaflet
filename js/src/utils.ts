@@ -1,25 +1,36 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-// @ts-nocheck
-import * as widgets from '@jupyter-widgets/base';
+import { DOMWidgetView, WidgetModel, WidgetView } from '@jupyter-widgets/base';
 
-function camel_case(input) {
+// Define the interface for LeafletViewCommon
+interface ILeafletViewCommon {
+  get_options(): Record<string, any>;
+}
+
+function camel_case(input: string) {
   // Convert from foo_bar to fooBar
   return input.toLowerCase().replace(/_(.)/g, function (match, group1) {
     return group1.toUpperCase();
   });
 }
 
-export class LeafletWidgetView extends widgets.WidgetView {}
-export class LeafletDOMWidgetView extends widgets.DOMWidgetView {}
+export class LeafletWidgetView
+  extends WidgetView
+  implements ILeafletViewCommon
+{
+  get_options: () => Record<string, any>;
+}
+export class LeafletDOMWidgetView extends DOMWidgetView {}
 
-class leafletViewCommon {
-  get_options() {
-    var o = this.model.get('options');
-    var options = {};
-    var key;
-    for (var i = 0; i < o.length; i++) {
+class leafletViewCommon implements ILeafletViewCommon {
+  model: WidgetModel;
+
+  get_options(): Record<string, any> {
+    const o = this.model.get('options') as string[];
+    const options: Record<string, any> = {};
+    let key: string;
+    for (let i = 0; i < o.length; i++) {
       key = o[i];
       // Convert from foo_bar to fooBar that Leaflet.js uses
       if (this.model.get(key) !== null) {
@@ -30,7 +41,7 @@ class leafletViewCommon {
   }
 }
 
-function applyMixins(derivedCtor, baseCtors) {
+function applyMixins(derivedCtor: any, baseCtors: any[]): void {
   baseCtors.forEach((baseCtor) => {
     Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
       Object.defineProperty(

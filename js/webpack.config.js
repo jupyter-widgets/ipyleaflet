@@ -7,17 +7,24 @@ crypto.createHash = (algorithm) =>
   cryptoOrigCreateHash(algorithm == 'md4' ? 'sha256' : algorithm);
 
 var rules = [
+  { test: /\.ts$/, loader: 'ts-loader' },
+  { test: /\.js$/, loader: 'source-map-loader' },
   { test: /\.css$/, use: ['style-loader', 'css-loader'] },
   { test: /\.(jpg|png|gif|svg)$/i, type: 'asset' },
 ];
 
 var resolve = {
+  // Add '.ts' and '.tsx' as resolvable extensions.
+  extensions: ['.webpack.js', '.web.js', '.ts', '.js'],
   fallback: {
     crypto: require.resolve('crypto-browserify'),
     buffer: require.resolve('buffer/'),
     stream: require.resolve('stream-browserify'),
   },
 };
+
+// Packages that shouldn't be bundled but loaded at runtime
+const externals = ['@jupyter-widgets/base'];
 
 module.exports = [
   {
@@ -28,13 +35,18 @@ module.exports = [
     // some configuration for requirejs, and provides the legacy
     // "load_ipython_extension" function which is required for any notebook
     // extension.
-    entry: './src/extension.js',
+    entry: './src/extension.ts',
     output: {
       filename: 'extension.js',
       path: path.resolve(__dirname, '..', 'ipyleaflet', 'nbextension'),
       libraryTarget: 'amd',
     },
-    resolve: resolve,
+    module: {
+      rules: rules,
+    },
+    devtool: 'source-map',
+    externals,
+    resolve,
   },
   {
     // Bundle for the notebook containing the custom widget views and models
@@ -42,7 +54,7 @@ module.exports = [
     // This bundle contains the implementation for the custom widget views and
     // custom widget.
     // It must be an amd module
-    entry: ['./amd-public-path.js', './src/notebook.js'],
+    entry: ['./src/amd-public-path.ts', './src/notebook.ts'],
     output: {
       filename: 'index.js',
       path: path.resolve(__dirname, '..', 'ipyleaflet', 'nbextension'),
@@ -54,7 +66,7 @@ module.exports = [
       rules: rules,
     },
     // 'module' is the magic requirejs dependency used to set the publicPath
-    externals: ['@jupyter-widgets/base', 'module'],
+    externals: [...externals, 'module'],
     resolve: resolve,
   },
   {
@@ -67,7 +79,7 @@ module.exports = [
     //
     // The target bundle is always `dist/index.js`, which is the path
     // required by the custom widget embedder.
-    entry: ['./amd-public-path.js', './src/embed.js'],
+    entry: ['./src/amd-public-path.ts', './src/embed.ts'],
     output: {
       filename: 'index.js',
       path: path.resolve(__dirname, 'dist'),
@@ -79,7 +91,7 @@ module.exports = [
       rules: rules,
     },
     // 'module' is the magic requirejs dependency used to set the publicPath
-    externals: ['@jupyter-widgets/base', 'module'],
+    externals: [...externals, 'module'],
     resolve: resolve,
   },
 ];

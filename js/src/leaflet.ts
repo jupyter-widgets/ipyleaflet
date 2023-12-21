@@ -1,24 +1,24 @@
 //@ts-nocheck
 // const L = require('leaflet');
 import * as L from 'leaflet';
+import 'leaflet-defaulticon-compatibility';
+import 'leaflet-draw';
+import 'leaflet-fullscreen';
+import 'leaflet-measure';
+import 'leaflet-rotatedmarker';
+import 'leaflet-search';
+import 'leaflet-splitmap';
+import 'leaflet-transform';
+import 'leaflet-velocity';
+import 'leaflet.awesome-markers';
+import 'leaflet.markercluster';
+import 'leaflet.vectorgrid';
 import 'proj4';
 import 'proj4leaflet';
-import 'leaflet-defaulticon-compatibility';
-import 'leaflet.vectorgrid';
-import 'leaflet-splitmap';
-import 'leaflet-draw';
-import 'leaflet.markercluster';
-import 'leaflet-velocity';
-import 'leaflet-measure';
+import 'protomaps-leaflet';
 import './leaflet-heat';
 import './leaflet-imageservice';
 import './leaflet-magnifyingglass';
-import 'leaflet-rotatedmarker';
-import 'leaflet-fullscreen';
-import 'leaflet-transform';
-import 'leaflet.awesome-markers';
-import 'leaflet-search';
-import 'protomaps-leaflet';
 
 // Monkey patch GridLayer for smoother URL updates
 L.patchGridLayer = function (layer: any) {
@@ -59,17 +59,17 @@ L.patchGridLayer = function (layer: any) {
   };
 };
 
-var oldTileLayer = L.tileLayer;
-L.tileLayer = function (url: any, options: any) {
-  var obj = oldTileLayer(url, options);
-  L.patchGridLayer(obj);
-  return obj;
-};
+// var oldTileLayer = L.tileLayer;
+// L.tileLayer = function (url: any, options: any) {
+//   var obj = oldTileLayer(url, options);
+//   L.patchGridLayer(obj);
+//   return obj;
+// };
 
-L.tileLayer.wms = function (url: any, options: any) {
-  var obj = oldTileLayer.wms(url, options);
-  L.patchGridLayer(obj);
-  return obj;
-};
+// L.tileLayer.wms = function (url: any, options: any) {
+//   var obj = oldTileLayer.wms(url, options);
+//   L.patchGridLayer(obj);
+//   return obj;
+// };
 
 export default L;

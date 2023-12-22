@@ -29,7 +29,7 @@ export interface ILeafletLayerModel {
   popup_max_width: number;
   popup_max_height: number | null;
   pane: string;
-  subitems: any[];
+  subitems: Layer[];
 }
 
 export class LeafletLayerModel extends WidgetModel {
@@ -259,4 +259,4 @@ export class LeafletLayerView extends LeafletWidgetView {
   }
 }
 
-export abstract class LeafletUILayerView extends LeafletLayerView {}
+export class LeafletUILayerView extends LeafletLayerView {}

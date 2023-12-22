@@ -5,7 +5,7 @@ import { WidgetModel, WidgetView } from '@jupyter-widgets/base';
 import L from '../leaflet';
 import { LeafletWidgetView } from '../utils';
 
-interface LeafletControlModelOptions {
+export interface LeafletControlModelOptions {
   _view_name: string;
   _model_name: string;
   _view_module: string;
@@ -48,11 +48,11 @@ export abstract class LeafletControlView extends LeafletWidgetView {
   leaflet_events() {}
 
   model_events() {
-    var key;
-    var o = this.model.get('options');
-    for (var i = 0; i < o.length; i++) {
+    let key: string;
+    const o = this.model.get('options');
+    for (let i = 0; i < o.length; i++) {
       key = o[i];
-      this.listenTo(this.model, 'change:' + key, function () {
+      this.listenTo(this.model, 'change:' + key, () => {
         L.setOptions(this.obj, this.get_options());
       });
     }

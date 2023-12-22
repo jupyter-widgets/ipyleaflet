@@ -21,7 +21,12 @@ export class LeafletWidgetView
 {
   get_options: () => Record<string, any>;
 }
-export class LeafletDOMWidgetView extends DOMWidgetView {}
+export class LeafletDOMWidgetView
+  extends DOMWidgetView
+  implements ILeafletViewCommon
+{
+  get_options: () => Record<string, any>;
+}
 
 class leafletViewCommon implements ILeafletViewCommon {
   model: WidgetModel;

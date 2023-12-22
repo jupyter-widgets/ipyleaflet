@@ -1,15 +1,20 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-import * as widgets from '@jupyter-widgets/base';
-import * as PMessaging from '@lumino/messaging';
-import * as PWidgets from '@lumino/widgets';
-import { Layer, LeafletMouseEvent, Popup } from 'leaflet';
+import {
+  ViewList,
+  WidgetModel,
+  WidgetView,
+  unpack_models,
+} from '@jupyter-widgets/base';
+import { IMessageHandler, MessageLoop } from '@lumino/messaging';
+import { Widget } from '@lumino/widgets';
+import { Control, Layer, LeafletMouseEvent, Map, Popup } from 'leaflet';
 import { LeafletControlView } from '../jupyter-leaflet';
 import L from '../leaflet';
-import * as utils from '../utils';
+import { LeafletWidgetView } from '../utils';
 
-interface LeafletLayerModelOptions {
+export interface ILeafletLayerModel {
   _view_name: string;
   _model_name: string;
   _view_module: string;
@@ -19,7 +24,7 @@ interface LeafletLayerModelOptions {
   options: string[];
   name: string;
   base: boolean;
-  popup: widgets.WidgetModel | null;
+  popup: WidgetModel | null;
   popup_min_width: number;
   popup_max_width: number;
   popup_max_height: number | null;
@@ -27,8 +32,8 @@ interface LeafletLayerModelOptions {
   subitems: any[];
 }
 
-export class LeafletLayerModel extends widgets.WidgetModel {
-  defaults(): LeafletLayerModelOptions {
+export class LeafletLayerModel extends WidgetModel {
+  defaults(): ILeafletLayerModel {
     return {
       ...super.defaults(),
       _view_name: 'LeafletLayerView',
@@ -51,9 +56,9 @@ export class LeafletLayerModel extends widgets.WidgetModel {
 }
 
 LeafletLayerModel.serializers = {
-  ...widgets.WidgetModel.serializers,
-  popup: { deserialize: widgets.unpack_models },
-  subitems: { deserialize: widgets.unpack_models },
+  ...WidgetModel.serializers,
+  popup: { deserialize: unpack_models },
+  subitems: { deserialize: unpack_models },
 };
 
 export class LeafletUILayerModel extends LeafletLayerModel {
@@ -66,23 +71,23 @@ export class LeafletUILayerModel extends LeafletLayerModel {
   }
 }
 
-interface LayerWidgetView extends Partial<widgets.WidgetView> {
-  obj?: Popup | Layer;
-  pWidget?: PMessaging.IMessageHandler;
+interface LayerWidgetView extends Partial<WidgetView> {
+  obj?: Popup | Layer | Control;
+  pWidget?: IMessageHandler;
 }
 
-export class LeafletLayerView extends utils.LeafletWidgetView {
-  map_view: any;
+export class LeafletLayerView extends LeafletWidgetView {
+  map_view: {
+    obj: Map;
+  };
   popup_content: LayerWidgetView;
   popup_content_promise: Promise<void>;
-  subitem_views: widgets.ViewList<any>;
+  subitem_views: ViewList<LayerWidgetView>;
   obj: Layer;
 
   create_obj(): void {}
 
-  initialize(
-    parameters: widgets.WidgetView.IInitializeParameters<LeafletLayerModel>
-  ) {
+  initialize(parameters: WidgetView.IInitializeParameters<LeafletLayerModel>) {
     super.initialize(parameters);
     this.map_view = this.options.map_view;
     this.popup_content_promise = Promise.resolve();
@@ -98,14 +103,17 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
     child_view.remove();
   }
 
-  async add_subitem_model(child_model: widgets.WidgetModel) {
-    const view: LayerWidgetView =
-      await this.create_child_view<widgets.WidgetView>(child_model, {
+  async add_subitem_model(child_model: WidgetModel) {
+    const view: LayerWidgetView = await this.create_child_view<WidgetView>(
+      child_model,
+      {
         map_view: this,
-      });
-    if (child_model instanceof LeafletLayerModel) {
+      }
+    );
+    if (view.obj instanceof Layer) {
       this.map_view.obj.addLayer(view.obj);
-    } else {
+    }
+    if (view.obj instanceof Control) {
       this.map_view.obj.addControl(view.obj);
     }
     //Trigger the displayed event of the child view.
@@ -124,7 +132,7 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
       this.bind_popup(value_2);
     });
     this.update_pane();
-    this.subitem_views = new widgets.ViewList(
+    this.subitem_views = new ViewList(
       this.add_subitem_model,
       this.remove_subitem_view,
       this
@@ -206,30 +214,26 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
     });
   }
 
-  bind_popup(value: widgets.WidgetModel) {
+  bind_popup(value: WidgetModel) {
     if (this.popup_content) {
       this.obj.unbindPopup();
       this.popup_content.remove();
     }
     if (value) {
       this.popup_content_promise = this.popup_content_promise.then(async () => {
-        const view: LayerWidgetView =
-          await this.create_child_view<widgets.WidgetView>(value, {
+        const view: LayerWidgetView = await this.create_child_view<WidgetView>(
+          value,
+          {
             map_view: this.map_view,
-          });
+          }
+        );
         // If it's a Popup widget
         if (view.obj instanceof Popup) {
           this.obj.bindPopup(view.obj, this.popup_options());
         } else {
-          PMessaging.MessageLoop.sendMessage(
-            view.pWidget,
-            PWidgets.Widget.Msg.BeforeAttach
-          );
+          MessageLoop.sendMessage(view.pWidget, Widget.Msg.BeforeAttach);
           this.obj.bindPopup(view.el, this.popup_options());
-          PMessaging.MessageLoop.sendMessage(
-            view.pWidget,
-            PWidgets.Widget.Msg.AfterAttach
-          );
+          MessageLoop.sendMessage(view.pWidget, Widget.Msg.AfterAttach);
         }
         this.popup_content = view;
         this.trigger('popup_content:created');

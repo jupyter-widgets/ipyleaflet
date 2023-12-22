@@ -1,15 +1,34 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
-//@ts-nocheck
 
 import * as widgets from '@jupyter-widgets/base';
 import * as PMessaging from '@lumino/messaging';
 import * as PWidgets from '@lumino/widgets';
+import { Layer, LeafletMouseEvent, Popup } from 'leaflet';
+import { LeafletControlView } from '../jupyter-leaflet';
 import L from '../leaflet';
 import * as utils from '../utils';
 
+interface LeafletLayerModelOptions {
+  _view_name: string;
+  _model_name: string;
+  _view_module: string;
+  _model_module: string;
+  opacity: number;
+  bottom: boolean;
+  options: string[];
+  name: string;
+  base: boolean;
+  popup: widgets.WidgetModel | null;
+  popup_min_width: number;
+  popup_max_width: number;
+  popup_max_height: number | null;
+  pane: string;
+  subitems: any[];
+}
+
 export class LeafletLayerModel extends widgets.WidgetModel {
-  defaults() {
+  defaults(): LeafletLayerModelOptions {
     return {
       ...super.defaults(),
       _view_name: 'LeafletLayerView',
@@ -47,56 +66,70 @@ export class LeafletUILayerModel extends LeafletLayerModel {
   }
 }
 
+interface LayerWidgetView extends Partial<widgets.WidgetView> {
+  obj?: Popup | Layer;
+  pWidget?: PMessaging.IMessageHandler;
+}
+
 export class LeafletLayerView extends utils.LeafletWidgetView {
-  initialize(parameters) {
+  map_view: any;
+  popup_content: LayerWidgetView;
+  popup_content_promise: Promise<void>;
+  subitem_views: widgets.ViewList<any>;
+  obj: Layer;
+
+  create_obj(): void {}
+
+  initialize(
+    parameters: widgets.WidgetView.IInitializeParameters<LeafletLayerModel>
+  ) {
     super.initialize(parameters);
     this.map_view = this.options.map_view;
     this.popup_content_promise = Promise.resolve();
   }
 
-  remove_subitem_view(child_view) {
+  remove_subitem_view(child_view: LeafletLayerView) {
     if (child_view instanceof LeafletLayerView) {
       this.map_view.obj.removeLayer(child_view.obj);
-    } else {
+    }
+    if (child_view instanceof LeafletControlView) {
       this.map_view.obj.removeControl(child_view.obj);
     }
     child_view.remove();
   }
 
-  add_subitem_model(child_model) {
-    return this.create_child_view(child_model, {
-      map_view: this,
-    }).then((view) => {
-      if (child_model instanceof LeafletLayerModel) {
-        this.map_view.obj.addLayer(view.obj);
-      } else {
-        this.map_view.obj.addControl(view.obj);
-      }
-
-      //Trigger the displayed event of the child view.
-      this.displayed.then(() => {
-        view.trigger('displayed', this);
+  async add_subitem_model(child_model: widgets.WidgetModel) {
+    const view: LayerWidgetView =
+      await this.create_child_view<widgets.WidgetView>(child_model, {
+        map_view: this,
       });
-      return view;
+    if (child_model instanceof LeafletLayerModel) {
+      this.map_view.obj.addLayer(view.obj);
+    } else {
+      this.map_view.obj.addControl(view.obj);
+    }
+    //Trigger the displayed event of the child view.
+    this.displayed.then(() => {
+      view.trigger('displayed', this);
     });
+    return view;
   }
 
-  render() {
-    return Promise.resolve(this.create_obj()).then(() => {
-      this.leaflet_events();
-      this.model_events();
-      this.bind_popup(this.model.get('popup'));
-      this.listenTo(this.model, 'change:popup', function (model, value) {
-        this.bind_popup(value);
-      });
-      this.update_pane();
-      this.subitem_views = new widgets.ViewList(
-        this.add_subitem_model,
-        this.remove_subitem_view,
-        this
-      );
-      this.subitem_views.update(this.model.get('subitems'));
+  async render() {
+    await Promise.resolve(this.create_obj());
+    this.leaflet_events();
+    this.model_events();
+    this.bind_popup(this.model.get('popup'));
+    this.listenTo(this.model, 'change:popup', function (model, value_2) {
+      this.bind_popup(value_2);
     });
+    this.update_pane();
+    this.subitem_views = new widgets.ViewList(
+      this.add_subitem_model,
+      this.remove_subitem_view,
+      this
+    );
+    this.subitem_views.update(this.model.get('subitems'));
   }
 
   update_pane() {
@@ -111,7 +144,7 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
     if (this.obj.on) {
       this.obj.on(
         'click dblclick mousedown mouseup mouseover mouseout',
-        (event) => {
+        (event: LeafletMouseEvent) => {
           this.send({
             event: 'interaction',
             type: event.type,
@@ -123,13 +156,17 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
         // This is a workaround for making maps rendered correctly in popups
         window.dispatchEvent(new Event('resize'));
       });
+      //TODO: transform is from a plugin, working on base leaflet first
       // this layer is transformable
+      //@ts-ignore
       if (this.obj.transform) {
         // add the handler only when the layer has been added
         this.obj.on('add', () => {
+          //@ts-ignore
           this.update_transform();
         });
         this.obj.on('transformed', () => {
+          //@ts-ignore
           this.model.set('locations', this.obj.getLatLngs());
           this.touch();
         });
@@ -138,40 +175,25 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
   }
 
   model_events() {
-    var key;
-    var o = this.model.get('options');
-    for (var i = 0; i < o.length; i++) {
+    let key: string;
+    const o = this.model.get('options');
+    for (let i = 0; i < o.length; i++) {
       key = o[i];
-      this.listenTo(
-        this.model,
-        'change:' + key,
-        function () {
-          L.setOptions(this.obj, this.get_options());
-        },
-        this
-      );
+      this.listenTo(this.model, 'change:' + key, function () {
+        L.setOptions(this.obj, this.get_options());
+      });
     }
     this.model.on_some_change(
       ['popup_min_width', 'popup_max_width', 'popup_max_height'],
       this.update_popup,
       this
     );
-    this.listenTo(
-      this.model,
-      'change:pane',
-      function () {
-        this.map_view.rerender();
-      },
-      this
-    );
-    this.listenTo(
-      this.model,
-      'change:subitems',
-      function () {
-        this.subitem_views.update(this.subitems);
-      },
-      this
-    );
+    this.listenTo(this.model, 'change:pane', function () {
+      this.map_view.rerender();
+    });
+    this.listenTo(this.model, 'change:subitems', function () {
+      this.subitem_views.update(this.subitems);
+    });
   }
 
   remove() {
@@ -184,33 +206,33 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
     });
   }
 
-  bind_popup(value) {
+  bind_popup(value: widgets.WidgetModel) {
     if (this.popup_content) {
       this.obj.unbindPopup();
       this.popup_content.remove();
     }
     if (value) {
-      this.popup_content_promise = this.popup_content_promise.then(() => {
-        return this.create_child_view(value, { map_view: this.map_view }).then(
-          (view) => {
-            // If it's a Popup widget
-            if (value.name == 'LeafletPopupModel') {
-              this.obj.bindPopup(view.obj, this.popup_options());
-            } else {
-              PMessaging.MessageLoop.sendMessage(
-                view.pWidget,
-                PWidgets.Widget.Msg.BeforeAttach
-              );
-              this.obj.bindPopup(view.el, this.popup_options());
-              PMessaging.MessageLoop.sendMessage(
-                view.pWidget,
-                PWidgets.Widget.Msg.AfterAttach
-              );
-            }
-            this.popup_content = view;
-            this.trigger('popup_content:created');
-          }
-        );
+      this.popup_content_promise = this.popup_content_promise.then(async () => {
+        const view: LayerWidgetView =
+          await this.create_child_view<widgets.WidgetView>(value, {
+            map_view: this.map_view,
+          });
+        // If it's a Popup widget
+        if (view.obj instanceof Popup) {
+          this.obj.bindPopup(view.obj, this.popup_options());
+        } else {
+          PMessaging.MessageLoop.sendMessage(
+            view.pWidget,
+            PWidgets.Widget.Msg.BeforeAttach
+          );
+          this.obj.bindPopup(view.el, this.popup_options());
+          PMessaging.MessageLoop.sendMessage(
+            view.pWidget,
+            PWidgets.Widget.Msg.AfterAttach
+          );
+        }
+        this.popup_content = view;
+        this.trigger('popup_content:created');
       });
     }
     return this.popup_content_promise;
@@ -233,4 +255,4 @@ export class LeafletLayerView extends utils.LeafletWidgetView {
   }
 }
 
-export class LeafletUILayerView extends LeafletLayerView {}
+export abstract class LeafletUILayerView extends LeafletLayerView {}

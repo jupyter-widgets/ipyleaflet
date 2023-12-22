@@ -642,6 +642,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/backbone@npm:^1.4.18":
+  version: 1.4.18
+  resolution: "@types/backbone@npm:1.4.18"
+  dependencies:
+    "@types/jquery": "*"
+    "@types/underscore": "*"
+  checksum: 2a24a86861627acdfbab5a6622a6b2c7b4cc0b15eb7249cbe2c44b3dc705b1a16212482b45bff57b3be3dc27cc7b99f8fc589eebc31d1ef7bdb54ff2a80a9b05
+  languageName: node
+  linkType: hard
+
 "@types/css-font-loading-module@npm:^0.0.7":
   version: 0.0.7
   resolution: "@types/css-font-loading-module@npm:0.0.7"
@@ -4583,6 +4593,7 @@ __metadata:
   dependencies:
     "@jupyter-widgets/base": ^2 || ^3 || ^4 || ^5 || ^6
     "@jupyterlab/builder": ^4.0.8
+    "@types/backbone": ^1.4.18
     "@types/leaflet": ^1.9.8
     "@types/node": ^20.10.5
     "@types/webpack-env": ^1.18.4

@@ -65,6 +65,7 @@
   },
   "devDependencies": {
     "@jupyterlab/builder": "^4.0.8",
+    "@types/backbone": "^1.4.18",
     "@types/leaflet": "^1.9.8",
     "@types/node": "^20.10.5",
     "@types/webpack-env": "^1.18.4",

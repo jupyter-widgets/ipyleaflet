@@ -71,7 +71,7 @@ export class LeafletUILayerModel extends LeafletLayerModel {
   }
 }
 
-interface LayerWidgetView extends Partial<WidgetView> {
+interface LayerWidgetView extends WidgetView {
   obj?: Popup | Layer | Control;
   pWidget?: IMessageHandler;
 }

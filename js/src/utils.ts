@@ -49,11 +49,13 @@ class leafletViewCommon implements ILeafletViewCommon {
 function applyMixins(derivedCtor: any, baseCtors: any[]): void {
   baseCtors.forEach((baseCtor) => {
     Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
-      Object.defineProperty(
-        derivedCtor.prototype,
-        name,
-        Object.getOwnPropertyDescriptor(baseCtor.prototype, name)
+      const propertyDescriptor = Object.getOwnPropertyDescriptor(
+        baseCtor.prototype,
+        name
       );
+      if (propertyDescriptor) {
+        Object.defineProperty(derivedCtor.prototype, name, propertyDescriptor);
+      }
     });
   });
 }

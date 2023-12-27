@@ -1,6 +1,7 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
+import { Icon } from 'leaflet';
 import L from '../leaflet';
 import * as layer from './Layer';
 
@@ -22,6 +23,7 @@ export class LeafletIconModel extends layer.LeafletUILayerModel {
 }
 
 export class LeafletIconView extends layer.LeafletUILayerView {
+  obj: Icon;
   create_obj() {
     //@ts-ignore
     this.obj = L.icon(this.get_options());

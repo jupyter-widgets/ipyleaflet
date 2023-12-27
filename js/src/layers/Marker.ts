@@ -2,8 +2,9 @@
 // Distributed under the terms of the Modified BSD License.
 
 import { WidgetModel, WidgetView, unpack_models } from '@jupyter-widgets/base';
-import { DivIcon, Icon, IconOptions, Marker } from 'leaflet';
+import { Icon, Marker, MarkerOptions } from 'leaflet';
 import L from '../leaflet';
+import { LeafletIconView } from './Icon';
 import {
   ILeafletLayerModel,
   LeafletUILayerModel,
@@ -58,14 +59,10 @@ LeafletMarkerModel.serializers = {
   icon: { deserialize: unpack_models },
 };
 
-interface MarkerWidgetView extends WidgetView {
-  obj?: DivIcon | Icon<IconOptions>;
-}
-
 export class LeafletMarkerView extends LeafletUILayerView {
   obj: Marker;
   icon_promise: Promise<void>;
-  icon?: MarkerWidgetView;
+  icon: LeafletIconView;
 
   initialize(parameters: WidgetView.IInitializeParameters<LeafletMarkerModel>) {
     super.initialize(parameters);
@@ -73,7 +70,10 @@ export class LeafletMarkerView extends LeafletUILayerView {
   }
 
   create_obj() {
-    this.obj = L.marker(this.model.get('location'), this.get_options());
+    this.obj = L.marker(
+      this.model.get('location'),
+      this.get_options() as MarkerOptions
+    );
 
     this.obj.on('dragend', (event) => {
       var marker = event.target;
@@ -98,9 +98,7 @@ export class LeafletMarkerView extends LeafletUILayerView {
     }
     if (value) {
       this.icon_promise = this.icon_promise.then(async () => {
-        const view: MarkerWidgetView = await this.create_child_view<WidgetView>(
-          value
-        );
+        const view = await this.create_child_view<LeafletIconView>(value);
         this.obj.setIcon(view.obj);
         this.icon = view;
       });
@@ -109,32 +107,32 @@ export class LeafletMarkerView extends LeafletUILayerView {
 
   model_events() {
     super.model_events();
-    this.listenTo(this.model, 'change:location', function () {
+    this.listenTo(this.model, 'change:location', () => {
       this.obj.setLatLng(this.model.get('location'));
       this.send({
         event: 'move',
         location: this.model.get('location'),
       });
     });
-    this.listenTo(this.model, 'change:z_index_offset', function () {
+    this.listenTo(this.model, 'change:z_index_offset', () => {
       this.obj.setZIndexOffset(this.model.get('z_index_offset'));
     });
-    this.listenTo(this.model, 'change:opacity', function () {
+    this.listenTo(this.model, 'change:opacity', () => {
       if (this.model.get('visible')) {
         this.obj.setOpacity(this.model.get('opacity'));
       }
     });
-    this.listenTo(this.model, 'change:visible', function () {
+    this.listenTo(this.model, 'change:visible', () => {
       if (this.model.get('visible')) {
         this.obj.setOpacity(this.model.get('opacity'));
       } else {
         this.obj.setOpacity(0);
       }
     });
-    this.listenTo(this.model, 'change:rotation_angle', function () {
+    this.listenTo(this.model, 'change:rotation_angle', () => {
       this.obj.setRotationAngle(this.model.get('rotation_angle'));
     });
-    this.listenTo(this.model, 'change:rotation_origin', function () {
+    this.listenTo(this.model, 'change:rotation_origin', () => {
       this.obj.setRotationOrigin(this.model.get('rotation_origin'));
     });
 
@@ -145,12 +143,9 @@ export class LeafletMarkerView extends LeafletUILayerView {
     } else {
       this.obj.setOpacity(0);
     }
-    //TODO: Rotation is from a plugin, handling base leaflet first
-    //@ts-ignore
     this.obj.setRotationAngle(this.model.get('rotation_angle'));
-    //@ts-ignore
     this.obj.setRotationOrigin(this.model.get('rotation_origin'));
-    this.listenTo(this.model, 'change:icon', function () {
+    this.listenTo(this.model, 'change:icon', () => {
       this.set_icon(this.model.get('icon'));
     });
     this.set_icon(this.model.get('icon'));

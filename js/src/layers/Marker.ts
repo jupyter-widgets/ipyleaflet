@@ -2,7 +2,7 @@
 // Distributed under the terms of the Modified BSD License.
 
 import { WidgetModel, WidgetView, unpack_models } from '@jupyter-widgets/base';
-import { Icon, Marker, MarkerOptions } from 'leaflet';
+import { Marker, MarkerOptions } from 'leaflet';
 import L from '../leaflet';
 import { LeafletIconView } from './Icon';
 import {

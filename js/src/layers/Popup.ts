@@ -1,16 +1,21 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-//@ts-nocheck
-import * as widgets from '@jupyter-widgets/base';
-import * as PMessaging from '@lumino/messaging';
-import * as PWidgets from '@lumino/widgets';
+import { WidgetView, unpack_models } from '@jupyter-widgets/base';
+import { MessageLoop } from '@lumino/messaging';
+import { Widget } from '@lumino/widgets';
+import { LatLngTuple, Popup, PopupOptions } from 'leaflet';
 import L from '../leaflet';
-import * as layer from './Layer';
+import { LeafletUILayerModel, LeafletUILayerView } from './Layer';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
-export class LeafletPopupModel extends layer.LeafletUILayerModel {
+type PopupContent = {
+  msg: 'open' | 'close';
+  location: LatLngTuple;
+};
+
+export class LeafletPopupModel extends LeafletUILayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -26,20 +31,23 @@ export class LeafletPopupModel extends layer.LeafletUILayerModel {
 }
 
 LeafletPopupModel.serializers = {
-  ...layer.LeafletUILayerModel.serializers,
-  child: { deserialize: widgets.unpack_models },
+  ...LeafletUILayerModel.serializers,
+  child: { deserialize: unpack_models },
 };
 
-export class LeafletPopupView extends layer.LeafletUILayerView {
+export class LeafletPopupView extends LeafletUILayerView {
+  obj: Popup;
+  child: LeafletPopupView; // Change the type as needed
+  child_promise: Promise<void>;
+
   create_obj() {
-    //@ts-ignore
-    this.obj = L.popup(this.get_options()).setLatLng(
+    this.obj = L.popup(this.get_options() as PopupOptions).setLatLng(
       this.model.get('location')
     );
     this.model.on('msg:custom', this.handle_message.bind(this));
   }
 
-  initialize(parameters) {
+  initialize(parameters: WidgetView.IInitializeParameters<LeafletPopupModel>) {
     super.initialize(parameters);
     this.child_promise = Promise.resolve();
   }
@@ -58,26 +66,19 @@ export class LeafletPopupView extends layer.LeafletUILayerView {
     });
   }
 
-  set_child(value) {
+  set_child(value: LeafletPopupModel) {
     if (this.child) {
       this.child.remove();
     }
     if (value) {
-      this.child_promise = this.child_promise.then(() => {
-        return this.create_child_view(value).then((view) => {
-          PMessaging.MessageLoop.sendMessage(
-            view.pWidget,
-            PWidgets.Widget.Msg.BeforeAttach
-          );
-          this.obj.setContent(view.el);
-          PMessaging.MessageLoop.sendMessage(
-            view.pWidget,
-            PWidgets.Widget.Msg.AfterAttach
-          );
-          this.force_update();
-          this.child = view;
-          this.trigger('child:created');
-        });
+      this.child_promise = this.child_promise.then(async () => {
+        const view = await this.create_child_view<LeafletPopupView>(value);
+        MessageLoop.sendMessage(view.pWidget, Widget.Msg.BeforeAttach);
+        this.obj.setContent(view.el);
+        MessageLoop.sendMessage(view.pWidget, Widget.Msg.AfterAttach);
+        this.force_update();
+        this.child = view;
+        this.trigger('child:created');
       });
     }
     return this.child_promise;
@@ -104,7 +105,6 @@ export class LeafletPopupView extends layer.LeafletUILayerView {
   }
 
   update_popup() {
-    //@ts-ignore
     L.setOptions(this.obj, this.get_options());
     this.force_update();
   }
@@ -119,9 +119,16 @@ export class LeafletPopupView extends layer.LeafletUILayerView {
       this.map_view.obj.closePopup(this.obj);
     }
   }
-  handle_message(content) {
-    if (content.msg == 'open') {
-      this.map_view.obj.openPopup(this.obj, content.location);
+  handle_message(content: PopupContent) {
+    const objContent = this.obj.getContent();
+
+    // Check that object has actual Content
+    if (
+      content.msg == 'open' &&
+      objContent &&
+      !(objContent instanceof Function)
+    ) {
+      this.map_view.obj.openPopup(objContent, content.location);
     } else if (content.msg == 'close') {
       this.map_view.obj.closePopup(this.obj);
     }

@@ -6,6 +6,7 @@ import * as widgets from '@jupyter-widgets/base';
 import L from './leaflet';
 import * as utils from './utils';
 import * as proj from './projections';
+import { Map } from 'leaflet';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
@@ -160,6 +161,8 @@ LeafletMapModel.serializers = {
 };
 
 export class LeafletMapView extends utils.LeafletDOMWidgetView {
+  obj: Map;
+
   initialize(options) {
     super.initialize(options);
     // The dirty flag is used to prevent sub-pixel center changes

@@ -9,8 +9,8 @@ import {
 } from '@jupyter-widgets/base';
 import { IMessageHandler, MessageLoop } from '@lumino/messaging';
 import { Widget } from '@lumino/widgets';
-import { Control, Layer, LeafletMouseEvent, Map, Popup } from 'leaflet';
-import { LeafletControlView } from '../jupyter-leaflet';
+import { Control, Layer, LeafletMouseEvent, Popup } from 'leaflet';
+import { LeafletControlView, LeafletMapView } from '../jupyter-leaflet';
 import L from '../leaflet';
 import { LeafletWidgetView } from '../utils';
 
@@ -71,19 +71,14 @@ export class LeafletUILayerModel extends LeafletLayerModel {
   }
 }
 
-interface LayerWidgetView extends WidgetView {
-  obj?: Popup | Layer | Control;
-  pWidget?: IMessageHandler;
-}
-
 export class LeafletLayerView extends LeafletWidgetView {
-  map_view: {
-    obj: Map;
-  };
-  popup_content: LayerWidgetView;
+  map_view: LeafletMapView;
+  popup_content: LeafletLayerView;
   popup_content_promise: Promise<void>;
-  subitem_views: ViewList<LayerWidgetView>;
+  subitem_views: ViewList<LeafletLayerView>;
   obj: Layer;
+  subitems: WidgetModel[];
+  pWidget: IMessageHandler;
 
   create_obj(): void {}
 
@@ -104,12 +99,10 @@ export class LeafletLayerView extends LeafletWidgetView {
   }
 
   async add_subitem_model(child_model: WidgetModel) {
-    const view: LayerWidgetView = await this.create_child_view<WidgetView>(
-      child_model,
-      {
+    const view: LeafletLayerView =
+      await this.create_child_view<LeafletLayerView>(child_model, {
         map_view: this,
-      }
-    );
+      });
     if (view.obj instanceof Layer) {
       this.map_view.obj.addLayer(view.obj);
     }
@@ -128,7 +121,7 @@ export class LeafletLayerView extends LeafletWidgetView {
     this.leaflet_events();
     this.model_events();
     this.bind_popup(this.model.get('popup'));
-    this.listenTo(this.model, 'change:popup', function (model, value_2) {
+    this.listenTo(this.model, 'change:popup', (model, value_2) => {
       this.bind_popup(value_2);
     });
     this.update_pane();
@@ -151,7 +144,8 @@ export class LeafletLayerView extends LeafletWidgetView {
     // If the layer is interactive
     if (this.obj.on) {
       this.obj.on(
-        'click dblclick mousedown mouseup mouseover mouseout',
+        // TODO: Calls wrong overload without 'as any'
+        'click dblclick mousedown mouseup mouseover mouseout mousemove contextmenu preclick' as any,
         (event: LeafletMouseEvent) => {
           this.send({
             event: 'interaction',
@@ -187,7 +181,7 @@ export class LeafletLayerView extends LeafletWidgetView {
     const o = this.model.get('options');
     for (let i = 0; i < o.length; i++) {
       key = o[i];
-      this.listenTo(this.model, 'change:' + key, function () {
+      this.listenTo(this.model, 'change:' + key, () => {
         L.setOptions(this.obj, this.get_options());
       });
     }
@@ -196,10 +190,10 @@ export class LeafletLayerView extends LeafletWidgetView {
       this.update_popup,
       this
     );
-    this.listenTo(this.model, 'change:pane', function () {
+    this.listenTo(this.model, 'change:pane', () => {
       this.map_view.rerender();
     });
-    this.listenTo(this.model, 'change:subitems', function () {
+    this.listenTo(this.model, 'change:subitems', () => {
       this.subitem_views.update(this.subitems);
     });
   }
@@ -221,12 +215,9 @@ export class LeafletLayerView extends LeafletWidgetView {
     }
     if (value) {
       this.popup_content_promise = this.popup_content_promise.then(async () => {
-        const view: LayerWidgetView = await this.create_child_view<WidgetView>(
-          value,
-          {
-            map_view: this.map_view,
-          }
-        );
+        const view = await this.create_child_view<LeafletLayerView>(value, {
+          map_view: this.map_view,
+        });
         // If it's a Popup widget
         if (view.obj instanceof Popup) {
           this.obj.bindPopup(view.obj, this.popup_options());

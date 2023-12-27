@@ -1,11 +1,11 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-import { Icon } from 'leaflet';
+import { Icon, IconOptions } from 'leaflet';
 import L from '../leaflet';
-import * as layer from './Layer';
+import { LeafletUILayerModel, LeafletUILayerView } from './Layer';
 
-export class LeafletIconModel extends layer.LeafletUILayerModel {
+export class LeafletIconModel extends LeafletUILayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -22,10 +22,10 @@ export class LeafletIconModel extends layer.LeafletUILayerModel {
   }
 }
 
-export class LeafletIconView extends layer.LeafletUILayerView {
+export class LeafletIconView extends LeafletUILayerView {
   obj: Icon;
+
   create_obj() {
-    //@ts-ignore
-    this.obj = L.icon(this.get_options());
+    this.obj = L.icon(this.get_options() as IconOptions);
   }
 }

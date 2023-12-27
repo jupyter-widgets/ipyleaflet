@@ -33,9 +33,11 @@ export class LeafletLayersControlView extends LeafletControlView {
   }
 
   toggle_obj() {
-    this.obj.remove();
-    delete this.obj;
-    this.create_obj();
+    if (this.obj) {
+      this.obj.remove();
+      delete this.obj;
+      this.create_obj();
+    }
   }
 
   model_events() {
@@ -44,26 +46,22 @@ export class LeafletLayersControlView extends LeafletControlView {
     });
   }
 
-  create_obj() {
-    return Promise.all(this.map_view.layer_views.views)
-      .then((views) => {
-        var baselayers = views.reduce(function (ov, view) {
-          if (view.model.get('base')) {
-            ov[view.model.get('name')] = view.obj;
-          }
-          return ov;
-        }, {});
-        var overlays = views.reduce(function (ov, view) {
-          if (!view.model.get('base')) {
-            ov[view.model.get('name')] = view.obj;
-          }
-          return ov;
-        }, {});
-        this.obj = L.control.layers(baselayers, overlays, this.get_options());
-        return this;
-      })
-      .then(() => {
-        this.obj.addTo(this.map_view.obj);
-      });
+  async create_obj() {
+    const views = await Promise.all(this.map_view.layer_views.views);
+    let baselayers = views.reduce(function (ov, view) {
+      if (view.model.get('base')) {
+        ov[view.model.get('name')] = view.obj;
+      }
+      return ov;
+    }, {});
+    let overlays = views.reduce(function (ov_1, view_1) {
+      if (!view_1.model.get('base')) {
+        ov_1[view_1.model.get('name')] = view_1.obj;
+      }
+      return ov_1;
+    }, {});
+    this.obj = L.control.layers(baselayers, overlays, this.get_options());
+    this;
+    this.obj.addTo(this.map_view.obj);
   }
 }

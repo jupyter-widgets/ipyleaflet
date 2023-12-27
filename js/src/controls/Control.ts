@@ -29,7 +29,7 @@ export class LeafletControlModel extends WidgetModel {
 
 export abstract class LeafletControlView extends LeafletWidgetView {
   map_view: any;
-  obj: L.Control;
+  obj?: L.Control;
 
   initialize(
     parameters: WidgetView.IInitializeParameters<LeafletControlModel>

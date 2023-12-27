@@ -2,11 +2,10 @@
   "compilerOptions": {
     "declaration": true,
     "esModuleInterop": true,
-    "lib": ["es2015", "dom"],
-    "module": "commonjs",
+    "lib": ["es2020", "dom"],
     "moduleResolution": "node",
     "noEmitOnError": false,
-    "noUnusedLocals": false,
+    "noUnusedLocals": true,
     "outDir": "lib",
     "resolveJsonModule": true,
     "rootDir": "src",
@@ -14,7 +13,8 @@
     "sourceMap": true,
     "strict": false,
     "strictPropertyInitialization": false,
-    "target": "es2015",
+    "target": "ES2020",
+    "module": "ES2020",
     "noImplicitAny": false,
     "types": ["node", "webpack-env"]
   },

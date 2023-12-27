@@ -11,11 +11,11 @@
     "rootDir": "src",
     "skipLibCheck": true,
     "sourceMap": true,
-    "strict": false,
     "strictPropertyInitialization": false,
     "target": "ES2020",
     "module": "ES2020",
-    "noImplicitAny": false,
+    "strict": true,
+    "noImplicitAny": true,
     "types": ["node", "webpack-env"]
   },
   "exclude": ["src/**/__tests__", "lib/**"]

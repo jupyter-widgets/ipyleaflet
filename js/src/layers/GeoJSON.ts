@@ -1,12 +1,20 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
-// @ts-nocheck
 
+import {
+  GeoJSON,
+  GeoJSONOptions,
+  LeafletMouseEvent,
+  StyleFunction,
+} from 'leaflet';
 import L from '../leaflet';
 
-import * as featuregroup from './FeatureGroup';
+import {
+  LeafletFeatureGroupModel,
+  LeafletFeatureGroupView,
+} from './FeatureGroup';
 
-export class LeafletGeoJSONModel extends featuregroup.LeafletFeatureGroupModel {
+export class LeafletGeoJSONModel extends LeafletFeatureGroupModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -21,21 +29,23 @@ export class LeafletGeoJSONModel extends featuregroup.LeafletFeatureGroupModel {
   }
 }
 
-export class LeafletGeoJSONView extends featuregroup.LeafletFeatureGroupView {
+export class LeafletGeoJSONView extends LeafletFeatureGroupView {
+  obj: GeoJSON;
+
   create_obj() {
-    var style = (feature) => {
+    const style: StyleFunction = (feature) => {
       const model_style = this.model.get('style');
-      const feature_style = feature.properties.style || {};
+      const feature_style = feature?.properties.style || {};
       return {
         ...feature_style,
         ...model_style,
       };
     };
 
-    var options = {
+    const options: GeoJSONOptions = {
       style: style,
-      onEachFeature: (feature, layer) => {
-        var mouseevent = (e) => {
+      onEachFeature: (feature, layer: GeoJSON) => {
+        const mouseevent = (e: LeafletMouseEvent) => {
           if (e.type == 'mouseover') {
             layer.setStyle(this.model.get('hover_style'));
             layer.once('mouseout', () => {
@@ -56,7 +66,7 @@ export class LeafletGeoJSONView extends featuregroup.LeafletFeatureGroupView {
       },
     };
 
-    var point_style = this.model.get('point_style');
+    const point_style = this.model.get('point_style');
 
     if (Object.keys(point_style).length !== 0) {
       options.pointToLayer = function (feature, latlng) {
@@ -68,34 +78,19 @@ export class LeafletGeoJSONView extends featuregroup.LeafletFeatureGroupView {
   }
 
   model_events() {
-    this.listenTo(
-      this.model,
-      'change:style',
-      function () {
-        this.obj.setStyle(this.model.get('style'));
-      },
-      this
-    );
-    this.listenTo(
-      this.model,
-      'change:data',
-      function () {
-        this.obj.clearLayers();
+    this.listenTo(this.model, 'change:style', () => {
+      this.obj.setStyle(this.model.get('style'));
+    });
+    this.listenTo(this.model, 'change:data', () => {
+      this.obj.clearLayers();
+      this.obj.addData(this.model.get('data'));
+    });
+    this.listenTo(this.model, 'change:visible', () => {
+      if (this.model.get('visible')) {
         this.obj.addData(this.model.get('data'));
-      },
-      this
-    );
-    this.listenTo(
-      this.model,
-      'change:visible',
-      function () {
-        if (this.model.get('visible')) {
-          this.obj.addData(this.model.get('data'));
-        } else {
-          this.obj.clearLayers();
-        }
-      },
-      this
-    );
+      } else {
+        this.obj.clearLayers();
+      }
+    });
   }
 }

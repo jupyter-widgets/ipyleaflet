@@ -120,15 +120,16 @@ export class LeafletPopupView extends LeafletUILayerView {
     }
   }
   handle_message(content: PopupContent) {
-    const objContent = this.obj.getContent();
+    //const objContent = this.obj.getContent();
 
     // Check that object has actual Content
     if (
-      content.msg == 'open' &&
-      objContent &&
-      !(objContent instanceof Function)
+      content.msg == 'open'
+      //&& objContent && !(objContent instanceof Function)
     ) {
-      this.map_view.obj.openPopup(objContent, content.location);
+      // TODO: Using Content object here introduces a bug
+      //@ts-ignore
+      this.map_view.obj.openPopup(this.obj, content.location);
     } else if (content.msg == 'close') {
       this.map_view.obj.closePopup(this.obj);
     }

@@ -1,10 +1,11 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
+import { FeatureGroup } from 'leaflet';
 import L from '../leaflet';
-import * as layergroup from './LayerGroup';
+import { LeafletLayerGroupModel, LeafletLayerGroupView } from './LayerGroup';
 
-export class LeafletFeatureGroupModel extends layergroup.LeafletLayerGroupModel {
+export class LeafletFeatureGroupModel extends LeafletLayerGroupModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -14,9 +15,10 @@ export class LeafletFeatureGroupModel extends layergroup.LeafletLayerGroupModel 
   }
 }
 
-export class LeafletFeatureGroupView extends layergroup.LeafletLayerGroupView {
+export class LeafletFeatureGroupView extends LeafletLayerGroupView {
+  obj: FeatureGroup;
+
   create_obj() {
-    //@ts-ignore
     this.obj = L.featureGroup();
   }
 }

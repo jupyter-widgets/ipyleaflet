@@ -1,10 +1,10 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-//@ts-nocheck
-import * as vectorlayer from './VectorLayer';
+import { Path } from 'leaflet';
+import { LeafletVectorLayerModel, LeafletVectorLayerView } from './VectorLayer';
 
-export class LeafletPathModel extends vectorlayer.LeafletVectorLayerModel {
+export class LeafletPathModel extends LeafletVectorLayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -24,21 +24,18 @@ export class LeafletPathModel extends vectorlayer.LeafletVectorLayerModel {
   }
 }
 
-export class LeafletPathView extends vectorlayer.LeafletVectorLayerView {
+export class LeafletPathView extends LeafletVectorLayerView {
+  obj: Path;
+
   model_events() {
     super.model_events();
     var key;
     var o = this.model.get('options');
     for (var i = 0; i < o.length; i++) {
       key = o[i];
-      this.listenTo(
-        this.model,
-        'change:' + key,
-        function () {
-          this.obj.setStyle(this.get_options());
-        },
-        this
-      );
+      this.listenTo(this.model, 'change:' + key, () => {
+        this.obj.setStyle(this.get_options());
+      });
     }
   }
 }

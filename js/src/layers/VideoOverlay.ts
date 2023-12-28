@@ -1,12 +1,12 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
-//@ts-nocheck
-import * as L from '../leaflet';
-import * as rasterlayer from './RasterLayer';
+import { VideoOverlay } from 'leaflet';
+import L from '../leaflet';
+import { LeafletRasterLayerModel, LeafletRasterLayerView } from './RasterLayer';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
-export class LeafletVideoOverlayModel extends rasterlayer.LeafletRasterLayerModel {
+export class LeafletVideoOverlayModel extends LeafletRasterLayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -19,7 +19,9 @@ export class LeafletVideoOverlayModel extends rasterlayer.LeafletRasterLayerMode
   }
 }
 
-export class LeafletVideoOverlayView extends rasterlayer.LeafletRasterLayerView {
+export class LeafletVideoOverlayView extends LeafletRasterLayerView {
+  obj: VideoOverlay;
+
   create_obj() {
     this.obj = L.videoOverlay(
       this.model.get('url'),
@@ -27,22 +29,22 @@ export class LeafletVideoOverlayView extends rasterlayer.LeafletRasterLayerView 
       this.get_options()
     );
     this.obj.on('load', () => {
-      var MyPauseControl = L.Control.extend({
+      const MyPauseControl = L.Control.extend({
         onAdd: () => {
-          var button = L.DomUtil.create('button');
+          const button = L.DomUtil.create('button');
           button.innerHTML = '&#10074&#10074';
           L.DomEvent.on(button, 'click', () => {
-            this.obj.getElement().pause();
+            this.obj.getElement()?.pause();
           });
           return button;
         },
       });
-      var MyPlayControl = L.Control.extend({
+      const MyPlayControl = L.Control.extend({
         onAdd: () => {
-          var button = L.DomUtil.create('button');
+          const button = L.DomUtil.create('button');
           button.innerHTML = '&#9658';
           L.DomEvent.on(button, 'click', () => {
-            this.obj.getElement().play();
+            this.obj.getElement()?.play();
           });
           return button;
         },
@@ -54,32 +56,22 @@ export class LeafletVideoOverlayView extends rasterlayer.LeafletRasterLayerView 
 
   model_events() {
     super.model_events();
-    this.listenTo(
-      this.model,
-      'change:url',
-      function () {
-        const url = this.model.get('url');
-        const bounds = this.model.get('bounds');
-        const options = this.get_options();
-        this.map_view.obj.removeLayer(this.obj);
-        this.obj = L.videoOverlay(url, bounds, options);
-        this.map_view.obj.addLayer(this.obj);
-      },
-      this
-    );
+    this.listenTo(this.model, 'change:url', () => {
+      const url = this.model.get('url');
+      const bounds = this.model.get('bounds');
+      const options = this.get_options();
+      this.map_view.obj.removeLayer(this.obj);
+      this.obj = L.videoOverlay(url, bounds, options);
+      this.map_view.obj.addLayer(this.obj);
+    });
 
-    this.listenTo(
-      this.model,
-      'change:bounds',
-      function () {
-        const url = this.model.get('url');
-        const bounds = this.model.get('bounds');
-        const options = this.get_options();
-        this.map_view.obj.removeLayer(this.obj);
-        this.obj = L.videoOverlay(url, bounds, options);
-        this.map_view.obj.addLayer(this.obj);
-      },
-      this
-    );
+    this.listenTo(this.model, 'change:bounds', () => {
+      const url = this.model.get('url');
+      const bounds = this.model.get('bounds');
+      const options = this.get_options();
+      this.map_view.obj.removeLayer(this.obj);
+      this.obj = L.videoOverlay(url, bounds, options);
+      this.map_view.obj.addLayer(this.obj);
+    });
   }
 }

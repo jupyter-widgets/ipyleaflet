@@ -98,7 +98,7 @@ export class LeafletLayerView extends LeafletWidgetView {
     child_view.remove();
   }
 
-  async add_subitem_model(child_model: WidgetModel) {
+  async add_subitem_model(child_model: LeafletLayerModel) {
     const view: LeafletLayerView =
       await this.create_child_view<LeafletLayerView>(child_model, {
         map_view: this,

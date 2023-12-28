@@ -34,10 +34,7 @@ class leafletViewCommon implements ILeafletViewCommon {
   get_options(): Record<string, any> {
     const o = this.model.get('options') as string[];
     const options: Record<string, any> = {};
-    let key: string;
-    for (let i = 0; i < o.length; i++) {
-      key = o[i];
-      // Convert from foo_bar to fooBar that Leaflet.js uses
+    for (const key of o) {
       if (this.model.get(key) !== null) {
         options[camel_case(key)] = this.model.get(key);
       }

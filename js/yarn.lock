@@ -686,6 +686,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/geojson-vt@npm:*":
+  version: 3.2.5
+  resolution: "@types/geojson-vt@npm:3.2.5"
+  dependencies:
+    "@types/geojson": "*"
+  checksum: 3c77f52c4a82b8087d3e04b86a62027ad1dccf4d339df7c7c191cfcf288564e050b241664e072fc9fd3bb5b71e217dc0dcfb7c467bded4be303ab2b283612b72
+  languageName: node
+  linkType: hard
+
 "@types/geojson@npm:*":
   version: 7946.0.13
   resolution: "@types/geojson@npm:7946.0.13"
@@ -725,12 +734,59 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/leaflet-draw@npm:^1.0.11":
+  version: 1.0.11
+  resolution: "@types/leaflet-draw@npm:1.0.11"
+  dependencies:
+    "@types/leaflet": "*"
+  checksum: 3ffcb4b0a435e09bb6e168d1d3f2d377ad63f87168b5582cc25d9f54f9a07f664086fc49403e0a110b5e81c10f48385ad8d9bca6ed9e70c53def1ba90012032c
+  languageName: node
+  linkType: hard
+
+"@types/leaflet-fullscreen@npm:^1.0.9":
+  version: 1.0.9
+  resolution: "@types/leaflet-fullscreen@npm:1.0.9"
+  dependencies:
+    "@types/leaflet": "*"
+  checksum: a17d516fd9452731c2baa77e40445773752e1fa4428e270608045641d0371c9005e842eb764463f8b6cc80964b92ecee6e964798512d519a16e1a3bf29406541
+  languageName: node
+  linkType: hard
+
 "@types/leaflet-rotatedmarker@npm:^0.2.5":
   version: 0.2.5
   resolution: "@types/leaflet-rotatedmarker@npm:0.2.5"
   dependencies:
     "@types/leaflet": "*"
   checksum: 890cc8cface4a48f2507a9d0a30d203f01a8d9d026dde89d5cbb596295ece6ccd58e0a4b1fb211950e6e2c7469502424ac8182380d7cf62a5e67d5b6fa0c3587
+  languageName: node
+  linkType: hard
+
+"@types/leaflet.awesome-markers@npm:^2.0.28":
+  version: 2.0.28
+  resolution: "@types/leaflet.awesome-markers@npm:2.0.28"
+  dependencies:
+    "@types/leaflet": "*"
+  checksum: 955b441c9b66da8ab2df25c6a3d0e69c130ee89b2214cea209f2bccf12fdd476ac73c6b6111f590f9a3e3770c515981e5587584260c4c72642454b314e321181
+  languageName: node
+  linkType: hard
+
+"@types/leaflet.markercluster@npm:^1.5.4":
+  version: 1.5.4
+  resolution: "@types/leaflet.markercluster@npm:1.5.4"
+  dependencies:
+    "@types/leaflet": "*"
+  checksum: 23fbd15d436bad908589edc5c6027aa36ca00ebc203a10520cfc7a64424525f3d97cbe11d3e498be5a537f1abae9da523ba1f54e9b30557697c55ad412a28dc1
+  languageName: node
+  linkType: hard
+
+"@types/leaflet.vectorgrid@npm:^1.3.5":
+  version: 1.3.5
+  resolution: "@types/leaflet.vectorgrid@npm:1.3.5"
+  dependencies:
+    "@types/geojson": "*"
+    "@types/geojson-vt": "*"
+    "@types/leaflet": "*"
+  checksum: 03e19f3fbc80650b5c47d2a024d3695bd3004bd1c4f2d83c6ab10674fc2b23f0d7f64f73ba0b818a8d90db54c6eacbdaac82afa61f7530589e5e262b3688730f
   languageName: node
   linkType: hard
 
@@ -4604,7 +4660,12 @@ __metadata:
     "@jupyterlab/builder": ^4.0.8
     "@types/backbone": ^1.4.18
     "@types/leaflet": ^1.9.8
+    "@types/leaflet-draw": ^1.0.11
+    "@types/leaflet-fullscreen": ^1.0.9
     "@types/leaflet-rotatedmarker": ^0.2.5
+    "@types/leaflet.awesome-markers": ^2.0.28
+    "@types/leaflet.markercluster": ^1.5.4
+    "@types/leaflet.vectorgrid": ^1.3.5
     "@types/node": ^20.10.5
     "@types/webpack-env": ^1.18.4
     buffer: ^6.0.3

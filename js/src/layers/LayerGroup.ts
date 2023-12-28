@@ -1,12 +1,12 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
-//@ts-nocheck
 
-import * as widgets from '@jupyter-widgets/base';
+import { unpack_models, ViewList } from '@jupyter-widgets/base';
+import { LayerGroup } from 'leaflet';
 import L from '../leaflet';
-import * as layer from './Layer';
+import { LeafletLayerModel, LeafletLayerView } from './Layer';
 
-export class LeafletLayerGroupModel extends layer.LeafletLayerModel {
+export class LeafletLayerGroupModel extends LeafletLayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -18,14 +18,17 @@ export class LeafletLayerGroupModel extends layer.LeafletLayerModel {
 }
 
 LeafletLayerGroupModel.serializers = {
-  ...layer.LeafletLayerModel.serializers,
-  layers: { deserialize: widgets.unpack_models },
+  ...LeafletLayerModel.serializers,
+  layers: { deserialize: unpack_models },
 };
 
-export class LeafletLayerGroupView extends layer.LeafletLayerView {
+export class LeafletLayerGroupView extends LeafletLayerView {
+  obj: LayerGroup;
+  layer_views: ViewList<LeafletLayerView>;
+
   create_obj() {
     this.obj = L.layerGroup();
-    this.layer_views = new widgets.ViewList(
+    this.layer_views = new ViewList(
       this.add_layer_model,
       this.remove_layer_view,
       this
@@ -33,26 +36,22 @@ export class LeafletLayerGroupView extends layer.LeafletLayerView {
     this.layer_views.update(this.model.get('layers'));
   }
 
-  remove_layer_view(child_view) {
+  remove_layer_view(child_view: LeafletLayerView) {
     this.obj.removeLayer(child_view.obj);
     child_view.remove();
   }
 
-  add_layer_model(child_model) {
-    return this.create_child_view(child_model).then((child_view) => {
-      this.obj.addLayer(child_view.obj);
-      return child_view;
-    });
+  async add_layer_model(child_model: LeafletLayerModel) {
+    const child_view = await this.create_child_view<LeafletLayerView>(
+      child_model
+    );
+    this.obj.addLayer(child_view.obj);
+    return child_view;
   }
 
   model_events() {
-    this.listenTo(
-      this.model,
-      'change:layers',
-      function () {
-        this.layer_views.update(this.model.get('layers'));
-      },
-      this
-    );
+    this.listenTo(this.model, 'change:layers', () => {
+      this.layer_views.update(this.model.get('layers'));
+    });
   }
 }

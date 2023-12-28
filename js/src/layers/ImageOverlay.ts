@@ -1,13 +1,13 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-//@ts-nocheck
+import { ImageOverlay } from 'leaflet';
 import L from '../leaflet';
-import * as rasterlayer from './RasterLayer';
+import { LeafletRasterLayerModel, LeafletRasterLayerView } from './RasterLayer';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
-export class LeafletImageOverlayModel extends rasterlayer.LeafletRasterLayerModel {
+export class LeafletImageOverlayModel extends LeafletRasterLayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -20,9 +20,10 @@ export class LeafletImageOverlayModel extends rasterlayer.LeafletRasterLayerMode
   }
 }
 
-export class LeafletImageOverlayView extends rasterlayer.LeafletRasterLayerView {
+export class LeafletImageOverlayView extends LeafletRasterLayerView {
+  obj: ImageOverlay;
+
   create_obj() {
-    //@ts-ignore
     this.obj = L.imageOverlay(
       this.model.get('url'),
       this.model.get('bounds'),
@@ -33,24 +34,14 @@ export class LeafletImageOverlayView extends rasterlayer.LeafletRasterLayerView 
   model_events() {
     super.model_events();
 
-    this.listenTo(
-      this.model,
-      'change:url',
-      function () {
-        const url = this.model.get('url');
-        this.obj.setUrl(url);
-      },
-      this
-    );
+    this.listenTo(this.model, 'change:url', () => {
+      const url = this.model.get('url');
+      this.obj.setUrl(url);
+    });
 
-    this.listenTo(
-      this.model,
-      'change:bounds',
-      function () {
-        const bounds = this.model.get('bounds');
-        this.obj.setBounds(bounds);
-      },
-      this
-    );
+    this.listenTo(this.model, 'change:bounds', () => {
+      const bounds = this.model.get('bounds');
+      this.obj.setBounds(bounds);
+    });
   }
 }

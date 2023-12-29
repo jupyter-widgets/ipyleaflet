@@ -1,6 +1,6 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
-import { Handler, Polyline } from 'leaflet';
+import { Polyline } from 'leaflet';
 import L from '../leaflet';
 import { LeafletPathModel, LeafletPathView } from './Path';
 
@@ -17,22 +17,8 @@ export class LeafletPolylineModel extends LeafletPathModel {
   }
 }
 
-interface ExtendedPolyline extends Polyline {
-  dragging?: Handler;
-  transform?: Transform;
-}
-
-interface Transform extends Handler {
-  reset: () => void;
-  setOptions: (options: {
-    scaling: string;
-    uniformScaling: string;
-    rotation: string;
-  }) => Handler;
-}
-
 export class LeafletPolylineView extends LeafletPathView {
-  obj: ExtendedPolyline;
+  obj: Polyline;
 
   create_obj() {
     this.obj = L.polyline(this.model.get('locations'), this.get_options());

@@ -39,10 +39,10 @@ export abstract class LeafletControlView extends LeafletWidgetView {
   }
 
   render() {
-    return Promise.resolve(this.create_obj()).then(() => {
-      this.leaflet_events();
-      this.model_events();
-    });
+    // await Promise.resolve(this.create_obj());
+    this.create_obj();
+    this.leaflet_events();
+    this.model_events();
   }
 
   leaflet_events() {}

@@ -20,4 +20,18 @@ declare module 'leaflet' {
     dragging: Handler;
     transform: Transform;
   }
+
+  declare namespace Control {
+    interface LegendOptions extends ControlOptions {
+      position: ControlPosition;
+    }
+
+    class Legend extends Control {
+      constructor(options?: LegendOptions);
+      options: LegendOptions;
+    }
+  }
+  declare namespace control {
+    function legend(options?: Control.LegendOptions): Control.Legend;
+  }
 }

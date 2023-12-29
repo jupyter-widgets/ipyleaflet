@@ -2,10 +2,13 @@
 // Distributed under the terms of the Modified BSD License.
 
 import { WidgetView } from '@jupyter-widgets/base';
+import { Control } from 'leaflet';
 import L from '../leaflet';
 import { LeafletControlModel, LeafletControlView } from './Control';
 
 export class LeafletScaleControlModel extends LeafletControlModel {
+  obj: Control.Scale;
+
   defaults() {
     return {
       ...super.defaults(),

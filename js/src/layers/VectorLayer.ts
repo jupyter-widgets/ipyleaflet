@@ -1,9 +1,9 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-import * as layer from './Layer';
+import { LeafletLayerModel, LeafletLayerView } from './Layer';
 
-export class LeafletVectorLayerModel extends layer.LeafletLayerModel {
+export class LeafletVectorLayerModel extends LeafletLayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -13,4 +13,4 @@ export class LeafletVectorLayerModel extends layer.LeafletLayerModel {
   }
 }
 
-export class LeafletVectorLayerView extends layer.LeafletLayerView {}
+export class LeafletVectorLayerView extends LeafletLayerView {}

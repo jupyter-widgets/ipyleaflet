@@ -1,12 +1,13 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
-// @ts-nocheck
 
 import * as widgets from '@jupyter-widgets/base';
-import L from './leaflet';
-import * as utils from './utils';
-import * as proj from './projections';
+import { Dict } from '@jupyter-widgets/base';
+import { ObjectHash } from 'backbone';
 import { Map } from 'leaflet';
+import L from './leaflet';
+import * as proj from './projections';
+import * as utils from './utils';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
@@ -29,6 +30,8 @@ LeafletMapStyleModel.styleProperties = {
 };
 
 export class LeafletMapModel extends widgets.DOMWidgetModel {
+  _dragging: boolean;
+
   defaults() {
     return {
       ...super.defaults(),
@@ -85,7 +88,7 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
     };
   }
 
-  initialize(attributes, options) {
+  initialize(attributes: ObjectHash, options: widgets.IBackboneModelOptions) {
     super.initialize(attributes, options);
     this.set('window_url', window.location.href);
     this._dragging = false;
@@ -101,53 +104,53 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
     this.set('style', new_style);
   }
 
-  update_bounds() {
-    return widgets.resolvePromisesDict(this.views).then((views) => {
-      // default bounds if the projection is latlon
-      var bounds = {
-        north: -90,
-        south: 90,
-        east: -Infinity,
-        west: Infinity,
-      };
-      var pixel_bounds = {
-        top: 9007199254740991,
-        bottom: 0,
-        right: 0,
-        left: 9007199254740991,
-      };
-      Object.keys(views).reduce(
-        function (bnds_pixbnds, key) {
-          var bnds = bnds_pixbnds[0];
-          var pixbnds = bnds_pixbnds[1];
-          var obj = views[key].obj;
-          if (obj) {
-            var view_bounds = obj.getBounds();
-            bnds.north = Math.max(bnds.north, view_bounds.getNorth());
-            bnds.south = Math.min(bnds.south, view_bounds.getSouth());
-            bnds.east = Math.max(bnds.east, view_bounds.getEast());
-            bnds.west = Math.min(bnds.west, view_bounds.getWest());
-            var view_pixel_bounds = obj.getPixelBounds();
-            var top_left = view_pixel_bounds.getTopLeft();
-            var bottom_right = view_pixel_bounds.getBottomRight();
-            pixbnds.top = Math.min(pixbnds.top, top_left.y);
-            pixbnds.bottom = Math.max(pixbnds.bottom, bottom_right.y);
-            pixbnds.right = Math.max(pixbnds.right, bottom_right.x);
-            pixbnds.left = Math.min(pixbnds.left, top_left.x);
-          }
-          return [bnds, pixbnds];
-        },
-        [bounds, pixel_bounds]
-      );
-      this.set('north', bounds.north);
-      this.set('south', bounds.south);
-      this.set('east', bounds.east);
-      this.set('west', bounds.west);
-      this.set('top', pixel_bounds.top);
-      this.set('bottom', pixel_bounds.bottom);
-      this.set('right', pixel_bounds.right);
-      this.set('left', pixel_bounds.left);
-    });
+  //TODO idk
+  async update_bounds(view: Dict<PromiseLike<widgets.WidgetView>>): Promise<void> {
+    const views = await widgets.resolvePromisesDict(view);
+    // default bounds if the projection is latlon
+    let bounds = {
+      north: -90,
+      south: 90,
+      east: -Infinity,
+      west: Infinity,
+    };
+    let pixel_bounds = {
+      top: 9007199254740991,
+      bottom: 0,
+      right: 0,
+      left: 9007199254740991,
+    };
+    [bounds, pixel_bounds] = Object.keys(views).reduce(
+      function (bnds_pixbnds: [typeof bounds, typeof pixel_bounds], key: string) {
+        const bnds = bnds_pixbnds[0];
+        const pixbnds = bnds_pixbnds[1];
+        const obj = views[key].obj;
+        if (obj) {
+          const view_bounds = obj.getBounds();
+          bnds.north = Math.max(bnds.north, view_bounds.getNorth());
+          bnds.south = Math.min(bnds.south, view_bounds.getSouth());
+          bnds.east = Math.max(bnds.east, view_bounds.getEast());
+          bnds.west = Math.min(bnds.west, view_bounds.getWest());
+          const view_pixel_bounds = obj.getPixelBounds();
+          const top_left = view_pixel_bounds.getTopLeft();
+          const bottom_right = view_pixel_bounds.getBottomRight();
+          pixbnds.top = Math.min(pixbnds.top, top_left.y);
+          pixbnds.bottom = Math.max(pixbnds.bottom, bottom_right.y);
+          pixbnds.right = Math.max(pixbnds.right, bottom_right.x);
+          pixbnds.left = Math.min(pixbnds.left, top_left.x);
+        }
+        return [bnds, pixbnds];
+      },
+      [bounds, pixel_bounds]
+    );
+    this.set('north', bounds.north);
+    this.set('south', bounds.south);
+    this.set('east', bounds.east);
+    this.set('west', bounds.west);
+    this.set('top', pixel_bounds.top);
+    this.set('bottom', pixel_bounds.bottom);
+    this.set('right', pixel_bounds.right);
+    this.set('left', pixel_bounds.left);
   }
 }
 
@@ -186,17 +189,15 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     child_view.remove();
   }
 
-  add_layer_model(child_model) {
-    return this.create_child_view(child_model, {
+  async add_layer_model(child_model) {
+    const view = await this.create_child_view(child_model, {
       map_view: this,
-    }).then((view) => {
-      this.obj.addLayer(view.obj);
-
-      this.displayed.then(() => {
-        view.trigger('displayed', this);
-      });
-      return view;
     });
+    this.obj.addLayer(view.obj);
+    this.displayed.then(() => {
+      view.trigger('displayed', this);
+    });
+    return view;
   }
 
   remove_control_view(child_view) {
@@ -204,18 +205,16 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     child_view.remove();
   }
 
-  add_control_model(child_model) {
-    return this.create_child_view(child_model, {
+  async add_control_model(child_model) {
+    const view = await this.create_child_view(child_model, {
       map_view: this,
-    }).then((view) => {
-      this.obj.addControl(view.obj);
-
-      // Trigger the displayed event of the child view.
-      this.displayed.then(() => {
-        view.trigger('displayed', this);
-      });
-      return view;
     });
+    this.obj.addControl(view.obj);
+    // Trigger the displayed event of the child view.
+    this.displayed.then(() => {
+      view.trigger('displayed', this);
+    });
+    return view;
   }
 
   render() {
@@ -255,7 +254,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     });
   }
 
-  create_obj() {
+  async create_obj() {
     return this.layoutPromise.then(() => {
       var options = {
         ...this.get_options(),

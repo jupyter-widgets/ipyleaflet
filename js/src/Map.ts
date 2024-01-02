@@ -170,7 +170,7 @@ LeafletMapModel.serializers = {
 };
 
 export class LeafletMapView extends utils.LeafletDOMWidgetView {
-  obj: Map | undefined;
+  obj: Map;
   dirty: boolean;
   map_container: HTMLDivElement;
   map_child: HTMLDivElement;
@@ -187,9 +187,9 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
 
   create_panes() {
     // const panes = this.model.get('panes');
-    const panes = this.obj?.getPanes()
+    const panes = this.obj.getPanes()
     for (const name in panes) {
-      const pane = this.obj?.createPane(name);
+      const pane = this.obj.createPane(name);
       const styles = panes[name];
       for (const key in styles) {
         // TODO come back to this
@@ -200,7 +200,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
   }
 
   remove_layer_view(child_view: LeafletLayerView) {
-    this.obj?.removeLayer(child_view.obj);
+    this.obj.removeLayer(child_view.obj);
     child_view.remove();
   }
 
@@ -208,7 +208,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     const view = await this.create_child_view<LeafletLayerView>(child_model, {
       map_view: this,
     });
-    this.obj?.addLayer(view.obj);
+    this.obj.addLayer(view.obj);
     this.displayed.then(() => {
       view.trigger('displayed', this);
     });
@@ -216,7 +216,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
   }
 
   remove_control_view(child_view: LeafletControlView) {
-    this.obj?.removeControl(child_view.obj);
+    this.obj.removeControl(child_view.obj);
     child_view.remove();
   }
 
@@ -224,7 +224,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     const view = await this.create_child_view<LeafletControlView>(child_model, {
       map_view: this,
     });
-    this.obj?.addControl(view.obj);
+    this.obj.addControl(view.obj);
     // Trigger the displayed event of the child view.
     this.displayed.then(() => {
       view.trigger('displayed', this);
@@ -282,14 +282,15 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
   }
 
   rerender() {
-    this.obj?.remove();
-    this.obj = undefined;
+    this.obj.remove();
+    //@ts-ignore
+    delete this.obj;
     this.el.removeChild(this.map_child);
     this.render();
   }
 
   leaflet_events() {
-    this.obj?.on('moveend', (e) => {
+    this.obj.on('moveend', (e) => {
       if (!this.dirty) {
         this.dirty = true;
         const c = e.target.getCenter();
@@ -303,12 +304,12 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       this.model.update_style();
     });
 
-    this.obj?.on('movestart', () => {
+    this.obj.on('movestart', () => {
       this.model._dragging = true;
       this.model.update_style();
     });
 
-    this.obj?.on('zoomend', (e) => {
+    this.obj.on('zoomend', (e) => {
       if (!this.dirty) {
         this.dirty = true;
         var z = e.target.getZoom();
@@ -320,7 +321,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       });
     });
 
-    this.obj?.on(
+    this.obj.on(
       'click dblclick mousedown mouseup mouseover mouseout mousemove contextmenu preclick' as any,
       (event: LeafletMouseEvent) => {
         this.send({
@@ -332,8 +333,8 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       }
     );
 
-    this.obj?.on('fullscreenchange', () => {
-      this.model.set('fullscreen', this.obj?.isFullscreen());
+    this.obj.on('fullscreenchange', () => {
+      this.model.set('fullscreen', this.obj.isFullscreen());
     });
   }
 
@@ -357,9 +358,9 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       'change:dragging',
       () => {
         if (this.model.get('dragging')) {
-          this.obj?.dragging.enable();
+          this.obj.dragging.enable();
         } else {
-          this.obj?.dragging.disable();
+          this.obj.dragging.disable();
         }
       }
     );
@@ -390,7 +391,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
           // animation triggers a `moveend` event in an animationFrame,
           // which causes the center to bounce despite of the dirty flag
           // which is set back to false synchronously.
-          this.obj?.flyTo(this.model.get('center'), this.model.get('zoom'), {
+          this.obj.flyTo(this.model.get('center'), this.model.get('zoom'), {
             animate: false,
           });
           this.dirty = false;
@@ -406,7 +407,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       () => {
         if (!this.dirty) {
           this.dirty = true;
-          this.obj?.panTo(this.model.get('center'));
+          this.obj.panTo(this.model.get('center'));
           this.dirty = false;
         }
         this.model.update_bounds().then(() => {
@@ -433,8 +434,8 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       'change:fullscreen',
       () => {
         var fullscreen = this.model.get('fullscreen');
-        if (this.obj?.isFullscreen() !== fullscreen) {
-          this.obj?.toggleFullscreen();
+        if (this.obj.isFullscreen() !== fullscreen) {
+          this.obj.toggleFullscreen();
         }
       }
     );
@@ -471,7 +472,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
         // to sub-pixel differences)
         // `pan=false` corresponds to having to top-left corner
         // unchanged.
-        this.obj?.invalidateSize({
+        this.obj.invalidateSize({
           animate: false,
           pan: true,
         });
@@ -481,7 +482,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
         this.dirty = true;
         // If we are in a jupyter-widget tab, we get an after-show before
         // this.displayed is resolved. In this case, obj is not created yet.
-        this.obj?.invalidateSize({
+        this.obj.invalidateSize({
           animate: false,
           pan: true,
         });

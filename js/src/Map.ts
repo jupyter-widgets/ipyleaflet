@@ -1,7 +1,14 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-import * as widgets from '@jupyter-widgets/base';
+import {
+  DOMWidgetModel,
+  IBackboneModelOptions,
+  StyleModel,
+  ViewList,
+  WidgetView,
+  unpack_models,
+} from '@jupyter-widgets/base';
 import { Message } from '@lumino/messaging';
 import { ObjectHash } from 'backbone';
 import { LeafletMouseEvent, Map } from 'leaflet';
@@ -12,12 +19,12 @@ import {
   LeafletLayerView,
 } from './jupyter-leaflet';
 import L from './leaflet';
-import * as proj from './projections';
-import * as utils from './utils';
+import { getProjection } from './projections';
+import { LeafletDOMWidgetView } from './utils';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
-export class LeafletMapStyleModel extends widgets.StyleModel {
+export class LeafletMapStyleModel extends StyleModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -35,7 +42,7 @@ LeafletMapStyleModel.styleProperties = {
   },
 };
 
-export class LeafletMapModel extends widgets.DOMWidgetModel {
+export class LeafletMapModel extends DOMWidgetModel {
   _dragging: boolean;
   // views: Dict<LeafletLayerView | LeafletControlView>;
 
@@ -95,7 +102,7 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
     };
   }
 
-  initialize(attributes: ObjectHash, options: widgets.IBackboneModelOptions) {
+  initialize(attributes: ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
     this.set('window_url', window.location.href);
     this._dragging = false;
@@ -167,26 +174,24 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
 }
 
 LeafletMapModel.serializers = {
-  ...widgets.DOMWidgetModel.serializers,
-  layers: { deserialize: widgets.unpack_models },
-  controls: { deserialize: widgets.unpack_models },
-  style: { deserialize: widgets.unpack_models },
-  default_style: { deserialize: widgets.unpack_models },
-  dragging_style: { deserialize: widgets.unpack_models },
+  ...DOMWidgetModel.serializers,
+  layers: { deserialize: unpack_models },
+  controls: { deserialize: unpack_models },
+  style: { deserialize: unpack_models },
+  default_style: { deserialize: unpack_models },
+  dragging_style: { deserialize: unpack_models },
 };
 
-export class LeafletMapView extends utils.LeafletDOMWidgetView {
+export class LeafletMapView extends LeafletDOMWidgetView {
   obj: Map;
   dirty: boolean;
   map_container: HTMLDivElement;
   map_child: HTMLDivElement;
-  layer_views: widgets.ViewList<LeafletLayerView>;
-  control_views: widgets.ViewList<LeafletControlView>;
+  layer_views: ViewList<LeafletLayerView>;
+  control_views: ViewList<LeafletControlView>;
   model: LeafletMapModel;
 
-  initialize(
-    options: widgets.WidgetView.IInitializeParameters<LeafletMapModel>
-  ) {
+  initialize(options: WidgetView.IInitializeParameters<LeafletMapModel>) {
     super.initialize(options);
     // The dirty flag is used to prevent sub-pixel center changes
     // computed by leaflet to be applied to the model.
@@ -249,12 +254,12 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     if (this.get_options().interpolation == 'nearest') {
       this.map_container.classList.add('crisp-image');
     }
-    this.layer_views = new widgets.ViewList(
+    this.layer_views = new ViewList(
       this.add_layer_model,
       this.remove_layer_view,
       this
     );
-    this.control_views = new widgets.ViewList(
+    this.control_views = new ViewList(
       this.add_control_model,
       this.remove_control_view,
       this
@@ -281,7 +286,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     return this.layoutPromise.then(() => {
       const options = {
         ...this.get_options(),
-        crs: proj.getProjection(this.model.get('crs')),
+        crs: getProjection(this.model.get('crs')),
         zoomControl: false,
         attributionControl: false,
       };

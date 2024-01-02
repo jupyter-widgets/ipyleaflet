@@ -4,10 +4,12 @@
 import * as widgets from '@jupyter-widgets/base';
 import { Dict } from '@jupyter-widgets/base';
 import { ObjectHash } from 'backbone';
-import { Map } from 'leaflet';
+import { LeafletMouseEvent, Map } from 'leaflet';
 import L from './leaflet';
 import * as proj from './projections';
 import * as utils from './utils';
+import { LeafletControlModel, LeafletControlView, LeafletLayerModel, LeafletLayerView } from './jupyter-leaflet';
+import {Message} from '@lumino/messaging';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
@@ -31,6 +33,8 @@ LeafletMapStyleModel.styleProperties = {
 
 export class LeafletMapModel extends widgets.DOMWidgetModel {
   _dragging: boolean;
+ // views: Dict<LeafletLayerView | LeafletControlView>;
+
 
   defaults() {
     return {
@@ -95,7 +99,7 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
   }
 
   update_style() {
-    var new_style;
+    let new_style;
     if (!this._dragging) {
       new_style = this.get('default_style');
     } else {
@@ -104,10 +108,11 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
     this.set('style', new_style);
   }
 
-  //TODO idk
-  async update_bounds(view: Dict<PromiseLike<widgets.WidgetView>>): Promise<void> {
-    const views = await widgets.resolvePromisesDict(view);
-    // default bounds if the projection is latlon
+  //TODO fix this
+  async update_bounds() {
+    //@ts-ignore
+    const views = await widgets.resolvePromisesDict(this.views);
+    // default bounds if the projection is latlng
     let bounds = {
       north: -90,
       south: 90,
@@ -124,6 +129,7 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       function (bnds_pixbnds: [typeof bounds, typeof pixel_bounds], key: string) {
         const bnds = bnds_pixbnds[0];
         const pixbnds = bnds_pixbnds[1];
+        //@ts-ignore
         const obj = views[key].obj;
         if (obj) {
           const view_bounds = obj.getBounds();
@@ -164,9 +170,15 @@ LeafletMapModel.serializers = {
 };
 
 export class LeafletMapView extends utils.LeafletDOMWidgetView {
-  obj: Map;
+  obj: Map | undefined;
+  dirty: boolean;
+  map_container: HTMLDivElement;
+  map_child: HTMLDivElement;
+  layer_views: widgets.ViewList<LeafletLayerView>;
+  control_views: widgets.ViewList<LeafletControlView>;
+  model: LeafletMapModel;
 
-  initialize(options) {
+  initialize(options: widgets.WidgetView.IInitializeParameters<LeafletMapModel>) {
     super.initialize(options);
     // The dirty flag is used to prevent sub-pixel center changes
     // computed by leaflet to be applied to the model.
@@ -174,42 +186,45 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
   }
 
   create_panes() {
-    const panes = this.model.get('panes');
+    // const panes = this.model.get('panes');
+    const panes = this.obj?.getPanes()
     for (const name in panes) {
-      const pane = this.obj.createPane(name);
+      const pane = this.obj?.createPane(name);
       const styles = panes[name];
       for (const key in styles) {
+        // TODO come back to this
+        //@ts-ignore
         pane.style[key] = styles[key];
       }
     }
   }
 
-  remove_layer_view(child_view) {
-    this.obj.removeLayer(child_view.obj);
+  remove_layer_view(child_view: LeafletLayerView) {
+    this.obj?.removeLayer(child_view.obj);
     child_view.remove();
   }
 
-  async add_layer_model(child_model) {
-    const view = await this.create_child_view(child_model, {
+  async add_layer_model(child_model: LeafletLayerModel) {
+    const view = await this.create_child_view<LeafletLayerView>(child_model, {
       map_view: this,
     });
-    this.obj.addLayer(view.obj);
+    this.obj?.addLayer(view.obj);
     this.displayed.then(() => {
       view.trigger('displayed', this);
     });
     return view;
   }
 
-  remove_control_view(child_view) {
-    this.obj.removeControl(child_view.obj);
+  remove_control_view(child_view: LeafletControlView) {
+    this.obj?.removeControl(child_view.obj);
     child_view.remove();
   }
 
-  async add_control_model(child_model) {
-    const view = await this.create_child_view(child_model, {
+  async add_control_model(child_model: LeafletControlModel) {
+    const view = await this.create_child_view<LeafletControlView>(child_model, {
       map_view: this,
     });
-    this.obj.addControl(view.obj);
+    this.obj?.addControl(view.obj);
     // Trigger the displayed event of the child view.
     this.displayed.then(() => {
       view.trigger('displayed', this);
@@ -256,7 +271,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
 
   async create_obj() {
     return this.layoutPromise.then(() => {
-      var options = {
+      const options = {
         ...this.get_options(),
         crs: proj.getProjection(this.model.get('crs')),
         zoomControl: false,
@@ -267,17 +282,17 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
   }
 
   rerender() {
-    this.obj.remove();
-    delete this.obj;
+    this.obj?.remove();
+    this.obj = undefined;
     this.el.removeChild(this.map_child);
     this.render();
   }
 
   leaflet_events() {
-    this.obj.on('moveend', (e) => {
+    this.obj?.on('moveend', (e) => {
       if (!this.dirty) {
         this.dirty = true;
-        var c = e.target.getCenter();
+        const c = e.target.getCenter();
         this.model.set('center', [c.lat, c.lng]);
         this.dirty = false;
       }
@@ -288,12 +303,12 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       this.model.update_style();
     });
 
-    this.obj.on('movestart', () => {
+    this.obj?.on('movestart', () => {
       this.model._dragging = true;
       this.model.update_style();
     });
 
-    this.obj.on('zoomend', (e) => {
+    this.obj?.on('zoomend', (e) => {
       if (!this.dirty) {
         this.dirty = true;
         var z = e.target.getZoom();
@@ -305,9 +320,9 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       });
     });
 
-    this.obj.on(
-      'click dblclick mousedown mouseup mouseover mouseout mousemove contextmenu preclick',
-      (event) => {
+    this.obj?.on(
+      'click dblclick mousedown mouseup mouseover mouseout mousemove contextmenu preclick' as any,
+      (event: LeafletMouseEvent) => {
         this.send({
           event: 'interaction',
           type: event.type,
@@ -317,59 +332,55 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
       }
     );
 
-    this.obj.on('fullscreenchange', () => {
-      this.model.set('fullscreen', this.obj.isFullscreen());
+    this.obj?.on('fullscreenchange', () => {
+      this.model.set('fullscreen', this.obj?.isFullscreen());
     });
   }
 
   model_events() {
-    var key;
-    var o = this.model.get('options');
-    for (var i = 0; i < o.length; i++) {
+    let key;
+    let o = this.model.get('options');
+    for (let i = 0; i < o.length; i++) {
       key = o[i];
       this.listenTo(
         this.model,
         'change:' + key,
-        function () {
+        () => {
           L.setOptions(this.obj, this.get_options());
-        },
-        this
+        }
       );
     }
-    this.listenTo(this.model, 'msg:custom', this.handle_msg, this);
-    this.listenTo(this.model, 'change:panes', this.rerender, this);
+    // this.listenTo(this.model, 'msg:custom', this.handle_msg);
+    this.listenTo(this.model, 'change:panes', this.rerender);
     this.listenTo(
       this.model,
       'change:dragging',
-      function () {
+      () => {
         if (this.model.get('dragging')) {
-          this.obj.dragging.enable();
+          this.obj?.dragging.enable();
         } else {
-          this.obj.dragging.disable();
+          this.obj?.dragging.disable();
         }
-      },
-      this
+      }
     );
     this.listenTo(
       this.model,
       'change:layers',
-      function () {
+      () => {
         this.layer_views.update(this.model.get('layers'));
-      },
-      this
+      }
     );
     this.listenTo(
       this.model,
       'change:controls',
-      function () {
+      () => {
         this.control_views.update(this.model.get('controls'));
-      },
-      this
+      }
     );
     this.listenTo(
       this.model,
       'change:zoom',
-      function () {
+      () => {
         if (!this.dirty) {
           this.dirty = true;
           // Using flyTo instead of setZoom to adjust for potential
@@ -379,7 +390,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
           // animation triggers a `moveend` event in an animationFrame,
           // which causes the center to bounce despite of the dirty flag
           // which is set back to false synchronously.
-          this.obj.flyTo(this.model.get('center'), this.model.get('zoom'), {
+          this.obj?.flyTo(this.model.get('center'), this.model.get('zoom'), {
             animate: false,
           });
           this.dirty = false;
@@ -387,69 +398,67 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
         this.model.update_bounds().then(() => {
           this.touch();
         });
-      },
-      this
+      }
     );
     this.listenTo(
       this.model,
       'change:center',
-      function () {
+      () => {
         if (!this.dirty) {
           this.dirty = true;
-          this.obj.panTo(this.model.get('center'));
+          this.obj?.panTo(this.model.get('center'));
           this.dirty = false;
         }
         this.model.update_bounds().then(() => {
           this.touch();
         });
-      },
-      this
+      }
     );
     this.listenTo(
       this.model,
       'change:dragging_style',
-      function () {
+      () => {
         this.model.update_style();
-      },
-      this
+      }
     );
     this.listenTo(
       this.model,
       'change:default_style',
-      function () {
+      () => {
         this.model.update_style();
-      },
-      this
+      }
     );
     this.listenTo(
       this.model,
       'change:fullscreen',
-      function () {
+      () => {
         var fullscreen = this.model.get('fullscreen');
-        if (this.obj.isFullscreen() !== fullscreen) {
-          this.obj.toggleFullscreen();
+        if (this.obj?.isFullscreen() !== fullscreen) {
+          this.obj?.toggleFullscreen();
         }
-      },
-      this
+      }
     );
   }
 
-  handle_msg(content) {
-    switch (content.method) {
-      case 'foo':
-        break;
-    }
-  }
+  // handle_msg(content) {
+  //   switch (content.method) {
+  //     case 'foo':
+  //       break;
+  //   }
+  // }
 
-  processPhosphorMessage(msg) {
+
+  processPhosphorMessage(msg: Message) {
+    //TODO: fix this?
+    //@ts-ignore
     this._processLuminoMessage(msg, super.processPhosphorMessage);
   }
 
-  processLuminoMessage(msg) {
+  processLuminoMessage(msg: Message) {
     this._processLuminoMessage(msg, super.processLuminoMessage);
   }
 
-  _processLuminoMessage(msg, _super) {
+  _processLuminoMessage(msg: Message, _super: Function) {
     _super.call(this, msg);
     if (!this.obj) return;
     switch (msg.type) {
@@ -462,7 +471,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
         // to sub-pixel differences)
         // `pan=false` corresponds to having to top-left corner
         // unchanged.
-        this.obj.invalidateSize({
+        this.obj?.invalidateSize({
           animate: false,
           pan: true,
         });
@@ -472,7 +481,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
         this.dirty = true;
         // If we are in a jupyter-widget tab, we get an after-show before
         // this.displayed is resolved. In this case, obj is not created yet.
-        this.obj.invalidateSize({
+        this.obj?.invalidateSize({
           animate: false,
           pan: true,
         });

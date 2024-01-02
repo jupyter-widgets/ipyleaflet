@@ -7,6 +7,7 @@ import {
   StyleModel,
   ViewList,
   WidgetView,
+  resolvePromisesDict,
   unpack_models,
 } from '@jupyter-widgets/base';
 import { Message } from '@lumino/messaging';
@@ -121,7 +122,7 @@ export class LeafletMapModel extends DOMWidgetModel {
   //TODO fix this
   async update_bounds() {
     //@ts-ignore
-    const views = await widgets.resolvePromisesDict(this.views);
+    const views = await resolvePromisesDict(this.views);
     // default bounds if the projection is latlng
     let bounds = {
       north: -90,

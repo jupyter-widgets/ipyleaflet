@@ -290,9 +290,7 @@ export class LeafletMapView extends LeafletDOMWidgetView {
         zoomControl: false,
         attributionControl: false,
       };
-      console.log('options', options);
       this.obj = L.map(this.map_container, options);
-      console.log('CRS', options.crs);
     });
   }
 

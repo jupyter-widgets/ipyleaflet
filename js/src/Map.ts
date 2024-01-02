@@ -2,14 +2,18 @@
 // Distributed under the terms of the Modified BSD License.
 
 import * as widgets from '@jupyter-widgets/base';
-import { Dict } from '@jupyter-widgets/base';
+import { Message } from '@lumino/messaging';
 import { ObjectHash } from 'backbone';
 import { LeafletMouseEvent, Map } from 'leaflet';
+import {
+  LeafletControlModel,
+  LeafletControlView,
+  LeafletLayerModel,
+  LeafletLayerView,
+} from './jupyter-leaflet';
 import L from './leaflet';
 import * as proj from './projections';
 import * as utils from './utils';
-import { LeafletControlModel, LeafletControlView, LeafletLayerModel, LeafletLayerView } from './jupyter-leaflet';
-import {Message} from '@lumino/messaging';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
@@ -33,8 +37,7 @@ LeafletMapStyleModel.styleProperties = {
 
 export class LeafletMapModel extends widgets.DOMWidgetModel {
   _dragging: boolean;
- // views: Dict<LeafletLayerView | LeafletControlView>;
-
+  // views: Dict<LeafletLayerView | LeafletControlView>;
 
   defaults() {
     return {
@@ -126,7 +129,10 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
       left: 9007199254740991,
     };
     [bounds, pixel_bounds] = Object.keys(views).reduce(
-      function (bnds_pixbnds: [typeof bounds, typeof pixel_bounds], key: string) {
+      function (
+        bnds_pixbnds: [typeof bounds, typeof pixel_bounds],
+        key: string
+      ) {
         const bnds = bnds_pixbnds[0];
         const pixbnds = bnds_pixbnds[1];
         //@ts-ignore
@@ -178,7 +184,9 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
   control_views: widgets.ViewList<LeafletControlView>;
   model: LeafletMapModel;
 
-  initialize(options: widgets.WidgetView.IInitializeParameters<LeafletMapModel>) {
+  initialize(
+    options: widgets.WidgetView.IInitializeParameters<LeafletMapModel>
+  ) {
     super.initialize(options);
     // The dirty flag is used to prevent sub-pixel center changes
     // computed by leaflet to be applied to the model.
@@ -187,7 +195,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
 
   create_panes() {
     // const panes = this.model.get('panes');
-    const panes = this.obj.getPanes()
+    const panes = this.obj.getPanes();
     for (const name in panes) {
       const pane = this.obj.createPane(name);
       const styles = panes[name];
@@ -277,7 +285,9 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
         zoomControl: false,
         attributionControl: false,
       };
+      console.log('options', options);
       this.obj = L.map(this.map_container, options);
+      console.log('CRS', options.crs);
     });
   }
 
@@ -343,102 +353,66 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     let o = this.model.get('options');
     for (let i = 0; i < o.length; i++) {
       key = o[i];
-      this.listenTo(
-        this.model,
-        'change:' + key,
-        () => {
-          L.setOptions(this.obj, this.get_options());
-        }
-      );
+      this.listenTo(this.model, 'change:' + key, () => {
+        L.setOptions(this.obj, this.get_options());
+      });
     }
     // this.listenTo(this.model, 'msg:custom', this.handle_msg);
     this.listenTo(this.model, 'change:panes', this.rerender);
-    this.listenTo(
-      this.model,
-      'change:dragging',
-      () => {
-        if (this.model.get('dragging')) {
-          this.obj.dragging.enable();
-        } else {
-          this.obj.dragging.disable();
-        }
+    this.listenTo(this.model, 'change:dragging', () => {
+      if (this.model.get('dragging')) {
+        this.obj.dragging.enable();
+      } else {
+        this.obj.dragging.disable();
       }
-    );
-    this.listenTo(
-      this.model,
-      'change:layers',
-      () => {
-        this.layer_views.update(this.model.get('layers'));
-      }
-    );
-    this.listenTo(
-      this.model,
-      'change:controls',
-      () => {
-        this.control_views.update(this.model.get('controls'));
-      }
-    );
-    this.listenTo(
-      this.model,
-      'change:zoom',
-      () => {
-        if (!this.dirty) {
-          this.dirty = true;
-          // Using flyTo instead of setZoom to adjust for potential
-          // sub-pixel error in leaflet object's center.
-          //
-          // Disabling animation on updates from the model because
-          // animation triggers a `moveend` event in an animationFrame,
-          // which causes the center to bounce despite of the dirty flag
-          // which is set back to false synchronously.
-          this.obj.flyTo(this.model.get('center'), this.model.get('zoom'), {
-            animate: false,
-          });
-          this.dirty = false;
-        }
-        this.model.update_bounds().then(() => {
-          this.touch();
+    });
+    this.listenTo(this.model, 'change:layers', () => {
+      this.layer_views.update(this.model.get('layers'));
+    });
+    this.listenTo(this.model, 'change:controls', () => {
+      this.control_views.update(this.model.get('controls'));
+    });
+    this.listenTo(this.model, 'change:zoom', () => {
+      if (!this.dirty) {
+        this.dirty = true;
+        // Using flyTo instead of setZoom to adjust for potential
+        // sub-pixel error in leaflet object's center.
+        //
+        // Disabling animation on updates from the model because
+        // animation triggers a `moveend` event in an animationFrame,
+        // which causes the center to bounce despite of the dirty flag
+        // which is set back to false synchronously.
+        this.obj.flyTo(this.model.get('center'), this.model.get('zoom'), {
+          animate: false,
         });
+        this.dirty = false;
       }
-    );
-    this.listenTo(
-      this.model,
-      'change:center',
-      () => {
-        if (!this.dirty) {
-          this.dirty = true;
-          this.obj.panTo(this.model.get('center'));
-          this.dirty = false;
-        }
-        this.model.update_bounds().then(() => {
-          this.touch();
-        });
+      this.model.update_bounds().then(() => {
+        this.touch();
+      });
+    });
+    this.listenTo(this.model, 'change:center', () => {
+      if (!this.dirty) {
+        this.dirty = true;
+        this.obj.panTo(this.model.get('center'));
+        this.dirty = false;
       }
-    );
-    this.listenTo(
-      this.model,
-      'change:dragging_style',
-      () => {
-        this.model.update_style();
+      this.model.update_bounds().then(() => {
+        this.touch();
+      });
+    });
+    this.listenTo(this.model, 'change:dragging_style', () => {
+      this.model.update_style();
+    });
+    this.listenTo(this.model, 'change:default_style', () => {
+      this.model.update_style();
+    });
+    this.listenTo(this.model, 'change:fullscreen', () => {
+      var fullscreen = this.model.get('fullscreen');
+      if (this.obj.isFullscreen() !== fullscreen) {
+        this.obj.toggleFullscreen();
       }
-    );
-    this.listenTo(
-      this.model,
-      'change:default_style',
-      () => {
-        this.model.update_style();
-      }
-    );
-    this.listenTo(
-      this.model,
-      'change:fullscreen',
-      () => {
-        var fullscreen = this.model.get('fullscreen');
-        if (this.obj.isFullscreen() !== fullscreen) {
-          this.obj.toggleFullscreen();
-        }
-      }
-    );
+    });
   }
 
   // handle_msg(content) {
@@ -447,7 +421,6 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
   //       break;
   //   }
   // }
-
 
   processPhosphorMessage(msg: Message) {
     //TODO: fix this?

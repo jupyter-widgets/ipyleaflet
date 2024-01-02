@@ -90,10 +90,10 @@ export class LeafletLayerView extends LeafletWidgetView {
 
   remove_subitem_view(child_view: LeafletLayerView) {
     if (child_view instanceof LeafletLayerView) {
-      this.map_view.obj.removeLayer(child_view.obj);
+      this.map_view.obj?.removeLayer(child_view.obj);
     }
     if (child_view instanceof LeafletControlView) {
-      this.map_view.obj.removeControl(child_view.obj);
+      this.map_view.obj?.removeControl(child_view.obj);
     }
     child_view.remove();
   }
@@ -104,10 +104,10 @@ export class LeafletLayerView extends LeafletWidgetView {
         map_view: this,
       });
     if (view.obj instanceof Layer) {
-      this.map_view.obj.addLayer(view.obj);
+      this.map_view.obj?.addLayer(view.obj);
     }
     if (view.obj instanceof Control) {
-      this.map_view.obj.addControl(view.obj);
+      this.map_view.obj?.addControl(view.obj);
     }
     //Trigger the displayed event of the child view.
     this.displayed.then(() => {

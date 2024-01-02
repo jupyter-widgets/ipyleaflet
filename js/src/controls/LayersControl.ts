@@ -35,6 +35,7 @@ export class LeafletLayersControlView extends LeafletControlView {
   toggle_obj() {
     if (this.obj) {
       this.obj.remove();
+      //@ts-ignore
       delete this.obj;
       this.create_obj();
     }

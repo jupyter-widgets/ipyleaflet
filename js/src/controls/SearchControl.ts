@@ -1,12 +1,12 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-//@ts-nocheck
-import * as widgets from '@jupyter-widgets/base';
+// leaflet-search does not have typescript definitions
+import { unpack_models } from '@jupyter-widgets/base';
 import L from '../leaflet';
-import * as control from './Control';
+import { LeafletControlModel, LeafletControlView } from './Control';
 
-export class LeafletSearchControlModel extends control.LeafletControlModel {
+export class LeafletSearchControlModel extends LeafletControlModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -28,13 +28,15 @@ export class LeafletSearchControlModel extends control.LeafletControlModel {
 }
 
 LeafletSearchControlModel.serializers = {
-  ...control.LeafletControlModel.serializers,
-  marker: { deserialize: widgets.unpack_models },
-  layer: { deserialize: widgets.unpack_models },
+  ...LeafletControlModel.serializers,
+  marker: { deserialize: unpack_models },
+  layer: { deserialize: unpack_models },
 };
 
-export class LeafletSearchControlView extends control.LeafletControlView {
-  create_obj() {
+export class LeafletSearchControlView extends LeafletControlView {
+  obj: any;
+
+  async create_obj() {
     const layer = this.model.get('layer');
     const marker = this.model.get('marker');
     const layer_promise =
@@ -42,19 +44,18 @@ export class LeafletSearchControlView extends control.LeafletControlView {
     const marker_promise =
       marker !== null ? this.create_child_view(marker) : Promise.resolve(null);
 
-    return Promise.all([layer_promise, marker_promise]).then((result) => {
-      const layer_view = result[0];
-      const marker_view = result[1];
-      const options = this.get_options();
-      options.layer = layer_view !== null ? layer_view.obj : null;
-      options.marker = marker_view !== null ? marker_view.obj : false;
-      //@ts-ignore
-      this.obj = L.control.search(options);
-    });
+    const result = await Promise.all([layer_promise, marker_promise]);
+    const layer_view = result[0] as any;
+    const marker_view = result[1] as any;
+    const options = this.get_options();
+    options.layer = layer_view !== null ? layer_view.obj : null;
+    options.marker = marker_view !== null ? marker_view.obj : false;
+    //@ts-ignore
+    this.obj = L.control.search(options);
   }
 
   leaflet_events() {
-    this.obj.on('search:locationfound', (e) => {
+    this.obj.on('search:locationfound', (e: any) => {
       if (e.layer !== null) {
         var found_style = this.model.get('found_style');
         e.layer.setStyle(found_style);

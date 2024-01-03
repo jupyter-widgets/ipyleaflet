@@ -4,6 +4,7 @@
 import { WidgetModel, WidgetView } from '@jupyter-widgets/base';
 import L from '../leaflet';
 import { LeafletWidgetView } from '../utils';
+import { LeafletMapView } from '../jupyter-leaflet';
 
 export interface LeafletControlModelOptions {
   _view_name: string;
@@ -28,7 +29,7 @@ export class LeafletControlModel extends WidgetModel {
 }
 
 export abstract class LeafletControlView extends LeafletWidgetView {
-  map_view: any;
+  map_view: LeafletMapView;
   obj: L.Control;
 
   initialize(

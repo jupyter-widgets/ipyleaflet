@@ -1,4 +1,4 @@
-import L from 'leaflet';
+import L, { InternalTile } from 'leaflet';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-draw';
 import 'leaflet-fullscreen';
@@ -19,11 +19,11 @@ import './leaflet-imageservice';
 import './leaflet-magnifyingglass';
 
 L.Layer.include({
-  _refreshTileUrl: function (tile: any, url: any) {
+  _refreshTileUrl: function (tile: InternalTile, url: string) {
     //use a image in background, so that only replace the actual tile, once image is loaded in cache!
-    var img = new Image();
-    img.onload = function () {
-      L.Util.requestAnimFrame(function () {
+    const img = new Image();
+    img.onload = () => {
+      L.Util.requestAnimFrame(() => {
         tile.el.src = url;
       });
     };
@@ -32,14 +32,14 @@ L.Layer.include({
 
   refresh: function () {
     //prevent _tileOnLoad/_tileReady re-triggering a opacity animation
-    var wasAnimated = this._map._fadeAnimated;
+    const wasAnimated = this._map._fadeAnimated;
     this._map._fadeAnimated = false;
 
-    for (var key in this._tiles) {
-      var tile = this._tiles[key];
+    for (const key in this._tiles) {
+      const tile = this._tiles[key];
       if (tile.current && tile.active) {
-        var oldsrc = tile.el.src;
-        var newsrc = this.getTileUrl(tile.coords);
+        const oldsrc = tile.el.src;
+        const newsrc = this.getTileUrl(tile.coords);
         if (oldsrc != newsrc) {
           //L.DomEvent.off(tile, 'load', this._tileOnLoad); ... this doesnt work!
           this._refreshTileUrl(tile, newsrc);

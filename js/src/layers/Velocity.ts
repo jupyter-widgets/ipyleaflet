@@ -1,12 +1,12 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-//@ts-nocheck
-import L from '../leaflet';
-import * as utils from '../utils';
-import * as layer from './Layer';
+//leaflet-velocity does not have typescript definitions
+import { setOptions } from 'leaflet';
+import { camel_case } from '../utils';
+import { LeafletLayerModel, LeafletLayerView } from './Layer';
 
-export class LeafletVelocityModel extends layer.LeafletLayerModel {
+export class LeafletVelocityModel extends LeafletLayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -31,9 +31,11 @@ export class LeafletVelocityModel extends layer.LeafletLayerModel {
   }
 }
 
-export class LeafletVelocityView extends layer.LeafletLayerView {
+export class LeafletVelocityView extends LeafletLayerView {
+  obj: any;
+
   create_obj() {
-    var options = this.get_options();
+    const options = this.get_options();
     options.data = this.model.get('data');
     //@ts-ignore
     this.obj = L.velocityLayer(options);
@@ -41,28 +43,16 @@ export class LeafletVelocityView extends layer.LeafletLayerView {
 
   model_events() {
     super.model_events();
-    this.listenTo(
-      this.model,
-      'change:data',
-      function () {
-        const data = this.model.get('data');
-        this.obj.setData(data);
-      },
-      this
-    );
+    this.listenTo(this.model, 'change:data', () => {
+      const data = this.model.get('data');
+      this.obj.setData(data);
+    });
     // Separate display_options from the options to perform a shallow copy.
-    var key = 'display_options';
-    this.listenTo(
-      this.model,
-      'change:' + key,
-      function () {
-        var options = {};
-        //@ts-ignore
-        options[utils.camel_case(key)] = { ...this.model.get(key) };
-        //@ts-ignore
-        L.setOptions(this.obj, options);
-      },
-      this
-    );
+    const key = 'display_options';
+    this.listenTo(this.model, 'change:' + key, () => {
+      const options: { [key: string]: any } = {};
+      options[camel_case(key)] = { ...this.model.get(key) };
+      setOptions(this.obj, options);
+    });
   }
 }

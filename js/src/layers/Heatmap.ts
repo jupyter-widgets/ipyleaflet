@@ -1,12 +1,12 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-//@ts-nocheck
+// leaflet-heat does not have typescript definitions
 import L from '../leaflet';
-import * as layer from './Layer';
-import * as rasterlayer from './RasterLayer';
+import { LeafletLayerView } from './Layer';
+import { LeafletRasterLayerModel } from './RasterLayer';
 
-export class LeafletHeatmapModel extends rasterlayer.LeafletRasterLayerModel {
+export class LeafletHeatmapModel extends LeafletRasterLayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -29,7 +29,8 @@ export class LeafletHeatmapModel extends rasterlayer.LeafletRasterLayerModel {
   }
 }
 
-export class LeafletHeatmapView extends layer.LeafletLayerView {
+export class LeafletHeatmapView extends LeafletLayerView {
+  obj: any;
   create_obj() {
     //@ts-ignore
     this.obj = L.heatLayer(this.model.get('locations'), this.get_options());
@@ -38,13 +39,8 @@ export class LeafletHeatmapView extends layer.LeafletLayerView {
   model_events() {
     super.model_events();
 
-    this.listenTo(
-      this.model,
-      'change:locations',
-      function () {
-        this.obj.setLatLngs(this.model.get('locations'));
-      },
-      this
-    );
+    this.listenTo(this.model, 'change:locations', () => {
+      this.obj.setLatLngs(this.model.get('locations'));
+    });
   }
 }

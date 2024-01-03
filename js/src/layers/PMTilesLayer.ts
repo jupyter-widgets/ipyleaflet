@@ -1,11 +1,11 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-//@ts-nocheck
-import * as layer from './Layer';
-import * as protomapsL from 'protomaps-leaflet';
+// protomaps-leaflet does not have typescript definitions
+import { json_style, leafletLayer } from 'protomaps-leaflet';
+import { LeafletLayerModel, LeafletLayerView } from './Layer';
 
-export class LeafletPMTilesLayerModel extends layer.LeafletLayerModel {
+export class LeafletPMTilesLayerModel extends LeafletLayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -18,30 +18,27 @@ export class LeafletPMTilesLayerModel extends layer.LeafletLayerModel {
   }
 }
 
-export class LeafletPMTilesLayerView extends layer.LeafletLayerView {
+export class LeafletPMTilesLayerView extends LeafletLayerView {
+  obj: any;
+
   create_obj() {
-    var options = {
+    const options = {
       ...this.get_options(),
       url: this.model.get('url'),
       //@ts-ignore
-      ...protomapsL.json_style(this.model.get('style')),
+      ...json_style(this.model.get('style')),
     };
-    this.obj = protomapsL.leafletLayer(options);
+    this.obj = leafletLayer(options);
   }
 
   model_events() {
     super.model_events();
-    this.listenTo(
-      this.model,
-      'change:url',
-      function () {
-        this.obj.setUrl(this.model.get('url'));
-      },
-      this
-    );
+    this.listenTo(this.model, 'change:url', () => {
+      this.obj.setUrl(this.model.get('url'));
+    });
   }
 
-  handle_message(content) {
+  handle_message(content: { msg: string }) {
     if (content.msg == 'add_inspector') {
       this.obj.addInspector(this.map_view.obj);
     }

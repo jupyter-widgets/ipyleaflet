@@ -2,9 +2,9 @@
 // Distributed under the terms of the Modified BSD License.
 
 import L from '../leaflet';
-import * as polygon from './Polygon';
+import { LeafletPolygonModel, LeafletPolygonView } from './Polygon';
 
-export class LeafletRectangleModel extends polygon.LeafletPolygonModel {
+export class LeafletRectangleModel extends LeafletPolygonModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -15,7 +15,7 @@ export class LeafletRectangleModel extends polygon.LeafletPolygonModel {
   }
 }
 
-export class LeafletRectangleView extends polygon.LeafletPolygonView {
+export class LeafletRectangleView extends LeafletPolygonView {
   create_obj() {
     //@ts-ignore
     this.obj = L.rectangle(this.model.get('bounds'), this.get_options());

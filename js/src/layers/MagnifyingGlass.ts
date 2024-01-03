@@ -1,13 +1,13 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-//@ts-nocheck
-import * as widgets from '@jupyter-widgets/base';
+// leaflet-magnifyingglass does not have typescript definitions
+import { ViewList, WidgetModel, unpack_models } from '@jupyter-widgets/base';
 import L from '../leaflet';
-import * as layer from './Layer';
-import * as rasterlayer from './RasterLayer';
+import { LeafletLayerView } from './Layer';
+import { LeafletRasterLayerModel } from './RasterLayer';
 
-export class LeafletMagnifyingGlassModel extends rasterlayer.LeafletRasterLayerModel {
+export class LeafletMagnifyingGlassModel extends LeafletRasterLayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -24,29 +24,31 @@ export class LeafletMagnifyingGlassModel extends rasterlayer.LeafletRasterLayerM
 }
 
 LeafletMagnifyingGlassModel.serializers = {
-  ...widgets.WidgetModel.serializers,
-  layers: { deserialize: widgets.unpack_models },
+  ...WidgetModel.serializers,
+  layers: { deserialize: unpack_models },
 };
 
-export class LeafletMagnifyingGlassView extends layer.LeafletLayerView {
-  remove_layer_view(child_view) {
+export class LeafletMagnifyingGlassView extends LeafletLayerView {
+  layer_views: any;
+
+  remove_layer_view(child_view: any) {
     child_view.remove();
   }
 
-  add_layer_model(child_model) {
-    return this.create_child_view(child_model).then((child_view) => {
+  add_layer_model(child_model: any) {
+    return this.create_child_view(child_model).then((child_view: any) => {
       return child_view.obj;
     });
   }
 
   create_obj() {
-    this.layer_views = new widgets.ViewList(
+    this.layer_views = new ViewList(
       this.add_layer_model,
       this.remove_layer_view,
       this
     );
     var layers = this.get_options().layers;
-    return this.layer_views.update(layers).then((layers) => {
+    return this.layer_views.update(layers).then((layers: any) => {
       var options = this.get_options();
       options.layers = layers;
       //@ts-ignore
@@ -60,17 +62,12 @@ export class LeafletMagnifyingGlassView extends layer.LeafletLayerView {
     var o = this.model.get('options');
     for (var i = 0; i < o.length; i++) {
       key = o[i];
-      this.listenTo(
-        this.model,
-        'change:' + key,
-        function () {
-          this.map_view.obj.removeLayer(this.obj);
-          this.create_obj().then(() => {
-            this.map_view.obj.addLayer(this.obj);
-          });
-        },
-        this
-      );
+      this.listenTo(this.model, 'change:' + key, () => {
+        this.map_view.obj.removeLayer(this.obj);
+        this.create_obj().then(() => {
+          this.map_view.obj.addLayer(this.obj);
+        });
+      });
     }
   }
 }

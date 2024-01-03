@@ -1,14 +1,19 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
-//@ts-nocheck
-import * as widgets from '@jupyter-widgets/base';
-import * as PMessaging from '@lumino/messaging';
-import * as PWidgets from '@lumino/widgets';
+
+import { unpack_models } from '@jupyter-widgets/base';
+import { MessageLoop } from '@lumino/messaging';
+import { Widget } from '@lumino/widgets';
 import L from '../leaflet';
-import * as control from './Control';
+import { LeafletControlModel, LeafletControlView } from './Control';
 
 class WidgetControl extends L.Control {
-  updateLayout(options) {
+  _container: any;
+  _content: any;
+  _map: any;
+  options: any;
+
+  updateLayout(options: any) {
     if (!this._container) {
       return;
     }
@@ -21,7 +26,7 @@ class WidgetControl extends L.Control {
     return this._content;
   }
 
-  setContent(content) {
+  setContent(content: any) {
     if (!this._map) {
       return;
     }
@@ -43,15 +48,19 @@ class WidgetControl extends L.Control {
   }
 }
 
+//@ts-ignore
 L.Control.WidgetControl = WidgetControl;
 
+//@ts-ignore
 L.control.widgetcontrol = function (options) {
+  //@ts-ignore
   return new L.Control.WidgetControl(options);
 };
 
-export class LeafletWidgetControlModel extends control.LeafletControlModel {
+export class LeafletWidgetControlModel extends LeafletControlModel {
   defaults() {
     return {
+      ...super.defaults(),
       _view_name: 'LeafletWidgetControlView',
       _model_name: 'LeafletWidgetControlModel',
       widget: null,
@@ -65,18 +74,21 @@ export class LeafletWidgetControlModel extends control.LeafletControlModel {
 }
 
 LeafletWidgetControlModel.serializers = {
-  ...control.LeafletControlModel.serializers,
-  widget: { deserialize: widgets.unpack_models },
+  ...LeafletControlModel.serializers,
+  widget: { deserialize: unpack_models },
 };
 
-export class LeafletWidgetControlView extends control.LeafletControlView {
-  initialize(parameters) {
+export class LeafletWidgetControlView extends LeafletControlView {
+  widget_view: any;
+  obj: any;
+
+  initialize(parameters: any) {
     super.initialize(parameters);
     this.map_view = this.options.map_view;
     this.widget_view = undefined;
   }
 
-  set_widget(widget_model) {
+  set_widget(widget_model: any) {
     if (this.widget_view) {
       this.widget_view.remove();
       this.widget_view = undefined;
@@ -89,15 +101,9 @@ export class LeafletWidgetControlView extends control.LeafletControlView {
           this.widget_view.trigger('displayed', this);
           this.widget_view.displayed.then(() => {
             this.updateLayout();
-            PMessaging.MessageLoop.sendMessage(
-              view.pWidget,
-              PWidgets.Widget.Msg.BeforeAttach
-            );
+            MessageLoop.sendMessage(view.pWidget, Widget.Msg.BeforeAttach);
             this.obj.setContent(view.el);
-            PMessaging.MessageLoop.sendMessage(
-              view.pWidget,
-              PWidgets.Widget.Msg.AfterAttach
-            );
+            MessageLoop.sendMessage(view.pWidget, Widget.Msg.AfterAttach);
           });
         });
       });
@@ -105,6 +111,7 @@ export class LeafletWidgetControlView extends control.LeafletControlView {
   }
 
   create_obj() {
+    //@ts-ignore
     this.obj = L.control.widgetcontrol(this.get_options());
     this.set_widget(this.model.get('widget'));
   }

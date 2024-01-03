@@ -1,10 +1,6 @@
-// Copyright (c) Jupyter Development Team.
-// Distributed under the terms of the Modified BSD License.
-
 import { WidgetModel, WidgetView } from '@jupyter-widgets/base';
 import L from '../leaflet';
 import { LeafletWidgetView } from '../utils';
-import { LeafletMapView } from '../jupyter-leaflet';
 
 export interface LeafletControlModelOptions {
   _view_name: string;
@@ -29,7 +25,7 @@ export class LeafletControlModel extends WidgetModel {
 }
 
 export abstract class LeafletControlView extends LeafletWidgetView {
-  map_view: LeafletMapView;
+  map_view: any;
   obj: L.Control;
 
   initialize(
@@ -40,10 +36,10 @@ export abstract class LeafletControlView extends LeafletWidgetView {
   }
 
   render() {
-    // await Promise.resolve(this.create_obj());
-    this.create_obj();
-    this.leaflet_events();
-    this.model_events();
+    return Promise.resolve(this.create_obj()).then(() => {
+      this.leaflet_events();
+      this.model_events();
+    });
   }
 
   leaflet_events() {}

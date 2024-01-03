@@ -40,6 +40,7 @@ export class LeafletLegendControlView extends LeafletControlView {
     this.map_view = this.options.map_view;
   }
 
+  //@ts-ignore
   render() {
     this.create_obj();
     this.model.on('change:title', this.titleChanged, this);

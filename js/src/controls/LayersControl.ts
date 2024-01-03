@@ -2,8 +2,11 @@
 // Distributed under the terms of the Modified BSD License.
 
 import { WidgetView } from '@jupyter-widgets/base';
+import { Layer } from 'leaflet';
 import L from '../leaflet';
 import { LeafletControlModel, LeafletControlView } from './Control';
+
+type OvType = { [key: string]: Layer };
 
 export class LeafletLayersControlModel extends LeafletControlModel {
   defaults() {
@@ -49,13 +52,13 @@ export class LeafletLayersControlView extends LeafletControlView {
 
   async create_obj() {
     const views = await Promise.all(this.map_view.layer_views.views);
-    let baselayers = views.reduce(function (ov, view) {
+    let baselayers = views.reduce((ov: OvType, view) => {
       if (view.model.get('base')) {
         ov[view.model.get('name')] = view.obj;
       }
       return ov;
     }, {});
-    let overlays = views.reduce(function (ov_1, view_1) {
+    let overlays = views.reduce((ov_1: OvType, view_1) => {
       if (!view_1.model.get('base')) {
         ov_1[view_1.model.get('name')] = view_1.obj;
       }

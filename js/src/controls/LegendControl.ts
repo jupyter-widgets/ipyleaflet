@@ -40,8 +40,7 @@ export class LeafletLegendControlView extends LeafletControlView {
     this.map_view = this.options.map_view;
   }
 
-  //@ts-ignore
-  render() {
+  async render(): Promise<void> {
     this.create_obj();
     this.model.on('change:title', this.titleChanged, this);
     this.model.on('change:position', this.positionChanged, this);

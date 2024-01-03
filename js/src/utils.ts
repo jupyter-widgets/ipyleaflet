@@ -8,7 +8,7 @@ interface ILeafletViewCommon {
   get_options(): Record<string, any>;
 }
 
-function camel_case(input: string) {
+export function camel_case(input: string) {
   // Convert from foo_bar to fooBar
   return input.toLowerCase().replace(/_(.)/g, function (match, group1) {
     return group1.toUpperCase();

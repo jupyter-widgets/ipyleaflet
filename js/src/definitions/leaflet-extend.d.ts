@@ -21,6 +21,15 @@ declare module 'leaflet' {
     transform: Transform;
   }
 
+  interface InternalTile {
+    active?: boolean | undefined;
+    coords: Coords;
+    current: boolean;
+    el: HTMLImageElement;
+    loaded?: Date | undefined;
+    retain?: boolean | undefined;
+  }
+
   declare namespace Control {
     interface LegendOptions extends ControlOptions {
       position: ControlPosition;

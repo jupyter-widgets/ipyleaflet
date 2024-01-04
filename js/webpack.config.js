@@ -54,7 +54,7 @@ module.exports = [
     // This bundle contains the implementation for the custom widget views and
     // custom widget.
     // It must be an amd module
-    entry: ['./src/amd-public-path.ts', './src/notebook.ts'],
+    entry: './src/notebook.ts',
     output: {
       filename: 'index.js',
       path: path.resolve(__dirname, '..', 'ipyleaflet', 'nbextension'),
@@ -79,7 +79,7 @@ module.exports = [
     //
     // The target bundle is always `dist/index.js`, which is the path
     // required by the custom widget embedder.
-    entry: ['./src/amd-public-path.ts', './src/embed.ts'],
+    entry: './src/embed.ts',
     output: {
       filename: 'index.js',
       path: path.resolve(__dirname, 'dist'),

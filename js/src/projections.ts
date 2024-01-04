@@ -1,11 +1,15 @@
-import { CRS, Proj } from 'leaflet';
+import { CRS, Point, Proj } from 'leaflet';
 import L from './leaflet';
 
-interface Proj extends Proj.CRS {
+interface Proj {
   name: string;
   proj4def: string;
   custom: boolean;
-  options: Proj.ProjCRSOptions;
+
+  bounds?: Point[];
+  origin?: [number, number] | undefined;
+  resolutions?: number[] | undefined;
+  options?: Proj.ProjCRSOptions;
 }
 
 export function getProjection(proj: Proj) {
@@ -13,9 +17,9 @@ export function getProjection(proj: Proj) {
     return CRS[proj.name as keyof typeof CRS];
   } else {
     return new L.Proj.CRS(proj.name, proj.proj4def, {
-      origin: proj.options.origin,
-      resolutions: proj.options.resolutions,
-      bounds: proj.options.bounds,
+      origin: proj.origin,
+      resolutions: proj.resolutions,
+      bounds: new L.Bounds(proj.bounds),
     });
   }
 }

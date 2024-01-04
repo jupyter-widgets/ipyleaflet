@@ -10,6 +10,7 @@ interface Transform extends Handler {
   }) => Handler;
 }
 
+type Panes = Record<string, Record<string, any>>;
 declare module 'leaflet' {
   interface Layer {
     _refreshTileUrl(tile: any, url: any): void;

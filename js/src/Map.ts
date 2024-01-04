@@ -22,6 +22,7 @@ import {
 import L from './leaflet';
 import { getProjection } from './projections';
 import { LeafletDOMWidgetView } from './utils';
+import { Panes } from './definitions/leaflet-extend';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
@@ -45,7 +46,8 @@ LeafletMapStyleModel.styleProperties = {
 
 export class LeafletMapModel extends DOMWidgetModel {
   _dragging: boolean;
-  // views: Dict<LeafletLayerView | LeafletControlView>;
+  views: Record<string, Promise<WidgetView>>;
+  // views: Dict<Promise<LeafletMapView>>;
 
   defaults() {
     return {
@@ -121,7 +123,6 @@ export class LeafletMapModel extends DOMWidgetModel {
 
   //TODO fix this
   async update_bounds() {
-    //@ts-ignore
     const views = await resolvePromisesDict(this.views);
     // default bounds if the projection is latlng
     let bounds = {
@@ -200,8 +201,7 @@ export class LeafletMapView extends LeafletDOMWidgetView {
   }
 
   create_panes() {
-    // const panes = this.model.get('panes');
-    const panes = this.obj.getPanes();
+    const panes: Panes = this.model.get('panes');
     for (const name in panes) {
       const pane = this.obj.createPane(name);
       const styles = panes[name];
@@ -361,7 +361,6 @@ export class LeafletMapView extends LeafletDOMWidgetView {
         L.setOptions(this.obj, this.get_options());
       });
     }
-    // this.listenTo(this.model, 'msg:custom', this.handle_msg);
     this.listenTo(this.model, 'change:panes', this.rerender);
     this.listenTo(this.model, 'change:dragging', () => {
       if (this.model.get('dragging')) {
@@ -419,16 +418,8 @@ export class LeafletMapView extends LeafletDOMWidgetView {
     });
   }
 
-  // handle_msg(content) {
-  //   switch (content.method) {
-  //     case 'foo':
-  //       break;
-  //   }
-  // }
-
   processPhosphorMessage(msg: Message) {
-    //TODO: fix this?
-    //@ts-ignore
+    //@ts-ignore This is for backward compatibility with Jupyterlab 3
     this._processLuminoMessage(msg, super.processPhosphorMessage);
   }
 

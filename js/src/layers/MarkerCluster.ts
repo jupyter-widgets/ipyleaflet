@@ -1,12 +1,12 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-//@ts-nocheck
-import * as widgets from '@jupyter-widgets/base';
+import { ViewList, WidgetModel, unpack_models } from '@jupyter-widgets/base';
+import { MarkerClusterGroup } from 'leaflet';
 import L from '../leaflet';
-import * as layer from './Layer';
+import { LeafletLayerModel, LeafletLayerView } from './Layer';
 
-export class LeafletMarkerClusterModel extends layer.LeafletLayerModel {
+export class LeafletMarkerClusterModel extends LeafletLayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -36,44 +36,43 @@ export class LeafletMarkerClusterModel extends layer.LeafletLayerModel {
     };
   }
 }
-//@ts-ignore
+
 LeafletMarkerClusterModel.serializers = {
-  ...widgets.WidgetModel.serializers,
-  markers: { deserialize: widgets.unpack_models },
+  ...WidgetModel.serializers,
+  markers: { deserialize: unpack_models },
 };
 
-export class LeafletMarkerClusterView extends layer.LeafletLayerView {
+export class LeafletMarkerClusterView extends LeafletLayerView {
+  obj: MarkerClusterGroup;
+  marker_views: ViewList<LeafletLayerView>;
+
   model_events() {
     super.model_events();
-    this.listenTo(
-      this.model,
-      'change:markers',
-      (model) => {
-        this.marker_views.update(model.get('markers'));
-      },
-      this
-    );
+    this.listenTo(this.model, 'change:markers', (model) => {
+      this.marker_views.update(model.get('markers'));
+    });
   }
 
-  remove_layer_view(child_view) {
+  remove_layer_view(child_view: LeafletLayerView) {
     this.obj.removeLayer(child_view.obj);
     child_view.remove();
   }
 
-  add_layer_model(child_model) {
-    return this.create_child_view(child_model, {
-      map_view: this.map_view,
-    }).then((child_view) => {
-      this.obj.addLayer(child_view.obj);
-      return child_view;
-    });
+  async add_layer_model(child_model: LeafletLayerModel) {
+    const child_view = await this.create_child_view<LeafletLayerView>(
+      child_model,
+      {
+        map_view: this.map_view,
+      }
+    );
+    this.obj.addLayer(child_view.obj);
+    return child_view;
   }
 
   create_obj() {
     var options = this.get_options();
-    //@ts-ignore
     this.obj = L.markerClusterGroup(options);
-    this.marker_views = new widgets.ViewList(
+    this.marker_views = new ViewList(
       this.add_layer_model,
       this.remove_layer_view,
       this

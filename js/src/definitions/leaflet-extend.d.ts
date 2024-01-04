@@ -1,4 +1,3 @@
-import 'leaflet';
 import {
   Circle,
   CircleMarker,
@@ -9,6 +8,9 @@ import {
   Rectangle,
 } from 'leaflet';
 
+type CSSStyleStringIndex = Partial<CSSStyleDeclaration> & {
+  [propName: string]: string;
+};
 type Panes = Record<string, Record<string, any>>;
 type LayerShapes =
   | Circle

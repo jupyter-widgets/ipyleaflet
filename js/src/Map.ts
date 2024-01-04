@@ -13,6 +13,7 @@ import {
 import { Message } from '@lumino/messaging';
 import { ObjectHash } from 'backbone';
 import { LeafletMouseEvent, Map } from 'leaflet';
+import { CSSStyleStringIndex, Panes } from './definitions/leaflet-extend';
 import {
   LeafletControlModel,
   LeafletControlView,
@@ -22,7 +23,6 @@ import {
 import L from './leaflet';
 import { getProjection } from './projections';
 import { LeafletDOMWidgetView } from './utils';
-import { Panes } from './definitions/leaflet-extend';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
@@ -206,9 +206,7 @@ export class LeafletMapView extends LeafletDOMWidgetView {
       const pane = this.obj.createPane(name);
       const styles = panes[name];
       for (const key in styles) {
-        // TODO come back to this
-        //@ts-ignore
-        pane.style[key] = styles[key];
+        (pane.style as CSSStyleStringIndex)[key] = styles[key];
       }
     }
   }

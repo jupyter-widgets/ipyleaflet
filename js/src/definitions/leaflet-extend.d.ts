@@ -1,5 +1,22 @@
 import 'leaflet';
-import { Handler } from 'leaflet';
+import {
+  Circle,
+  CircleMarker,
+  Handler,
+  Marker,
+  Polygon,
+  Polyline,
+  Rectangle,
+} from 'leaflet';
+
+type Panes = Record<string, Record<string, any>>;
+type LayerShapes =
+  | Circle
+  | CircleMarker
+  | Marker
+  | Polygon
+  | Polyline
+  | Rectangle;
 
 interface Transform extends Handler {
   reset: () => void;
@@ -10,7 +27,6 @@ interface Transform extends Handler {
   }) => Handler;
 }
 
-type Panes = Record<string, Record<string, any>>;
 declare module 'leaflet' {
   interface Layer {
     _refreshTileUrl(tile: any, url: any): void;

@@ -1,15 +1,13 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-//@ts-nocheck
-import * as widgets from '@jupyter-widgets/base';
-import { WidgetView } from '@jupyter-widgets/base';
+import { unpack_models, WidgetView } from '@jupyter-widgets/base';
 import { DrawEvents, GeoJSON } from 'leaflet';
+import { LayerShapes } from '../definitions/leaflet-extend';
 import L from '../leaflet';
-import * as control from './Control';
-import { LeafletControlModel } from './Control';
+import { LeafletControlModel, LeafletControlView } from './Control';
 
-export class LeafletDrawControlModel extends control.LeafletControlModel {
+export class LeafletDrawControlModel extends LeafletControlModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -29,11 +27,11 @@ export class LeafletDrawControlModel extends control.LeafletControlModel {
 }
 
 LeafletDrawControlModel.serializers = {
-  ...control.LeafletControlModel.serializers,
-  layer: { deserialize: widgets.unpack_models },
+  ...LeafletControlModel.serializers,
+  layer: { deserialize: unpack_models },
 };
 
-export class LeafletDrawControlView extends control.LeafletControlView {
+export class LeafletDrawControlView extends LeafletControlView {
   feature_group: GeoJSON;
 
   initialize(
@@ -51,37 +49,30 @@ export class LeafletDrawControlView extends control.LeafletControlView {
     });
     this.data_to_layers();
     this.map_view.obj.addLayer(this.feature_group);
-
     let polyline = this.model.get('polyline');
     if (!Object.keys(polyline).length) {
       polyline = false;
     }
-
     let polygon = this.model.get('polygon');
     if (!Object.keys(polygon).length) {
       polygon = false;
     }
-
     let circle = this.model.get('circle');
     if (!Object.keys(circle).length) {
       circle = false;
     }
-
     let circlemarker = this.model.get('circlemarker');
     if (!Object.keys(circlemarker).length) {
       circlemarker = false;
     }
-
     let rectangle = this.model.get('rectangle');
     if (!Object.keys(rectangle).length) {
       rectangle = false;
     }
-
     let marker = this.model.get('marker');
     if (!Object.keys(marker).length) {
       marker = false;
     }
-
     this.obj = new L.Control.Draw({
       position: this.model.get('position'),
       edit: {
@@ -98,7 +89,6 @@ export class LeafletDrawControlView extends control.LeafletControlView {
         marker: marker,
       },
     });
-
     this.map_view.obj.on('draw:created', (e: DrawEvents.Created) => {
       const layer = e.layer;
       const geo_json = layer.toGeoJSON();
@@ -110,30 +100,22 @@ export class LeafletDrawControlView extends control.LeafletControlView {
       this.feature_group.addLayer(layer);
       this.layers_to_data();
     });
-
     this.map_view.obj.on('draw:edited', (e: DrawEvents.Edited) => {
       const layers = e.layers;
       layers.eachLayer((layer) => {
-        const geo_json = layer.toGeoJSON();
+        const geo_json = (layer as LayerShapes).toGeoJSON();
         geo_json.properties.style = layer.options;
         this.send({
           event: 'draw:edited',
           geo_json: geo_json,
         });
       });
-      const geo_json = layers.toGeoJSON();
-      geo_json.properties.style = layer.options;
-      this.send({
-        event: 'draw:edited',
-        geo_json: geo_json,
-      });
       this.layers_to_data();
     });
-
     this.map_view.obj.on('draw:deleted', (e: DrawEvents.Deleted) => {
-      let layers = e.layers;
+      const layers = e.layers;
       layers.eachLayer((layer) => {
-        let geo_json = layer.toGeoJSON();
+        const geo_json = (layer as LayerShapes).toGeoJSON();
         geo_json.properties.style = layer.options;
         this.send({
           event: 'draw:deleted',
@@ -142,7 +124,6 @@ export class LeafletDrawControlView extends control.LeafletControlView {
       });
       this.layers_to_data();
     });
-
     this.model.on('msg:custom', this.handle_message.bind(this));
     this.model.on('change:data', this.data_to_layers.bind(this));
   }
@@ -163,9 +144,9 @@ export class LeafletDrawControlView extends control.LeafletControlView {
   }
 
   layers_to_data() {
-    let newData = [];
+    let newData: LayerShapes[] = [];
     this.feature_group.eachLayer((layer) => {
-      const geoJson = layer.toGeoJSON();
+      const geoJson = (layer as LayerShapes).toGeoJSON();
       geoJson.properties.style = layer.options;
       newData.push(geoJson);
     });

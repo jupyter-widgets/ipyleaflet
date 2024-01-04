@@ -57,7 +57,7 @@ export class LeafletSearchControlView extends LeafletControlView {
   leaflet_events() {
     this.obj.on('search:locationfound', (e: any) => {
       if (e.layer !== null) {
-        var found_style = this.model.get('found_style');
+        const found_style = this.model.get('found_style');
         e.layer.setStyle(found_style);
         if (e.layer._popup) {
           e.layer.openPopup();

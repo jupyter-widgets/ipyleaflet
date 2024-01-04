@@ -35,14 +35,14 @@ export class LeafletSplitMapControlView extends LeafletControlView {
   }
 
   create_obj() {
-    var left_models = asArray(this.model.get('left_layer'));
-    var right_models = asArray(this.model.get('right_layer'));
-    var layersModel = this.map_view.model.get('layers');
+    const left_models = asArray(this.model.get('left_layer'));
+    const right_models = asArray(this.model.get('right_layer'));
+    let layersModel = this.map_view.model.get('layers');
     layersModel = layersModel.concat(left_models, right_models);
 
     return this.map_view.layer_views.update(layersModel).then((views: any) => {
-      var left_views: any[] = [];
-      var right_views: any[] = [];
+      const left_views: any[] = [];
+      const right_views: any[] = [];
       views.forEach((view: any) => {
         if (left_models.includes(view.model)) {
           left_views.push(view.obj);

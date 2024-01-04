@@ -47,9 +47,9 @@ export class LeafletMagnifyingGlassView extends LeafletLayerView {
       this.remove_layer_view,
       this
     );
-    var layers = this.get_options().layers;
+    const layers = this.get_options().layers;
     return this.layer_views.update(layers).then((layers: any) => {
-      var options = this.get_options();
+      const options = this.get_options();
       options.layers = layers;
       //@ts-ignore
       this.obj = L.magnifyingGlass(options);
@@ -58,9 +58,9 @@ export class LeafletMagnifyingGlassView extends LeafletLayerView {
 
   model_events() {
     super.model_events();
-    var key;
-    var o = this.model.get('options');
-    for (var i = 0; i < o.length; i++) {
+    let key;
+    const o = this.model.get('options');
+    for (let i = 0; i < o.length; i++) {
       key = o[i];
       this.listenTo(this.model, 'change:' + key, () => {
         this.map_view.obj.removeLayer(this.obj);

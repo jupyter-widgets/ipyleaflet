@@ -326,7 +326,7 @@ export class LeafletMapView extends LeafletDOMWidgetView {
     this.obj.on('zoomend', (e) => {
       if (!this.dirty) {
         this.dirty = true;
-        var z = e.target.getZoom();
+        const z = e.target.getZoom();
         this.model.set('zoom', z);
         this.dirty = false;
       }
@@ -411,7 +411,7 @@ export class LeafletMapView extends LeafletDOMWidgetView {
       this.model.update_style();
     });
     this.listenTo(this.model, 'change:fullscreen', () => {
-      var fullscreen = this.model.get('fullscreen');
+      const fullscreen = this.model.get('fullscreen');
       if (this.obj.isFullscreen() !== fullscreen) {
         this.obj.toggleFullscreen();
       }

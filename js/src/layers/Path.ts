@@ -29,9 +29,9 @@ export class LeafletPathView extends LeafletVectorLayerView {
 
   model_events() {
     super.model_events();
-    var key;
-    var o = this.model.get('options');
-    for (var i = 0; i < o.length; i++) {
+    let key;
+    const o = this.model.get('options');
+    for (let i = 0; i < o.length; i++) {
       key = o[i];
       this.listenTo(this.model, 'change:' + key, () => {
         this.obj.setStyle(this.get_options());

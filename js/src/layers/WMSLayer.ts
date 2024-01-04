@@ -34,7 +34,7 @@ export class LeafletWMSLayerView extends LeafletTileLayerView {
   model_events() {
     super.model_events();
 
-    for (var option in this.get_options()) {
+    for (let option in this.get_options()) {
       this.model.on('change:' + option, () => {
         this.obj.setParams(this.get_options() as WMSParams, true);
         this.obj.refresh();

@@ -1,10 +1,10 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-// leaflet-magnifyingglass does not have typescript definitions
 import { ViewList, WidgetModel, unpack_models } from '@jupyter-widgets/base';
+import { Layer } from 'leaflet';
 import L from '../leaflet';
-import { LeafletLayerView } from './Layer';
+import { LeafletLayerModel, LeafletLayerView } from './Layer';
 import { LeafletRasterLayerModel } from './RasterLayer';
 
 export class LeafletMagnifyingGlassModel extends LeafletRasterLayerModel {
@@ -29,31 +29,31 @@ LeafletMagnifyingGlassModel.serializers = {
 };
 
 export class LeafletMagnifyingGlassView extends LeafletLayerView {
-  layer_views: any;
+  layer_views: ViewList<Layer>;
 
-  remove_layer_view(child_view: any) {
+  remove_layer_view(child_view: Layer) {
     child_view.remove();
   }
 
-  add_layer_model(child_model: any) {
-    return this.create_child_view(child_model).then((child_view: any) => {
-      return child_view.obj;
-    });
+  async add_layer_model(child_model: LeafletLayerModel) {
+    const child_view = await this.create_child_view<LeafletLayerView>(
+      child_model
+    );
+    return child_view.obj;
   }
 
-  create_obj() {
-    this.layer_views = new ViewList(
+  async create_obj() {
+    this.layer_views = new ViewList<Layer>(
       this.add_layer_model,
       this.remove_layer_view,
       this
     );
+
     const layers = this.get_options().layers;
-    return this.layer_views.update(layers).then((layers: any) => {
-      const options = this.get_options();
-      options.layers = layers;
-      //@ts-ignore
-      this.obj = L.magnifyingGlass(options);
-    });
+    const layers_1 = await this.layer_views.update(layers);
+    const options = this.get_options();
+    options.layers = layers_1;
+    this.obj = L.magnifyingGlass(options);
   }
 
   model_events() {

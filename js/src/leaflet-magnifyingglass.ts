@@ -1,6 +1,12 @@
 // The code below was copied from the following source:
 // https://github.com/bbecquet/Leaflet.MagnifyingGlass
-//@ts-nocheck
+import L, {
+  LatLngExpression,
+  LeafletMouseEvent,
+  MagnifyingGlassOptions,
+  Map,
+  Point,
+} from 'leaflet';
 
 L.MagnifyingGlass = L.Layer.extend({
   options: {
@@ -12,7 +18,7 @@ L.MagnifyingGlass = L.Layer.extend({
     fixedZoom: -1,
   },
 
-  initialize: function (options) {
+  initialize: function (options: MagnifyingGlassOptions) {
     L.Util.setOptions(this, options);
     this._fixedZoom = this.options.fixedZoom != -1;
     this._mainMap = null;
@@ -23,7 +29,7 @@ L.MagnifyingGlass = L.Layer.extend({
     return this._glassMap;
   },
 
-  _createMiniMap: function (elt) {
+  _createMiniMap: function (elt: string | HTMLElement) {
     return new L.Map(elt, {
       layers: this.options.layers,
       zoom: this._getZoom(),
@@ -53,7 +59,7 @@ L.MagnifyingGlass = L.Layer.extend({
     this._glassMap.setZoom(this._getZoom());
   },
 
-  setRadius: function (radius) {
+  setRadius: function (radius: number) {
     this.options.radius = radius;
     if (this._wrapperElt) {
       this._wrapperElt.style.width = this.options.radius * 2 + 'px';
@@ -61,12 +67,12 @@ L.MagnifyingGlass = L.Layer.extend({
     }
   },
 
-  setLatLng: function (latLng) {
+  setLatLng: function (latLng: LatLngExpression) {
     this.options.latLng = latLng;
     this._update(latLng);
   },
 
-  _updateFromMouse: function (evt) {
+  _updateFromMouse: function (evt: LeafletMouseEvent) {
     this._update(evt.latlng, evt.layerPoint);
   },
 
@@ -74,7 +80,7 @@ L.MagnifyingGlass = L.Layer.extend({
     this._update(this.options.latLng);
   },
 
-  _update: function (latLng, layerPoint) {
+  _update: function (latLng: LatLngExpression, layerPoint: Point) {
     // update mini map view, forcing no animation
     this._glassMap.setView(latLng, this._getZoom(), {
       pan: { animate: false },
@@ -90,7 +96,7 @@ L.MagnifyingGlass = L.Layer.extend({
   /**
   As defined by ILayer
   */
-  onAdd: function (map) {
+  onAdd: function (map: Map) {
     this._mainMap = map;
     // create a wrapper element and a container for the map inside it
     this._wrapperElt = L.DomUtil.create('div', 'leaflet-magnifying-glass');
@@ -109,7 +115,7 @@ L.MagnifyingGlass = L.Layer.extend({
     this.setRadius(opts.radius);
     this.setLatLng(opts.latLng);
 
-    this._glassMap.whenReady(function () {
+    this._glassMap.whenReady(() => {
       if (opts.fixedPosition) {
         this._mainMap.on('zoomend', this._updateFixed, this);
         // for now, hide the elements during zoom transitions
@@ -131,7 +137,7 @@ L.MagnifyingGlass = L.Layer.extend({
     return this;
   },
 
-  _fireClick: function (domMouseEvt) {
+  _fireClick: function (domMouseEvt: L.DomEvent.PropagableEvent) {
     this.fire('click', domMouseEvt);
     L.DomEvent.stopPropagation(domMouseEvt);
   },
@@ -139,7 +145,7 @@ L.MagnifyingGlass = L.Layer.extend({
   /**
   As defined by ILayer
   */
-  onRemove: function (map) {
+  onRemove: function (map: Map) {
     map.off('viewreset', this._updateFixed, this);
     map.off('mousemove', this._updateFromMouse, this);
     map.off('zoomend', this._updateZoom, this);

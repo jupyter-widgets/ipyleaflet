@@ -49,6 +49,29 @@ declare module 'leaflet' {
     retain?: boolean | undefined;
   }
 
+  interface MagnifyingGlassOptions extends ControlOptions {
+    radius: number;
+    zoomOffset: number;
+    layers: Layer[];
+    fixedPosition: false;
+    latLng: LatLngExpression;
+    fixedZoom: number;
+  }
+
+  class MagnifyingGlass extends Layer {
+    constructor(options?: MagnifyingGlassOptions);
+    options: MagnifyingGlassOptions;
+    getMap(): Map;
+    _createMiniMap(elt: string | HTMLElement): Map;
+    _getZoom(): number;
+    _updateZoom(): void;
+    setRadius(radius: number): void;
+  }
+
+  function magnifyingGlass(
+    options?: Control.MagnifyingGlassOptions
+  ): L.MagnifyingGlass;
+
   declare namespace Control {
     interface LegendOptions extends ControlOptions {
       position: ControlPosition;
@@ -59,6 +82,7 @@ declare module 'leaflet' {
       options: LegendOptions;
     }
   }
+
   declare namespace control {
     function legend(options?: Control.LegendOptions): Control.Legend;
   }

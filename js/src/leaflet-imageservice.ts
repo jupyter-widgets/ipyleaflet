@@ -245,10 +245,6 @@ L.ImageService = L.Layer.extend({
     }
   },
 
-  // update: function () {
-  //   this.update();
-  // },
-
   update: function () {
     if (!this._map) {
       return;

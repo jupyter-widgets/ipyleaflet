@@ -1,3 +1,4 @@
+import { Dict } from '@jupyter-widgets/base';
 import {
   Circle,
   CircleMarker,
@@ -49,7 +50,7 @@ declare module 'leaflet' {
     retain?: boolean | undefined;
   }
 
-  interface MagnifyingGlassOptions extends ControlOptions {
+  interface MagnifyingGlassOptions extends LayerOptions {
     radius: number;
     zoomOffset: number;
     layers: Layer[];
@@ -71,6 +72,37 @@ declare module 'leaflet' {
   function magnifyingGlass(
     options?: Control.MagnifyingGlassOptions
   ): L.MagnifyingGlass;
+
+  interface ImageServiceOptions extends LayerOptions {
+    url: string;
+    f: string;
+    format: string;
+    pixelType: string;
+    noData: number[];
+    noDataInterpretation: string;
+    interpolation: string;
+    compressionQuality: number;
+    bandIds: number[];
+    time: string[];
+    renderingRule: Dict;
+    mosaicRule: Dict;
+    endpoint: string;
+    attribution: string;
+    crs: CRS;
+    interactive: boolean;
+    updateInterval: number;
+  }
+
+  class ImageService extends Layer {
+    constructor(options?: ImageServiceOptions);
+    options: ImageServiceOptions;
+    updateUrl(): void;
+    onAdd(map: Map): this;
+    onRemove(): this;
+    update(): void;
+  }
+
+  function imageService(options?: ImageServiceOptions): L.ImageService;
 
   declare namespace Control {
     interface LegendOptions extends ControlOptions {

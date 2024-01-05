@@ -50,9 +50,9 @@ export class LeafletMagnifyingGlassView extends LeafletLayerView {
     );
 
     const layers = this.get_options().layers;
-    const layers_1 = await this.layer_views.update(layers);
+    const layers_views = await this.layer_views.update(layers);
     const options = this.get_options();
-    options.layers = layers_1;
+    options.layers = layers_views;
     this.obj = L.magnifyingGlass(options);
   }
 

@@ -104,6 +104,28 @@ declare module 'leaflet' {
 
   function imageService(options?: ImageServiceOptions): L.ImageService;
 
+  interface HeatLayerOptions extends LayerOptions {
+    minOpacity: number;
+    maxZoom: number;
+    radius: number;
+    blur: number;
+    max: number;
+  }
+
+  class HeatLayer extends Layer {
+    constructor(latlngs: LatLngExpression[], options?: HeatLayerOptions);
+    options: HeatLayerOptions;
+    setOptions(options: HeatLayerOptions): this;
+    addLatLng(latlng: LatLngExpression): this;
+    setLatLngs(latlngs: LatLngExpression[]): this;
+    redraw(): this;
+  }
+
+  function heatLayer(
+    latlngs: LatLngExpression[],
+    options?: HeatLayerOptions
+  ): L.HeatLayer;
+
   declare namespace Control {
     interface LegendOptions extends ControlOptions {
       position: ControlPosition;

@@ -1,7 +1,7 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-// leaflet-heat does not have typescript definitions
+import { HeatLayer, HeatLayerOptions } from 'leaflet';
 import L from '../leaflet';
 import { LeafletLayerView } from './Layer';
 import { LeafletRasterLayerModel } from './RasterLayer';
@@ -30,10 +30,13 @@ export class LeafletHeatmapModel extends LeafletRasterLayerModel {
 }
 
 export class LeafletHeatmapView extends LeafletLayerView {
-  obj: any;
+  obj: HeatLayer;
+
   create_obj() {
-    //@ts-ignore
-    this.obj = L.heatLayer(this.model.get('locations'), this.get_options());
+    this.obj = L.heatLayer(
+      this.model.get('locations'),
+      this.get_options() as HeatLayerOptions
+    );
   }
 
   model_events() {

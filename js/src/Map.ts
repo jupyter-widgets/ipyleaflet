@@ -3,6 +3,7 @@
 
 import {
   DOMWidgetModel,
+  Dict,
   IBackboneModelOptions,
   StyleModel,
   ViewList,
@@ -46,8 +47,7 @@ LeafletMapStyleModel.styleProperties = {
 
 export class LeafletMapModel extends DOMWidgetModel {
   _dragging: boolean;
-  views: Record<string, Promise<WidgetView>>;
-  // views: Dict<Promise<LeafletMapView>>;
+  views: Dict<Promise<LeafletMapView>>;
 
   defaults() {
     return {
@@ -121,7 +121,6 @@ export class LeafletMapModel extends DOMWidgetModel {
     this.set('style', new_style);
   }
 
-  //TODO fix this
   async update_bounds() {
     const views = await resolvePromisesDict(this.views);
     // default bounds if the projection is latlng
@@ -144,15 +143,14 @@ export class LeafletMapModel extends DOMWidgetModel {
       ) {
         const bnds = bnds_pixbnds[0];
         const pixbnds = bnds_pixbnds[1];
-        //@ts-ignore
-        const obj = views[key].obj;
-        if (obj) {
-          const view_bounds = obj.getBounds();
+        const currentView = views[key];
+        if (currentView?.obj) {
+          const view_bounds = currentView.obj.getBounds();
           bnds.north = Math.max(bnds.north, view_bounds.getNorth());
           bnds.south = Math.min(bnds.south, view_bounds.getSouth());
           bnds.east = Math.max(bnds.east, view_bounds.getEast());
           bnds.west = Math.min(bnds.west, view_bounds.getWest());
-          const view_pixel_bounds = obj.getPixelBounds();
+          const view_pixel_bounds = currentView.obj.getPixelBounds();
           const top_left = view_pixel_bounds.getTopLeft();
           const bottom_right = view_pixel_bounds.getBottomRight();
           pixbnds.top = Math.min(pixbnds.top, top_left.y);

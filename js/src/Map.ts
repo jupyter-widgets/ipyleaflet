@@ -1,15 +1,33 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
-// @ts-nocheck
 
-import * as widgets from '@jupyter-widgets/base';
+import {
+  DOMWidgetModel,
+  Dict,
+  IBackboneModelOptions,
+  StyleModel,
+  ViewList,
+  WidgetView,
+  resolvePromisesDict,
+  unpack_models,
+} from '@jupyter-widgets/base';
+import { Message } from '@lumino/messaging';
+import { ObjectHash } from 'backbone';
+import { LeafletMouseEvent, Map } from 'leaflet';
+import { CSSStyleStringIndex, Panes } from './definitions/leaflet-extend';
+import {
+  LeafletControlModel,
+  LeafletControlView,
+  LeafletLayerModel,
+  LeafletLayerView,
+} from './jupyter-leaflet';
 import L from './leaflet';
-import * as utils from './utils';
-import * as proj from './projections';
+import { getProjection } from './projections';
+import { LeafletDOMWidgetView } from './utils';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
-export class LeafletMapStyleModel extends widgets.StyleModel {
+export class LeafletMapStyleModel extends StyleModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -27,7 +45,10 @@ LeafletMapStyleModel.styleProperties = {
   },
 };
 
-export class LeafletMapModel extends widgets.DOMWidgetModel {
+export class LeafletMapModel extends DOMWidgetModel {
+  _dragging: boolean;
+  views: Dict<Promise<LeafletMapView>>;
+
   defaults() {
     return {
       ...super.defaults(),
@@ -84,14 +105,14 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
     };
   }
 
-  initialize(attributes, options) {
+  initialize(attributes: ObjectHash, options: IBackboneModelOptions) {
     super.initialize(attributes, options);
     this.set('window_url', window.location.href);
     this._dragging = false;
   }
 
   update_style() {
-    var new_style;
+    let new_style;
     if (!this._dragging) {
       new_style = this.get('default_style');
     } else {
@@ -100,67 +121,77 @@ export class LeafletMapModel extends widgets.DOMWidgetModel {
     this.set('style', new_style);
   }
 
-  update_bounds() {
-    return widgets.resolvePromisesDict(this.views).then((views) => {
-      // default bounds if the projection is latlon
-      var bounds = {
-        north: -90,
-        south: 90,
-        east: -Infinity,
-        west: Infinity,
-      };
-      var pixel_bounds = {
-        top: 9007199254740991,
-        bottom: 0,
-        right: 0,
-        left: 9007199254740991,
-      };
-      Object.keys(views).reduce(
-        function (bnds_pixbnds, key) {
-          var bnds = bnds_pixbnds[0];
-          var pixbnds = bnds_pixbnds[1];
-          var obj = views[key].obj;
-          if (obj) {
-            var view_bounds = obj.getBounds();
-            bnds.north = Math.max(bnds.north, view_bounds.getNorth());
-            bnds.south = Math.min(bnds.south, view_bounds.getSouth());
-            bnds.east = Math.max(bnds.east, view_bounds.getEast());
-            bnds.west = Math.min(bnds.west, view_bounds.getWest());
-            var view_pixel_bounds = obj.getPixelBounds();
-            var top_left = view_pixel_bounds.getTopLeft();
-            var bottom_right = view_pixel_bounds.getBottomRight();
-            pixbnds.top = Math.min(pixbnds.top, top_left.y);
-            pixbnds.bottom = Math.max(pixbnds.bottom, bottom_right.y);
-            pixbnds.right = Math.max(pixbnds.right, bottom_right.x);
-            pixbnds.left = Math.min(pixbnds.left, top_left.x);
-          }
-          return [bnds, pixbnds];
-        },
-        [bounds, pixel_bounds]
-      );
-      this.set('north', bounds.north);
-      this.set('south', bounds.south);
-      this.set('east', bounds.east);
-      this.set('west', bounds.west);
-      this.set('top', pixel_bounds.top);
-      this.set('bottom', pixel_bounds.bottom);
-      this.set('right', pixel_bounds.right);
-      this.set('left', pixel_bounds.left);
-    });
+  async update_bounds() {
+    const views = await resolvePromisesDict(this.views);
+    // default bounds if the projection is latlng
+    let bounds = {
+      north: -90,
+      south: 90,
+      east: -Infinity,
+      west: Infinity,
+    };
+    let pixel_bounds = {
+      top: 9007199254740991,
+      bottom: 0,
+      right: 0,
+      left: 9007199254740991,
+    };
+    [bounds, pixel_bounds] = Object.keys(views).reduce(
+      function (
+        bnds_pixbnds: [typeof bounds, typeof pixel_bounds],
+        key: string
+      ) {
+        const bnds = bnds_pixbnds[0];
+        const pixbnds = bnds_pixbnds[1];
+        const currentView = views[key];
+        if (currentView?.obj) {
+          const view_bounds = currentView.obj.getBounds();
+          bnds.north = Math.max(bnds.north, view_bounds.getNorth());
+          bnds.south = Math.min(bnds.south, view_bounds.getSouth());
+          bnds.east = Math.max(bnds.east, view_bounds.getEast());
+          bnds.west = Math.min(bnds.west, view_bounds.getWest());
+          const view_pixel_bounds = currentView.obj.getPixelBounds();
+          const top_left = view_pixel_bounds.getTopLeft();
+          const bottom_right = view_pixel_bounds.getBottomRight();
+          pixbnds.top = Math.min(pixbnds.top, top_left.y);
+          pixbnds.bottom = Math.max(pixbnds.bottom, bottom_right.y);
+          pixbnds.right = Math.max(pixbnds.right, bottom_right.x);
+          pixbnds.left = Math.min(pixbnds.left, top_left.x);
+        }
+        return [bnds, pixbnds];
+      },
+      [bounds, pixel_bounds]
+    );
+    this.set('north', bounds.north);
+    this.set('south', bounds.south);
+    this.set('east', bounds.east);
+    this.set('west', bounds.west);
+    this.set('top', pixel_bounds.top);
+    this.set('bottom', pixel_bounds.bottom);
+    this.set('right', pixel_bounds.right);
+    this.set('left', pixel_bounds.left);
   }
 }
 
 LeafletMapModel.serializers = {
-  ...widgets.DOMWidgetModel.serializers,
-  layers: { deserialize: widgets.unpack_models },
-  controls: { deserialize: widgets.unpack_models },
-  style: { deserialize: widgets.unpack_models },
-  default_style: { deserialize: widgets.unpack_models },
-  dragging_style: { deserialize: widgets.unpack_models },
+  ...DOMWidgetModel.serializers,
+  layers: { deserialize: unpack_models },
+  controls: { deserialize: unpack_models },
+  style: { deserialize: unpack_models },
+  default_style: { deserialize: unpack_models },
+  dragging_style: { deserialize: unpack_models },
 };
 
-export class LeafletMapView extends utils.LeafletDOMWidgetView {
-  initialize(options) {
+export class LeafletMapView extends LeafletDOMWidgetView {
+  obj: Map;
+  dirty: boolean;
+  map_container: HTMLDivElement;
+  map_child: HTMLDivElement;
+  layer_views: ViewList<LeafletLayerView>;
+  control_views: ViewList<LeafletControlView>;
+  model: LeafletMapModel;
+
+  initialize(options: WidgetView.IInitializeParameters<LeafletMapModel>) {
     super.initialize(options);
     // The dirty flag is used to prevent sub-pixel center changes
     // computed by leaflet to be applied to the model.
@@ -168,51 +199,47 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
   }
 
   create_panes() {
-    const panes = this.model.get('panes');
+    const panes: Panes = this.model.get('panes');
     for (const name in panes) {
       const pane = this.obj.createPane(name);
       const styles = panes[name];
       for (const key in styles) {
-        pane.style[key] = styles[key];
+        (pane.style as CSSStyleStringIndex)[key] = styles[key];
       }
     }
   }
 
-  remove_layer_view(child_view) {
+  remove_layer_view(child_view: LeafletLayerView) {
     this.obj.removeLayer(child_view.obj);
     child_view.remove();
   }
 
-  add_layer_model(child_model) {
-    return this.create_child_view(child_model, {
+  async add_layer_model(child_model: LeafletLayerModel) {
+    const view = await this.create_child_view<LeafletLayerView>(child_model, {
       map_view: this,
-    }).then((view) => {
-      this.obj.addLayer(view.obj);
-
-      this.displayed.then(() => {
-        view.trigger('displayed', this);
-      });
-      return view;
     });
+    this.obj.addLayer(view.obj);
+    this.displayed.then(() => {
+      view.trigger('displayed', this);
+    });
+    return view;
   }
 
-  remove_control_view(child_view) {
+  remove_control_view(child_view: LeafletControlView) {
     this.obj.removeControl(child_view.obj);
     child_view.remove();
   }
 
-  add_control_model(child_model) {
-    return this.create_child_view(child_model, {
+  async add_control_model(child_model: LeafletControlModel) {
+    const view = await this.create_child_view<LeafletControlView>(child_model, {
       map_view: this,
-    }).then((view) => {
-      this.obj.addControl(view.obj);
-
-      // Trigger the displayed event of the child view.
-      this.displayed.then(() => {
-        view.trigger('displayed', this);
-      });
-      return view;
     });
+    this.obj.addControl(view.obj);
+    // Trigger the displayed event of the child view.
+    this.displayed.then(() => {
+      view.trigger('displayed', this);
+    });
+    return view;
   }
 
   render() {
@@ -224,12 +251,12 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     if (this.get_options().interpolation == 'nearest') {
       this.map_container.classList.add('crisp-image');
     }
-    this.layer_views = new widgets.ViewList(
+    this.layer_views = new ViewList(
       this.add_layer_model,
       this.remove_layer_view,
       this
     );
-    this.control_views = new widgets.ViewList(
+    this.control_views = new ViewList(
       this.add_control_model,
       this.remove_control_view,
       this
@@ -252,11 +279,11 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     });
   }
 
-  create_obj() {
+  async create_obj() {
     return this.layoutPromise.then(() => {
-      var options = {
+      const options = {
         ...this.get_options(),
-        crs: proj.getProjection(this.model.get('crs')),
+        crs: getProjection(this.model.get('crs')),
         zoomControl: false,
         attributionControl: false,
       };
@@ -266,6 +293,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
 
   rerender() {
     this.obj.remove();
+    //@ts-ignore
     delete this.obj;
     this.el.removeChild(this.map_child);
     this.render();
@@ -275,7 +303,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     this.obj.on('moveend', (e) => {
       if (!this.dirty) {
         this.dirty = true;
-        var c = e.target.getCenter();
+        const c = e.target.getCenter();
         this.model.set('center', [c.lat, c.lng]);
         this.dirty = false;
       }
@@ -294,7 +322,7 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     this.obj.on('zoomend', (e) => {
       if (!this.dirty) {
         this.dirty = true;
-        var z = e.target.getZoom();
+        const z = e.target.getZoom();
         this.model.set('zoom', z);
         this.dirty = false;
       }
@@ -304,8 +332,8 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
     });
 
     this.obj.on(
-      'click dblclick mousedown mouseup mouseover mouseout mousemove contextmenu preclick',
-      (event) => {
+      'click dblclick mousedown mouseup mouseover mouseout mousemove contextmenu preclick' as any,
+      (event: LeafletMouseEvent) => {
         this.send({
           event: 'interaction',
           type: event.type,
@@ -321,133 +349,81 @@ export class LeafletMapView extends utils.LeafletDOMWidgetView {
   }
 
   model_events() {
-    var key;
-    var o = this.model.get('options');
-    for (var i = 0; i < o.length; i++) {
+    let key;
+    let o = this.model.get('options');
+    for (let i = 0; i < o.length; i++) {
       key = o[i];
-      this.listenTo(
-        this.model,
-        'change:' + key,
-        function () {
-          L.setOptions(this.obj, this.get_options());
-        },
-        this
-      );
+      this.listenTo(this.model, 'change:' + key, () => {
+        L.setOptions(this.obj, this.get_options());
+      });
     }
-    this.listenTo(this.model, 'msg:custom', this.handle_msg, this);
-    this.listenTo(this.model, 'change:panes', this.rerender, this);
-    this.listenTo(
-      this.model,
-      'change:dragging',
-      function () {
-        if (this.model.get('dragging')) {
-          this.obj.dragging.enable();
-        } else {
-          this.obj.dragging.disable();
-        }
-      },
-      this
-    );
-    this.listenTo(
-      this.model,
-      'change:layers',
-      function () {
-        this.layer_views.update(this.model.get('layers'));
-      },
-      this
-    );
-    this.listenTo(
-      this.model,
-      'change:controls',
-      function () {
-        this.control_views.update(this.model.get('controls'));
-      },
-      this
-    );
-    this.listenTo(
-      this.model,
-      'change:zoom',
-      function () {
-        if (!this.dirty) {
-          this.dirty = true;
-          // Using flyTo instead of setZoom to adjust for potential
-          // sub-pixel error in leaflet object's center.
-          //
-          // Disabling animation on updates from the model because
-          // animation triggers a `moveend` event in an animationFrame,
-          // which causes the center to bounce despite of the dirty flag
-          // which is set back to false synchronously.
-          this.obj.flyTo(this.model.get('center'), this.model.get('zoom'), {
-            animate: false,
-          });
-          this.dirty = false;
-        }
-        this.model.update_bounds().then(() => {
-          this.touch();
+    this.listenTo(this.model, 'change:panes', this.rerender);
+    this.listenTo(this.model, 'change:dragging', () => {
+      if (this.model.get('dragging')) {
+        this.obj.dragging.enable();
+      } else {
+        this.obj.dragging.disable();
+      }
+    });
+    this.listenTo(this.model, 'change:layers', () => {
+      this.layer_views.update(this.model.get('layers'));
+    });
+    this.listenTo(this.model, 'change:controls', () => {
+      this.control_views.update(this.model.get('controls'));
+    });
+    this.listenTo(this.model, 'change:zoom', () => {
+      if (!this.dirty) {
+        this.dirty = true;
+        // Using flyTo instead of setZoom to adjust for potential
+        // sub-pixel error in leaflet object's center.
+        //
+        // Disabling animation on updates from the model because
+        // animation triggers a `moveend` event in an animationFrame,
+        // which causes the center to bounce despite of the dirty flag
+        // which is set back to false synchronously.
+        this.obj.flyTo(this.model.get('center'), this.model.get('zoom'), {
+          animate: false,
         });
-      },
-      this
-    );
-    this.listenTo(
-      this.model,
-      'change:center',
-      function () {
-        if (!this.dirty) {
-          this.dirty = true;
-          this.obj.panTo(this.model.get('center'));
-          this.dirty = false;
-        }
-        this.model.update_bounds().then(() => {
-          this.touch();
-        });
-      },
-      this
-    );
-    this.listenTo(
-      this.model,
-      'change:dragging_style',
-      function () {
-        this.model.update_style();
-      },
-      this
-    );
-    this.listenTo(
-      this.model,
-      'change:default_style',
-      function () {
-        this.model.update_style();
-      },
-      this
-    );
-    this.listenTo(
-      this.model,
-      'change:fullscreen',
-      function () {
-        var fullscreen = this.model.get('fullscreen');
-        if (this.obj.isFullscreen() !== fullscreen) {
-          this.obj.toggleFullscreen();
-        }
-      },
-      this
-    );
+        this.dirty = false;
+      }
+      this.model.update_bounds().then(() => {
+        this.touch();
+      });
+    });
+    this.listenTo(this.model, 'change:center', () => {
+      if (!this.dirty) {
+        this.dirty = true;
+        this.obj.panTo(this.model.get('center'));
+        this.dirty = false;
+      }
+      this.model.update_bounds().then(() => {
+        this.touch();
+      });
+    });
+    this.listenTo(this.model, 'change:dragging_style', () => {
+      this.model.update_style();
+    });
+    this.listenTo(this.model, 'change:default_style', () => {
+      this.model.update_style();
+    });
+    this.listenTo(this.model, 'change:fullscreen', () => {
+      const fullscreen = this.model.get('fullscreen');
+      if (this.obj.isFullscreen() !== fullscreen) {
+        this.obj.toggleFullscreen();
+      }
+    });
   }
 
-  handle_msg(content) {
-    switch (content.method) {
-      case 'foo':
-        break;
-    }
-  }
-
-  processPhosphorMessage(msg) {
+  processPhosphorMessage(msg: Message) {
+    //@ts-ignore This is for backward compatibility with Jupyterlab 3
     this._processLuminoMessage(msg, super.processPhosphorMessage);
   }
 
-  processLuminoMessage(msg) {
+  processLuminoMessage(msg: Message) {
     this._processLuminoMessage(msg, super.processLuminoMessage);
   }
 
-  _processLuminoMessage(msg, _super) {
+  _processLuminoMessage(msg: Message, _super: Function) {
     _super.call(this, msg);
     if (!this.obj) return;
     switch (msg.type) {

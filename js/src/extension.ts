@@ -1,10 +1,9 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
-// @ts-nocheck
 
 // Configure requirejs
-if (window.require) {
-  window.require.config({
+if ((window as any).require) {
+  (window as any).require.config({
     map: {
       '*': {
         'jupyter-leaflet': 'nbextensions/jupyter-leaflet/index',
@@ -13,4 +12,4 @@ if (window.require) {
   });
 }
 
-export const load_ipython_extension = function () {};
+export function load_ipython_extension() {}

@@ -1,11 +1,11 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
-//@ts-nocheck
 
+import { WidgetView } from '@jupyter-widgets/base';
 import L from '../leaflet';
-import * as control from './Control';
+import { LeafletControlModel, LeafletControlView } from './Control';
 
-export class LeafletAttributionControlModel extends control.LeafletControlModel {
+export class LeafletAttributionControlModel extends LeafletControlModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -15,8 +15,10 @@ export class LeafletAttributionControlModel extends control.LeafletControlModel 
   }
 }
 
-export class LeafletAttributionControlView extends control.LeafletControlView {
-  initialize(parameters) {
+export class LeafletAttributionControlView extends LeafletControlView {
+  initialize(
+    parameters: WidgetView.IInitializeParameters<LeafletControlModel>
+  ) {
     super.initialize(parameters);
     this.map_view = this.options.map_view;
   }

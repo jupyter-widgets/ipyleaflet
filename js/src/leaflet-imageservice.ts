@@ -1,6 +1,8 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
-//@ts-nocheck
+
+import L, { ImageServiceOptions, Map, Point } from 'leaflet';
+
 L.ImageService = L.Layer.extend({
   options: {
     url: '',
@@ -22,7 +24,7 @@ L.ImageService = L.Layer.extend({
     updateInterval: 200,
   },
 
-  initialize: function (options) {
+  initialize: function (options: ImageServiceOptions) {
     L.Util.setOptions(this, options);
   },
 
@@ -38,14 +40,14 @@ L.ImageService = L.Layer.extend({
     return this;
   },
 
-  onAdd: function (map) {
+  onAdd: function (map: Map) {
     this._map = map;
     this.updateUrl();
     if (!this._image) {
       this._initImage();
     }
     this._map.on('moveend', () => {
-      L.Util.throttle(this._update(), this.options.updateInterval, this);
+      L.Util.throttle(this.update(), this.options.updateInterval, this);
     });
     if (this.options.interactive) {
       L.DomUtil.addClass(this._image, 'leaflet-interactive');
@@ -78,7 +80,7 @@ L.ImageService = L.Layer.extend({
     return this;
   },
 
-  setUrl: function (url) {
+  setUrl: function (url: string) {
     // change the URL of the image
     if (this.options.endpoint === 'Esri') {
       this._url = url + '/exportImage' + this._buildParams();
@@ -92,7 +94,7 @@ L.ImageService = L.Layer.extend({
   },
 
   getEvents: function () {
-    var events = {
+    const events = {
       zoom: this._reset,
       viewreset: this._reset,
     };
@@ -104,7 +106,10 @@ L.ImageService = L.Layer.extend({
     return this._bounds;
   },
 
-  toLatLngBounds: function (a, b) {
+  toLatLngBounds: function (
+    a: L.LatLngBounds | L.LatLngExpression,
+    b: L.LatLngExpression
+  ) {
     // convert bounds to LatLngBounds object
     if (a instanceof L.LatLngBounds) {
       return a;
@@ -124,9 +129,9 @@ L.ImageService = L.Layer.extend({
 
   _getBBox: function () {
     // get the bounding box of the current map formatted for exportImage
-    var pixelbounds = this._map.getPixelBounds();
-    var sw = this._map.unproject(pixelbounds.getBottomLeft());
-    var ne = this._map.unproject(pixelbounds.getTopRight());
+    const pixelbounds = this._map.getPixelBounds();
+    const sw = this._map.unproject(pixelbounds.getBottomLeft());
+    const ne = this._map.unproject(pixelbounds.getTopRight());
     return [
       this._map.options.crs.project(ne).x,
       this._map.options.crs.project(ne).y,
@@ -145,27 +150,27 @@ L.ImageService = L.Layer.extend({
 
   _getSize: function () {
     // get the size of the current map
-    var size = this._map.getSize();
+    const size = this._map.getSize();
     return [size.x, size.y];
   },
 
   _getEPSG: function () {
     // get the EPSG code (numeric) of the current map
-    var epsg = this.options.crs.code;
-    var spatial_reference = parseInt(epsg.split(':')[1], 10);
+    const epsg = this.options.crs.code;
+    const spatial_reference = parseInt(epsg.split(':')[1], 10);
     return spatial_reference;
   },
 
   _getTime: function () {
     // get start and end times and convert to seconds since epoch
-    var st = new Date(this.options.time[0]).getTime().valueOf();
-    var et = new Date(this.options.time[1]).getTime().valueOf();
-    return [st, et];
+    const startTime = new Date(this.options.time[0]).getTime().valueOf();
+    const endTime = new Date(this.options.time[1]).getTime().valueOf();
+    return [startTime, endTime];
   },
 
   _buildParams: function () {
     // parameters for image server query
-    var params = {
+    const params: Record<string, any> = {
       bbox: this._getBBox().join(','),
       size: this._getSize().join(','),
       bboxSR: this._getEPSG(),
@@ -210,8 +215,8 @@ L.ImageService = L.Layer.extend({
   },
 
   _initImage: function () {
-    var wasElementSupplied = this._url.tagName === 'IMG';
-    var img = (this._image = L.DomUtil.create('img'));
+    const wasElementSupplied = this._url.tagName === 'IMG';
+    const img = (this._image = L.DomUtil.create('img'));
     L.DomUtil.addClass(img, 'leaflet-image-layer');
     img.onselectstart = L.Util.falseFn;
     img.onmousemove = L.Util.falseFn;
@@ -224,23 +229,23 @@ L.ImageService = L.Layer.extend({
   },
 
   _reset: function () {
-    var img = this._image;
-    var size = this._getSize();
+    const img = this._image;
+    const size = this._getSize();
     img.style.width = size[0] + 'px';
     img.style.height = size[1] + 'px';
     if (this._getEPSG() === 3857) {
-      var bounds = new L.Bounds(
+      const bounds = new L.Bounds(
         this._map.latLngToLayerPoint(this._bounds.getNorthWest()),
         this._map.latLngToLayerPoint(this._bounds.getSouthEast())
       );
-      L.DomUtil.setPosition(img, bounds.min);
+      L.DomUtil.setPosition(img, bounds.min ?? new Point(0, 0));
     } else {
-      var pixelorigin = this._topLeft.subtract(this._map.getPixelOrigin());
+      const pixelorigin = this._topLeft.subtract(this._map.getPixelOrigin());
       L.DomUtil.setPosition(img, pixelorigin);
     }
   },
 
-  _update: function () {
+  update: function () {
     if (!this._map) {
       return;
     }

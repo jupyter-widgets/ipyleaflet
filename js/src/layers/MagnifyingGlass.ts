@@ -1,13 +1,13 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-//@ts-nocheck
-import * as widgets from '@jupyter-widgets/base';
+import { ViewList, WidgetModel, unpack_models } from '@jupyter-widgets/base';
+import { Layer } from 'leaflet';
 import L from '../leaflet';
-import * as layer from './Layer';
-import * as rasterlayer from './RasterLayer';
+import { LeafletLayerModel, LeafletLayerView } from './Layer';
+import { LeafletRasterLayerModel } from './RasterLayer';
 
-export class LeafletMagnifyingGlassModel extends rasterlayer.LeafletRasterLayerModel {
+export class LeafletMagnifyingGlassModel extends LeafletRasterLayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -24,53 +24,50 @@ export class LeafletMagnifyingGlassModel extends rasterlayer.LeafletRasterLayerM
 }
 
 LeafletMagnifyingGlassModel.serializers = {
-  ...widgets.WidgetModel.serializers,
-  layers: { deserialize: widgets.unpack_models },
+  ...WidgetModel.serializers,
+  layers: { deserialize: unpack_models },
 };
 
-export class LeafletMagnifyingGlassView extends layer.LeafletLayerView {
-  remove_layer_view(child_view) {
+export class LeafletMagnifyingGlassView extends LeafletLayerView {
+  layer_views: ViewList<Layer>;
+
+  remove_layer_view(child_view: Layer) {
     child_view.remove();
   }
 
-  add_layer_model(child_model) {
-    return this.create_child_view(child_model).then((child_view) => {
-      return child_view.obj;
-    });
+  async add_layer_model(child_model: LeafletLayerModel) {
+    const child_view = await this.create_child_view<LeafletLayerView>(
+      child_model
+    );
+    return child_view.obj;
   }
 
-  create_obj() {
-    this.layer_views = new widgets.ViewList(
+  async create_obj() {
+    this.layer_views = new ViewList<Layer>(
       this.add_layer_model,
       this.remove_layer_view,
       this
     );
-    var layers = this.get_options().layers;
-    return this.layer_views.update(layers).then((layers) => {
-      var options = this.get_options();
-      options.layers = layers;
-      //@ts-ignore
-      this.obj = L.magnifyingGlass(options);
-    });
+
+    const layers = this.get_options().layers;
+    const layers_views = await this.layer_views.update(layers);
+    const options = this.get_options();
+    options.layers = layers_views;
+    this.obj = L.magnifyingGlass(options);
   }
 
   model_events() {
     super.model_events();
-    var key;
-    var o = this.model.get('options');
-    for (var i = 0; i < o.length; i++) {
+    let key;
+    const o = this.model.get('options');
+    for (let i = 0; i < o.length; i++) {
       key = o[i];
-      this.listenTo(
-        this.model,
-        'change:' + key,
-        function () {
-          this.map_view.obj.removeLayer(this.obj);
-          this.create_obj().then(() => {
-            this.map_view.obj.addLayer(this.obj);
-          });
-        },
-        this
-      );
+      this.listenTo(this.model, 'change:' + key, () => {
+        this.map_view.obj.removeLayer(this.obj);
+        this.create_obj().then(() => {
+          this.map_view.obj.addLayer(this.obj);
+        });
+      });
     }
   }
 }

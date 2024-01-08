@@ -2,9 +2,9 @@
 // Distributed under the terms of the Modified BSD License.
 
 import L from '../leaflet';
-import * as layer from './Layer';
+import { LeafletUILayerModel, LeafletUILayerView } from './Layer';
 
-export class LeafletAwesomeIconModel extends layer.LeafletUILayerModel {
+export class LeafletAwesomeIconModel extends LeafletUILayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -18,9 +18,8 @@ export class LeafletAwesomeIconModel extends layer.LeafletUILayerModel {
   }
 }
 
-export class LeafletAwesomeIconView extends layer.LeafletUILayerView {
+export class LeafletAwesomeIconView extends LeafletUILayerView {
   create_obj() {
-    //@ts-ignore
     this.obj = L.AwesomeMarkers.icon({
       prefix: 'fa',
       icon: this.model.get('name'),

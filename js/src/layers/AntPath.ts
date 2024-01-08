@@ -1,11 +1,13 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
-//@ts-nocheck
+
+// leaflet-ant-path does not have typescript definitions
+//@ts-ignore
 import { antPath } from 'leaflet-ant-path';
 import L from '../leaflet';
-import * as vectorlayer from './VectorLayer';
+import { LeafletVectorLayerModel, LeafletVectorLayerView } from './VectorLayer';
 
-export class LeafletAntPathModel extends vectorlayer.LeafletVectorLayerModel {
+export class LeafletAntPathModel extends LeafletVectorLayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -25,19 +27,27 @@ export class LeafletAntPathModel extends vectorlayer.LeafletVectorLayerModel {
   }
 }
 
-export class LeafletAntPathView extends vectorlayer.LeafletVectorLayerView {
+export class LeafletAntPathView extends LeafletVectorLayerView {
+  obj: any;
+
   create_obj() {
     this.obj = antPath(this.model.get('locations'), this.get_ant_options());
   }
 
   model_events() {
     super.model_events();
-    this.listenTo(this.model, 'change:locations', function () {
+    this.listenTo(this.model, 'change:locations', () => {
       this.obj.setLatLngs(this.model.get('locations'));
     });
-    this.model.on_some_change(this.model.get('options'), () => {
-      this.obj.setStyle(this.get_ant_options());
-    });
+
+    this.model.on_some_change(
+      this.model.get('options'),
+      () => {
+        this.obj.setStyle(this.get_ant_options());
+      },
+      this
+    );
+
     this.obj.setStyle(this.get_ant_options());
   }
 
@@ -46,7 +56,7 @@ export class LeafletAntPathView extends vectorlayer.LeafletVectorLayerView {
     if (options.use != 'circle') {
       delete options.radius;
     }
-    options.use = L[options.use];
+    options.use = (L as any)[options.use];
     return options;
   }
 }

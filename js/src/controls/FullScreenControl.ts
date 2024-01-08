@@ -1,10 +1,11 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-//@ts-nocheck
+import { WidgetView } from '@jupyter-widgets/base';
 import L from '../leaflet';
-import * as control from './Control';
-export class LeafletFullScreenControlModel extends control.LeafletControlModel {
+import { LeafletControlModel, LeafletControlView } from './Control';
+
+export class LeafletFullScreenControlModel extends LeafletControlModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -14,15 +15,16 @@ export class LeafletFullScreenControlModel extends control.LeafletControlModel {
   }
 }
 
-export class LeafletFullScreenControlView extends control.LeafletControlView {
-  initialize(parameters) {
+export class LeafletFullScreenControlView extends LeafletControlView {
+  initialize(
+    parameters: WidgetView.IInitializeParameters<LeafletControlModel>
+  ) {
     super.initialize(parameters);
     this.map_view = this.options.map_view;
   }
 
   create_obj() {
     //@ts-ignore
-
     this.obj = L.control.fullscreen(this.get_options());
   }
 }

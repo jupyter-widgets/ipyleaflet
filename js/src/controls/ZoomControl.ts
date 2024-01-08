@@ -1,11 +1,11 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-//@ts-nocheck
+import { WidgetView } from '@jupyter-widgets/base';
 import L from '../leaflet';
-import * as control from './Control';
+import { LeafletControlModel, LeafletControlView } from './Control';
 
-export class LeafletZoomControlModel extends control.LeafletControlModel {
+export class LeafletZoomControlModel extends LeafletControlModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -19,14 +19,15 @@ export class LeafletZoomControlModel extends control.LeafletControlModel {
   }
 }
 
-export class LeafletZoomControlView extends control.LeafletControlView {
-  initialize(parameters) {
+export class LeafletZoomControlView extends LeafletControlView {
+  initialize(
+    parameters: WidgetView.IInitializeParameters<LeafletControlModel>
+  ) {
     super.initialize(parameters);
     this.map_view = this.options.map_view;
   }
 
   create_obj() {
-    //@ts-ignore
     this.obj = L.control.zoom(this.get_options());
   }
 }

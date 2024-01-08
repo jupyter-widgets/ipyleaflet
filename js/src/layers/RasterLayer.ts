@@ -1,10 +1,9 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-//@ts-nocheck
-import * as layer from './Layer';
+import { LeafletLayerModel, LeafletLayerView } from './Layer';
 
-export class LeafletRasterLayerModel extends layer.LeafletLayerModel {
+export class LeafletRasterLayerModel extends LeafletLayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -15,31 +14,23 @@ export class LeafletRasterLayerModel extends layer.LeafletLayerModel {
   }
 }
 
-export class LeafletRasterLayerView extends layer.LeafletLayerView {
+export class LeafletRasterLayerView extends LeafletLayerView {
+  obj: any;
+
   model_events() {
     super.model_events();
-    this.listenTo(
-      this.model,
-      'change:opacity',
-      function () {
-        if (this.model.get('visible')) {
-          this.obj.setOpacity(this.model.get('opacity'));
-        }
-      },
-      this
-    );
-    this.listenTo(
-      this.model,
-      'change:visible',
-      function () {
-        if (this.model.get('visible')) {
-          this.obj.setOpacity(this.model.get('opacity'));
-        } else {
-          this.obj.setOpacity(0);
-        }
-      },
-      this
-    );
+    this.listenTo(this.model, 'change:opacity', () => {
+      if (this.model.get('visible')) {
+        this.obj.setOpacity(this.model.get('opacity'));
+      }
+    });
+    this.listenTo(this.model, 'change:visible', () => {
+      if (this.model.get('visible')) {
+        this.obj.setOpacity(this.model.get('opacity'));
+      } else {
+        this.obj.setOpacity(0);
+      }
+    });
 
     if (this.model.get('visible')) {
       this.obj.setOpacity(this.model.get('opacity'));

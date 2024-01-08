@@ -1,9 +1,9 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-import * as tilelayer from './TileLayer';
+import { LeafletTileLayerModel, LeafletTileLayerView } from './TileLayer';
 
-export class LeafletLocalTileLayerModel extends tilelayer.LeafletTileLayerModel {
+export class LeafletLocalTileLayerModel extends LeafletTileLayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -14,7 +14,7 @@ export class LeafletLocalTileLayerModel extends tilelayer.LeafletTileLayerModel 
   }
 }
 
-export class LeafletLocalTileLayerView extends tilelayer.LeafletTileLayerView {
+export class LeafletLocalTileLayerView extends LeafletTileLayerView {
   create_obj() {
     this.model.set('url', this.model.get('path'));
     this.model.save_changes();

@@ -1,9 +1,11 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
-//@ts-nocheck
-import * as layer from './Layer';
 
-export class LeafletVectorTileLayerModel extends layer.LeafletLayerModel {
+import { VectorGrid } from 'leaflet';
+import L from '../leaflet';
+import { LeafletLayerModel, LeafletLayerView } from './Layer';
+
+export class LeafletVectorTileLayerModel extends LeafletLayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -15,9 +17,11 @@ export class LeafletVectorTileLayerModel extends layer.LeafletLayerModel {
   }
 }
 
-export class LeafletVectorTileLayerView extends layer.LeafletLayerView {
+export class LeafletVectorTileLayerView extends LeafletLayerView {
+  obj: VectorGrid.Protobuf;
+
   create_obj() {
-    var options = {
+    const options = {
       ...this.get_options(),
       rendererFactory: L.canvas.tile,
     };
@@ -27,17 +31,12 @@ export class LeafletVectorTileLayerView extends layer.LeafletLayerView {
 
   model_events() {
     super.model_events();
-    this.listenTo(
-      this.model,
-      'change:url',
-      function () {
-        this.obj.setUrl(this.model.get('url'));
-      },
-      this
-    );
+    this.listenTo(this.model, 'change:url', () => {
+      this.obj.setUrl(this.model.get('url'));
+    });
   }
 
-  handle_message(content) {
+  handle_message(content: { msg: string }) {
     if (content.msg == 'redraw') {
       this.obj.redraw();
     }

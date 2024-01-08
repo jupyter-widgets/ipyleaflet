@@ -1,12 +1,12 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-//@ts-nocheck
-import * as widgets from '@jupyter-widgets/base';
+// leaflet-splitmap does not have typescript definitions
+import { unpack_models } from '@jupyter-widgets/base';
 import L from '../leaflet';
-import * as control from './Control';
+import { LeafletControlModel, LeafletControlView } from './Control';
 
-export class LeafletSplitMapControlModel extends control.LeafletControlModel {
+export class LeafletSplitMapControlModel extends LeafletControlModel {
   default() {
     return {
       ...super.defaults(),
@@ -19,31 +19,31 @@ export class LeafletSplitMapControlModel extends control.LeafletControlModel {
 }
 
 LeafletSplitMapControlModel.serializers = {
-  ...control.LeafletControlModel,
-  left_layer: { deserialize: widgets.unpack_models },
-  right_layer: { deserialize: widgets.unpack_models },
+  ...LeafletControlModel,
+  left_layer: { deserialize: unpack_models },
+  right_layer: { deserialize: unpack_models },
 };
 
-function asArray(arg) {
+function asArray(arg: any) {
   return Array.isArray(arg) ? arg : [arg];
 }
 
-export class LeafletSplitMapControlView extends control.LeafletControlView {
-  initialize(parameters) {
+export class LeafletSplitMapControlView extends LeafletControlView {
+  initialize(parameters: any) {
     super.initialize(parameters);
     this.map_view = this.options.map_view;
   }
 
   create_obj() {
-    var left_models = asArray(this.model.get('left_layer'));
-    var right_models = asArray(this.model.get('right_layer'));
-    var layersModel = this.map_view.model.get('layers');
+    const left_models = asArray(this.model.get('left_layer'));
+    const right_models = asArray(this.model.get('right_layer'));
+    let layersModel = this.map_view.model.get('layers');
     layersModel = layersModel.concat(left_models, right_models);
 
-    return this.map_view.layer_views.update(layersModel).then((views) => {
-      var left_views = [];
-      var right_views = [];
-      views.forEach((view) => {
+    return this.map_view.layer_views.update(layersModel).then((views: any) => {
+      const left_views: any[] = [];
+      const right_views: any[] = [];
+      views.forEach((view: any) => {
         if (left_models.includes(view.model)) {
           left_views.push(view.obj);
         }

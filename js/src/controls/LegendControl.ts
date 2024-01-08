@@ -1,8 +1,19 @@
-// @ts-nocheck
-
+import { WidgetView } from '@jupyter-widgets/base';
+import { Control } from 'leaflet';
 import L from '../leaflet';
-import * as control from './Control';
-export class LeafletLegendControlModel extends control.LeafletControlModel {
+import { LeafletControlModel, LeafletControlView } from './Control';
+
+L.Control.Legend = L.Control.extend({
+  options: {
+    position: 'bottomright',
+  },
+});
+
+L.control.legend = function (options) {
+  return new L.Control.Legend(options);
+};
+
+export class LeafletLegendControlModel extends LeafletControlModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -19,13 +30,17 @@ export class LeafletLegendControlModel extends control.LeafletControlModel {
   }
 }
 
-export class LeafletLegendControlView extends control.LeafletControlView {
-  initialize(parameters) {
+export class LeafletLegendControlView extends LeafletControlView {
+  obj: Control.Legend;
+
+  initialize(
+    parameters: WidgetView.IInitializeParameters<LeafletControlModel>
+  ) {
     super.initialize(parameters);
     this.map_view = this.options.map_view;
   }
 
-  render() {
+  async render(): Promise<void> {
     this.create_obj();
     this.model.on('change:title', this.titleChanged, this);
     this.model.on('change:position', this.positionChanged, this);
@@ -33,7 +48,7 @@ export class LeafletLegendControlView extends control.LeafletControlView {
   }
 
   create_obj() {
-    let jsLegend = L.control({ position: this.model.get('position') });
+    let jsLegend = L.control.legend({ position: this.model.get('position') });
 
     jsLegend.onAdd = () => {
       let jsLegendName = 'leaflet-control-legend';
@@ -47,8 +62,10 @@ export class LeafletLegendControlView extends control.LeafletControlView {
 
   legendChanged() {
     let container = this.obj.getContainer();
-    L.DomUtil.empty(container);
-    this.addContent(container);
+    if (container) {
+      L.DomUtil.empty(container);
+      this.addContent(container);
+    }
   }
 
   positionChanged() {
@@ -57,18 +74,20 @@ export class LeafletLegendControlView extends control.LeafletControlView {
 
   titleChanged() {
     let container = this.obj.getContainer();
-    let titleContainer = container.getElementsByTagName('h4')[0];
-    titleContainer.textContent = this.model.get('title');
+    let titleContainer = container?.getElementsByTagName('h4')[0];
+    if (titleContainer) {
+      titleContainer.textContent = this.model.get('title');
+    }
   }
 
-  addContent(container) {
+  addContent(container: HTMLElement) {
     let titleContainer = document.createElement('h4');
     titleContainer.textContent = this.model.get('title');
     container.appendChild(titleContainer);
     let legend = this.model.get('legend');
     for (let legendElement in legend) {
       let icon = document.createElement('i');
-      icon.style = `background-color: ${legend[legendElement]}`;
+      icon.style.backgroundColor = legend[legendElement];
       container.appendChild(icon);
       container.innerHTML += `<p>${legendElement} </p></br>`;
     }

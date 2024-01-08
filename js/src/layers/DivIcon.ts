@@ -1,10 +1,11 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
+import { DivIcon, DivIconOptions } from 'leaflet';
 import L from '../leaflet';
-import * as layer from './Layer';
+import { LeafletUILayerModel, LeafletUILayerView } from './Layer';
 
-export class LeafletDivIconModel extends layer.LeafletUILayerModel {
+export class LeafletDivIconModel extends LeafletUILayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -19,9 +20,10 @@ export class LeafletDivIconModel extends layer.LeafletUILayerModel {
   }
 }
 
-export class LeafletDivIconView extends layer.LeafletUILayerView {
+export class LeafletDivIconView extends LeafletUILayerView {
+  obj: DivIcon;
+
   create_obj() {
-    //@ts-ignore
-    this.obj = L.divIcon(this.get_options());
+    this.obj = L.divIcon(this.get_options() as DivIconOptions);
   }
 }

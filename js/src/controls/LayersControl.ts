@@ -1,11 +1,14 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-//@ts-nocheck
+import { WidgetView } from '@jupyter-widgets/base';
+import { Layer } from 'leaflet';
 import L from '../leaflet';
-import * as control from './Control';
+import { LeafletControlModel, LeafletControlView } from './Control';
 
-export class LeafletLayersControlModel extends control.LeafletControlModel {
+type OvType = { [key: string]: Layer };
+
+export class LeafletLayersControlModel extends LeafletControlModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -15,7 +18,7 @@ export class LeafletLayersControlModel extends control.LeafletControlModel {
   }
 }
 
-export class LeafletLayersControlView extends control.LeafletControlView {
+export class LeafletLayersControlView extends LeafletControlView {
   /**
    * Core leaflet layers control maintains its own list of layers internally
    * causing issues when the layers of the underlying map changes
@@ -25,15 +28,20 @@ export class LeafletLayersControlView extends control.LeafletControlView {
    * destroy the layers control object and create a new one.
    */
 
-  initialize(parameters) {
+  initialize(
+    parameters: WidgetView.IInitializeParameters<LeafletControlModel>
+  ) {
     super.initialize(parameters);
     this.map_view = this.options.map_view;
   }
 
   toggle_obj() {
-    this.obj.remove();
-    delete this.obj;
-    this.create_obj();
+    if (this.obj) {
+      this.obj.remove();
+      //@ts-ignore
+      delete this.obj;
+      this.create_obj();
+    }
   }
 
   model_events() {
@@ -42,27 +50,22 @@ export class LeafletLayersControlView extends control.LeafletControlView {
     });
   }
 
-  create_obj() {
-    return Promise.all(this.map_view.layer_views.views)
-      .then((views) => {
-        var baselayers = views.reduce(function (ov, view) {
-          if (view.model.get('base')) {
-            ov[view.model.get('name')] = view.obj;
-          }
-          return ov;
-        }, {});
-        var overlays = views.reduce(function (ov, view) {
-          if (!view.model.get('base')) {
-            ov[view.model.get('name')] = view.obj;
-          }
-          return ov;
-        }, {});
-        //@ts-ignore
-        this.obj = L.control.layers(baselayers, overlays, this.get_options());
-        return this;
-      })
-      .then(() => {
-        this.obj.addTo(this.map_view.obj);
-      });
+  async create_obj() {
+    const views = await Promise.all(this.map_view.layer_views.views);
+    let baselayers = views.reduce((ov: OvType, view) => {
+      if (view.model.get('base')) {
+        ov[view.model.get('name')] = view.obj;
+      }
+      return ov;
+    }, {});
+    let overlays = views.reduce((ov_1: OvType, view_1) => {
+      if (!view_1.model.get('base')) {
+        ov_1[view_1.model.get('name')] = view_1.obj;
+      }
+      return ov_1;
+    }, {});
+    this.obj = L.control.layers(baselayers, overlays, this.get_options());
+    this;
+    this.obj.addTo(this.map_view.obj);
   }
 }

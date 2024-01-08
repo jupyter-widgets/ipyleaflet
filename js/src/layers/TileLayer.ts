@@ -1,12 +1,12 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-//@ts-nocheck
+import { TileLayer } from 'leaflet';
 import { Spinner } from 'spin.js';
 import L from '../leaflet';
-import * as rasterlayer from './RasterLayer';
+import { LeafletRasterLayerModel, LeafletRasterLayerView } from './RasterLayer';
 
-export class LeafletTileLayerModel extends rasterlayer.LeafletRasterLayerModel {
+export class LeafletTileLayerModel extends LeafletRasterLayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -31,9 +31,11 @@ export class LeafletTileLayerModel extends rasterlayer.LeafletRasterLayerModel {
   }
 }
 
-export class LeafletTileLayerView extends rasterlayer.LeafletRasterLayerView {
+export class LeafletTileLayerView extends LeafletRasterLayerView {
+  obj: TileLayer;
+  spinner: Spinner;
+
   create_obj() {
-    //@ts-ignore
     this.obj = L.tileLayer(this.model.get('url'), this.get_options());
     this.model.on('msg:custom', this.handle_message.bind(this));
   }
@@ -66,18 +68,13 @@ export class LeafletTileLayerView extends rasterlayer.LeafletRasterLayerView {
 
   model_events() {
     super.model_events();
-    this.listenTo(
-      this.model,
-      'change:url',
-      function () {
-        this.obj.setUrl(this.model.get('url'), true);
-        this.obj.refresh();
-      },
-      this
-    );
+    this.listenTo(this.model, 'change:url', () => {
+      this.obj.setUrl(this.model.get('url'), true);
+      this.obj.refresh();
+    });
   }
 
-  handle_message(content) {
+  handle_message(content: { msg: string }) {
     if (content.msg == 'redraw') {
       this.obj.redraw();
     }

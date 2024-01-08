@@ -1,13 +1,12 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-//@ts-nocheck
-
+import { TileLayer, WMSParams } from 'leaflet';
 import L from '../leaflet';
-import * as proj from '../projections';
-import * as tilelayer from './TileLayer';
+import { getProjection } from '../projections';
+import { LeafletTileLayerModel, LeafletTileLayerView } from './TileLayer';
 
-export class LeafletWMSLayerModel extends tilelayer.LeafletTileLayerModel {
+export class LeafletWMSLayerModel extends LeafletTileLayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -23,20 +22,21 @@ export class LeafletWMSLayerModel extends tilelayer.LeafletTileLayerModel {
   }
 }
 
-export class LeafletWMSLayerView extends tilelayer.LeafletTileLayerView {
+export class LeafletWMSLayerView extends LeafletTileLayerView {
+  obj: TileLayer.WMS;
   create_obj() {
     this.obj = L.tileLayer.wms(this.model.get('url'), {
       ...this.get_options(),
-      crs: proj.getProjection(this.model.get('crs')),
+      crs: getProjection(this.model.get('crs')),
     });
   }
 
   model_events() {
     super.model_events();
 
-    for (var option in this.get_options()) {
+    for (let option in this.get_options()) {
       this.model.on('change:' + option, () => {
-        this.obj.setParams(this.get_options(), true);
+        this.obj.setParams(this.get_options() as WMSParams, true);
         this.obj.refresh();
       });
     }

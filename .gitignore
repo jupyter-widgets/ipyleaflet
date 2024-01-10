@@ -5,7 +5,7 @@ build/
 *.py[cod]
 node_modules/
 *package-lock.json
-js/.yarn/
+python/jupyter_leaflet/.yarn/
 ui-tests/.yarn/
 
 # Compiled javascript

@@ -25,7 +25,6 @@
     "build:lib": "tsc",
     "build:nbextension": "webpack --no-devtool",
     "build:labextension": "jupyter labextension build .",
-    "build:extensions": "yarn run build && yarn run build:labextension",
     "clean": "yarn run clean:lib && yarn run clean:nbextension && yarn run clean:labextension",
     "clean:lib": "rimraf lib",
     "clean:nbextension": "rimraf ../ipyleaflet/nbextension/index.js",

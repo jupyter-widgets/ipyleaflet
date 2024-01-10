@@ -1,1 +1,0 @@
-{"version":3,"file":"Path.d.ts","sourceRoot":"","sources":["../../src/layers/Path.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,IAAI,EAAE,MAAM,SAAS,CAAC;AAC/B,OAAO,EAAE,uBAAuB,EAAE,sBAAsB,EAAE,MAAM,eAAe,CAAC;AAEhF,qBAAa,gBAAiB,SAAQ,uBAAuB;IAC3D,QAAQ;;;;;;;;;;;;;;;;;;;;;;;;;;;CAiBT;AAED,qBAAa,eAAgB,SAAQ,sBAAsB;IACzD,GAAG,EAAE,IAAI,CAAC;IAEV,YAAY;CAWb"}

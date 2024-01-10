@@ -1,0 +1,21 @@
+import L from 'leaflet';
+import 'leaflet-defaulticon-compatibility';
+import 'leaflet-draw';
+import 'leaflet-fullscreen';
+import 'leaflet-measure';
+import 'leaflet-rotatedmarker';
+import 'leaflet-search';
+import 'leaflet-splitmap';
+import 'leaflet-transform';
+import 'leaflet-velocity';
+import 'leaflet.awesome-markers';
+import 'leaflet.markercluster';
+import 'leaflet.vectorgrid';
+import 'proj4';
+import 'proj4leaflet';
+import 'protomaps-leaflet';
+import './leaflet-heat';
+import './leaflet-imageservice';
+import './leaflet-magnifyingglass';
+export default L;
+//# sourceMappingURL=leaflet.d.ts.map

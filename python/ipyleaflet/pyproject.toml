@@ -30,8 +30,8 @@ classifiers = [
 ]
 requires-python = ">=3.7"
 dependencies = [
-    "ipyleaflet-core",
-    "jupyer-leaflet",
+    "ipyleaflet_core",
+    "jupyter_leaflet",
 ]
 
 [project.urls]

@@ -3,7 +3,7 @@
 #
 
 import sys
-from ._version import version_info, __version__  # noqa
+from ._version import  __version__  # noqa
 
 from .leaflet import *  # noqa
 from .basemaps import basemaps  # noqa

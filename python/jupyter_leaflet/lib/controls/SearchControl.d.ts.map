@@ -1,0 +1,1 @@
+{"version":3,"file":"SearchControl.d.ts","sourceRoot":"","sources":["../../src/controls/SearchControl.ts"],"names":[],"mappings":"AAMA,OAAO,EAAE,mBAAmB,EAAE,kBAAkB,EAAE,MAAM,WAAW,CAAC;AAEpE,qBAAa,yBAA0B,SAAQ,mBAAmB;IAChE,QAAQ;;;;;;;;;;;;;;;;;;;;;;CAkBT;AAQD,qBAAa,wBAAyB,SAAQ,kBAAkB;IAC9D,GAAG,EAAE,GAAG,CAAC;IAEH,UAAU;IAkBhB,cAAc;CAkBf"}

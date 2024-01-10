@@ -1,0 +1,1 @@
+{"version":3,"file":"Icon.d.ts","sourceRoot":"","sources":["../../src/layers/Icon.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,IAAI,EAAe,MAAM,SAAS,CAAC;AAC5C,OAAO,CAAC,MAAM,YAAY,CAAC;AAC3B,OAAO,EAAE,mBAAmB,EAAE,kBAAkB,EAAE,MAAM,SAAS,CAAC;AAElE,qBAAa,gBAAiB,SAAQ,mBAAmB;IACvD,QAAQ;;;;;;;;;;;;;;;;;;;;;;;;CAcT;AAED,qBAAa,eAAgB,SAAQ,kBAAkB;IACrD,GAAG,EAAE,IAAI,CAAC;IAEV,UAAU;CAGX"}

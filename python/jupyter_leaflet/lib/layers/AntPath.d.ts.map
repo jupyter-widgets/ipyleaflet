@@ -1,0 +1,1 @@
+{"version":3,"file":"AntPath.d.ts","sourceRoot":"","sources":["../../src/layers/AntPath.ts"],"names":[],"mappings":"AAMA,OAAO,CAAC,MAAM,YAAY,CAAC;AAC3B,OAAO,EAAE,uBAAuB,EAAE,sBAAsB,EAAE,MAAM,eAAe,CAAC;AAEhF,qBAAa,mBAAoB,SAAQ,uBAAuB;IAC9D,QAAQ;;;;;;;;;;;;;;;;;;;;;;;;;;;CAiBT;AAED,qBAAa,kBAAmB,SAAQ,sBAAsB;IAC5D,GAAG,EAAE,GAAG,CAAC;IAET,UAAU;IAIV,YAAY;IAiBZ,eAAe;CAQhB"}

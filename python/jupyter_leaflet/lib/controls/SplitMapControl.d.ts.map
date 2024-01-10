@@ -1,0 +1,1 @@
+{"version":3,"file":"SplitMapControl.d.ts","sourceRoot":"","sources":["../../src/controls/SplitMapControl.ts"],"names":[],"mappings":"AAMA,OAAO,EAAE,mBAAmB,EAAE,kBAAkB,EAAE,MAAM,WAAW,CAAC;AAEpE,qBAAa,2BAA4B,SAAQ,mBAAmB;IAClE,OAAO;;;;;;;;;;CASR;AAYD,qBAAa,0BAA2B,SAAQ,kBAAkB;IAChE,UAAU,CAAC,UAAU,EAAE,GAAG;IAK1B,UAAU;CAqBX"}

@@ -58,7 +58,7 @@ artifacts = [
 # TODO nbextension
 [tool.hatch.build.targets.wheel.shared-data]
 "ipyleaflet/nbextension" = "share/jupyter/nbextensions/jupyter-leaflet"
-"ipyleaflet/labextension" = "share/jupyter/labextensions/jupyter-Leaflet"
+"ipyleaflet/labextension" = "share/jupyter/labextensions/jupyter-leaflet"
 "jupyter-leaflet.json" = "etc/jupyter/nbconfig/notebook.d/jupyter-leaflet.json"
 
 [tool.hatch.build.targets.sdist]
@@ -78,7 +78,7 @@ build-function = "hatch_jupyter_builder.npm_builder"
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
 path = "./js"
-build_cmd = "build:extensions"
+build_cmd = "build"
 npm = [
     "jlpm", # TODO jlpm?
 ]

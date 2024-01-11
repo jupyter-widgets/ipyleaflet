@@ -51,7 +51,7 @@ jobs:
         run: |
           yarn install
           yarn run lint:check
-        working-directory: js
+        working-directory: python/jupyter_leaflet
 
       - name: Import check
         run: python -c 'import ipyleaflet'

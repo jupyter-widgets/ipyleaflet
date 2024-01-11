@@ -9,7 +9,7 @@ build-backend = "hatchling.build"
 name = "ipyleaflet"
 version = "0.18.1"
 description = "A Jupyter widget for dynamic Leaflet maps"
-readme = "README.md"
+readme = "../../README.md"
 authors = [
     { name = "Project Jupyter", email = "jupyter@googlegroups.com" },
 ]
@@ -22,13 +22,11 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "Topic :: Multimedia :: Graphics",
     "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
 ]
-requires-python = ">=3.7"
+requires-python = ">=3.10"
 dependencies = [
     "ipyleaflet_core",
     "jupyter_leaflet",

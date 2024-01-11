@@ -37,6 +37,9 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/jupyter-widgets/ipyleaflet"
 
+[tool.hatch.build.targets.wheel]
+packages = ["ipyleaflet"]
+
 [tool.ruff]
 extend-include = ["*.ipynb"]
 

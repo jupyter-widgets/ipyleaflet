@@ -34,14 +34,14 @@ jobs:
               - python==${{ matrix.python-version }}
 
       - name: Install ipyleaflet
-        run: pip install python/ipyleaflet --no-deps
+        run: pip install python/jupyter_leaflet python/jupyter_core python/ipyleaflet --no-deps
 
       - name: Check installation files
         run: |
           test -d $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet
           test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet/extension.js
           test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet/index.js
-          test -d $CONDA_PREFIX/share/jupyter/labextensions/jupyter-leaflet
+          test -f $CONDA_PREFIX/share/jupyter/nbextensions/jupyter-leaflet/index.js
           test -f $CONDA_PREFIX/share/jupyter/labextensions/jupyter-leaflet/package.json
 
       - name: Python Linters

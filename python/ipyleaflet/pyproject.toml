@@ -35,10 +35,5 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/jupyter-widgets/ipyleaflet"
 
-[tool.hatch.build.targets.sdist]
-exclude = [
-    ".github",
-]
-
-[tool.hatch.version]
-path = "ipyleaflet/__init__.py"
+[tool.hatch.build.targets.wheel]
+packages = ["ipyleaflet_core", "jupyer_leaflet"]

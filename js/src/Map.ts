@@ -67,7 +67,7 @@ export class LeafletMapModel extends DOMWidgetModel {
       scroll_wheel_zoom: false,
       double_click_zoom: true,
       box_zoom: true,
-      tap: true,
+      tap_hold: true,
       tap_tolerance: 15,
       world_copy_jump: false,
       close_popup_on_click: true,

@@ -1412,12 +1412,15 @@ class LayerGroup(Layer):
     ----------
     layers: list, default []
         List of layers to include in the group.
+    visible: bool, default True
+        the visibility of the layer on the map
     """
 
     _view_name = Unicode("LeafletLayerGroupView").tag(sync=True)
     _model_name = Unicode("LeafletLayerGroupModel").tag(sync=True)
 
     layers = Tuple().tag(trait=Instance(Layer), sync=True, **widget_serialization)
+    visible = Bool(True).tag(sync=True)
 
     _layer_ids = List()
 
@@ -1551,6 +1554,11 @@ class LayerGroup(Layer):
     def clear(self):
         """Remove all layers from the group."""
         self.layers = ()
+
+    @observe("visible")
+    def toggle_markers(self, visible):
+        """Switch the layers visibility according to the master LayerGroup."""
+        [setattr(layer, "visible", visible["new"]) for layer in self.layers]
 
 
 class FeatureGroup(LayerGroup):

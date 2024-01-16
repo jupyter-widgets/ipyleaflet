@@ -27,8 +27,8 @@
     "build:labextension": "jupyter labextension build .",
     "clean": "yarn run clean:lib && yarn run clean:nbextension && yarn run clean:labextension",
     "clean:lib": "rimraf lib",
-    "clean:nbextension": "rimraf ../ipyleaflet/nbextension/index.js",
-    "clean:labextension": "rimraf ../ipyleaflet/labextension",
+    "clean:nbextension": "rimraf ../nbextension/index.js",
+    "clean:labextension": "rimraf ../labextension",
     "lint": "yarn prettier && yarn eslint",
     "lint:check": "yarn prettier:check && yarn eslint",
     "prettier": "yarn prettier:base --write --list-different",
@@ -42,9 +42,9 @@
     "@jupyter-widgets/base": "^2 || ^3 || ^4 || ^5 || ^6",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
-    "leaflet": "^1.9.4",
+    "leaflet": "^1.7.1",
     "leaflet-ant-path": "^1.3.0",
-    "leaflet-defaulticon-compatibility": "^0.1.2",
+    "leaflet-defaulticon-compatibility": "^0.1.1",
     "leaflet-draw": "^1.0.4",
     "leaflet-fullscreen": "^1.0.2",
     "leaflet-measure": "^3.1.0",
@@ -96,7 +96,7 @@
   },
   "jupyterlab": {
     "extension": "lib/jupyterlab-plugin",
-    "outputDir": "../ipyleaflet/labextension",
+    "outputDir": "./labextension",
     "webpackConfig": "webpack.lab.config.js",
     "sharedPackages": {
       "@jupyter-widgets/base": {

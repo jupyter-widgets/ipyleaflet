@@ -9,4 +9,7 @@ dependencies:
   - xyzservices
   - branca
   - pip:
-    - ..
+      - ../python/jupyter_leaflet
+      - ../python/ipyleaflet_core
+      - ../python/ipyleaflet
+      - ../python/ipyleaflet

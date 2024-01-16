@@ -2576,7 +2576,7 @@ class Map(DOMWidget, InteractMixin):
         Whether the map can be zoomed in by double clicking on it and zoomed out by double clicking while holding shift.
     box_zoom: boolean, default True
         Whether the map can be zoomed to a rectangular area specified by dragging the mouse while pressing the shift key
-    tap_hold: boolean, default True
+    tap: boolean, default True
         Enables mobile hacks for supporting instant taps.
     tap_tolerance: int, default	15
         The max number of pixels a user can shift his finger during touch for it to be considered a valid tap.
@@ -2637,7 +2637,7 @@ class Map(DOMWidget, InteractMixin):
     scroll_wheel_zoom = Bool(False).tag(sync=True, o=True)
     double_click_zoom = Bool(True).tag(sync=True, o=True)
     box_zoom = Bool(True).tag(sync=True, o=True)
-    tap_hold = Bool(True).tag(sync=True, o=True)
+    tap = Bool(True).tag(sync=True, o=True)
     tap_tolerance = Int(15).tag(sync=True, o=True)
     world_copy_jump = Bool(False).tag(sync=True, o=True)
     close_popup_on_click = Bool(True).tag(sync=True, o=True)

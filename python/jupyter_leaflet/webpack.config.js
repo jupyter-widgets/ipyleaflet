@@ -38,7 +38,7 @@ module.exports = [
     entry: './src/extension.ts',
     output: {
       filename: 'extension.js',
-      path: path.resolve(__dirname, '..', 'ipyleaflet', 'nbextension'),
+      path: path.resolve(__dirname, 'nbextension'),
       libraryTarget: 'amd',
     },
     module: {
@@ -57,7 +57,7 @@ module.exports = [
     entry: ['./src/amd-public-path.ts', './src/notebook.ts'],
     output: {
       filename: 'index.js',
-      path: path.resolve(__dirname, '..', 'ipyleaflet', 'nbextension'),
+      path: path.resolve(__dirname, 'nbextension'),
       libraryTarget: 'amd',
       publicPath: '', // Set in amd-public-path.js
     },

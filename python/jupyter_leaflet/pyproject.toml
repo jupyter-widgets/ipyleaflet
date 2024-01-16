@@ -6,10 +6,10 @@ requires = [
 build-backend = "hatchling.build"
 
 [project]
-name = "ipyleaflet"
+name = "jupyter-leaflet"
 version = "0.18.1"
-description = "A Jupyter widget for dynamic Leaflet maps"
-readme = "README.md"
+description = "ipyleaflet extensions for JupyterLab and Jupyter Notebook"
+readme = "../../README.md"
 authors = [
     { name = "Project Jupyter", email = "jupyter@googlegroups.com" },
 ]
@@ -22,31 +22,24 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "Topic :: Multimedia :: Graphics",
     "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
 ]
-dependencies = [
-    "ipywidgets>=7.6.0,<9",
-    "traittypes>=0.2.1,<3",
-    "xyzservices>=2021.8.1",
-    "branca>=0.5.0",
-]
+requires-python = ">=3.10"
 
 [project.urls]
 Homepage = "https://github.com/jupyter-widgets/ipyleaflet"
 
 [tool.hatch.build]
 artifacts = [
-    "ipyleaflet/nbextension/index.*",
-    "ipyleaflet/labextension",
+    "nbextension/index.*",
+    "labextension",
 ]
 
 [tool.hatch.build.targets.wheel.shared-data]
-"ipyleaflet/nbextension" = "share/jupyter/nbextensions/jupyter-leaflet"
-"ipyleaflet/labextension" = "share/jupyter/labextensions/jupyter-leaflet"
+"nbextension" = "share/jupyter/nbextensions/jupyter-leaflet"
+"labextension" = "share/jupyter/labextensions/jupyter-leaflet"
 "jupyter-leaflet.json" = "etc/jupyter/nbconfig/notebook.d/jupyter-leaflet.json"
 
 [tool.hatch.build.targets.sdist]
@@ -56,8 +49,8 @@ exclude = [
 
 [tool.hatch.build.hooks.jupyter-builder]
 ensured-targets = [
-    "ipyleaflet/nbextension/index.js",
-    "ipyleaflet/labextension/package.json",
+    "nbextension/index.js",
+    "labextension/package.json",
 ]
 dependencies = [
     "hatch-jupyter-builder>=0.8.1",
@@ -65,7 +58,7 @@ dependencies = [
 build-function = "hatch_jupyter_builder.npm_builder"
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
-path = "./js"
+path = "."
 build_cmd = "build"
 npm = [
     "jlpm",

@@ -5,20 +5,18 @@ build/
 *.py[cod]
 node_modules/
 *package-lock.json
-js/.yarn/
+python/jupyter_leaflet/.yarn/
 ui-tests/.yarn/
 
 # Compiled javascript
-ipyleaflet/nbextension/
-ipyleaflet/labextension/
-js/dist/
-js/lib/
+python/jupyter_leaflet/nbextension/
+python/jupyter_leaflet/labextension/
+python/jupyter_leaflet/dist/
+python/jupyter_leaflet/lib/
 
 # OS X
 .DS_Store
 .idea/
-
-js/jupyter-leaflet-*.tgz
 
 # Documentation data files
 docs/*.csv

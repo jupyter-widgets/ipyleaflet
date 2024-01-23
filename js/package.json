@@ -76,6 +76,9 @@
       "@jupyter-widgets/base": {
         "bundled": false,
         "singleton": true
+      },
+      "leaflet": {
+        "singleton": true
       }
     }
   }

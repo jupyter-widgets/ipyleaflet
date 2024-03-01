@@ -70,7 +70,9 @@ For a development installation (requires yarn, you can install it with `conda in
 ```
 git clone https://github.com/jupyter-widgets/ipyleaflet.git
 cd ipyleaflet
-pip install -e .
+(cd python/ipyleaflet_core; pip install -e .)
+(cd python/jupyter_leaflet ; pip install -e .)
+(cd python/ipyleaflet; pip install -e .)
 ```
 
 If you are using the classic Jupyter Notebook you need to install the nbextension:

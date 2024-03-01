@@ -20,6 +20,7 @@ import {
   LeafletControlView,
   LeafletLayerModel,
   LeafletLayerView,
+  LeafletGeomanDrawControlView,
 } from './jupyter-leaflet';
 import L from './leaflet';
 import { getProjection } from './projections';
@@ -234,6 +235,10 @@ export class LeafletMapView extends LeafletDOMWidgetView {
     const view = await this.create_child_view<LeafletControlView>(child_model, {
       map_view: this,
     });
+    if (view instanceof LeafletGeomanDrawControlView) {
+      return view;
+    }
+
     this.obj.addControl(view.obj);
     // Trigger the displayed event of the child view.
     this.displayed.then(() => {

@@ -2129,9 +2129,10 @@ class SplitMapControl(Control):
 
 class DrawControlBase(Control):
 
-    circlemarker = Dict({ 'pathOptions': {} }).tag(sync=True)
-    polyline = Dict({ 'pathOptions': {} }).tag(sync=True)
-    polygon = Dict({ 'pathOptions': {} }).tag(sync=True)
+    # Different drawing modes
+    # See https://www.geoman.io/docs/modes/draw-mode
+    polyline = Dict({ 'shapeOptions': {} }).tag(sync=True)
+    polygon = Dict({ 'shapeOptions': {} }).tag(sync=True)
 
     # Leave empty to disable these
     circle = Dict().tag(sync=True)
@@ -2207,11 +2208,7 @@ class GeomanDrawControl(DrawControlBase):
     # Hides toolbar
     hide_controls = Bool(False).tag(sync=True)
 
-    # Different drawing modes
-    # See https://www.geoman.io/docs/modes/draw-mode
-    circlemarker = Dict({ 'pathOptions': {} }).tag(sync=True)
-    polyline = Dict({ 'pathOptions': {} }).tag(sync=True)
-    polygon = Dict({ 'pathOptions': {} }).tag(sync=True)
+    circlemarker = Dict({ 'shapeOptions': {} }).tag(sync=True)
 
     # Disabled by default
     text = Dict().tag(sync=True)
@@ -2265,23 +2262,13 @@ class DrawControl(DrawControlBase):
     _view_name = Unicode("LeafletGeomanDrawControlView").tag(sync=True)
     _model_name = Unicode("LeafletGeomanDrawControlModel").tag(sync=True)
 
-    # Enable each of the following drawing by giving them a non empty dict of options
-    # You can add Leaflet style options in the shapeOptions sub-dict
-    # See https://github.com/Leaflet/Leaflet.draw#polylineoptions
-    # TODO: mutable default value!
-    polyline = Dict({'shapeOptions': {}}).tag(sync=True)
-    # See https://github.com/Leaflet/Leaflet.draw#polygonoptions
-    # TODO: mutable default value!
-    polygon = Dict({'shapeOptions': {}}).tag(sync=True)
-    circlemarker = Dict({'shapeOptions': {}}).tag(sync=True)
+    circlemarker = Dict().tag(sync=True)
 
     last_draw = Dict({
         'type': 'Feature',
         'geometry': None
     })
     last_action = Unicode()
-
-    _draw_callbacks = Instance(CallbackDispatcher, ())
 
     def __init__(self, **kwargs):
         super(DrawControl, self).__init__(**kwargs)
@@ -2291,13 +2278,13 @@ class DrawControl(DrawControlBase):
         if content.get('event', '').startswith('pm:'):
             action = content.get('event').split(':')[1]
             geo_json = content.get('geo_json')
+            # We remove vertexadded events, since they were not available through leaflet-draw
             if action == "vertexadded":
-                self._draw_callbacks(self, action=action, geo_json=geo_json)
                 return
             # Some actions return only new feature, while others return all features
             # in the layer
-            if not isinstance(geo_json, list):
-                geo_json = [geo_json]
+            if not isinstance(geo_json, dict):
+                geo_json = geo_json[-1]
             self.last_draw = geo_json
             self.last_action = action
             self._draw_callbacks(self, action=action, geo_json=self.last_draw)

@@ -17,17 +17,17 @@ export class LeafletGeomanDrawControlModel extends LeafletControlModel {
       hide_controls: false,
       data: [],
       marker: {},
-      circleMarker: { pathOptions: {} },
+      circleMarker: { markerStyle: {} },
       circle: {},
       polyline: { pathOptions: {} },
       rectangle: {},
       polygon: { pathOptions: {} },
       text: {},
       edit: true,
-      drag: true,
+      drag: false,
       remove: true,
-      cut: true,
-      rotate: true,
+      cut: false,
+      rotate: false,
     };
   }
 }
@@ -88,43 +88,73 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
 
     var position = this.model.get('position');
 
-    // Convert shapeOptions to pathOptions for backwards compatibility
     var drawMarker = this.model.get('marker');
     if (!Object.keys(drawMarker).length) {
       drawMarker = false;
-    } else if ('shapeOptions' in Object.keys(drawMarker)) {
-      drawMarker.pathOptions = drawMarker.shapeOptions;
+    } else {
+      // For backwards compatibility
+      if ("shapeOptions" in drawMarker) {
+        drawMarker.markerOptions = drawMarker.shapeOptions;
+        delete drawMarker.shapeOptions;
+      }
+      this.map_view.obj.pm.enableDraw(drawMarker);
     }
+
     var drawCircleMarker = this.model.get('circlemarker');
     if (!Object.keys(drawCircleMarker).length) {
       drawCircleMarker = false;
-    } else if ('shapeOptions' in Object.keys(drawCircleMarker)) {
-      drawCircleMarker.pathOptions = drawCircleMarker.shapeOptions;
+    } else {
+      if ("shapeOptions" in drawCircleMarker) {
+        drawCircleMarker.pathOptions = drawCircleMarker.shapeOptions;
+        delete drawCircleMarker.shapeOptions;
+      }
+      this.map_view.obj.pm.Draw.CircleMarker.setOptions(drawCircleMarker);
     }
+
     var drawCircle = this.model.get('circle');
     if (!Object.keys(drawCircle).length) {
       drawCircle = false;
-    } else if ('shapeOptions' in Object.keys(drawCircle)) {
-      drawCircle.pathOptions = drawCircle.shapeOptions;
+    } else {
+      if ("shapeOptions" in drawCircle) {
+        drawCircle.pathOptions = drawCircle.shapeOptions;
+        delete drawCircle.shapeOptions;
+      }
+      this.map_view.obj.pm.Draw.Circle.setOptions(drawCircle);
     }
+
     var drawPolyline = this.model.get('polyline');
     if (!Object.keys(drawPolyline).length) {
       drawPolyline = false;
-    } else if ('shapeOptions' in Object.keys(drawPolyline)) {
-      drawPolyline.pathOptions = drawPolyline.shapeOptions;
+    } else {
+      if ("shapeOptions" in drawPolyline) {
+        drawPolyline.pathOptions = drawPolyline.shapeOptions;
+        delete drawPolyline.shapeOptions;
+      }
+      this.map_view.obj.pm.Draw.Line.setOptions(drawPolyline);
     }
+
     var drawRectangle = this.model.get('rectangle');
     if (!Object.keys(drawRectangle).length) {
       drawRectangle = false;
-    } else if ('shapeOptions' in Object.keys(drawRectangle)) {
-      drawRectangle.pathOptions = drawRectangle.shapeOptions;
+    } else {
+      if ("shapeOptions" in drawRectangle) {
+        drawRectangle.pathOptions = drawRectangle.shapeOptions;
+        delete drawRectangle.shapeOptions;
+      }
+      this.map_view.obj.pm.Draw.Rectangle.setOptions(drawRectangle);
     }
+
     var drawPolygon = this.model.get('polygon');
     if (!Object.keys(drawPolygon).length) {
       drawPolygon = false;
-    } else if ('shapeOptions' in Object.keys(drawPolygon)) {
-      drawPolygon.pathOptions = drawPolygon.shapeOptions;
+    } else {
+      if ("shapeOptions" in drawPolygon) {
+        drawPolygon.pathOptions = drawPolygon.shapeOptions;
+        delete drawPolygon.shapeOptions;
+      }
+      this.map_view.obj.pm.Draw.Polygon.setOptions(drawPolygon);
     }
+
     var drawText = this.model.get('text');
     if (!Object.keys(drawText).length) {
       drawText = false;
@@ -166,7 +196,6 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
         });
         this.feature_group.addLayer(layer);
         this.layers_to_data();
-        console.log('CREATED');
         this.model.save_changes();
       }
     );
@@ -290,7 +319,6 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
 
   setMode() {
     var mode = this.model.get('current_mode');
-    console.log('setting mode', mode);
     if (mode == null) {
       const currentShape = this.map_view.obj.pm.Draw.getActiveShape();
       if (currentShape) {
@@ -407,7 +435,6 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
         newData.push(geoJson);
       }
     });
-    console.log('data changed, new data:', newData);
     this.model.set('data', newData);
     this.model.save_changes();
   }

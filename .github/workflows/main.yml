@@ -55,3 +55,11 @@ jobs:
 
       - name: Import check
         run: python -c 'import ipyleaflet'
+
+      - name: Install playwright
+        run: |
+          pip install "solara[pytest]"
+          playwright install chromium
+
+      - name: Run tests
+        run: pytest tests -vv

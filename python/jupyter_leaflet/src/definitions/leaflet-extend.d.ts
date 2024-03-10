@@ -135,9 +135,17 @@ declare module 'leaflet' {
       constructor(options?: LegendOptions);
       options: LegendOptions;
     }
+
+    interface MeasureOptions extends ControlOptions {}
+    class Measure extends Control {
+      constructor(options?: MeasureOptions);
+      options: MeasureOptions;
+      _setCaptureMarkerIcon: () => void;
+    }
   }
 
   declare namespace control {
     function legend(options?: Control.LegendOptions): Control.Legend;
+    function measure(options?: Control.MeasureOptions): Control.Measure;
   }
 }

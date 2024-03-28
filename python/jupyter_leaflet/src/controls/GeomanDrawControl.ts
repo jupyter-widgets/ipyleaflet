@@ -1,5 +1,5 @@
 import { unpack_models, WidgetView } from '@jupyter-widgets/base';
-import { DrawEvents, GeoJSON } from 'leaflet';
+import { GeoJSON } from 'leaflet';
 import L from '../leaflet';
 import { LayerShapes } from '../definitions/leaflet-extend';
 import { LeafletControlModel, LeafletControlView } from './Control';
@@ -39,6 +39,7 @@ LeafletGeomanDrawControlModel.serializers = {
 
 export class LeafletGeomanDrawControlView extends LeafletControlView {
   feature_group: GeoJSON;
+  controlOptions: { [option: string]: any };
   initialize(
     parameters: WidgetView.IInitializeParameters<LeafletControlModel>
   ) {
@@ -97,7 +98,7 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
         drawMarker.markerOptions = drawMarker.shapeOptions;
         delete drawMarker.shapeOptions;
       }
-      this.map_view.obj.pm.enableDraw(drawMarker);
+      this.map_view.obj.pm.Draw.Marker.setOptions(drawMarker);
     }
 
     var drawCircleMarker = this.model.get('circlemarker');
@@ -166,23 +167,21 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
     var cutMode = this.model.get('cut');
     var rotateMode = this.model.get('rotate');
 
-    if (!this.model.get('hide_controls')) {
-      this.map_view.obj.pm.addControls({
-        position: position,
-        drawMarker: !(drawMarker == false),
-        drawCircleMarker: !(drawCircleMarker == false),
-        drawCircle: !(drawCircle == false),
-        drawPolyline: !(drawPolyline == false),
-        drawRectangle: !(drawRectangle == false),
-        drawPolygon: !(drawPolygon == false),
-        drawText: !(drawText == false),
-        editMode: editMode,
-        dragMode: dragMode,
-        removalMode: removalMode,
-        cutPolygon: cutMode,
-        rotateMode: rotateMode,
-      });
-    }
+    this.controlOptions = {
+      position: position,
+      drawMarker: !(drawMarker == false),
+      drawCircleMarker: !(drawCircleMarker == false),
+      drawCircle: !(drawCircle == false),
+      drawPolyline: !(drawPolyline == false),
+      drawRectangle: !(drawRectangle == false),
+      drawPolygon: !(drawPolygon == false),
+      drawText: !(drawText == false),
+      editMode: editMode,
+      dragMode: dragMode,
+      removalMode: removalMode,
+      cutPolygon: cutMode,
+      rotateMode: rotateMode,
+    };
 
     this.setMode();
 
@@ -194,6 +193,22 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
           event: 'pm:create',
           geo_json: this.layer_to_json(layer),
         });
+        // Without this, the text layer will not be editable after creation. We only create the layer after
+        // the text has been edited.
+        if (e.shape === 'Text') {
+          if (!layer.pm.enabled()) layer.pm.enable();
+          layer.pm.focus();
+          layer.on('pm:textblur', (e) => {
+            this.send({
+              event: 'pm:textchange',
+              geo_json: this.layer_to_json(layer),
+            });
+            this.feature_group.addLayer(layer);
+            this.layers_to_data();
+            this.model.save_changes();
+          });
+          return;
+        }
         this.feature_group.addLayer(layer);
         this.layers_to_data();
         this.model.save_changes();

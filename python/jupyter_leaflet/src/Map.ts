@@ -235,7 +235,11 @@ export class LeafletMapView extends LeafletDOMWidgetView {
     const view = await this.create_child_view<LeafletControlView>(child_model, {
       map_view: this,
     });
-    if (view instanceof LeafletGeomanDrawControlView) {
+    if (
+      view instanceof LeafletGeomanDrawControlView &&
+      !child_model.get('hide_controls')
+    ) {
+      this.obj.pm.addControls(view.controlOptions);
       return view;
     }
 

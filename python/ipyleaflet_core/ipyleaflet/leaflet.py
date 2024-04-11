@@ -2191,6 +2191,37 @@ class DrawControlBase(Control):
         """Clear all markers."""
         self.send({"msg": "clear_markers"})
 
+
+class DrawControl(DrawControlBase):
+    """DrawControl class.
+
+    Drawing tools for drawing on the map.
+    """
+
+    _view_name = Unicode("LeafletDrawControlView").tag(sync=True)
+    _model_name = Unicode("LeafletDrawControlModel").tag(sync=True)
+
+    # Enable each of the following drawing by giving them a non empty dict of options
+    # You can add Leaflet style options in the shapeOptions sub-dict
+    # See https://github.com/Leaflet/Leaflet.draw#polylineoptions and
+    # https://github.com/Leaflet/Leaflet.draw#polygonoptions
+    circlemarker = Dict({"shapeOptions": {}}).tag(sync=True)
+
+    last_draw = Dict({"type": "Feature", "geometry": None})
+    last_action = Unicode()
+
+    def __init__(self, **kwargs):
+        super(DrawControl, self).__init__(**kwargs)
+        self.on_msg(self._handle_leaflet_event)
+
+    def _handle_leaflet_event(self, _, content, buffers):
+        if content.get("event", "").startswith("draw"):
+            event, action = content.get("event").split(":")
+            self.last_draw = content.get("geo_json")
+            self.last_action = action
+            self._draw_callbacks(self, action=action, geo_json=self.last_draw)
+
+
 class GeomanDrawControl(DrawControlBase):
     """GeomanDrawControl class.
 
@@ -2253,10 +2284,10 @@ class GeomanDrawControl(DrawControlBase):
         self.send({'msg': 'clear_text'})
 
 
-class DrawControl(DrawControlBase):
+class DrawControlCompatibility(DrawControlBase):
     """DrawControl class.
 
-    Old drawing tools powered by leaflet-draw for backwards compatibility. Use GeomanDrawControl instead.
+    Python side compatibility layer for old DrawControls, using the new Geoman front-end but old Python API.
     """
     
     _view_name = Unicode("LeafletGeomanDrawControlView").tag(sync=True)
@@ -2271,7 +2302,7 @@ class DrawControl(DrawControlBase):
     last_action = Unicode()
 
     def __init__(self, **kwargs):
-        super(DrawControl, self).__init__(**kwargs)
+        super(DrawControlCompatibility, self).__init__(**kwargs)
         self.on_msg(self._handle_leaflet_event)
 
     def _handle_leaflet_event(self, _, content, buffers):

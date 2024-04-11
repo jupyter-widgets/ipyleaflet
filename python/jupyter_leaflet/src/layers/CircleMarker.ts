@@ -22,7 +22,10 @@ export class LeafletCircleMarkerView extends LeafletPathView {
   obj: CircleMarker;
 
   create_obj() {
-    this.obj = L.circleMarker(this.model.get('location'), this.get_options());
+    this.obj = L.circleMarker(
+      this.model.get('location'),
+      this.get_options() as L.CircleMarkerOptions
+    );
   }
 
   model_events() {

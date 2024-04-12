@@ -235,6 +235,8 @@ export class LeafletMapView extends LeafletDOMWidgetView {
     const view = await this.create_child_view<LeafletControlView>(child_model, {
       map_view: this,
     });
+    // Work around for Geoman creating and adding its own toolbar
+    // TODO: remove the special case
     if (
       view instanceof LeafletGeomanDrawControlView &&
       !child_model.get('hide_controls')

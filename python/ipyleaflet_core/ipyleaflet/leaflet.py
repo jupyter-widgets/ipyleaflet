@@ -2129,11 +2129,6 @@ class SplitMapControl(Control):
 
 class DrawControlBase(Control):
 
-    # Different drawing modes
-    # See https://www.geoman.io/docs/modes/draw-mode
-    polyline = Dict({ 'shapeOptions': {} }).tag(sync=True)
-    polygon = Dict({ 'shapeOptions': {} }).tag(sync=True)
-
     # Leave empty to disable these
     circle = Dict().tag(sync=True)
     rectangle = Dict().tag(sync=True)
@@ -2205,7 +2200,9 @@ class DrawControl(DrawControlBase):
     # You can add Leaflet style options in the shapeOptions sub-dict
     # See https://github.com/Leaflet/Leaflet.draw#polylineoptions and
     # https://github.com/Leaflet/Leaflet.draw#polygonoptions
-    circlemarker = Dict({'shapeOptions': {}}).tag(sync=True)
+    polyline = Dict({ 'shapeOptions': {} }).tag(sync=True)
+    polygon = Dict({ 'shapeOptions': {} }).tag(sync=True)
+    circlemarker = Dict({ 'shapeOptions': {} }).tag(sync=True)
 
     last_draw = Dict({"type": "Feature", "geometry": None})
     last_action = Unicode()
@@ -2239,7 +2236,11 @@ class GeomanDrawControl(DrawControlBase):
     # Hides toolbar
     hide_controls = Bool(False).tag(sync=True)
 
-    circlemarker = Dict({'pathOptions':{}}).tag(sync=True)
+    # Different drawing modes
+    # See https://www.geoman.io/docs/modes/draw-mode
+    polyline = Dict({ 'pathOptions': {} }).tag(sync=True)
+    polygon = Dict({ 'pathOptions': {} }).tag(sync=True)
+    circlemarker = Dict({ 'pathOptions': {} }).tag(sync=True)
 
     # Disabled by default
     text = Dict().tag(sync=True)
@@ -2293,7 +2294,11 @@ class DrawControlCompatibility(DrawControlBase):
     _view_name = Unicode("LeafletGeomanDrawControlView").tag(sync=True)
     _model_name = Unicode("LeafletGeomanDrawControlModel").tag(sync=True)
 
-    circlemarker = Dict({'shapeOptions': {}}).tag(sync=True)
+    # Different drawing modes
+    # See https://www.geoman.io/docs/modes/draw-mode
+    polyline = Dict({ 'shapeOptions': {} }).tag(sync=True)
+    polygon = Dict({ 'shapeOptions': {} }).tag(sync=True)
+    circlemarker = Dict({ 'shapeOptions': {} }).tag(sync=True)
 
     last_draw = Dict({
         'type': 'Feature',

@@ -17,7 +17,7 @@ export class LeafletGeomanDrawControlModel extends LeafletControlModel {
       hide_controls: false,
       data: [],
       marker: {},
-      circlemarker: { markerStyle: {} },
+      circlemarker: { pathOptions: {} },
       circle: {},
       polyline: { pathOptions: {} },
       rectangle: {},

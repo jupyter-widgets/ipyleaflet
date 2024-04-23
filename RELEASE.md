@@ -18,9 +18,9 @@
 5. Build and publish Python package
    ```sh
    python -m build python/jupyter_leaflet
-   twine upload python/jupyter_leaflet/dist/*
+   twine upload python/jupyter_leaflet/dist/jupyter_leaflet*
    python -m build python/ipyleaflet
-   twine upload python/ipyleaflet/dist/*
+   twine upload python/ipyleaflet/dist/ipyleaflet*
    ```
 6. Update environment config with new ipyleaflet pypi download link: `docs/jupyterlite_config.json`
 7. Commit and push in git

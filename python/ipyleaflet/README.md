@@ -11,7 +11,7 @@ A Jupyter / Leaflet bridge enabling interactive maps in the Jupyter notebook.
 
 ### Selecting a basemap for a leaflet map:
 
-![Basemap Screencast](basemap.gif)
+![Basemap Screencast](https://github.com/jupyter-widgets/ipyleaflet/blob/master/basemap.gif)
 
 ### Loading a geojson map:
 

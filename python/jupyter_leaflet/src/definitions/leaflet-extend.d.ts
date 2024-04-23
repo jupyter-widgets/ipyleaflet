@@ -34,6 +34,9 @@ declare module 'leaflet' {
   interface Layer {
     _refreshTileUrl(tile: any, url: any): void;
     refresh(): void;
+    toGeoJSON(): GeoJson;
+    _pmTempLayer: any;
+    _leaflet_id: number;
   }
 
   interface Polyline {

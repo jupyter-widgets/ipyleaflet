@@ -37,6 +37,7 @@ export * from './layers/WMSLayer';
 export * from './controls/AttributionControl';
 export * from './controls/Control';
 export * from './controls/DrawControl';
+export * from './controls/GeomanDrawControl';
 export * from './controls/FullScreenControl';
 export * from './controls/LayersControl';
 export * from './controls/LegendControl';

@@ -1,7 +1,7 @@
 Draw Control
 ============
 
-The ``DrawControl`` allows one to draw shapes on the map such as ``Rectangle`` ``Circle`` or lines.
+The ``DrawControl`` is deprecated and will be removed in a future release. Please use ``GeomanDrawControl`` instead.
 
 Example
 -------

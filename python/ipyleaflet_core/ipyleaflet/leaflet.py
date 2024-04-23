@@ -2127,24 +2127,7 @@ class SplitMapControl(Control):
             self.x = event.x
 
 
-class DrawControl(Control):
-    """DrawControl class.
-
-    Drawing tools for drawing on the map.
-    """
-
-    _view_name = Unicode("LeafletDrawControlView").tag(sync=True)
-    _model_name = Unicode("LeafletDrawControlModel").tag(sync=True)
-
-    # Enable each of the following drawing by giving them a non empty dict of options
-    # You can add Leaflet style options in the shapeOptions sub-dict
-    # See https://github.com/Leaflet/Leaflet.draw#polylineoptions
-    # TODO: mutable default value!
-    polyline = Dict({"shapeOptions": {}}).tag(sync=True)
-    # See https://github.com/Leaflet/Leaflet.draw#polygonoptions
-    # TODO: mutable default value!
-    polygon = Dict({"shapeOptions": {}}).tag(sync=True)
-    circlemarker = Dict({"shapeOptions": {}}).tag(sync=True)
+class DrawControlBase(Control):
 
     # Leave empty to disable these
     circle = Dict().tag(sync=True)
@@ -2158,21 +2141,10 @@ class DrawControl(Control):
     # Layer data
     data = List().tag(sync=True)
 
-    last_draw = Dict({"type": "Feature", "geometry": None})
-    last_action = Unicode()
-
     _draw_callbacks = Instance(CallbackDispatcher, ())
 
     def __init__(self, **kwargs):
-        super(DrawControl, self).__init__(**kwargs)
-        self.on_msg(self._handle_leaflet_event)
-
-    def _handle_leaflet_event(self, _, content, buffers):
-        if content.get("event", "").startswith("draw"):
-            event, action = content.get("event").split(":")
-            self.last_draw = content.get("geo_json")
-            self.last_action = action
-            self._draw_callbacks(self, action=action, geo_json=self.last_draw)
+        super(DrawControlBase, self).__init__(**kwargs)
 
     def on_draw(self, callback, remove=False):
         """Add a draw event listener.
@@ -2213,6 +2185,145 @@ class DrawControl(Control):
     def clear_markers(self):
         """Clear all markers."""
         self.send({"msg": "clear_markers"})
+
+
+class DrawControl(DrawControlBase):
+    """DrawControl class.
+
+    Drawing tools for drawing on the map.
+    """
+
+    _view_name = Unicode("LeafletDrawControlView").tag(sync=True)
+    _model_name = Unicode("LeafletDrawControlModel").tag(sync=True)
+
+    # Enable each of the following drawing by giving them a non empty dict of options
+    # You can add Leaflet style options in the shapeOptions sub-dict
+    # See https://github.com/Leaflet/Leaflet.draw#polylineoptions and
+    # https://github.com/Leaflet/Leaflet.draw#polygonoptions
+    polyline = Dict({ 'shapeOptions': {} }).tag(sync=True)
+    polygon = Dict({ 'shapeOptions': {} }).tag(sync=True)
+    circlemarker = Dict({ 'shapeOptions': {} }).tag(sync=True)
+
+    last_draw = Dict({"type": "Feature", "geometry": None})
+    last_action = Unicode()
+
+    def __init__(self, **kwargs):
+        super(DrawControl, self).__init__(**kwargs)
+        self.on_msg(self._handle_leaflet_event)
+
+    def _handle_leaflet_event(self, _, content, buffers):
+        if content.get("event", "").startswith("draw"):
+            event, action = content.get("event").split(":")
+            self.last_draw = content.get("geo_json")
+            self.last_action = action
+            self._draw_callbacks(self, action=action, geo_json=self.last_draw)
+
+
+class GeomanDrawControl(DrawControlBase):
+    """GeomanDrawControl class.
+
+    Alternative drawing tools for drawing on the map provided by Leaflet-Geoman.
+    """
+
+    _view_name = Unicode("LeafletGeomanDrawControlView").tag(sync=True)
+    _model_name = Unicode("LeafletGeomanDrawControlModel").tag(sync=True)
+
+    # Current mode & shape
+    # valid values are: 'draw', 'edit', 'drag', 'remove', 'cut', 'rotate'
+    # for drawing, the tool can be added after ':' e.g. 'draw:marker'
+    current_mode = Any(allow_none=True, default_value=None).tag(sync=True)
+
+    # Hides toolbar
+    hide_controls = Bool(False).tag(sync=True)
+
+    # Different drawing modes
+    # See https://www.geoman.io/docs/modes/draw-mode
+    polyline = Dict({ 'pathOptions': {} }).tag(sync=True)
+    polygon = Dict({ 'pathOptions': {} }).tag(sync=True)
+    circlemarker = Dict({ 'pathOptions': {} }).tag(sync=True)
+
+    # Disabled by default
+    text = Dict().tag(sync=True)
+
+    # Tools
+    # See https://www.geoman.io/docs/modes
+    drag = Bool(True).tag(sync=True)
+    cut = Bool(True).tag(sync=True)
+    rotate = Bool(True).tag(sync=True)
+
+    def __init__(self, **kwargs):
+        super(GeomanDrawControl, self).__init__(**kwargs)
+        self.on_msg(self._handle_leaflet_event)
+
+    def _handle_leaflet_event(self, _, content, buffers):
+        if content.get('event', '').startswith('pm:'):
+            action = content.get('event').split(':')[1]
+            geo_json = content.get('geo_json')
+            if action == "vertexadded":
+                self._draw_callbacks(self, action=action, geo_json=geo_json)
+                return
+            # Some actions return only new feature, while others return all features
+            # in the layer
+            if not isinstance(geo_json, list):
+                geo_json = [geo_json]
+            self._draw_callbacks(self, action=action, geo_json=geo_json)
+
+    def on_draw(self, callback, remove=False):
+        """Add a draw event listener.
+
+        Parameters
+        ----------
+        callback : callable
+            Callback function that will be called on draw event.
+        remove: boolean
+            Whether to remove this callback or not. Defaults to False.
+        """
+        self._draw_callbacks.register_callback(callback, remove=remove)
+
+    def clear_text(self):
+        """Clear all text."""
+        self.send({'msg': 'clear_text'})
+
+
+class DrawControlCompatibility(DrawControlBase):
+    """DrawControl class.
+
+    Python side compatibility layer for old DrawControls, using the new Geoman front-end but old Python API.
+    """
+    
+    _view_name = Unicode("LeafletGeomanDrawControlView").tag(sync=True)
+    _model_name = Unicode("LeafletGeomanDrawControlModel").tag(sync=True)
+
+    # Different drawing modes
+    # See https://www.geoman.io/docs/modes/draw-mode
+    polyline = Dict({ 'shapeOptions': {} }).tag(sync=True)
+    polygon = Dict({ 'shapeOptions': {} }).tag(sync=True)
+    circlemarker = Dict({ 'shapeOptions': {} }).tag(sync=True)
+
+    last_draw = Dict({
+        'type': 'Feature',
+        'geometry': None
+    })
+    last_action = Unicode()
+
+    def __init__(self, **kwargs):
+        super(DrawControlCompatibility, self).__init__(**kwargs)
+        self.on_msg(self._handle_leaflet_event)
+
+    def _handle_leaflet_event(self, _, content, buffers):
+        if content.get('event', '').startswith('pm:'):
+            action = content.get('event').split(':')[1]
+            geo_json = content.get('geo_json')
+            # We remove vertexadded events, since they were not available through leaflet-draw
+            if action == "vertexadded":
+                return
+            # Some actions return only new feature, while others return all features
+            # in the layer
+            if not isinstance(geo_json, dict):
+                geo_json = geo_json[-1]
+            self.last_draw = geo_json
+            self.last_action = action
+            self._draw_callbacks(self, action=action, geo_json=self.last_draw)
 
 
 class ZoomControl(Control):

@@ -1,14 +1,13 @@
 [build-system]
 requires = [
     "hatchling",
-    "jupyterlab==4.*",
 ]
 build-backend = "hatchling.build"
 
 [project]
 name = "ipyleaflet"
 description = "A Jupyter widget for dynamic Leaflet maps"
-readme = "../../README.md"
+readme = "README.md"
 authors = [
     { name = "Project Jupyter", email = "jupyter@googlegroups.com" },
 ]

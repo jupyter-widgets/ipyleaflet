@@ -7,10 +7,6 @@ The reference Python backend, `ipyleaflet` is available
 
 ## Package Install
 
-**Prerequisites**
-
-- [node](https://nodejs.org/)
-
 ```bash
-npm install --save jupyter-leaflet
+pip install jupyter-leaflet
 ```

@@ -34,7 +34,7 @@ jobs:
               - python==${{ matrix.python-version }}
 
       - name: Install ipyleaflet
-        run: pip install python/jupyter_leaflet python/ipyleaflet_core python/ipyleaflet --no-deps
+        run: pip install python/jupyter_leaflet python/ipyleaflet --no-deps
 
       - name: Check installation files
         run: |

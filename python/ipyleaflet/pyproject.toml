@@ -7,7 +7,6 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ipyleaflet"
-version = "0.18.1"
 description = "A Jupyter widget for dynamic Leaflet maps"
 readme = "../../README.md"
 authors = [
@@ -29,12 +28,30 @@ classifiers = [
 ]
 requires-python = ">=3.8"
 dependencies = [
-    "ipyleaflet_core",
-    "jupyter_leaflet",
+    "ipywidgets>=7.6.0,<9",
+    "traittypes>=0.2.1,<3",
+    "xyzservices>=2021.8.1",
+    "branca>=0.5.0",
+    # Is there no automatic way to compute this with hatch??
+    "jupyter_leaflet>=0.19,<0.20"
 ]
+
+[tool.hatch.version]
+path = "ipyleaflet/_version.py"
+source = "code"
 
 [project.urls]
 Homepage = "https://github.com/jupyter-widgets/ipyleaflet"
 
 [tool.hatch.build.targets.wheel]
-packages = ["ipyleaflet_core", "jupyer_leaflet"]
+packages = ["ipyleaflet"]
+
+[tool.ruff]
+extend-include = ["*.ipynb"]
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+]
+ignore = ["E501", "E731"]

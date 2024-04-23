@@ -32,7 +32,7 @@ dependencies = [
     "xyzservices>=2021.8.1",
     "branca>=0.5.0",
     # Is there no automatic way to compute this with hatch??
-    "jupyter_leaflet>=0.18,<0.19",
+    "jupyter_leaflet>=0.19,<0.20",
 ]
 dynamic = [
     "version",

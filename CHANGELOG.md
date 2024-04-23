@@ -1,3 +1,144 @@
+## v0.19.0
+
+### New Features
+
+* feat: introduce leaflet-geoman as an alternative to leaflet-draw by @iisakkirotko in https://github.com/jupyter-widgets/ipyleaflet/pull/1181
+
+### Documentation
+
+* Add colormaps to choropleth docs by @gjmooney in https://github.com/jupyter-widgets/ipyleaflet/pull/1157
+* Marker cluster api docs by @gjmooney in https://github.com/jupyter-widgets/ipyleaflet/pull/1151
+
+### Maintenance
+
+* Ruff linting by @gjmooney in https://github.com/jupyter-widgets/ipyleaflet/pull/1158
+* Switch to using TypeScript by @gjmooney in https://github.com/jupyter-widgets/ipyleaflet/pull/1159
+* Start adding types by @gjmooney in https://github.com/jupyter-widgets/ipyleaflet/pull/1160
+* Migrate to Hatch by @gjmooney in https://github.com/jupyter-widgets/ipyleaflet/pull/1166
+* Leaflet update by @gjmooney in https://github.com/jupyter-widgets/ipyleaflet/pull/1164
+* Split Python and JavaScript packages by @gjmooney in https://github.com/jupyter-widgets/ipyleaflet/pull/1168
+* Update yarn.lock files by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/1170
+* Add leaflet as singleton by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/1176
+* fix: Support for Python 3.8 was removed by @iisakkirotko in https://github.com/jupyter-widgets/ipyleaflet/pull/1180
+* fix: outdated installation instructions in README.md by @iisakkirotko in https://github.com/jupyter-widgets/ipyleaflet/pull/1179
+* fix: cast this.get_options to support @types/leaflet@1.9.9 by @iisakkirotko in https://github.com/jupyter-widgets/ipyleaflet/pull/1186
+* Use hatch-nodejs-version for the jupyter-leaflet versioning by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/1188
+* Refactor: remove ipyleaflet-core and have only ipyleaflet and jupyter-leaflet packages by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/1189
+
+### New Contributors
+
+* @iisakkirotko made their first contribution in https://github.com/jupyter-widgets/ipyleaflet/pull/1180
+
+**Full Changelog:** https://github.com/jupyter-widgets/ipyleaflet/compare/0.18.2...0.19.0
+
+## v0.18.2
+
+### What's Changed
+
+* Add leaflet as singleton by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/1175
+
+**Full Changelog:** https://github.com/jupyter-widgets/ipyleaflet/compare/0.18.1...0.18.2
+
+## v0.18.1
+
+### New features
+
+* Add "collapsed" property to the "LayersControl" by @gjmooney in https://github.com/jupyter-widgets/ipyleaflet/pull/1156
+* Add "index" argument to the Map's "add" method by @gjmooney in https://github.com/jupyter-widgets/ipyleaflet/pull/1156
+
+### Documentation
+
+* Documentation: Fix CSS issue by @gjmooney in https://github.com/jupyter-widgets/ipyleaflet/pull/1154
+
+### Maintenance
+
+* Update galata bot by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/1152
+* Fix missing hub command in bot action by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/1153
+* Change jupyterlab version and add yarn dependency by @gjmooney in https://github.com/jupyter-widgets/ipyleaflet/pull/1149
+
+### New Contributors
+
+* @gjmooney made their first contribution in https://github.com/jupyter-widgets/ipyleaflet/pull/1149
+
+**Full Changelog:** https://github.com/jupyter-widgets/ipyleaflet/compare/0.18.0...0.18.1
+
+## v0.18.0
+
+### What's Changed
+
+* Removed the unwanted character from Python code. by @frankwwu in https://github.com/jupyter-widgets/ipyleaflet/pull/1139
+* Added Jupyter Lab 4 support by @cdanielw in https://github.com/jupyter-widgets/ipyleaflet/pull/1146
+* Add support for PMTiles by @giswqs in https://github.com/jupyter-widgets/ipyleaflet/pull/1138
+* Towards ipyleaflet 0.18.0 by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/1147
+
+### New Contributors
+
+* @frankwwu made their first contribution in https://github.com/jupyter-widgets/ipyleaflet/pull/1139
+* @cdanielw made their first contribution in https://github.com/jupyter-widgets/ipyleaflet/pull/1146
+
+**Full Changelog:** https://github.com/jupyter-widgets/ipyleaflet/compare/0.17.4...0.18.0
+
+## v0.17.3
+
+### What's Changed
+
+* Add image service layers to address https://github.com/jupyter-widgets/ipyleaflet/pull/932 by @tsutterley in https://github.com/jupyter-widgets/ipyleaflet/pull/933
+* Revert change from https://github.com/jupyter-widgets/ipyleaflet/pull/965 that sets the default zoom to None by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/1068
+* Fix in tab by @maartenbreddels in https://github.com/jupyter-widgets/ipyleaflet/pull/1099
+
+### New Contributors
+
+* @tsutterley made their first contribution in https://github.com/jupyter-widgets/ipyleaflet/pull/933
+* @maartenbreddels made their first contribution in https://github.com/jupyter-widgets/ipyleaflet/pull/1099
+
+**Full Changelog:** https://github.com/jupyter-widgets/ipyleaflet/compare/0.17.2...0.17.3
+
+## v0.17.2
+
+### Bug fixes
+
+* Fix view bounds by @davidbrochart in https://github.com/jupyter-widgets/ipyleaflet/pull/1064
+
+### New features
+
+* Add subitems to layers by @HaudinFlorence in https://github.com/jupyter-widgets/ipyleaflet/pull/1011
+
+### Maintenance
+
+* JS linters by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/1057
+* Add pandas to bot by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/1056
+* Fix Galata bot by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/1055
+* Update the way we run UI-tests by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/1054
+* Corrected cursor name by @tylere in https://github.com/jupyter-widgets/ipyleaflet/pull/1047
+* Fixup yarn.lock by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/1043
+
+Full Changelog: https://github.com/jupyter-widgets/ipyleaflet/compare/0.17.1...0.17.2
+
+## v0.17.1
+
+### New features
+
+* Add a colormap control to be used with Choropleth layer by @HaudinFlorence in https://github.com/jupyter-widgets/ipyleaflet/pull/1010
+* Add zoom_offset param to TileLayer by @ned2 in https://github.com/jupyter-widgets/ipyleaflet/pull/1023
+* Add support for as_leaflet_layer in Map.add by @banesullivan in https://github.com/jupyter-widgets/ipyleaflet/pull/1033 and @davidbrochart in https://github.com/jupyter-widgets/ipyleaflet/pull/1037
+* ipywidgets 8.0 support by @jasongrout in https://github.com/jupyter-widgets/ipyleaflet/pull/968
+
+### Maintenance
+
+* Pin nodejs=16, drop base setup by @davidbrochart in https://github.com/jupyter-widgets/ipyleaflet/pull/1017
+* Remove HikeBike basemap from the examples by @HaudinFlorence in https://github.com/jupyter-widgets/ipyleaflet/pull/1039
+
+### Documentation
+
+* Use the latest jupyterlite-sphinx release on ReadTheDocs by @jtpio in https://github.com/jupyter-widgets/ipyleaflet/pull/1026
+* Lazy-load the JupyterLite embedded page in documentation by @HaudinFlorence in https://github.com/jupyter-widgets/ipyleaflet/pull/1007
+
+### New Contributors
+
+* @ned2 made their first contribution in https://github.com/jupyter-widgets/ipyleaflet/pull/1023
+
+Full Changelog: https://github.com/jupyter-widgets/ipyleaflet/compare/0.17.0...0.17.1
+
 ## v0.17.0
 
 Here are some highlights of changes in this version. See the full list of changes for more details: https://github.com/jupyter-widgets/ipyleaflet/compare/0.16.0...0.17.0
@@ -16,7 +157,7 @@ Here are some highlights of changes in this version. See the full list of change
   * `legend.legends` -> `legend.legend`
   * `legend.positioning` -> `legend.position`
   * `legend.positionnning` -> `legend.position`
-  
+
   The `name` argument in creating a LegendControl is also deprecated, please use the `title` argument instead: `LegendControl({}, title='My Title')`.
 * Deprecate layer and control-specific method names for Map and LayerGroup, in favor of methods that work for both layers and controls [#982](https://github.com/jupyter-widgets/ipyleaflet/pull/982). Update your code with the following substitutions for a Map `map` (or LayerGroup):
   * `map.add_control(...)` or `map.add_layer(...)` -> `map.add(...)`

@@ -17,7 +17,6 @@ keywords = [
    "ipython", "jupyter", "widgets", "graphics", "GIS",
 ]
 classifiers = [
-    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "Topic :: Multimedia :: Graphics",

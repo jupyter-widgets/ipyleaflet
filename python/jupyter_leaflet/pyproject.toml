@@ -2,12 +2,12 @@
 requires = [
     "hatchling",
     "jupyterlab==4.*",
+    "hatch-nodejs-version>=0.3.2",
 ]
 build-backend = "hatchling.build"
 
 [project]
 name = "jupyter-leaflet"
-version = "0.18.1"
 description = "ipyleaflet extensions for JupyterLab and Jupyter Notebook"
 readme = "../../README.md"
 authors = [
@@ -17,7 +17,6 @@ keywords = [
    "ipython", "jupyter", "widgets", "graphics", "GIS",
 ]
 classifiers = [
-    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "Topic :: Multimedia :: Graphics",
@@ -29,6 +28,9 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 requires-python = ">=3.8"
+dynamic = [
+    "version",
+]
 
 [project.urls]
 Homepage = "https://github.com/jupyter-widgets/ipyleaflet"
@@ -38,6 +40,9 @@ artifacts = [
     "nbextension/index.*",
     "labextension",
 ]
+
+[tool.hatch.version]
+source = "nodejs"
 
 [tool.hatch.build.targets.wheel.shared-data]
 "nbextension" = "share/jupyter/nbextensions/jupyter-leaflet"
@@ -74,4 +79,4 @@ select = [
     # pycodestyle
     "E",
 ]
-ignore = ["E501", "E731"] 
+ignore = ["E501", "E731"]

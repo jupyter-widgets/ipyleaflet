@@ -9,7 +9,7 @@ build-backend = "hatchling.build"
 [project]
 name = "jupyter-leaflet"
 description = "ipyleaflet extensions for JupyterLab and Jupyter Notebook"
-readme = "../../README.md"
+readme = "README.md"
 authors = [
     { name = "Project Jupyter", email = "jupyter@googlegroups.com" },
 ]

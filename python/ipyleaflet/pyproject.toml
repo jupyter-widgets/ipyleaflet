@@ -38,6 +38,9 @@ dynamic = [
     "version",
 ]
 
+[project.license]
+file = "LICENSE"
+
 [tool.hatch.version]
 path = "ipyleaflet/_version.py"
 source = "code"

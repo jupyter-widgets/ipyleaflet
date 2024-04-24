@@ -35,6 +35,9 @@ dynamic = [
 [project.urls]
 Homepage = "https://github.com/jupyter-widgets/ipyleaflet"
 
+[project.license]
+file = "LICENSE"
+
 [tool.hatch.build]
 artifacts = [
     "nbextension/index.*",

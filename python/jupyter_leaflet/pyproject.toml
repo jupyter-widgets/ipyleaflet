@@ -55,6 +55,7 @@ source = "nodejs"
 [tool.hatch.build.targets.sdist]
 exclude = [
     ".github",
+    ".yarn",
 ]
 
 [tool.hatch.build.hooks.jupyter-builder]

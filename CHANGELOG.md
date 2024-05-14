@@ -1,3 +1,7 @@
+## v0.19.1
+
+Version 0.19.0 did not contain a valid release on npm. This release is to fix that.
+
 ## v0.19.0
 
 ### New Features

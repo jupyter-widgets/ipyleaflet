@@ -10,7 +10,8 @@
   ],
   "files": [
     "css/",
-    "lib/"
+    "lib/",
+    "dist/"
   ],
   "repository": {
     "type": "git",

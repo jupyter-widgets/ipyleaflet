@@ -48,6 +48,11 @@ source = "code"
 [project.urls]
 Homepage = "https://github.com/jupyter-widgets/ipyleaflet"
 
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "*.gif"
+]
+
 [tool.hatch.build.targets.wheel]
 packages = ["ipyleaflet"]
 

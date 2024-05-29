@@ -7,7 +7,6 @@ Using pip
 .. code:: bash
 
     pip install ipyleaflet
-    jupyter nbextension enable --py --sys-prefix ipyleaflet  # can be skipped for notebook 5.3 and above
 
 Using conda
 -----------
@@ -37,8 +36,8 @@ For a development installation (requires yarn):
     pip install -e .
 
     # If you are developing on Jupyter Notebook
-    jupyter nbextension install --py --symlink --sys-prefix --overwrite ipyleaflet
-    jupyter nbextension enable --py --sys-prefix --overwrite ipyleaflet
+    jupyter nbextension install --py --symlink --sys-prefix --overwrite jupyter_leaflet
+    jupyter nbextension enable --py --sys-prefix jupyter_leaflet
 
     # If you are developing on JupyterLab
     jupyter labextension develop . --overwrite

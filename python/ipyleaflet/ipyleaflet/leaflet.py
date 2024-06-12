@@ -1096,7 +1096,7 @@ class VectorTileLayer(Layer):
         Url to the vector tile service.
     attribution: string, default ""
         Vector tile service attribution.
-    vector_tile_layer_styles: dict, default {}
+    vector_tile_layer_styles: dict or str, default {}
         CSS Styles to apply to the vector data.
     min_zoom: int, default 0
         The minimum zoom level down to which this layer will be displayed (inclusive).

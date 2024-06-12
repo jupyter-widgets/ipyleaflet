@@ -1098,6 +1098,14 @@ class VectorTileLayer(Layer):
         Vector tile service attribution.
     vector_tile_layer_styles: dict, default {}
         CSS Styles to apply to the vector data.
+    min_zoom: int, default 0
+        The minimum zoom level down to which this layer will be displayed (inclusive).
+    max_zoom: int, default 18
+        The maximum zoom level up to which this layer will be displayed (inclusive).
+    min_native_zoom: int, default None
+        Minimum zoom number the tile source has available. If it is specified, the tiles on all zoom levels lower than min_native_zoom will be loaded from min_native_zoom level and auto-scaled.
+    max_native_zoom: int, default None
+        Maximum zoom number the tile source has available. If it is specified, the tiles on all zoom levels higher than max_native_zoom will be loaded from max_native_zoom level and auto-scaled.
     """
 
     _view_name = Unicode("LeafletVectorTileLayerView").tag(sync=True)
@@ -1106,7 +1114,10 @@ class VectorTileLayer(Layer):
     url = Unicode().tag(sync=True, o=True)
     attribution = Unicode().tag(sync=True, o=True)
 
-    vector_tile_layer_styles = Dict().tag(sync=True, o=True)
+    min_zoom = Int(0).tag(sync=True, o=True)
+    max_zoom = Int(18).tag(sync=True, o=True)
+    min_native_zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)
+    max_native_zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)
 
     def redraw(self):
         """Force redrawing the tiles.

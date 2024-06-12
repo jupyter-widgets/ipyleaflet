@@ -13,6 +13,10 @@ export class LeafletVectorTileLayerModel extends LeafletLayerModel {
       _model_name: 'LeafletVectorTileLayerModel',
       url: '',
       vectorTileLayerStyles: {},
+      min_zoom: 0,
+      max_zoom: 18,
+      min_native_zoom: null,
+      max_native_zoom: null
     };
   }
 }

@@ -1114,6 +1114,8 @@ class VectorTileLayer(Layer):
     url = Unicode().tag(sync=True, o=True)
     attribution = Unicode().tag(sync=True, o=True)
 
+    vector_tile_layer_styles = Union([Dict(), Unicode()]).tag(sync=True, o=True)
+
     min_zoom = Int(0).tag(sync=True, o=True)
     max_zoom = Int(18).tag(sync=True, o=True)
     min_native_zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)

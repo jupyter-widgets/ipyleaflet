@@ -31,7 +31,7 @@ export class LeafletVectorTileLayerView extends LeafletLayerView {
     options['rendererFactory'] = L.canvas.tile;
 
     let x: any = this.model.get('vectorTileLayerStyles');
-    if (typeof x !== 'object') {
+    if (typeof x === 'string') {
       try {
         let blobCode = `const jsStyle=${x}; export { jsStyle };`;
 

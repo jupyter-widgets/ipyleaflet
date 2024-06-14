@@ -13,6 +13,10 @@ export class LeafletVectorTileLayerModel extends LeafletLayerModel {
       _model_name: 'LeafletVectorTileLayerModel',
       url: '',
       vectorTileLayerStyles: {},
+      min_zoom: 0,
+      max_zoom: 18,
+      min_native_zoom: null,
+      max_native_zoom: null,
     };
   }
 }
@@ -20,11 +24,28 @@ export class LeafletVectorTileLayerModel extends LeafletLayerModel {
 export class LeafletVectorTileLayerView extends LeafletLayerView {
   obj: VectorGrid.Protobuf;
 
-  create_obj() {
-    const options = {
+  async create_obj() {
+    let options = {
       ...this.get_options(),
-      rendererFactory: L.canvas.tile,
     };
+    options['rendererFactory'] = L.canvas.tile;
+
+    let x: any = this.model.get('vectorTileLayerStyles');
+    if (typeof x === 'string') {
+      try {
+        let blobCode = `const jsStyle=${x}; export { jsStyle };`;
+
+        const blob = new Blob([blobCode], { type: 'text/javascript' });
+        const url = URL.createObjectURL(blob);
+        const module = await import(/* webpackIgnore: true*/ url);
+        const jsStyle = module.jsStyle;
+
+        options['vectorTileLayerStyles'] = jsStyle;
+      } catch (error) {
+        options['vectorTileLayerStyles'] = {};
+      }
+    }
+
     this.obj = L.vectorGrid.protobuf(this.model.get('url'), options);
     this.model.on('msg:custom', this.handle_message.bind(this));
   }

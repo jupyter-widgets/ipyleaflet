@@ -2805,6 +2805,7 @@ class Map(DOMWidget, InteractMixin):
         )
 
         basemap.base = True
+        self._layer_ids.append(basemap.model_id)
 
         return (basemap,)
 

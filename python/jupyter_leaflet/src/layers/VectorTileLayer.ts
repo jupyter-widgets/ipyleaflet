@@ -32,7 +32,7 @@ export class LeafletVectorTileLayerView extends LeafletLayerView {
       ...this.get_options(),
     };
     options['rendererFactory'] = L.canvas.tile;
-    
+
     let x: any = options['vectorTileLayerStyles'];
     if (typeof x === 'string') {
       try {

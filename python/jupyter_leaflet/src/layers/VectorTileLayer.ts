@@ -17,6 +17,9 @@ export class LeafletVectorTileLayerModel extends LeafletLayerModel {
       max_zoom: 18,
       min_native_zoom: null,
       max_native_zoom: null,
+      interactive: true,
+      visible: true,
+      opacity: 1.0,
     };
   }
 }
@@ -29,8 +32,8 @@ export class LeafletVectorTileLayerView extends LeafletLayerView {
       ...this.get_options(),
     };
     options['rendererFactory'] = L.canvas.tile;
-
-    let x: any = this.model.get('vectorTileLayerStyles');
+    
+    let x: any = options['vectorTileLayerStyles'];
     if (typeof x === 'string') {
       try {
         let blobCode = `const jsStyle=${x}; export { jsStyle };`;
@@ -54,6 +57,18 @@ export class LeafletVectorTileLayerView extends LeafletLayerView {
     super.model_events();
     this.listenTo(this.model, 'change:url', () => {
       this.obj.setUrl(this.model.get('url'));
+    });
+    this.listenTo(this.model, 'change:opacity', () => {
+      if (this.model.get('visible')) {
+        this.obj.setOpacity(this.model.get('opacity'));
+      }
+    });
+    this.listenTo(this.model, 'change:visible', () => {
+      if (this.model.get('visible')) {
+        this.obj.setOpacity(this.model.get('opacity'));
+      } else {
+        this.obj.setOpacity(0);
+      }
     });
   }
 

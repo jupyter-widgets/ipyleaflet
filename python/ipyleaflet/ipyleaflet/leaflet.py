@@ -1106,6 +1106,10 @@ class VectorTileLayer(Layer):
         Minimum zoom number the tile source has available. If it is specified, the tiles on all zoom levels lower than min_native_zoom will be loaded from min_native_zoom level and auto-scaled.
     max_native_zoom: int, default None
         Maximum zoom number the tile source has available. If it is specified, the tiles on all zoom levels higher than max_native_zoom will be loaded from max_native_zoom level and auto-scaled.
+    opacity: float, default 1.
+        Opacity of the layer between 0. (fully transparent) and 1. (fully opaque).
+    visible: boolean, default True
+        Whether the layer is visible or not.
     """
 
     _view_name = Unicode("LeafletVectorTileLayerView").tag(sync=True)
@@ -1115,7 +1119,8 @@ class VectorTileLayer(Layer):
     attribution = Unicode().tag(sync=True, o=True)
 
     vector_tile_layer_styles = Union([Dict(), Unicode()]).tag(sync=True, o=True)
-
+    opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True)
+    visible = Bool(True).tag(sync=True)
     min_zoom = Int(0).tag(sync=True, o=True)
     max_zoom = Int(18).tag(sync=True, o=True)
     min_native_zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)

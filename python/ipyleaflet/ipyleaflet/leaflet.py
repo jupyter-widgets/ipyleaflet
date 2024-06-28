@@ -1110,6 +1110,7 @@ class VectorTileLayer(Layer):
         Opacity of the layer between 0. (fully transparent) and 1. (fully opaque).
     visible: boolean, default True
         Whether the layer is visible or not.
+    renderer_factory: rendererFactory option ('svg' or 'canvas') for L.VectorGrid, default 'svg'
     """
 
     _view_name = Unicode("LeafletVectorTileLayerView").tag(sync=True)
@@ -1125,6 +1126,7 @@ class VectorTileLayer(Layer):
     max_zoom = Int(18).tag(sync=True, o=True)
     min_native_zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)
     max_native_zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)
+    renderer_factory = Unicode('svg').tag(sync=True, o=True)
 
     def redraw(self):
         """Force redrawing the tiles.

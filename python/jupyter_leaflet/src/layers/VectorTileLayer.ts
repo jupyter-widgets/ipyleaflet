@@ -20,6 +20,7 @@ export class LeafletVectorTileLayerModel extends LeafletLayerModel {
       interactive: true,
       visible: true,
       opacity: 1.0,
+      renderer_factory: 'svg',
     };
   }
 }
@@ -31,7 +32,12 @@ export class LeafletVectorTileLayerView extends LeafletLayerView {
     let options = {
       ...this.get_options(),
     };
-    options['rendererFactory'] = L.canvas.tile;
+    let r: any = options['rendererFactory'];
+    if (r === 'canvas') {
+      options['rendererFactory'] = L.canvas.tile;
+    } else {
+      options['rendererFactory'] = L.svg.tile;
+    }
 
     let x: any = options['vectorTileLayerStyles'];
     if (typeof x === 'string') {

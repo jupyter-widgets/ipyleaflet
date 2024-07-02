@@ -67,6 +67,19 @@ export class LeafletVectorTileLayerView extends LeafletLayerView {
 
     this.obj = L.vectorGrid.protobuf(this.model.get('url'), options);
     this.model.on('msg:custom', this.handle_message.bind(this));
+
+    this.obj.on(
+      'click mouseover mouseout' as any,
+      (event: LeafletMouseEvent) => {
+        this.send({
+          event: 'interaction',
+          type: event.type,
+          coordinates: [event.latlng.lat, event.latlng.lng],
+          properties: event.propagatedFrom.properties,
+          options: event.propagatedFrom.options,
+        });
+      }
+    );
   }
 
   model_events() {

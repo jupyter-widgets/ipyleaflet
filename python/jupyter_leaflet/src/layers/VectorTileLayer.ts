@@ -17,7 +17,7 @@ export class LeafletVectorTileLayerModel extends LeafletLayerModel {
       max_zoom: 18,
       min_native_zoom: null,
       max_native_zoom: null,
-      interactive: true,
+      interactive: false,
       visible: true,
       opacity: 1.0,
       renderer_factory: 'svg',

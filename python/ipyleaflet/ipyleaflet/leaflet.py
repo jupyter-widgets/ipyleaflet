@@ -1111,6 +1111,8 @@ class VectorTileLayer(Layer):
     visible: boolean, default True
         Whether the layer is visible or not.
     renderer_factory: rendererFactory option ('svg' or 'canvas') for L.VectorGrid, default 'svg'
+    interactive: boolean, default False
+        Whether the layer is interactive or not.
     """
 
     _view_name = Unicode("LeafletVectorTileLayerView").tag(sync=True)
@@ -1120,8 +1122,9 @@ class VectorTileLayer(Layer):
     attribution = Unicode().tag(sync=True, o=True)
 
     vector_tile_layer_styles = Union([Dict(), Unicode()]).tag(sync=True, o=True)
-    opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True)
-    visible = Bool(True).tag(sync=True)
+    opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True,o=True)
+    visible = Bool(True).tag(sync=True, o=True)
+    interactive = Bool(False).tag(sync=True, o=True)
     min_zoom = Int(0).tag(sync=True, o=True)
     max_zoom = Int(18).tag(sync=True, o=True)
     min_native_zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)

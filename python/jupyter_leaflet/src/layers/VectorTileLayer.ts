@@ -21,6 +21,7 @@ export class LeafletVectorTileLayerModel extends LeafletLayerModel {
       visible: true,
       opacity: 1.0,
       renderer_factory: 'svg',
+      get_feature_id: null
     };
   }
 }
@@ -32,7 +33,16 @@ export class LeafletVectorTileLayerView extends LeafletLayerView {
     let options = {
       ...this.get_options(),
     };
+
+    if ('getFeatureId' in options) {
+      let idVar = options['getFeatureId'];
+      options['getFeatureId'] = function (feat: any) {
+        return feat.properties[idVar];
+      };
+    }
+
     let r: any = options['rendererFactory'];
+
     if (r === 'canvas') {
       options['rendererFactory'] = L.canvas.tile;
     } else {

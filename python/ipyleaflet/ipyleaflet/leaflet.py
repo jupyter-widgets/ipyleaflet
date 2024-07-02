@@ -1113,6 +1113,8 @@ class VectorTileLayer(Layer):
     renderer_factory: rendererFactory option ('svg' or 'canvas') for L.VectorGrid, default 'svg'
     interactive: boolean, default False
         Whether the layer is interactive or not.
+    get_feature_id: string, default None
+        Optional attribute name of a unique feature identifier. 
     """
 
     _view_name = Unicode("LeafletVectorTileLayerView").tag(sync=True)
@@ -1130,6 +1132,7 @@ class VectorTileLayer(Layer):
     min_native_zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)
     max_native_zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)
     renderer_factory = Unicode('svg').tag(sync=True, o=True)
+    get_feature_id = Unicode(allow_none=True, default_value=None).tag(sync=True, o=True)
 
     def redraw(self):
         """Force redrawing the tiles.

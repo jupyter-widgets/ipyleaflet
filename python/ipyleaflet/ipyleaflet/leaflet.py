@@ -1110,7 +1110,8 @@ class VectorTileLayer(Layer):
         Opacity of the layer between 0. (fully transparent) and 1. (fully opaque).
     visible: boolean, default True
         Whether the layer is visible or not.
-    renderer_factory: rendererFactory option ('svg' or 'canvas') for L.VectorGrid, default 'svg'
+    renderer_factory: string, default 'svg'
+        Engine for rendering VectorTileLayers; either 'canvas' or 'svg'. Use 'svg' for interactive layers.
     interactive: boolean, default False
         Whether the layer is interactive or not.
     get_feature_id: string, default None
@@ -1141,6 +1142,38 @@ class VectorTileLayer(Layer):
         need to refresh the layer.
         """
         self.send({"msg": "redraw"})
+
+    def set_feature_style(self, id:Int, layer_style:Dict):
+        """Re-symbolize one feature.
+
+        Given the unique ID for a vector features, re-symbolizes that feature across all tiles it appears in. 
+        Reverts the effects of a previous set_feature_style call. get_feature_id must be defined for 
+        set_feature_style to work. 
+
+        Attributes
+        ----------
+        id: int
+            The unique identifier for the feature to re-symbolize
+        layer_styles: dict
+            Style to apply to the feature
+        """
+        self.send({"msg": 
+                   {"setFeatureStyle":
+                    {"id":id, "layerStyle":layer_style}}
+                })
+
+    def reset_feature_style(self, id:Int):
+        """Reset feature style
+
+        Reverts the style to the layer's deafult.
+
+        Attributes
+        ----------
+        id: int
+            The unique identifier for the feature to re-symbolize
+        """
+        self.send({"msg": {"resetFeatureStyle":{"id":id}}})
+
 
 
 class PMTilesLayer(Layer):

@@ -1,7 +1,7 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-import { VectorGrid } from 'leaflet';
+import { LeafletMouseEvent, VectorGrid } from 'leaflet';
 import L from '../leaflet';
 import { LeafletLayerModel, LeafletLayerView } from './Layer';
 
@@ -21,7 +21,7 @@ export class LeafletVectorTileLayerModel extends LeafletLayerModel {
       visible: true,
       opacity: 1.0,
       renderer_factory: 'svg',
-      get_feature_id: null
+      get_feature_id: null,
     };
   }
 }
@@ -101,9 +101,20 @@ export class LeafletVectorTileLayerView extends LeafletLayerView {
     });
   }
 
-  handle_message(content: { msg: string }) {
-    if (content.msg == 'redraw') {
-      this.obj.redraw();
+  handle_message(content: { msg: any }) {
+    if (typeof content.msg === 'string') {
+      if (content.msg == 'redraw') {
+        this.obj.redraw();
+      }
+    } else {
+      if ('setFeatureStyle' in content.msg) {
+        let options = content.msg.setFeatureStyle;
+        this.obj.setFeatureStyle(options.id, options.layerStyle);
+      }
+      if ('resetFeatureStyle' in content.msg) {
+        let options = content.msg.resetFeatureStyle;
+        this.obj.resetFeatureStyle(options.id);
+      }
     }
   }
 }

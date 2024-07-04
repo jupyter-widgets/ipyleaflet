@@ -336,6 +336,10 @@ export class LeafletMapView extends LeafletDOMWidgetView {
         const z = e.target.getZoom();
         this.model.set('zoom', z);
         this.dirty = false;
+        this.send({
+          event: 'zoom',
+          zoom: z,
+        });
       }
       this.model.update_bounds().then(() => {
         this.touch();

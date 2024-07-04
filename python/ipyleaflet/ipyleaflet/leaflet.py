@@ -3171,13 +3171,19 @@ class Map(DOMWidget, InteractMixin):
 
     # Event handling
     _interaction_callbacks = Instance(CallbackDispatcher, ())
+    _zoom_callbacks = Instance(CallbackDispatcher, ())
 
     def _handle_leaflet_event(self, _, content, buffers):
         if content.get("event", "") == "interaction":
             self._interaction_callbacks(**content)
+        if content.get("event", "") == "zoom":
+            self._zoom_callbacks(**content)
 
     def on_interaction(self, callback, remove=False):
         self._interaction_callbacks.register_callback(callback, remove=remove)
+
+    def on_zoom(self, callback, remove=False):
+        self._zoom_callbacks.register_callback(callback, remove=remove)
 
     def fit_bounds(self, bounds):
         """Sets a map view that contains the given geographical bounds

@@ -68,6 +68,10 @@ export class LeafletVectorTileLayerView extends LeafletLayerView {
     this.obj = L.vectorGrid.protobuf(this.model.get('url'), options);
     this.model.on('msg:custom', this.handle_message.bind(this));
 
+    if (this.model.get('visible') == false) {
+      this.obj.setOpacity(0);
+    }
+
     this.model.on('change:feature_style', () => {
       const feature_style = this.model.get('feature_style');
       const reset = feature_style['reset'];

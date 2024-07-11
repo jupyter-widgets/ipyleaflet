@@ -1114,7 +1114,7 @@ class VectorTileLayer(Layer):
         Engine for rendering VectorTileLayers; either 'canvas' or 'svg'. Use 'svg' for interactive layers.
     interactive: boolean, default False
         Whether the layer is interactive or not.
-    get_feature_id: string, default None
+    feature_id: string, default None
         Optional attribute name of a unique feature identifier. 
     """
 
@@ -1133,7 +1133,7 @@ class VectorTileLayer(Layer):
     min_native_zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)
     max_native_zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)
     renderer = Unicode('svg').tag(sync=True, o=True)
-    get_feature_id = Unicode(allow_none=True, default_value=None).tag(sync=True, o=True)
+    feature_id = Unicode(allow_none=True, default_value=None).tag(sync=True, o=True)
     feature_style = Dict().tag(sync=True)
 
     def redraw(self):

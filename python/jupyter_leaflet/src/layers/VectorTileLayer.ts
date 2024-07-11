@@ -21,7 +21,7 @@ export class LeafletVectorTileLayerModel extends LeafletLayerModel {
       visible: true,
       opacity: 1.0,
       rendererFactory: L.svg.tile,
-      get_feature_id: null,
+      getFeatureId: null,
     };
   }
 }
@@ -34,8 +34,8 @@ export class LeafletVectorTileLayerView extends LeafletLayerView {
       ...this.get_options(),
     };
 
-    if ('getFeatureId' in options) {
-      let idVar = options['getFeatureId'];
+    if ('featureId' in options) {
+      let idVar = options['featureId'];
       options['getFeatureId'] = function (feat: any) {
         return feat.properties[idVar];
       };

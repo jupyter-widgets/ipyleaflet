@@ -49,19 +49,22 @@ export class LeafletVectorTileLayerView extends LeafletLayerView {
       options['rendererFactory'] = L.svg.tile;
     }
 
-    let x: any = options['vectorTileLayerStyles'];
-    if (typeof x === 'string') {
-      try {
-        let blobCode = `const jsStyle=${x}; export { jsStyle };`;
+    if ('layerStyles' in options) {
+      let x: any = options['layerStyles'];
+      options['vectorTileLayerStyles'] = x;
+      if (typeof x === 'string') {
+        try {
+          let blobCode = `const jsStyle=${x}; export { jsStyle };`;
 
-        const blob = new Blob([blobCode], { type: 'text/javascript' });
-        const url = URL.createObjectURL(blob);
-        const module = await import(/* webpackIgnore: true*/ url);
-        const jsStyle = module.jsStyle;
+          const blob = new Blob([blobCode], { type: 'text/javascript' });
+          const url = URL.createObjectURL(blob);
+          const module = await import(/* webpackIgnore: true*/ url);
+          const jsStyle = module.jsStyle;
 
-        options['vectorTileLayerStyles'] = jsStyle;
-      } catch (error) {
-        options['vectorTileLayerStyles'] = {};
+          options['vectorTileLayerStyles'] = jsStyle;
+        } catch (error) {
+          options['vectorTileLayerStyles'] = {};
+        }
       }
     }
 

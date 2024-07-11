@@ -1096,7 +1096,7 @@ class VectorTileLayer(Layer):
         Url to the vector tile service.
     attribution: string, default ""
         Vector tile service attribution.
-    vector_tile_layer_styles: dict or string, default {}. If string, it will be parsed as a javascript object (useful for defining styles that depend on properties and/or zoom).
+    layer_styles: dict or string, default {}. If string, it will be parsed as a javascript object (useful for defining styles that depend on properties and/or zoom).
         CSS Styles to apply to the vector data.
     min_zoom: int, default 0
         The minimum zoom level down to which this layer will be displayed (inclusive).
@@ -1124,7 +1124,7 @@ class VectorTileLayer(Layer):
     url = Unicode().tag(sync=True, o=True)
     attribution = Unicode().tag(sync=True, o=True)
 
-    vector_tile_layer_styles = Union([Dict(), Unicode()]).tag(sync=True, o=True)
+    layer_styles = Union([Dict(), Unicode()]).tag(sync=True, o=True)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True,o=True)
     visible = Bool(True).tag(sync=True, o=True)
     interactive = Bool(False).tag(sync=True, o=True)

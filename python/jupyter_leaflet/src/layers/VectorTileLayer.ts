@@ -20,7 +20,7 @@ export class LeafletVectorTileLayerModel extends LeafletLayerModel {
       interactive: false,
       visible: true,
       opacity: 1.0,
-      renderer_factory: 'svg',
+      rendererFactory: L.svg.tile,
       get_feature_id: null,
     };
   }
@@ -41,12 +41,13 @@ export class LeafletVectorTileLayerView extends LeafletLayerView {
       };
     }
 
-    let r: any = options['rendererFactory'];
-
-    if (r === 'canvas') {
-      options['rendererFactory'] = L.canvas.tile;
-    } else {
-      options['rendererFactory'] = L.svg.tile;
+    if ('renderer' in options) {
+      let r: any = options['renderer'];
+      if (r === 'canvas') {
+        options['rendererFactory'] = L.canvas.tile;
+      } else {
+        options['rendererFactory'] = L.svg.tile;
+      }
     }
 
     if ('layerStyles' in options) {

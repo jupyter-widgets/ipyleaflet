@@ -1134,6 +1134,7 @@ class VectorTileLayer(Layer):
     max_native_zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)
     renderer_factory = Unicode('svg').tag(sync=True, o=True)
     get_feature_id = Unicode(allow_none=True, default_value=None).tag(sync=True, o=True)
+    feature_style = Dict().tag(sync=True)
 
     def redraw(self):
         """Force redrawing the tiles.
@@ -1157,10 +1158,7 @@ class VectorTileLayer(Layer):
         layer_styles: dict
             Style to apply to the feature
         """
-        self.send({"msg": 
-                   {"setFeatureStyle":
-                    {"id":id, "layerStyle":layer_style}}
-                })
+        self.feature_style = {"id": id, "layerStyle": layer_style, "reset": False}
 
     def reset_feature_style(self, id:Int):
         """Reset feature style
@@ -1172,9 +1170,7 @@ class VectorTileLayer(Layer):
         id: int
             The unique identifier for the feature to re-symbolize
         """
-        self.send({"msg": {"resetFeatureStyle":{"id":id}}})
-
-
+        self.feature_style = {"id": id, "reset": True}
 
 class PMTilesLayer(Layer):
     """PMTilesLayer class, with Layer as parent class.

@@ -68,6 +68,19 @@ export class LeafletVectorTileLayerView extends LeafletLayerView {
     this.obj = L.vectorGrid.protobuf(this.model.get('url'), options);
     this.model.on('msg:custom', this.handle_message.bind(this));
 
+    this.model.on('change:feature_style', () => {
+      const feature_style = this.model.get('feature_style');
+      const reset = feature_style['reset'];
+      if (reset) {
+        this.obj.resetFeatureStyle(feature_style['id']);
+      } else {
+        this.obj.setFeatureStyle(
+          feature_style['id'],
+          feature_style['layerStyle']
+        );
+      }
+    });
+
     this.obj.on(
       'click mouseover mouseout' as any,
       (event: LeafletMouseEvent) => {
@@ -101,20 +114,9 @@ export class LeafletVectorTileLayerView extends LeafletLayerView {
     });
   }
 
-  handle_message(content: { msg: any }) {
-    if (typeof content.msg === 'string') {
-      if (content.msg == 'redraw') {
-        this.obj.redraw();
-      }
-    } else {
-      if ('setFeatureStyle' in content.msg) {
-        let options = content.msg.setFeatureStyle;
-        this.obj.setFeatureStyle(options.id, options.layerStyle);
-      }
-      if ('resetFeatureStyle' in content.msg) {
-        let options = content.msg.resetFeatureStyle;
-        this.obj.resetFeatureStyle(options.id);
-      }
+  handle_message(content: { msg: string }) {
+    if (content.msg == 'redraw') {
+      this.obj.redraw();
     }
   }
 }

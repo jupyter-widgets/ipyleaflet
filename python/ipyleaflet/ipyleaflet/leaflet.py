@@ -1125,6 +1125,7 @@ class VectorTileLayer(Layer):
     attribution = Unicode().tag(sync=True, o=True)
 
     layer_styles = Union([Dict(), Unicode()]).tag(sync=True, o=True)
+    vector_tile_layer_styles = Union([Dict(), Unicode()], allow_none=True, default_value=None)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True,o=True)
     visible = Bool(True).tag(sync=True, o=True)
     interactive = Bool(False).tag(sync=True, o=True)
@@ -1135,6 +1136,13 @@ class VectorTileLayer(Layer):
     renderer = Unicode('svg').tag(sync=True, o=True)
     feature_id = Unicode(allow_none=True, default_value=None).tag(sync=True, o=True)
     feature_style = Dict().tag(sync=True)
+
+    def __init__(self, **kwargs):
+        super(VectorTileLayer, self).__init__(**kwargs)
+        # Backwards compatibility: allow vector_tile_layer_styles as input:
+        vtl_style = getattr(self, "vector_tile_layer_styles")
+        if(vtl_style):
+            self.layer_styles = vtl_style
 
     def redraw(self):
         """Force redrawing the tiles.

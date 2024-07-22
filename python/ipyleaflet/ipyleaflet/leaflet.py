@@ -1096,7 +1096,7 @@ class VectorTileLayer(Layer):
         Url to the vector tile service.
     attribution: string, default ""
         Vector tile service attribution.
-    vector_tile_layer_styles: dict or string, default {}. If string, it will be parsed as a javascript object (useful for defining styles that depend on properties and/or zoom).
+    layer_styles: dict or string, default {}. If string, it will be parsed as a javascript object (useful for defining styles that depend on properties and/or zoom).
         CSS Styles to apply to the vector data.
     min_zoom: int, default 0
         The minimum zoom level down to which this layer will be displayed (inclusive).
@@ -1110,6 +1110,12 @@ class VectorTileLayer(Layer):
         Opacity of the layer between 0. (fully transparent) and 1. (fully opaque).
     visible: boolean, default True
         Whether the layer is visible or not.
+    renderer: string, default 'svg'
+        Engine for rendering VectorTileLayers; either 'canvas' or 'svg'. Use 'svg' for interactive layers.
+    interactive: boolean, default False
+        Whether the layer is interactive or not.
+    feature_id: string, default None
+        Optional attribute name of a unique feature identifier. 
     """
 
     _view_name = Unicode("LeafletVectorTileLayerView").tag(sync=True)
@@ -1118,13 +1124,34 @@ class VectorTileLayer(Layer):
     url = Unicode().tag(sync=True, o=True)
     attribution = Unicode().tag(sync=True, o=True)
 
-    vector_tile_layer_styles = Union([Dict(), Unicode()]).tag(sync=True, o=True)
-    opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True)
-    visible = Bool(True).tag(sync=True)
+    layer_styles = Union([Dict(), Unicode()]).tag(sync=True, o=True)
+    opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True,o=True)
+    visible = Bool(True).tag(sync=True, o=True)
+    interactive = Bool(False).tag(sync=True, o=True)
     min_zoom = Int(0).tag(sync=True, o=True)
     max_zoom = Int(18).tag(sync=True, o=True)
     min_native_zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)
     max_native_zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)
+    renderer = Unicode('svg').tag(sync=True, o=True)
+    feature_id = Unicode(allow_none=True, default_value=None).tag(sync=True, o=True)
+    feature_style = Dict().tag(sync=True)
+
+    # Backwards compatibility: allow vector_tile_layer_styles as input:
+    @property
+    def vector_tile_layer_styles(self):
+        return self.layer_styles
+
+    @vector_tile_layer_styles.setter
+    def vector_tile_layer_styles(self, value):
+        self.layer_styles = value     
+
+    def __init__(self, **kwargs):
+        super(VectorTileLayer, self).__init__(**kwargs)
+        # Backwards compatibility: allow vector_tile_layer_styles as input:
+        if "vector_tile_layer_styles" in kwargs:
+            vtl_style = kwargs["vector_tile_layer_styles"]
+            if(vtl_style):
+                self.layer_styles = vtl_style
 
     def redraw(self):
         """Force redrawing the tiles.
@@ -1134,6 +1161,33 @@ class VectorTileLayer(Layer):
         """
         self.send({"msg": "redraw"})
 
+    def set_feature_style(self, id:Int, layer_style:Dict):
+        """Re-symbolize one feature.
+
+        Given the unique ID for a vector features, re-symbolizes that feature across all tiles it appears in. 
+        Reverts the effects of a previous set_feature_style call. get_feature_id must be defined for 
+        set_feature_style to work. 
+
+        Attributes
+        ----------
+        id: int
+            The unique identifier for the feature to re-symbolize
+        layer_styles: dict
+            Style to apply to the feature
+        """
+        self.feature_style = {"id": id, "layerStyle": layer_style, "reset": False}
+
+    def reset_feature_style(self, id:Int):
+        """Reset feature style
+
+        Reverts the style to the layer's deafult.
+
+        Attributes
+        ----------
+        id: int
+            The unique identifier for the feature to re-symbolize
+        """
+        self.feature_style = {"id": id, "reset": True}
 
 class PMTilesLayer(Layer):
     """PMTilesLayer class, with Layer as parent class.

@@ -25,11 +25,14 @@ Additionally, there are modes that allow editing of previously drawn shapes:
 To have a drawing tool active on the map, pass it a non-empty dictionary with the desired options, see
 `geoman documentation <https://www.geoman.io/docs/modes/draw-mode#customize-style>`_ for details.
 
+By default, editing is disabled for shapes created programmatically as described in the :ref:`layers-section` page.
+However, adding ``pm_ignore=False`` to shapes allows them to be modified using the control.
+
 Example
 -------
 .. jupyter-execute::
 
-    from ipyleaflet import Map, GeomanDrawControl
+    from ipyleaflet import Map, GeomanDrawControl, Circle
 
     m = Map(center=(50, 354), zoom=5)
 
@@ -64,6 +67,12 @@ Example
     }
 
     m.add(draw_control)
+
+    circle = Circle(location=(50, 352), radius=100000, color="blue")
+    m.add(circle)
+
+    editable_circle = Circle(location=(50, 356), radius=100000, pm_ignore=False, color="red")
+    m.add(editable_circle)
 
     m
 

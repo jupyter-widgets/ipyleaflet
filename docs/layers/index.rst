@@ -1,3 +1,5 @@
+.. _layers-section:
+
 Layers
 ======
 

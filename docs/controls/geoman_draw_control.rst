@@ -51,13 +51,14 @@ Example
             "fillOpacity": 1.0
         }
     }
-    draw_control.circlemarker = {
+    draw_control.circle = {
         "pathOptions": {
             "fillColor": "#efed69",
             "color": "#efed69",
             "fillOpacity": 0.62
         }
     }
+    draw_control.circlemarker = {}
     draw_control.rectangle = {
         "pathOptions": {
             "fillColor": "#fca45d",

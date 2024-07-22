@@ -12,5 +12,6 @@ dependencies:
   - branca
   - traittypes
   - pandas
+  # - nodejs=18
   - yarn~=3.0
   - ruff

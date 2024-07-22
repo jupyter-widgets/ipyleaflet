@@ -1,10 +1,11 @@
 Geoman Draw Control
-============
+===================
 
-``GeomanDrawControl`` allows one to draw various shapes on the map. 
+``GeomanDrawControl`` allows one to draw various shapes on the map.
 The drawing functionality on the front-end is provided by `geoman <https://geoman.io/>`_.
 
 The following shapes are supported:
+
 - marker
 - circlemarker
 - circle

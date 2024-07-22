@@ -1,3 +1,20 @@
+## v0.19.2
+
+* fix(docs): GeomanDrawControl was not included in docs navigation by @iisakkirotko in https://github.com/jupyter-widgets/ipyleaflet/pull/1197
+* Fix velocity display_options bug by @giswqs in https://github.com/jupyter-widgets/ipyleaflet/pull/1199
+* remove broken, deprecated nbextension enable from installation docs by @minrk in https://github.com/jupyter-widgets/ipyleaflet/pull/1200
+* Add basemap model_id to Map._layer_ids attribute by @giswqs in https://github.com/jupyter-widgets/ipyleaflet/pull/1208
+* Improve vector tile layer by @lopezvoliver in https://github.com/jupyter-widgets/ipyleaflet/pull/1206
+* Vector tile layer opacity and visible by @lopezvoliver in https://github.com/jupyter-widgets/ipyleaflet/pull/1210
+* Updated integration tests workflow by @krassowski in https://github.com/jupyter-widgets/ipyleaflet/pull/1216
+* Interactive vector tile layers by @lopezvoliver in https://github.com/jupyter-widgets/ipyleaflet/pull/1213
+
+## New Contributors
+* @lopezvoliver made their first contribution in https://github.com/jupyter-widgets/ipyleaflet/pull/1206
+* @krassowski made their first contribution in https://github.com/jupyter-widgets/ipyleaflet/pull/1216
+
+**Full Changelog**: https://github.com/jupyter-widgets/ipyleaflet/compare/0.19.1...0.19.2
+
 ## v0.19.1
 
 Version 0.19.0 did not contain a valid release on npm. This release is to fix that.

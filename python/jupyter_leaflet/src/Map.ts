@@ -423,6 +423,14 @@ export class LeafletMapView extends LeafletDOMWidgetView {
         this.obj.toggleFullscreen();
       }
     });
+    this.listenTo(this.model, 'change:scroll_wheel_zoom', () => {
+      const scrollWheelZoom = this.model.get('scroll_wheel_zoom');
+      if (scrollWheelZoom) {
+        this.obj.scrollWheelZoom.enable();
+      } else {
+        this.obj.scrollWheelZoom.disable();
+      }
+    });
   }
 
   processPhosphorMessage(msg: Message) {

@@ -423,6 +423,38 @@ export class LeafletMapView extends LeafletDOMWidgetView {
         this.obj.toggleFullscreen();
       }
     });
+    this.listenTo(this.model, 'change:scroll_wheel_zoom', () => {
+      const scrollWheelZoom = this.model.get('scroll_wheel_zoom');
+      if (scrollWheelZoom) {
+        this.obj.scrollWheelZoom.enable();
+      } else {
+        this.obj.scrollWheelZoom.disable();
+      }
+    });
+    this.listenTo(this.model, 'change:double_click_zoom', () => {
+      const doubleClickZoom = this.model.get('double_click_zoom');
+      if (doubleClickZoom) {
+        this.obj.doubleClickZoom.enable();
+      } else {
+        this.obj.doubleClickZoom.disable();
+      }
+    });
+    this.listenTo(this.model, 'change:touch_zoom', () => {
+      const touchZoom = this.model.get('touch_zoom');
+      if (touchZoom) {
+        this.obj.touchZoom.enable();
+      } else {
+        this.obj.touchZoom.disable();
+      }
+    });
+    this.listenTo(this.model, 'change:box_zoom', () => {
+      const boxZoom = this.model.get('box_zoom');
+      if (boxZoom) {
+        this.obj.boxZoom.enable();
+      } else {
+        this.obj.boxZoom.disable();
+      }
+    });
   }
 
   processPhosphorMessage(msg: Message) {

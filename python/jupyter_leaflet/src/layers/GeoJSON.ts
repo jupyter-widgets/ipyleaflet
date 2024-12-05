@@ -57,6 +57,7 @@ export class LeafletGeoJSONView extends LeafletFeatureGroupView {
             feature: feature,
             properties: feature.properties,
             id: feature.id,
+            coordinates: [e.latlng.lat, e.latlng.lng],
           });
         };
         layer.on({

@@ -171,6 +171,8 @@ class Layer(Widget, InteractMixin):
         Interactive widget that will be shown in a Popup when clicking on the layer.
     pane: string
         Name of the pane to use for the layer.
+    pm_ignore: boolean
+        Make Leaflet-Geoman ignore the layer, so it cannot modify it.
     """
 
     _view_name = Unicode("LeafletLayerView").tag(sync=True)
@@ -194,6 +196,8 @@ class Layer(Widget, InteractMixin):
 
     options = List(trait=Unicode()).tag(sync=True)
     subitems = Tuple().tag(trait=Instance(Widget), sync=True, **widget_serialization)
+
+    pm_ignore = Bool(True).tag(sync=True, o=True)
 
     @validate("subitems")
     def _validate_subitems(self, proposal):

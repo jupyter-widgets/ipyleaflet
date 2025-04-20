@@ -31,6 +31,7 @@ export interface ILeafletLayerModel {
   pane: string;
   subitems: Layer[];
   pm_ignore: boolean;
+  snap_ignore: boolean;
 }
 
 export class LeafletLayerModel extends WidgetModel {
@@ -52,7 +53,8 @@ export class LeafletLayerModel extends WidgetModel {
       popup_max_height: null,
       pane: '',
       subitems: [],
-      pm_ignore: true
+      pm_ignore: true,
+      snap_ignore: false,
     };
   }
 }

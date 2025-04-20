@@ -181,6 +181,7 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
       removalMode: removalMode,
       cutPolygon: cutMode,
       rotateMode: rotateMode,
+      snappingOption: true,
     };
 
     this.setMode();

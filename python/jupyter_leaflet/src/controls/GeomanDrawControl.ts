@@ -1,5 +1,5 @@
 import { unpack_models, WidgetView } from '@jupyter-widgets/base';
-import { GeoJSON } from 'leaflet';
+import {ControlPosition, GeoJSON, Map} from 'leaflet';
 import L from '../leaflet';
 import { LayerShapes } from '../definitions/leaflet-extend';
 import { LeafletControlModel, LeafletControlView } from './Control';
@@ -320,6 +320,8 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
     this.model.on('change:current_mode', this.setMode.bind(this));
     this.model.on('msg:custom', this.handle_message.bind(this));
     this.model.on('change:data', this.data_to_layers.bind(this));
+
+    this.obj = this;
   }
 
   remove() {
@@ -332,6 +334,7 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
     this.map_view.obj.off('moveend');
     this.model.off('msg:custom');
     this.model.off('change:data');
+    return this
   }
 
   setMode() {
@@ -525,5 +528,15 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
       }
     }
     this.layers_to_data();
+  }
+
+  getPosition() {return this.options.position}
+  setPosition(position: ControlPosition){return this}
+  getContainer(){return this.map_view}
+  addTo(map: Map){
+    if (!this.options.get('hide_controls')) {
+      map.pm.addControls(this.controlOptions);
+    }
+    return this
   }
 }

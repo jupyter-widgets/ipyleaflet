@@ -227,8 +227,8 @@ export class LeafletMapView extends LeafletDOMWidgetView {
   }
 
   remove_control_view(child_view: LeafletControlView) {
-    this.obj.removeControl(child_view.obj);
     child_view.remove();
+    this.obj.removeControl(child_view.obj);
   }
 
   async add_control_model(child_model: LeafletControlModel) {

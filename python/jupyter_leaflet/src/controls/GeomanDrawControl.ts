@@ -87,102 +87,7 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
     this.data_to_layers();
     this.map_view.obj.addLayer(this.feature_group);
 
-    var position = this.model.get('position');
-
-    var drawMarker = this.model.get('marker');
-    if (!Object.keys(drawMarker).length) {
-      drawMarker = false;
-    } else {
-      // For backwards compatibility
-      if ('shapeOptions' in drawMarker) {
-        drawMarker.markerOptions = drawMarker.shapeOptions;
-        delete drawMarker.shapeOptions;
-      }
-      this.map_view.obj.pm.Draw.Marker.setOptions(drawMarker);
-    }
-
-    var drawCircleMarker = this.model.get('circlemarker');
-    if (!Object.keys(drawCircleMarker).length) {
-      drawCircleMarker = false;
-    } else {
-      if ('shapeOptions' in drawCircleMarker) {
-        drawCircleMarker.pathOptions = drawCircleMarker.shapeOptions;
-        delete drawCircleMarker.shapeOptions;
-      }
-      this.map_view.obj.pm.Draw.CircleMarker.setOptions(drawCircleMarker);
-    }
-
-    var drawCircle = this.model.get('circle');
-    if (!Object.keys(drawCircle).length) {
-      drawCircle = false;
-    } else {
-      if ('shapeOptions' in drawCircle) {
-        drawCircle.pathOptions = drawCircle.shapeOptions;
-        delete drawCircle.shapeOptions;
-      }
-      this.map_view.obj.pm.Draw.Circle.setOptions(drawCircle);
-    }
-
-    var drawPolyline = this.model.get('polyline');
-    if (!Object.keys(drawPolyline).length) {
-      drawPolyline = false;
-    } else {
-      if ('shapeOptions' in drawPolyline) {
-        drawPolyline.pathOptions = drawPolyline.shapeOptions;
-        delete drawPolyline.shapeOptions;
-      }
-      this.map_view.obj.pm.Draw.Line.setOptions(drawPolyline);
-    }
-
-    var drawRectangle = this.model.get('rectangle');
-    if (!Object.keys(drawRectangle).length) {
-      drawRectangle = false;
-    } else {
-      if ('shapeOptions' in drawRectangle) {
-        drawRectangle.pathOptions = drawRectangle.shapeOptions;
-        delete drawRectangle.shapeOptions;
-      }
-      this.map_view.obj.pm.Draw.Rectangle.setOptions(drawRectangle);
-    }
-
-    var drawPolygon = this.model.get('polygon');
-    if (!Object.keys(drawPolygon).length) {
-      drawPolygon = false;
-    } else {
-      if ('shapeOptions' in drawPolygon) {
-        drawPolygon.pathOptions = drawPolygon.shapeOptions;
-        delete drawPolygon.shapeOptions;
-      }
-      this.map_view.obj.pm.Draw.Polygon.setOptions(drawPolygon);
-    }
-
-    var drawText = this.model.get('text');
-    if (!Object.keys(drawText).length) {
-      drawText = false;
-    }
-
-    var editMode = this.model.get('edit');
-    var dragMode = this.model.get('drag');
-    var removalMode = this.model.get('remove');
-    var cutMode = this.model.get('cut');
-    var rotateMode = this.model.get('rotate');
-
-    this.controlOptions = {
-      position: position,
-      drawMarker: !(drawMarker == false),
-      drawCircleMarker: !(drawCircleMarker == false),
-      drawCircle: !(drawCircle == false),
-      drawPolyline: !(drawPolyline == false),
-      drawRectangle: !(drawRectangle == false),
-      drawPolygon: !(drawPolygon == false),
-      drawText: !(drawText == false),
-      editMode: editMode,
-      dragMode: dragMode,
-      removalMode: removalMode,
-      cutPolygon: cutMode,
-      rotateMode: rotateMode,
-      snappingOption: true,
-    };
+    this.setControlOptions();
 
     this.setMode();
 
@@ -324,6 +229,105 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
     this.obj = this;
   }
 
+  private setControlOptions() {
+    console.log("set_control_options")
+    var position = this.model.get('position');
+
+    var drawMarker = this.model.get('marker');
+    if (!Object.keys(drawMarker).length) {
+      drawMarker = false;
+    } else {
+      // For backwards compatibility
+      if ('shapeOptions' in drawMarker) {
+        drawMarker.markerOptions = drawMarker.shapeOptions;
+        delete drawMarker.shapeOptions;
+      }
+      this.map_view.obj.pm.Draw.Marker.setOptions(drawMarker);
+    }
+
+    var drawCircleMarker = this.model.get('circlemarker');
+    if (!Object.keys(drawCircleMarker).length) {
+      drawCircleMarker = false;
+    } else {
+      if ('shapeOptions' in drawCircleMarker) {
+        drawCircleMarker.pathOptions = drawCircleMarker.shapeOptions;
+        delete drawCircleMarker.shapeOptions;
+      }
+      this.map_view.obj.pm.Draw.CircleMarker.setOptions(drawCircleMarker);
+    }
+
+    var drawCircle = this.model.get('circle');
+    if (!Object.keys(drawCircle).length) {
+      drawCircle = false;
+    } else {
+      if ('shapeOptions' in drawCircle) {
+        drawCircle.pathOptions = drawCircle.shapeOptions;
+        delete drawCircle.shapeOptions;
+      }
+      this.map_view.obj.pm.Draw.Circle.setOptions(drawCircle);
+    }
+
+    var drawPolyline = this.model.get('polyline');
+    if (!Object.keys(drawPolyline).length) {
+      drawPolyline = false;
+    } else {
+      if ('shapeOptions' in drawPolyline) {
+        drawPolyline.pathOptions = drawPolyline.shapeOptions;
+        delete drawPolyline.shapeOptions;
+      }
+      this.map_view.obj.pm.Draw.Line.setOptions(drawPolyline);
+    }
+
+    var drawRectangle = this.model.get('rectangle');
+    if (!Object.keys(drawRectangle).length) {
+      drawRectangle = false;
+    } else {
+      if ('shapeOptions' in drawRectangle) {
+        drawRectangle.pathOptions = drawRectangle.shapeOptions;
+        delete drawRectangle.shapeOptions;
+      }
+      this.map_view.obj.pm.Draw.Rectangle.setOptions(drawRectangle);
+    }
+
+    var drawPolygon = this.model.get('polygon');
+    if (!Object.keys(drawPolygon).length) {
+      drawPolygon = false;
+    } else {
+      if ('shapeOptions' in drawPolygon) {
+        drawPolygon.pathOptions = drawPolygon.shapeOptions;
+        delete drawPolygon.shapeOptions;
+      }
+      this.map_view.obj.pm.Draw.Polygon.setOptions(drawPolygon);
+    }
+
+    var drawText = this.model.get('text');
+    if (!Object.keys(drawText).length) {
+      drawText = false;
+    }
+
+    var editMode = this.model.get('edit');
+    var dragMode = this.model.get('drag');
+    var removalMode = this.model.get('remove');
+    var cutMode = this.model.get('cut');
+    var rotateMode = this.model.get('rotate');
+
+    this.controlOptions = {
+      position: position,
+      drawMarker: !(drawMarker == false),
+      drawCircleMarker: !(drawCircleMarker == false),
+      drawCircle: !(drawCircle == false),
+      drawPolyline: !(drawPolyline == false),
+      drawRectangle: !(drawRectangle == false),
+      drawPolygon: !(drawPolygon == false),
+      drawText: !(drawText == false),
+      editMode: editMode,
+      dragMode: dragMode,
+      removalMode: removalMode,
+      cutPolygon: cutMode,
+      rotateMode: rotateMode,
+    };
+  }
+
   remove() {
     this.map_view.obj.pm.removeControls();
     this.map_view.obj.removeLayer(this.feature_group);
@@ -334,7 +338,7 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
     this.map_view.obj.off('moveend');
     this.model.off('msg:custom');
     this.model.off('change:data');
-    return this
+    return this;
   }
 
   setMode() {
@@ -530,13 +534,36 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
     this.layers_to_data();
   }
 
-  getPosition() {return this.options.position}
-  setPosition(position: ControlPosition){return this}
-  getContainer(){return this.map_view}
-  addTo(map: Map){
+  model_events() {
+    super.model_events();
+    // Geoman needs to be forced to update by removing and re-adding the control
+    // toolbar with the new options set.
+    for (let key in this.model.attributes) {
+      this.listenTo(this.model, 'change:' + key, () => {
+        this.setControlOptions()
+
+        this.map_view.obj.pm.removeControls();
+        if (!this.model.get('hide_controls')) {
+          this.map_view.obj.pm.addControls(this.controlOptions);
+        }
+      });
+    }
+  }
+
+  getPosition() {
+    return this.options.position;
+  }
+  setPosition(position: ControlPosition) {
+    this.options.position = position;
+    return this;
+  }
+  getContainer() {
+    return this.map_view;
+  }
+  addTo(map: Map) {
     if (!this.options.get('hide_controls')) {
       map.pm.addControls(this.controlOptions);
     }
-    return this
+    return this;
   }
 }

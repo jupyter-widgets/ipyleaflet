@@ -230,7 +230,6 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
   }
 
   private setControlOptions() {
-    console.log("set_control_options")
     var position = this.model.get('position');
 
     var drawMarker = this.model.get('marker');

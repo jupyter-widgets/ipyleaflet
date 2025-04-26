@@ -554,12 +554,16 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
   }
 
   setPosition(position: ControlPosition) {
-    this.options.position = position;
+    this.setControlOptions()
+    this.map_view.obj.pm.removeControls();
+    if (!this.model.get('hide_controls')) {
+      this.map_view.obj.pm.addControls(this.controlOptions);
+    }
     return this;
   }
 
   getContainer() {
-    return this.map_view;
+    return this.map_view.obj;
   }
 
   addTo(map: Map) {

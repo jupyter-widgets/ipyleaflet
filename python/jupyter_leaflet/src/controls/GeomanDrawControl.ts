@@ -536,16 +536,19 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
   model_events() {
     super.model_events();
     // Geoman needs to be forced to update by removing and re-adding the control
-    // toolbar with the new options set.
+    // toolbar with the new options set. Ignore attrs that are not options.
+    const excluded_keys = ["current_mode"]
     for (let key in this.model.attributes) {
-      this.listenTo(this.model, 'change:' + key, () => {
-        this.setControlOptions()
+      if (!(key.startsWith("_") || excluded_keys.includes(key))) {
+        this.listenTo(this.model, 'change:' + key, () => {
+          this.setControlOptions()
 
-        this.map_view.obj.pm.removeControls();
-        if (!this.model.get('hide_controls')) {
-          this.map_view.obj.pm.addControls(this.controlOptions);
-        }
-      });
+          this.map_view.obj.pm.removeControls();
+          if (!this.model.get('hide_controls')) {
+            this.map_view.obj.pm.addControls(this.controlOptions);
+          }
+        });
+      }
     }
   }
 

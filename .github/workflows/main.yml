@@ -31,6 +31,7 @@ jobs:
           environment-file: environment-dev.yml
           init-shell: bash
           cache-environment: true
+          create-args: python=${{ matrix.python-version }}
 
       - name: Install ipyleaflet
         run: pip install python/jupyter_leaflet python/ipyleaflet --no-deps

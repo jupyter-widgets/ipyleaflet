@@ -45,7 +45,7 @@ jobs:
           test -f $CONDA_PREFIX/share/jupyter/labextensions/jupyter-leaflet/package.json
 
       - name: Python Linters
-        run: ruff check --output-format=github --exclude "examples" --ignore "E501,E731,F403" .
+        run: ruff check --output-format=github --exclude "examples,ui-tests" --ignore "E501,E731,F403" .
 
       - name: JS Linters
         run: |

@@ -4,11 +4,11 @@ channels:
   - conda-forge
 
 dependencies:
+  - pip
   - yarn~=3.0
   - jupyterlab~=4.0
   - jupyter-packaging~=0.12
   - jupyter-sphinx
-  - build
   - scipy
   - netcdf4
   - geopandas
@@ -19,5 +19,6 @@ dependencies:
   - jupyterlite-sphinx
   - jupyterlite-xeus-python >=0.9.2,<0.10
   - pip:
+      - build
       - ../python/jupyter_leaflet
       - ../python/ipyleaflet

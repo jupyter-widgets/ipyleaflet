@@ -18,6 +18,7 @@ dependencies:
   - pydata-sphinx-theme
   - jupyterlite-sphinx
   - jupyterlite-xeus-python >=0.9.2,<0.10
+  - geodatasets
   - pip:
       - build
       - ../python/jupyter_leaflet

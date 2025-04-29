@@ -58,7 +58,6 @@ packages = ["ipyleaflet"]
 
 [tool.sphinx.configuration]
 source-dir = "docs"
-build-dir = "docs/_build"
 
 [tool.ruff]
 extend-include = ["*.ipynb"]

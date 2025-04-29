@@ -12,9 +12,10 @@ Examples
 
     from ipyleaflet import Map, GeoData, basemaps, LayersControl
     import geopandas
+    import geodatasets
     import json
 
-    countries = geopandas.read_file(geopandas.datasets.get_path('naturalearth_lowres'))
+    countries = geodatasets.read_file(geodatasets.get_path('naturalearth_lowres'))
 
     m = Map(center=(52.3,8.0), zoom = 3, basemap= basemaps.Esri.WorldTopoMap)
 

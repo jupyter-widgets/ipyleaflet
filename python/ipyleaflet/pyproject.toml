@@ -58,10 +58,11 @@ packages = ["ipyleaflet"]
 
 [tool.ruff]
 extend-include = ["*.ipynb"]
+exclude = ["examples"]
 
 [tool.ruff.lint]
 select = [
     # pycodestyle
     "E",
 ]
-ignore = ["E501", "E731"]
+ignore = ["E501", "E731", "F403"]

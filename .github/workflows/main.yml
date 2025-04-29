@@ -26,12 +26,11 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Setup conda
-        uses: mamba-org/setup-micromamba@v1
+        uses: mamba-org/setup-micromamba@main
         with:
           environment-file: environment-dev.yml
-          condarc: |
-            dependencies:
-              - python==${{ matrix.python-version }}
+          init-shell: bash
+          cache-environment: true
 
       - name: Install ipyleaflet
         run: pip install python/jupyter_leaflet python/ipyleaflet --no-deps

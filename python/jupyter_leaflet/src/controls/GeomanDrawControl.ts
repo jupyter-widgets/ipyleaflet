@@ -1,5 +1,5 @@
 import { unpack_models, WidgetView } from '@jupyter-widgets/base';
-import {ControlPosition, GeoJSON, Map} from 'leaflet';
+import { ControlPosition, GeoJSON, Map } from 'leaflet';
 import L from '../leaflet';
 import { LayerShapes } from '../definitions/leaflet-extend';
 import { LeafletControlModel, LeafletControlView } from './Control';
@@ -537,11 +537,11 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
     super.model_events();
     // Geoman needs to be forced to update by removing and re-adding the control
     // toolbar with the new options set. Ignore attrs that are not options.
-    const excluded_keys = ["current_mode"]
+    const excluded_keys = ['current_mode'];
     for (let key in this.model.attributes) {
-      if (!(key.startsWith("_") || excluded_keys.includes(key))) {
+      if (!(key.startsWith('_') || excluded_keys.includes(key))) {
         this.listenTo(this.model, 'change:' + key, () => {
-          this.setControlOptions()
+          this.setControlOptions();
 
           this.map_view.obj.pm.removeControls();
           if (!this.model.get('hide_controls')) {
@@ -557,7 +557,7 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
   }
 
   setPosition(position: ControlPosition) {
-    this.setControlOptions()
+    this.setControlOptions();
     this.map_view.obj.pm.removeControls();
     if (!this.model.get('hide_controls')) {
       this.map_view.obj.pm.addControls(this.controlOptions);

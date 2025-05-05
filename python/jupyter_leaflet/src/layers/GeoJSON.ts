@@ -43,7 +43,7 @@ export class LeafletGeoJSONView extends LeafletFeatureGroupView {
     };
 
     // Use get_options to trigger default option fetch behaviour
-    let options = this.get_options() as L.GeoJSONOptions
+    let options = this.get_options() as L.GeoJSONOptions;
 
     const geojson_options: GeoJSONOptions = {
       style: style,
@@ -70,7 +70,7 @@ export class LeafletGeoJSONView extends LeafletFeatureGroupView {
       },
     };
 
-    options = {...options, ...geojson_options}
+    options = { ...options, ...geojson_options };
 
     const point_style = this.model.get('point_style');
 

@@ -3,7 +3,7 @@
 import { Polyline } from 'leaflet';
 import L from '../leaflet';
 import { LeafletPathModel, LeafletPathView } from './Path';
-import {LineString, MultiLineString} from 'geojson';
+import { LineString, MultiLineString } from 'geojson';
 
 export class LeafletPolylineModel extends LeafletPathModel {
   defaults() {

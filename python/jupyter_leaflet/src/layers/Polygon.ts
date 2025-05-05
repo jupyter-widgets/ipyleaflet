@@ -4,7 +4,7 @@
 import { Polygon } from 'leaflet';
 import L from '../leaflet';
 import { LeafletPolylineModel, LeafletPolylineView } from './Polyline';
-import {LeafletPathView} from "./Path";
+import { LeafletPathView } from './Path';
 
 export class LeafletPolygonModel extends LeafletPolylineModel {
   defaults() {

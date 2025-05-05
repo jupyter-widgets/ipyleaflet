@@ -48,6 +48,9 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
   }
 
   create_obj() {
+    const model = this.model;
+    this.setControlOptions();
+
     this.feature_group = L.geoJson([], {
       style: function (feature) {
         if (feature?.properties != undefined) {
@@ -57,26 +60,32 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
         }
       },
       pointToLayer: function (feature, latlng) {
-        var options;
-        if (feature.properties.style.textMarker) {
+        let options;
+        if (feature?.properties?.style?.textMarker) {
           options = {
             textMarker: feature.properties.style.textMarker,
             text: feature.properties.style.text,
           };
         } else {
-          options = feature.properties.options;
+          options = feature.properties?.options;
         }
         switch (feature.properties.type) {
           case 'marker':
+            if (!options) {
+              options = model.get('marker')?.markerStyle;
+            }
             return new L.Marker(latlng, options);
           case 'circle':
             return new L.Circle(
               latlng,
               feature.properties.style.radius,
-              feature.properties.options
+              options
             );
           case 'circlemarker':
-            return new L.CircleMarker(latlng, feature.properties.options);
+            if (!options) {
+              options = model.get('circlemarker')?.pathOptions;
+            }
+            return new L.CircleMarker(latlng, options);
           // Below might work funny sometimes?
           // TODO: Check
           default:
@@ -86,8 +95,6 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
     });
     this.data_to_layers();
     this.map_view.obj.addLayer(this.feature_group);
-
-    this.setControlOptions();
 
     this.setMode();
 

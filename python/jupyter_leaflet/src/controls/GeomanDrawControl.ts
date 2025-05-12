@@ -89,7 +89,7 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
     this.feature_group.on('click', (e) => {
       this.send({
         event: 'click',
-        geo_json: this.layer_to_json(e.target),
+        geo_json: this.layer_to_json(e.sourceTarget),
         latlng: e.latlng,
       });
     }); 

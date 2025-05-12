@@ -71,7 +71,29 @@ export class LeafletMarkerClusterView extends LeafletLayerView {
 
   create_obj() {
     const options = this.get_options();
-    this.obj = L.markerClusterGroup(options);
+
+    // Intercept the creation of the cluster group to disable leaflet.pm
+    // (so that GeomanDrawControl will not be able to edit it)
+    const clusterGroup = L.markerClusterGroup(options);
+    const originalAddLayer = (clusterGroup as any)._featureGroup.addLayer;
+    (clusterGroup as any)._featureGroup.addLayer = function (layer: L.Layer) {
+      if (
+        // A cluster "bubble" is a marker with a child count
+        layer instanceof L.Marker &&
+        typeof (layer as any).getChildCount === 'function'
+      ) {
+        (layer as any).pmIgnore = true;
+        // Disable the leaflet.pm functionality for the cluster bubble
+        if ((layer as any).pm) {
+          (layer as any).pm.disable();
+          delete (layer as any).pm;
+        }
+      }
+
+      return originalAddLayer.call(this, layer);
+    };
+    this.obj = clusterGroup;
+
     this.marker_views = new ViewList(
       this.add_layer_model,
       this.remove_layer_view,

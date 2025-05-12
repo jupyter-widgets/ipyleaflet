@@ -93,6 +93,16 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
         }
       },
     });
+
+    // Click event handler
+    this.feature_group.on('click', (e) => {
+      this.send({
+        event: 'click',
+        geo_json: this.layer_to_json(e.target),
+        latlng: e.latlng,
+      });
+    }); 
+
     this.data_to_layers();
     this.map_view.obj.addLayer(this.feature_group);
 

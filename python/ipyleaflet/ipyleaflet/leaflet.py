@@ -2323,6 +2323,9 @@ class GeomanDrawControl(DrawControlBase):
     polygon = Dict({ 'pathOptions': {} }).tag(sync=True)
     circlemarker = Dict({ 'pathOptions': {} }).tag(sync=True)
 
+    # Hover style (applies for all drawing modes)
+    hover_style = Dict().tag(sync=True) 
+
     # Disabled by default
     text = Dict().tag(sync=True)
 

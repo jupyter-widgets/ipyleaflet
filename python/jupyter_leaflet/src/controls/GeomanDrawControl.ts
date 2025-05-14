@@ -102,6 +102,14 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
         latlng: e.latlng,
       });
     }); 
+    // Hover style
+    this.feature_group.on('mouseover', (e) => {
+      const layer = e.sourceTarget;
+      layer.setStyle(this.model.get('hover_style'));
+      layer.once('mouseout', () => {
+        this.feature_group.resetStyle(layer);
+      });
+    }); 
 
     this.data_to_layers();
     this.map_view.obj.addLayer(this.feature_group);

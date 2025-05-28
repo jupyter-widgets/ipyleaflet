@@ -335,8 +335,6 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
   }
 
   remove() {
-    this.map_view.obj.pm.removeControls();
-    this.map_view.obj.removeLayer(this.feature_group);
     this.map_view.obj.off('pm:create');
     this.map_view.obj.off('pm:remove');
     this.map_view.obj.off('pm:cut');
@@ -344,6 +342,8 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
     this.map_view.obj.off('moveend');
     this.model.off('msg:custom');
     this.model.off('change:data');
+    this.map_view.obj.pm.removeControls();
+    this.map_view.obj.removeLayer(this.feature_group);
     return this;
   }
 

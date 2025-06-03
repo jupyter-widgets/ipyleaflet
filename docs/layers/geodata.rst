@@ -15,7 +15,7 @@ Examples
     import geodatasets
     import json
 
-    countries = geodatasets.read_file(geodatasets.get_path('naturalearth_lowres'))
+    countries = geopandas.read_file(geodatasets.get_path('naturalearth.lowres'))
 
     m = Map(center=(52.3,8.0), zoom = 3, basemap= basemaps.Esri.WorldTopoMap)
 

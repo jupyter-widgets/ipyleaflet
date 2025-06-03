@@ -48,11 +48,6 @@ These basemaps are coming from the `xyzservices <https://xyzservices.readthedocs
 
 .. jupyter-execute::
 
-    Map(basemap=basemaps.Esri.DeLorme, center=center, zoom=zoom)
-
-
-.. jupyter-execute::
-
     Map(basemap=basemaps.Esri.WorldTopoMap, center=center, zoom=zoom)
 
 

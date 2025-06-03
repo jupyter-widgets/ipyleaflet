@@ -102,7 +102,7 @@ def basemap_to_tiles(basemap, day=yesterday, **kwargs):
         Extra key-word arguments to pass to the TileLayer constructor.
     """
     if isinstance(basemap, xyzservices.lib.TileProvider):
-        url = basemap.build_url(time=day)
+        url = basemap.build_url(time=day, scale_factor="{r}")
     elif isinstance(basemap, dict):
         url = basemap.get("url", "")
     else:

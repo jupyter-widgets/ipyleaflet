@@ -56,12 +56,16 @@ exclude = [
 [tool.hatch.build.targets.wheel]
 packages = ["ipyleaflet"]
 
+[tool.sphinx.configuration]
+source-dir = "docs"
+
 [tool.ruff]
 extend-include = ["*.ipynb"]
+exclude = ["examples"]
 
 [tool.ruff.lint]
 select = [
     # pycodestyle
     "E",
 ]
-ignore = ["E501", "E731"]
+ignore = ["E501", "E731", "F403"]

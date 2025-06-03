@@ -7,3 +7,7 @@ build:
 
 conda:
   environment: docs/build-environment.yml
+
+sphinx:
+  configuration: docs/conf.py
+  fail_on_warning: false

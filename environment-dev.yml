@@ -3,7 +3,6 @@ channels:
   - conda-forge
 dependencies:
   - pip
-  - build
   - wheel
   - jupyterlab~=4.0
   - jupyter-packaging~=0.12
@@ -14,3 +13,5 @@ dependencies:
   - pandas
   - yarn~=3.0
   - ruff
+  - pip:
+    - build

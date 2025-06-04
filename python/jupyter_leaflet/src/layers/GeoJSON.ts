@@ -66,10 +66,10 @@ export class LeafletGeoJSONView extends LeafletFeatureGroupView {
         const pmIgnore = this.model.get('pm_ignore');
         if (pmIgnore !== undefined) {
           (layer as any).pmIgnore = pmIgnore;
-            if (pmIgnore && layer.pm) {
-              layer.pm.disable();
-              delete (layer as any).pm;
-            }
+          if (pmIgnore && layer.pm) {
+            layer.pm.disable();
+            delete (layer as any).pm;
+          }
         }
         layer.on({
           mouseover: mouseevent,

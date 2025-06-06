@@ -662,7 +662,7 @@ class TileLayer(RasterLayer):
 
     Attributes
     ----------
-    url: string, default "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    url: string, default "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
         Url to the tiles service.
     min_zoom: int, default 0
         The minimum zoom level down to which this layer will be displayed (inclusive).
@@ -697,7 +697,7 @@ class TileLayer(RasterLayer):
     _model_name = Unicode("LeafletTileLayerModel").tag(sync=True)
 
     bottom = Bool(True).tag(sync=True)
-    url = Unicode("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").tag(sync=True)
+    url = Unicode("https://tile.openstreetmap.org/{z}/{x}/{y}.png").tag(sync=True)
     min_zoom = Int(0).tag(sync=True, o=True)
     max_zoom = Int(18).tag(sync=True, o=True)
     min_native_zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)

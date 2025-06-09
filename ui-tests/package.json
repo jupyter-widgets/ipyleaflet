@@ -13,7 +13,7 @@
   "author": "ipyleaflet",
   "license": "MIT",
   "dependencies": {
-    "@jupyterlab/galata": "^5.0.1",
+    "@jupyterlab/galata": "^5.3.4",
     "@playwright/test": "^1.32.0",
     "klaw-sync": "^6.0.0",
     "rimraf": "^3.0.2"

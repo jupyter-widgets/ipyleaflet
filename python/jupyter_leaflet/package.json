@@ -40,7 +40,7 @@
     "watch:nbextension": "webpack --watch"
   },
   "dependencies": {
-    "@geoman-io/leaflet-geoman-free": "^2.16.0",
+    "@geoman-io/leaflet-geoman-free": "^2.18.0",
     "@jupyter-widgets/base": "^2 || ^3 || ^4 || ^5 || ^6",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",

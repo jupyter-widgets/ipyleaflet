@@ -227,23 +227,14 @@ export class LeafletMapView extends LeafletDOMWidgetView {
   }
 
   remove_control_view(child_view: LeafletControlView) {
-    this.obj.removeControl(child_view.obj);
     child_view.remove();
+    this.obj.removeControl(child_view.obj);
   }
 
   async add_control_model(child_model: LeafletControlModel) {
     const view = await this.create_child_view<LeafletControlView>(child_model, {
       map_view: this,
     });
-    // Work around for Geoman creating and adding its own toolbar
-    // TODO: remove the special case
-    if (
-      view instanceof LeafletGeomanDrawControlView &&
-      !child_model.get('hide_controls')
-    ) {
-      this.obj.pm.addControls(view.controlOptions);
-      return view;
-    }
 
     this.obj.addControl(view.obj);
     // Trigger the displayed event of the child view.

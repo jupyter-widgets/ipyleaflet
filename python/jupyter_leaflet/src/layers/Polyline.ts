@@ -1,8 +1,9 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
-import { Polygon, Polyline } from 'leaflet';
+import { Polyline } from 'leaflet';
 import L from '../leaflet';
 import { LeafletPathModel, LeafletPathView } from './Path';
+import { LineString, MultiLineString } from 'geojson';
 
 export class LeafletPolylineModel extends LeafletPathModel {
   defaults() {
@@ -18,7 +19,7 @@ export class LeafletPolylineModel extends LeafletPathModel {
 }
 
 export class LeafletPolylineView extends LeafletPathView {
-  obj: Polyline | Polygon;
+  obj: Polyline<LineString | MultiLineString>;
 
   create_obj() {
     this.obj = L.polyline(this.model.get('locations'), this.get_options());

@@ -173,6 +173,8 @@ class Layer(Widget, InteractMixin):
         Name of the pane to use for the layer.
     pm_ignore: boolean
         Make Leaflet-Geoman ignore the layer, so it cannot modify it.
+    snap_ignore: boolean
+        Make Leaflet-Geoman snapping ignore the layer, so it is not used as a snap target when editing.
     """
 
     _view_name = Unicode("LeafletLayerView").tag(sync=True)
@@ -198,6 +200,7 @@ class Layer(Widget, InteractMixin):
     subitems = Tuple().tag(trait=Instance(Widget), sync=True, **widget_serialization)
 
     pm_ignore = Bool(True).tag(sync=True, o=True)
+    snap_ignore = Bool(True).tag(sync=True, o=False)
 
     @validate("subitems")
     def _validate_subitems(self, proposal):

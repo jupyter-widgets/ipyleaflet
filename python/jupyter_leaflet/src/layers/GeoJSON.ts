@@ -42,7 +42,10 @@ export class LeafletGeoJSONView extends LeafletFeatureGroupView {
       };
     };
 
-    const options: GeoJSONOptions = {
+    // Use get_options to trigger default option fetch behaviour
+    let options = this.get_options() as L.GeoJSONOptions;
+
+    const geojson_options: GeoJSONOptions = {
       style: style,
       onEachFeature: (feature, layer: GeoJSON) => {
         const mouseevent = (e: LeafletMouseEvent) => {
@@ -67,6 +70,8 @@ export class LeafletGeoJSONView extends LeafletFeatureGroupView {
       },
     };
 
+    options = { ...options, ...geojson_options };
+
     const point_style = this.model.get('point_style');
 
     if (Object.keys(point_style).length !== 0) {
@@ -79,6 +84,7 @@ export class LeafletGeoJSONView extends LeafletFeatureGroupView {
   }
 
   model_events() {
+    super.model_events();
     this.listenTo(this.model, 'change:style', () => {
       this.obj.setStyle(this.model.get('style'));
     });
@@ -86,6 +92,10 @@ export class LeafletGeoJSONView extends LeafletFeatureGroupView {
       this.obj.clearLayers();
       this.obj.addData(this.model.get('data'));
     });
+    // TODO this "visible" toggle is misleading, it suggests that there is
+    //  a visibility flag available in leaflet but actually it just doesn't add data.
+    //  This can lead to wasteful usage since it's the same as simply not adding geojson data
+    //  on the python side, except that in this case data will be transfered and then not used.
     this.listenTo(this.model, 'change:visible', () => {
       if (this.model.get('visible')) {
         this.obj.addData(this.model.get('data'));

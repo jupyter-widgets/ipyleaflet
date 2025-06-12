@@ -36,7 +36,7 @@ Example
 
     m = Map(center=(50, 354), zoom=5)
 
-    draw_control = GeomanDrawControl()
+    draw_control = GeomanDrawControl(hover_style={"fillColor": "red"})
     draw_control.polyline =  {
         "pathOptions": {
             "color": "#6bc2e5",
@@ -74,6 +74,14 @@ Example
 
     editable_circle = Circle(location=(50, 356), radius=100000, pm_ignore=False, color="red")
     m.add(editable_circle)
+
+    # Define click handler
+    def handle_click(control, **kwargs):
+        print("Click event detected!")
+        print("Event content:", kwargs)
+
+    # Register click handler
+    draw_control.on_click(handle_click)
 
     m
 

@@ -101,7 +101,7 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
         geo_json: this.layer_to_json(e.sourceTarget),
         latlng: e.latlng,
       });
-    }); 
+    });
     // Hover style
     this.feature_group.on('mouseover', (e) => {
       const layer = e.sourceTarget;
@@ -109,7 +109,7 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
       layer.once('mouseout', () => {
         this.feature_group.resetStyle(layer);
       });
-    }); 
+    });
 
     this.data_to_layers();
     this.map_view.obj.addLayer(this.feature_group);

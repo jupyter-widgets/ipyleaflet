@@ -68,6 +68,7 @@ jupyterlite_contents = [
     #    "../../examples/WealthOfNations.ipynb", # did not install bqplot widget as a federated extension?
     "../../examples/WidgetControl.ipynb",
 ]
+jupyterlite_silence = False
 
 # Output file base name for HTML help builder.
 html_theme = "pydata_sphinx_theme"

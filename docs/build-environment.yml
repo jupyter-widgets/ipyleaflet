@@ -16,6 +16,7 @@ dependencies:
   - branca
   - shapely
   - pydata-sphinx-theme
+  - jupyterlite-core
   - jupyterlite-sphinx
   - jupyterlite-xeus
   - geodatasets

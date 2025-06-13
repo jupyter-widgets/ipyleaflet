@@ -2307,6 +2307,8 @@ class GeomanDrawControl(DrawControlBase):
     _view_name = Unicode("LeafletGeomanDrawControlView").tag(sync=True)
     _model_name = Unicode("LeafletGeomanDrawControlModel").tag(sync=True)
 
+    _click_callbacks = Instance(CallbackDispatcher, ())
+
     # Current mode & shape
     # valid values are: 'draw', 'edit', 'drag', 'remove', 'cut', 'rotate'
     # for drawing, the tool can be added after ':' e.g. 'draw:marker'
@@ -2320,6 +2322,9 @@ class GeomanDrawControl(DrawControlBase):
     polyline = Dict({ 'pathOptions': {} }).tag(sync=True)
     polygon = Dict({ 'pathOptions': {} }).tag(sync=True)
     circlemarker = Dict({ 'pathOptions': {} }).tag(sync=True)
+
+    # Hover style (applies for all drawing modes)
+    hover_style = Dict().tag(sync=True) 
 
     # Disabled by default
     text = Dict().tag(sync=True)
@@ -2346,6 +2351,8 @@ class GeomanDrawControl(DrawControlBase):
             if not isinstance(geo_json, list):
                 geo_json = [geo_json]
             self._draw_callbacks(self, action=action, geo_json=geo_json)
+        elif content.get('event', '').startswith('click'):
+            self._click_callbacks(self, **content)
 
     def on_draw(self, callback, remove=False):
         """Add a draw event listener.
@@ -2358,6 +2365,19 @@ class GeomanDrawControl(DrawControlBase):
             Whether to remove this callback or not. Defaults to False.
         """
         self._draw_callbacks.register_callback(callback, remove=remove)
+
+    def on_click(self, callback, remove=False):
+        """Add a click event listener.
+
+        Parameters
+        ----------
+        callback : callable
+            Callback function that will be called on click event.
+        remove: boolean
+            Whether to remove this callback or not. Defaults to False.
+        """
+        self._click_callbacks.register_callback(callback, remove=remove)
+    
 
     def clear_text(self):
         """Clear all text."""

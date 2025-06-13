@@ -93,6 +93,46 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
         }
       },
     });
+
+    // Click event handler
+    this.feature_group.on('click', (e) => {
+      this.send({
+        event: 'click',
+        geo_json: this.layer_to_json(e.sourceTarget),
+        latlng: e.latlng,
+      });
+    });
+
+    // Apply hover styling to a single layer
+    const applyHoverStyle = (layer: any) => {
+      layer.on('mouseover', () => {
+        const style = this.model.get('hover_style');
+        if (style && typeof layer.setStyle === 'function') {
+          if (!layer._originalStyle) {
+            layer._originalStyle = { ...layer.options }; // clone to prevent mutation
+          }
+          layer.setStyle(style);
+        }
+      });
+
+      layer.on('mouseout', () => {
+        if (layer._originalStyle && typeof layer.setStyle === 'function') {
+          layer.setStyle(layer._originalStyle);
+        }
+      });
+    };
+
+    // Apply to existing layers
+    this.feature_group.eachLayer((layer: any) => {
+      applyHoverStyle(layer);
+    });
+
+    // Apply to new layers
+    this.feature_group.on('layeradd', (e) => {
+      const layer = e.layer;
+      applyHoverStyle(layer);
+    });
+
     this.data_to_layers();
     this.map_view.obj.addLayer(this.feature_group);
 

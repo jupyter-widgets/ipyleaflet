@@ -17,7 +17,7 @@ dependencies:
   - shapely
   - pydata-sphinx-theme
   - jupyterlite-sphinx
-  - jupyterlite-xeus-python >=0.9.2,<0.10
+  - jupyterlite-xeus
   - geodatasets
   - pip:
       - build

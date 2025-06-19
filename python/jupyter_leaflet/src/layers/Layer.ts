@@ -207,6 +207,9 @@ export class LeafletLayerView extends LeafletWidgetView {
     this.listenTo(this.model, 'change:subitems', () => {
       this.subitem_views.update(this.subitems);
     });
+    this.listenTo(this.model, 'change:tooltip', () => {
+      this.bind_tooltip(this.model.get('tooltip'));
+    });
   }
 
   remove() {

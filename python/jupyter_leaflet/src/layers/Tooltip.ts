@@ -44,7 +44,6 @@ export class LeafletTooltipView extends LeafletUILayerView {
         this.get_options() as TooltipOptions
       );
     } else {
-      // TODO: Tooltip to be bound to another layer
       this.obj = L.tooltip(this.get_options() as TooltipOptions);
     }
   }

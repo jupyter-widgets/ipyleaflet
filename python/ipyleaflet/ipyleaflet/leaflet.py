@@ -175,6 +175,8 @@ class Layer(Widget, InteractMixin):
         Make Leaflet-Geoman ignore the layer, so it cannot modify it.
     snap_ignore: boolean
         Make Leaflet-Geoman snapping ignore the layer, so it is not used as a snap target when editing.
+    tooltip: Tooltip widget
+        Tooltip widget to bind to the layer.
     """
 
     _view_name = Unicode("LeafletLayerView").tag(sync=True)
@@ -195,6 +197,10 @@ class Layer(Widget, InteractMixin):
     popup_max_width = Int(300).tag(sync=True)
     popup_max_height = Int(default_value=None, allow_none=True).tag(sync=True)
     pane = Unicode("").tag(sync=True)
+
+    tooltip = Instance(Widget, allow_none=True, default_value=None).tag(
+        sync=True, **widget_serialization
+    )
 
     options = List(trait=Unicode()).tag(sync=True)
     subitems = Tuple().tag(trait=Instance(Widget), sync=True, **widget_serialization)
@@ -660,6 +666,9 @@ class Tooltip(UILayer):
         to the tooltip position on the map.
     permanent: bool, default False
         Whether to open the tooltip permanently or only on mouseover.
+    sticky: bool, default False
+        If true, the tooltip will follow the mouse instead of being fixed at the feature center.
+        This option only applies when binding the tooltip to a Layer, not as stand-alone.
     """
     _view_name = Unicode("LeafletTooltipView").tag(sync=True)
     _model_name = Unicode("LeafletTooltipModel").tag(sync=True)
@@ -671,6 +680,7 @@ class Tooltip(UILayer):
     offset = List(def_loc).tag(sync=True, o=True)
     direction=Unicode('auto').tag(sync=True, o=True)
     permanent = Bool(False).tag(sync=True, o=True)
+    sticky = Bool(False).tag(sync=True, o=True)
 
 
 class RasterLayer(Layer):

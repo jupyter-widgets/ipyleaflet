@@ -9,7 +9,7 @@ import {
 } from '@jupyter-widgets/base';
 import { IMessageHandler, MessageLoop } from '@lumino/messaging';
 import { Widget } from '@lumino/widgets';
-import { Control, Layer, LeafletMouseEvent, Popup } from 'leaflet';
+import { Control, Layer, LeafletMouseEvent, Popup, Tooltip } from 'leaflet';
 import { LeafletControlView, LeafletMapView } from '../jupyter-leaflet';
 import L from '../leaflet';
 import { LeafletWidgetView } from '../utils';
@@ -29,6 +29,7 @@ export interface ILeafletLayerModel {
   popup_max_width: number;
   popup_max_height: number | null;
   pane: string;
+  tooltip: WidgetModel | null;
   subitems: Layer[];
   pm_ignore: boolean;
   snap_ignore: boolean;
@@ -55,6 +56,7 @@ export class LeafletLayerModel extends WidgetModel {
       subitems: [],
       pm_ignore: true,
       snap_ignore: false,
+      tooltip: null,
     };
   }
 }
@@ -62,6 +64,7 @@ export class LeafletLayerModel extends WidgetModel {
 LeafletLayerModel.serializers = {
   ...WidgetModel.serializers,
   popup: { deserialize: unpack_models },
+  tooltip: { deserialize: unpack_models },
   subitems: { deserialize: unpack_models },
 };
 
@@ -83,6 +86,8 @@ export class LeafletLayerView extends LeafletWidgetView {
   obj: Layer;
   subitems: WidgetModel[];
   pWidget: IMessageHandler;
+  tooltip_content: LeafletLayerView;
+  tooltip_content_promise: Promise<void>;
 
   create_obj(): void {}
 
@@ -90,6 +95,7 @@ export class LeafletLayerView extends LeafletWidgetView {
     super.initialize(parameters);
     this.map_view = this.options.map_view;
     this.popup_content_promise = Promise.resolve();
+    this.tooltip_content_promise = Promise.resolve();
   }
 
   remove_subitem_view(child_view: LeafletLayerView) {
@@ -128,6 +134,7 @@ export class LeafletLayerView extends LeafletWidgetView {
     this.listenTo(this.model, 'change:popup', (model, value_2) => {
       this.bind_popup(value_2);
     });
+    this.bind_tooltip(this.model.get('tooltip'));
     this.update_pane();
     this.subitem_views = new ViewList(
       this.add_subitem_model,
@@ -210,6 +217,11 @@ export class LeafletLayerView extends LeafletWidgetView {
         this.popup_content.remove();
       }
     });
+    this.tooltip_content_promise.then(() => {
+      if (this.tooltip_content) {
+        this.tooltip_content.remove();
+      }
+    });
   }
 
   bind_popup(value: WidgetModel) {
@@ -251,6 +263,27 @@ export class LeafletLayerView extends LeafletWidgetView {
     // Those TWO lines will enforce the options update
     this.obj.togglePopup();
     this.obj.togglePopup();
+  }
+
+  bind_tooltip(value: WidgetModel) {
+    if (this.tooltip_content) {
+      this.obj.unbindTooltip();
+      this.tooltip_content.remove();
+    }
+    if (value) {
+      this.tooltip_content_promise = this.tooltip_content_promise.then(
+        async () => {
+          const view = await this.create_child_view<LeafletLayerView>(value, {
+            map_view: this.map_view,
+          });
+          if (view.obj instanceof Tooltip) {
+            this.obj.bindTooltip(view.obj);
+          }
+          this.tooltip_content = view;
+        }
+      );
+    }
+    return this.tooltip_content_promise;
   }
 }
 

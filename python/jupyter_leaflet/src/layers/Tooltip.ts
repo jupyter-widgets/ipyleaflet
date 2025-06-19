@@ -51,5 +51,17 @@ export class LeafletTooltipView extends LeafletUILayerView {
 
   model_events() {
     super.model_events();
+    this.listenTo(this.model, 'change:location', () => {
+      if (this.model.get('location')) {
+        this.obj.setLatLng(this.model.get('location'));
+        this.send({
+          event: 'move',
+          location: this.model.get('location'),
+        });
+      }
+    });
+    this.listenTo(this.model, 'change:content', () => {
+      this.obj.setContent(this.model.get('content'));
+    });
   }
 }

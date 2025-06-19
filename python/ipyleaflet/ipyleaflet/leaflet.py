@@ -640,6 +640,39 @@ class Popup(UILayer):
         self.send({"msg": "close"})
 
 
+class Tooltip(UILayer):
+    """Tooltip class.
+
+    Used to display small texts on top of map layers.
+
+    Attributes
+    ----------
+    location: tuple, default None
+        Optional tuple containing the latitude/longitude of the stand-alone tooltip.
+    content: str, default ""
+        The text to show inside the tooltip
+    offset: tuple, default (0, 0)
+        Optional offset of the tooltip position (in pixels).
+    direction: str, default 'auto'
+        Direction where to open the tooltip. 
+        Possible values are: right, left, top, bottom, center, auto. 
+        auto will dynamically switch between right and left according 
+        to the tooltip position on the map.
+    permanent: bool, default False
+        Whether to open the tooltip permanently or only on mouseover.
+    """
+    _view_name = Unicode("LeafletTooltipView").tag(sync=True)
+    _model_name = Unicode("LeafletTooltipModel").tag(sync=True)
+
+    location = List(allow_none=True, default_value=None).tag(sync=True)
+
+    # Options
+    content = Unicode('').tag(sync=True, o=True)
+    offset = List(def_loc).tag(sync=True, o=True)
+    direction=Unicode('auto').tag(sync=True, o=True)
+    permanent = Bool(False).tag(sync=True, o=True)
+
+
 class RasterLayer(Layer):
     """Abstract RasterLayer class.
 

@@ -27,6 +27,7 @@ export * from './layers/Popup';
 export * from './layers/RasterLayer';
 export * from './layers/Rectangle';
 export * from './layers/TileLayer';
+export * from './layers/Tooltip';
 export * from './layers/VectorLayer';
 export * from './layers/VectorTileLayer';
 export * from './layers/Velocity';

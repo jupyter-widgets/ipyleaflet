@@ -14,7 +14,7 @@ Example
         location=[51.5, -0.09], 
         content="Hello world!<br />This is a nice tooltip.",
         offset=[-30,50], # Offset in pixels
-        permanent=False,  # The default is False, in which case you can remove the tooltip by clicking on it. 
+        permanent=False,  # The default is False, in which case you can remove the tooltip by clicking anywhere on the map.
         direction='bottom', # Default is 'auto'
     )
 

@@ -2378,6 +2378,8 @@ class GeomanDrawControl(DrawControlBase):
     cut = Bool(True).tag(sync=True)
     rotate = Bool(True).tag(sync=True)
 
+    limit_markers_to_count = Int(-1).tag(sync=True)
+
     def __init__(self, **kwargs):
         super(GeomanDrawControl, self).__init__(**kwargs)
         self.on_msg(self._handle_leaflet_event)

@@ -2378,6 +2378,8 @@ class GeomanDrawControl(DrawControlBase):
     cut = Bool(True).tag(sync=True)
     rotate = Bool(True).tag(sync=True)
 
+    continuous_updates = Bool(True).tag(sync=True)
+
     def __init__(self, **kwargs):
         super(GeomanDrawControl, self).__init__(**kwargs)
         self.on_msg(self._handle_leaflet_event)
@@ -2425,6 +2427,20 @@ class GeomanDrawControl(DrawControlBase):
     def clear_text(self):
         """Clear all text."""
         self.send({'msg': 'clear_text'})
+
+    def sync_data(self):
+        """Force sync the data from the Geoman side to the data traitlet.
+        This will cause all map data values to be sent from the client to the server.
+
+        Useful together with continuous_updates=False, to fetch the data at a specfic
+        point e.g. when a "save edits" button is pressed.
+
+        Note that this just triggers the client data sending, there will be a lag
+        between the request and the data sync being completed. Therefore to get the data
+        you will need to wait for the "data" traitlet to be updated, e.g. by using
+        traitlets.observe.
+        """
+        self.send({"msg": "sync_data"})
 
 
 class DrawControlCompatibility(DrawControlBase):

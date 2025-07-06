@@ -1,3 +1,38 @@
+## v0.20.0
+
+## New features
+
+* Add event coordinates to GeoJSON message by @lopezvoliver in https://github.com/jupyter-widgets/ipyleaflet/pull/1228
+* Default zoom level to 4 instead of 12 so that default Map() don't onl… by @SylvainCorlay in https://github.com/jupyter-widgets/ipyleaflet/pull/1252
+* Preserve `{r}` in basemap urls by @letmaik in https://github.com/jupyter-widgets/ipyleaflet/pull/1241
+* Fix geoman controls option update + snapping option by @mangecoeur in https://github.com/jupyter-widgets/ipyleaflet/pull/1247
+* Add on_click to GeomanDrawControl by @arjxn-py in https://github.com/jupyter-widgets/ipyleaflet/pull/1261
+
+## Bug fixes
+
+* Add scrollWheelZoom.enable() and disable() by @lopezvoliver in https://github.com/jupyter-widgets/ipyleaflet/pull/1225
+* Make Leaflet-Geoman ignore created layers by default by @riccardoporreca in https://github.com/jupyter-widgets/ipyleaflet/pull/1220
+* Make cluster "bubbles" ignorable by Geoman by @lopezvoliver in https://github.com/jupyter-widgets/ipyleaflet/pull/1249
+* Update deprecated subdomains for tile.openstreetmap.org by @arjxn-py in https://github.com/jupyter-widgets/ipyleaflet/pull/1257
+* Add workaround for MeasureControl map panning bug by @gjmooney in https://github.com/jupyter-widgets/ipyleaflet/pull/1171
+* geojson layers pmIgnore by @lopezvoliver in https://github.com/jupyter-widgets/ipyleaflet/pull/1251
+
+## Maintenance
+
+* Fix CI by @arjxn-py in https://github.com/jupyter-widgets/ipyleaflet/pull/1254
+* CI: check comment author association instead of issue author by @arjxn-py in https://github.com/jupyter-widgets/ipyleaflet/pull/1255
+* Update Binder link in the Usage section of the docs by @arjxn-py in https://github.com/jupyter-widgets/ipyleaflet/pull/1256
+* fix `examples/KML.ipynb` by @arjxn-py in https://github.com/jupyter-widgets/ipyleaflet/pull/1258
+* Update flaky snapshots by @arjxn-py in https://github.com/jupyter-widgets/ipyleaflet/pull/1259
+* Update lite deployment in docs by @martinRenou in https://github.com/jupyter-widgets/ipyleaflet/pull/1262
+
+## New Contributors
+* @riccardoporreca made their first contribution in https://github.com/jupyter-widgets/ipyleaflet/pull/1220
+* @arjxn-py made their first contribution in https://github.com/jupyter-widgets/ipyleaflet/pull/1254
+* @letmaik made their first contribution in https://github.com/jupyter-widgets/ipyleaflet/pull/1241
+
+**Full Changelog**: https://github.com/jupyter-widgets/ipyleaflet/compare/0.19.2...0.20.0
+
 ## v0.19.2
 
 * fix(docs): GeomanDrawControl was not included in docs navigation by @iisakkirotko in https://github.com/jupyter-widgets/ipyleaflet/pull/1197

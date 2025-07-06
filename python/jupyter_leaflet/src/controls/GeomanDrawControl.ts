@@ -1,5 +1,5 @@
 import { unpack_models, WidgetView } from '@jupyter-widgets/base';
-import {ControlPosition, GeoJSON, Map} from 'leaflet';
+import { ControlPosition, GeoJSON, Map } from 'leaflet';
 import L from '../leaflet';
 import { LayerShapes } from '../definitions/leaflet-extend';
 import { LeafletControlModel, LeafletControlView } from './Control';
@@ -48,6 +48,9 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
   }
 
   create_obj() {
+    const model = this.model;
+    this.setControlOptions();
+
     this.feature_group = L.geoJson([], {
       style: function (feature) {
         if (feature?.properties != undefined) {
@@ -57,26 +60,32 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
         }
       },
       pointToLayer: function (feature, latlng) {
-        var options;
-        if (feature.properties.style.textMarker) {
+        let options;
+        if (feature?.properties?.style?.textMarker) {
           options = {
             textMarker: feature.properties.style.textMarker,
             text: feature.properties.style.text,
           };
         } else {
-          options = feature.properties.options;
+          options = feature.properties?.options;
         }
         switch (feature.properties.type) {
           case 'marker':
+            if (!options) {
+              options = model.get('marker')?.markerStyle;
+            }
             return new L.Marker(latlng, options);
           case 'circle':
             return new L.Circle(
               latlng,
               feature.properties.style.radius,
-              feature.properties.options
+              options
             );
           case 'circlemarker':
-            return new L.CircleMarker(latlng, feature.properties.options);
+            if (!options) {
+              options = model.get('circlemarker')?.pathOptions;
+            }
+            return new L.CircleMarker(latlng, options);
           // Below might work funny sometimes?
           // TODO: Check
           default:
@@ -84,6 +93,46 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
         }
       },
     });
+
+    // Click event handler
+    this.feature_group.on('click', (e) => {
+      this.send({
+        event: 'click',
+        geo_json: this.layer_to_json(e.sourceTarget),
+        latlng: e.latlng,
+      });
+    });
+
+    // Apply hover styling to a single layer
+    const applyHoverStyle = (layer: any) => {
+      layer.on('mouseover', () => {
+        const style = this.model.get('hover_style');
+        if (style && typeof layer.setStyle === 'function') {
+          if (!layer._originalStyle) {
+            layer._originalStyle = { ...layer.options }; // clone to prevent mutation
+          }
+          layer.setStyle(style);
+        }
+      });
+
+      layer.on('mouseout', () => {
+        if (layer._originalStyle && typeof layer.setStyle === 'function') {
+          layer.setStyle(layer._originalStyle);
+        }
+      });
+    };
+
+    // Apply to existing layers
+    this.feature_group.eachLayer((layer: any) => {
+      applyHoverStyle(layer);
+    });
+
+    // Apply to new layers
+    this.feature_group.on('layeradd', (e) => {
+      const layer = e.layer;
+      applyHoverStyle(layer);
+    });
+
     this.data_to_layers();
     this.map_view.obj.addLayer(this.feature_group);
 
@@ -230,7 +279,6 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
   }
 
   private setControlOptions() {
-    console.log("set_control_options")
     var position = this.model.get('position');
 
     var drawMarker = this.model.get('marker');
@@ -329,8 +377,6 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
   }
 
   remove() {
-    this.map_view.obj.pm.removeControls();
-    this.map_view.obj.removeLayer(this.feature_group);
     this.map_view.obj.off('pm:create');
     this.map_view.obj.off('pm:remove');
     this.map_view.obj.off('pm:cut');
@@ -338,6 +384,8 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
     this.map_view.obj.off('moveend');
     this.model.off('msg:custom');
     this.model.off('change:data');
+    this.map_view.obj.pm.removeControls();
+    this.map_view.obj.removeLayer(this.feature_group);
     return this;
   }
 
@@ -537,31 +585,41 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
   model_events() {
     super.model_events();
     // Geoman needs to be forced to update by removing and re-adding the control
-    // toolbar with the new options set.
+    // toolbar with the new options set. Ignore attrs that are not options.
+    const excluded_keys = ['current_mode'];
     for (let key in this.model.attributes) {
-      this.listenTo(this.model, 'change:' + key, () => {
-        this.setControlOptions()
+      if (!(key.startsWith('_') || excluded_keys.includes(key))) {
+        this.listenTo(this.model, 'change:' + key, () => {
+          this.setControlOptions();
 
-        this.map_view.obj.pm.removeControls();
-        if (!this.model.get('hide_controls')) {
-          this.map_view.obj.pm.addControls(this.controlOptions);
-        }
-      });
+          this.map_view.obj.pm.removeControls();
+          if (!this.model.get('hide_controls')) {
+            this.map_view.obj.pm.addControls(this.controlOptions);
+          }
+        });
+      }
     }
   }
 
   getPosition() {
     return this.options.position;
   }
+
   setPosition(position: ControlPosition) {
-    this.options.position = position;
+    this.setControlOptions();
+    this.map_view.obj.pm.removeControls();
+    if (!this.model.get('hide_controls')) {
+      this.map_view.obj.pm.addControls(this.controlOptions);
+    }
     return this;
   }
+
   getContainer() {
-    return this.map_view;
+    return this.map_view.obj;
   }
+
   addTo(map: Map) {
-    if (!this.options.get('hide_controls')) {
+    if (!this.model.get('hide_controls')) {
       map.pm.addControls(this.controlOptions);
     }
     return this;

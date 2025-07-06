@@ -43,7 +43,7 @@ export class LeafletGeoJSONView extends LeafletFeatureGroupView {
     };
 
     // Use get_options to trigger default option fetch behaviour
-    let options = this.get_options() as L.GeoJSONOptions
+    let options = this.get_options() as L.GeoJSONOptions;
 
     const geojson_options: GeoJSONOptions = {
       style: style,
@@ -63,6 +63,14 @@ export class LeafletGeoJSONView extends LeafletFeatureGroupView {
             coordinates: [e.latlng.lat, e.latlng.lng],
           });
         };
+        const pmIgnore = this.model.get('pm_ignore');
+        if (pmIgnore !== undefined) {
+          (layer as any).pmIgnore = pmIgnore;
+          if (pmIgnore && layer.pm) {
+            layer.pm.disable();
+            delete (layer as any).pm;
+          }
+        }
         layer.on({
           mouseover: mouseevent,
           click: mouseevent,
@@ -70,7 +78,7 @@ export class LeafletGeoJSONView extends LeafletFeatureGroupView {
       },
     };
 
-    options = {...options, ...geojson_options}
+    options = { ...options, ...geojson_options };
 
     const point_style = this.model.get('point_style');
 

@@ -16,7 +16,7 @@ Try it online
 .. image:: https://jupyterlite.rtfd.io/en/latest/_static/badge.svg
    :target: ./lite/lab?path=ipyleaflet.ipynb
 
-You can try ipyleaflet below, or open many other live examples in a new browser tab with : `JupyterLite <./lite/lab?path=ipyleaflet.ipynb>`_ or `RetroLite <./lite/retro/tree>`_.
+You can try ipyleaflet below with JupyterLite! Or try our Notebooks examples in a new browser tab with : `JupyterLab <./lite/lab?path=ipyleaflet.ipynb>`_ or `Notebook <./lite/tree>`_.
 
 .. retrolite:: ipyleaflet.ipynb
    :width: 100%

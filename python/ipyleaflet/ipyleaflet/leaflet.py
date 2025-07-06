@@ -102,7 +102,7 @@ def basemap_to_tiles(basemap, day=yesterday, **kwargs):
         Extra key-word arguments to pass to the TileLayer constructor.
     """
     if isinstance(basemap, xyzservices.lib.TileProvider):
-        url = basemap.build_url(time=day)
+        url = basemap.build_url(time=day, scale_factor="{r}")
     elif isinstance(basemap, dict):
         url = basemap.get("url", "")
     else:
@@ -175,6 +175,8 @@ class Layer(Widget, InteractMixin):
         Make Leaflet-Geoman ignore the layer, so it cannot modify it.
     snap_ignore: boolean
         Make Leaflet-Geoman snapping ignore the layer, so it is not used as a snap target when editing.
+    tooltip: Tooltip widget
+        Tooltip widget to bind to the layer.
     """
 
     _view_name = Unicode("LeafletLayerView").tag(sync=True)
@@ -195,6 +197,10 @@ class Layer(Widget, InteractMixin):
     popup_max_width = Int(300).tag(sync=True)
     popup_max_height = Int(default_value=None, allow_none=True).tag(sync=True)
     pane = Unicode("").tag(sync=True)
+
+    tooltip = Instance(Widget, allow_none=True, default_value=None).tag(
+        sync=True, **widget_serialization
+    )
 
     options = List(trait=Unicode()).tag(sync=True)
     subitems = Tuple().tag(trait=Instance(Widget), sync=True, **widget_serialization)
@@ -640,6 +646,43 @@ class Popup(UILayer):
         self.send({"msg": "close"})
 
 
+class Tooltip(UILayer):
+    """Tooltip class.
+
+    Used to display small texts on top of map layers.
+
+    Attributes
+    ----------
+    location: tuple, default None
+        Optional tuple containing the latitude/longitude of the stand-alone tooltip.
+    content: str, default ""
+        The text to show inside the tooltip
+    offset: tuple, default (0, 0)
+        Optional offset of the tooltip position (in pixels).
+    direction: str, default 'auto'
+        Direction where to open the tooltip.
+        Possible values are: right, left, top, bottom, center, auto.
+        auto will dynamically switch between right and left according
+        to the tooltip position on the map.
+    permanent: bool, default False
+        Whether to open the tooltip permanently or only on mouseover.
+    sticky: bool, default False
+        If true, the tooltip will follow the mouse instead of being fixed at the feature center.
+        This option only applies when binding the tooltip to a Layer, not as stand-alone.
+    """
+    _view_name = Unicode("LeafletTooltipView").tag(sync=True)
+    _model_name = Unicode("LeafletTooltipModel").tag(sync=True)
+
+    location = List(allow_none=True, default_value=None).tag(sync=True)
+
+    # Options
+    content = Unicode('').tag(sync=True, o=True)
+    offset = List(def_loc).tag(sync=True, o=True)
+    direction=Unicode('auto').tag(sync=True, o=True)
+    permanent = Bool(False).tag(sync=True, o=True)
+    sticky = Bool(False).tag(sync=True, o=True)
+
+
 class RasterLayer(Layer):
     """Abstract RasterLayer class.
 
@@ -665,7 +708,7 @@ class TileLayer(RasterLayer):
 
     Attributes
     ----------
-    url: string, default "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    url: string, default "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
         Url to the tiles service.
     min_zoom: int, default 0
         The minimum zoom level down to which this layer will be displayed (inclusive).
@@ -700,7 +743,7 @@ class TileLayer(RasterLayer):
     _model_name = Unicode("LeafletTileLayerModel").tag(sync=True)
 
     bottom = Bool(True).tag(sync=True)
-    url = Unicode("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").tag(sync=True)
+    url = Unicode("https://tile.openstreetmap.org/{z}/{x}/{y}.png").tag(sync=True)
     min_zoom = Int(0).tag(sync=True, o=True)
     max_zoom = Int(18).tag(sync=True, o=True)
     min_native_zoom = Int(default_value=None, allow_none=True).tag(sync=True, o=True)
@@ -2307,6 +2350,8 @@ class GeomanDrawControl(DrawControlBase):
     _view_name = Unicode("LeafletGeomanDrawControlView").tag(sync=True)
     _model_name = Unicode("LeafletGeomanDrawControlModel").tag(sync=True)
 
+    _click_callbacks = Instance(CallbackDispatcher, ())
+
     # Current mode & shape
     # valid values are: 'draw', 'edit', 'drag', 'remove', 'cut', 'rotate'
     # for drawing, the tool can be added after ':' e.g. 'draw:marker'
@@ -2320,6 +2365,9 @@ class GeomanDrawControl(DrawControlBase):
     polyline = Dict({ 'pathOptions': {} }).tag(sync=True)
     polygon = Dict({ 'pathOptions': {} }).tag(sync=True)
     circlemarker = Dict({ 'pathOptions': {} }).tag(sync=True)
+
+    # Hover style (applies for all drawing modes)
+    hover_style = Dict().tag(sync=True)
 
     # Disabled by default
     text = Dict().tag(sync=True)
@@ -2346,6 +2394,8 @@ class GeomanDrawControl(DrawControlBase):
             if not isinstance(geo_json, list):
                 geo_json = [geo_json]
             self._draw_callbacks(self, action=action, geo_json=geo_json)
+        elif content.get('event', '').startswith('click'):
+            self._click_callbacks(self, **content)
 
     def on_draw(self, callback, remove=False):
         """Add a draw event listener.
@@ -2358,6 +2408,19 @@ class GeomanDrawControl(DrawControlBase):
             Whether to remove this callback or not. Defaults to False.
         """
         self._draw_callbacks.register_callback(callback, remove=remove)
+
+    def on_click(self, callback, remove=False):
+        """Add a click event listener.
+
+        Parameters
+        ----------
+        callback : callable
+            Callback function that will be called on click event.
+        remove: boolean
+            Whether to remove this callback or not. Defaults to False.
+        """
+        self._click_callbacks.register_callback(callback, remove=remove)
+
 
     def clear_text(self):
         """Clear all text."""
@@ -2804,7 +2867,7 @@ class Map(DOMWidget, InteractMixin):
 
     # Map options
     center = List(def_loc).tag(sync=True, o=True)
-    zoom = CFloat(12).tag(sync=True, o=True)
+    zoom = CFloat(4).tag(sync=True, o=True)
     max_zoom = CFloat(default_value=None, allow_none=True).tag(sync=True, o=True)
     min_zoom = CFloat(default_value=None, allow_none=True).tag(sync=True, o=True)
     zoom_delta = CFloat(1).tag(sync=True, o=True)

@@ -20,18 +20,18 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: [3.8]
+        python-version: [3.11]
 
     steps:
       - uses: actions/checkout@v2
 
       - name: Setup conda
-        uses: mamba-org/setup-micromamba@v1
+        uses: mamba-org/setup-micromamba@main
         with:
           environment-file: environment-dev.yml
-          condarc: |
-            dependencies:
-              - python==${{ matrix.python-version }}
+          init-shell: bash
+          cache-environment: true
+          create-args: python=${{ matrix.python-version }}
 
       - name: Install ipyleaflet
         run: pip install python/jupyter_leaflet python/ipyleaflet --no-deps
@@ -45,7 +45,7 @@ jobs:
           test -f $CONDA_PREFIX/share/jupyter/labextensions/jupyter-leaflet/package.json
 
       - name: Python Linters
-        run: ruff check --output-format=github .
+        run: ruff check --output-format=github --exclude "examples,ui-tests" --ignore "E501,E731,F403" .
 
       - name: JS Linters
         run: |

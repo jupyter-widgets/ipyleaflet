@@ -2985,12 +2985,6 @@ class Map(DOMWidget, InteractMixin):
             self.zoom_control_instance = ZoomControl()
             self.add(self.zoom_control_instance)
 
-        if self.attribution_control:
-            self.attribution_control_instance = AttributionControl(
-                position="bottomright"
-            )
-            self.add(self.attribution_control_instance)
-
     @observe("zoom_control")
     def observe_zoom_control(self, change):
         if change["new"]:

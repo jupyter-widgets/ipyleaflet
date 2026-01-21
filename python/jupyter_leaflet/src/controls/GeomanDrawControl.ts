@@ -136,6 +136,8 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
     this.data_to_layers();
     this.map_view.obj.addLayer(this.feature_group);
 
+    this.setControlOptions();
+
     this.setMode();
 
     this.map_view.obj.on(
@@ -398,7 +400,13 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
       mode = mode.split(':')[1];
       this.map_view.obj.pm.enableDraw(mode, this.model.get(mode.toLowerCase()));
     } else if (mode == 'edit') {
-      this.map_view.obj.pm.enableGlobalEditMode();
+      let n_markers = this.model.get('limit_markers_to_count');
+      if (!n_markers) {
+        n_markers = -1;
+      }
+      this.map_view.obj.pm.enableGlobalEditMode({
+        limitMarkersToCount: n_markers
+      });
     } else if (mode == 'drag') {
       this.map_view.obj.pm.enableGlobalDragMode();
     } else if (mode == 'remove') {

@@ -419,6 +419,8 @@ class DivIcon(UILayer):
     icon_size = List(default_value=None, allow_none=True).tag(sync=True, o=True)
     icon_anchor = List(default_value=None, allow_none=True).tag(sync=True, o=True)
     popup_anchor = List([0, 0], allow_none=True).tag(sync=True, o=True)
+    class_name = Unicode("leaflet-div-icon").tag(sync=True, o=True)
+
 
     @validate("icon_size", "icon_anchor", "popup_anchor")
     def _validate_attr(self, proposal):

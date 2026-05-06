@@ -8,11 +8,13 @@ dependencies:
   - yarn~=3.0
   - jupyterlab~=4.0
   - jupyter-packaging~=0.12
+  - sphinx<9
+  - docutils<0.22
   - jupyter-sphinx
   - scipy
   - netcdf4
   - geopandas
-  - xarray
+  - xarray<2026
   - branca
   - shapely
   - pydata-sphinx-theme

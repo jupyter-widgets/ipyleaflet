@@ -36,7 +36,7 @@ You can add multiple layers and controls to the map, using the ``add`` methods. 
 
     m
 
-As a Jupyter interactive widget, the layout of the ``Map`` object is specified by a Layout attribute. See `Layout and Styling of Jupyter widgets <https://ipywidgets.readthedocs.io/en/latest/examples/Widget%20Styling.html/>`_ for details.
+As a Jupyter interactive widget, the layout of the ``Map`` object is specified by a Layout attribute. See `Layout <https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20Layout.html/>`_ and `Styling <https://ipywidgets.readthedocs.io/en/stable/examples/Widget%20Styling.html/>`_ of Jupyter widgets for details.
 
 .. jupyter-execute::
 

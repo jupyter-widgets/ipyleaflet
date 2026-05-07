@@ -33,8 +33,9 @@ For a development installation (requires yarn):
 
     git clone https://github.com/jupyter-widgets/ipyleaflet.git
     cd ipyleaflet
-    pip install -e .
-
+    (cd python/jupyter_leaflet; pip install -e .)
+    (cd python/ipyleaflet; pip install -e .)
+ 
     # If you are developing on Jupyter Notebook
     jupyter nbextension install --py --symlink --sys-prefix --overwrite jupyter_leaflet
     jupyter nbextension enable --py --sys-prefix jupyter_leaflet

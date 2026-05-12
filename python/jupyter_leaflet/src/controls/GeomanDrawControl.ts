@@ -40,6 +40,7 @@ LeafletGeomanDrawControlModel.serializers = {
 export class LeafletGeomanDrawControlView extends LeafletControlView {
   feature_group: GeoJSON;
   controlOptions: { [option: string]: any };
+
   initialize(
     parameters: WidgetView.IInitializeParameters<LeafletControlModel>
   ) {
@@ -136,7 +137,11 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
     this.data_to_layers();
     this.map_view.obj.addLayer(this.feature_group);
 
+    this.setControlOptions();
+
     this.setMode();
+
+    const continuousUpdate = this.model.get('continuous_update');
 
     this.map_view.obj.on(
       'pm:create',
@@ -157,14 +162,20 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
               geo_json: this.layer_to_json(layer),
             });
             this.feature_group.addLayer(layer);
-            this.layers_to_data();
-            this.model.save_changes();
+            if (continuousUpdate) {
+              this.layers_to_data();
+              // TODO this is called anyway in layers to data?
+              // this.model.save_changes();
+            }
           });
           return;
         }
         this.feature_group.addLayer(layer);
-        this.layers_to_data();
-        this.model.save_changes();
+        if (continuousUpdate) {
+          this.layers_to_data();
+          // TODO this is called anyway in layers to data?
+          // this.model.save_changes();
+        }
       }
     );
     this.map_view.obj.on(
@@ -176,7 +187,11 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
           event: 'pm:remove',
           geo_json: this.layer_to_json(eventLayer),
         });
-        this.layers_to_data();
+        if (continuousUpdate) {
+          this.layers_to_data();
+          // TODO this is called anyway in layers to data?
+          // this.model.save_changes();
+        }
       }
     );
     this.map_view.obj.on(
@@ -202,13 +217,19 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
           event: 'pm:cut',
           geo_json: geo_json,
         });
-        this.layers_to_data();
+        if (continuousUpdate) {
+          this.layers_to_data();
+          this.model.save_changes();
+        }
       }
     );
     this.map_view.obj.on('pm:rotateend', (e: { layer: LayerShapes }) => {
       var eventLayer = e.layer;
       this.event_to_json('pm:rotateend', eventLayer);
-      this.layers_to_data();
+      if (continuousUpdate) {
+        this.layers_to_data();
+        this.model.save_changes();
+      }
     });
     // add listeners for syncing modes
     this.map_view.obj.on(
@@ -454,6 +475,8 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
 
   data_to_layers() {
     const data = this.model.get('data');
+    const continuousUpdate = this.model.get('continuous_update');
+
     this.feature_group.clearLayers();
     this.feature_group.addData(data);
     // We add event listeners here, since these need to be added on a
@@ -462,27 +485,39 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
       layer.on('pm:vertexadded', (e: { layer: L.Layer }) => {
         var eventLayer = e.layer;
         this.event_to_json('pm:vertexadded', eventLayer);
-        this.layers_to_data();
+
+        if (continuousUpdate) {
+          this.layers_to_data();
+        }
       });
       layer.on('pm:vertexremoved', (e) => {
         var eventLayer = e.layer;
         this.event_to_json('pm:vertexremoved', eventLayer);
-        this.layers_to_data();
+        if (continuousUpdate) {
+          this.layers_to_data();
+        }
       });
       layer.on('pm:markerdragend', (e) => {
         var eventLayer = e.layer;
         this.event_to_json('pm:vertexdrag', eventLayer);
-        this.layers_to_data();
+        if (continuousUpdate) {
+          console.log('pm:vertexdrag data push');
+          this.layers_to_data();
+        }
       });
       layer.on('pm:dragend', (e) => {
         var eventLayer = e.layer;
         this.event_to_json('pm:drag', eventLayer);
-        this.layers_to_data();
+        if (continuousUpdate) {
+          this.layers_to_data();
+        }
       });
       layer.on('pm:textblur', (e) => {
         var eventLayer = e.layer;
         this.event_to_json('pm:textchange', eventLayer);
-        this.layers_to_data();
+        if (continuousUpdate) {
+          this.layers_to_data();
+        }
       });
     });
   }
@@ -511,6 +546,11 @@ export class LeafletGeomanDrawControlView extends LeafletControlView {
 
   handle_message(content: { msg: string }) {
     switch (content.msg) {
+      case 'sync_data': {
+        this.layers_to_data();
+        // Return rather than break, since layers_to_data is run again further down.
+        return;
+      }
       case 'clear': {
         this.feature_group.eachLayer((layer) => {
           this.feature_group.removeLayer(layer);

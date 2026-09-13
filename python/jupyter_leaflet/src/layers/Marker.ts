@@ -129,6 +129,12 @@ export class LeafletMarkerView extends LeafletUILayerView {
         this.obj.setOpacity(0);
       }
     });
+    this.listenTo(this.model, 'change:title', () => {
+      const element = this.obj.getElement();
+      if (element) {
+        element.title = this.model.get('title');
+      }
+    });
     this.listenTo(this.model, 'change:rotation_angle', () => {
       this.obj.setRotationAngle(this.model.get('rotation_angle'));
     });

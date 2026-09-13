@@ -30,7 +30,7 @@ export class LeafletMeasureControlModel extends control.LeafletControlModel {
       primary_length_unit: 'feet',
       secondary_length_unit: undefined,
       primary_area_unit: 'acres',
-      secondar_area_unit: undefined,
+      secondary_area_unit: undefined,
       active_color: '#ABE67E',
       completed_color: '#C8F2BE',
       popup_options: {
@@ -55,6 +55,8 @@ export class LeafletMeasureControlView extends control.LeafletControlView {
   create_obj() {
     this.obj = L.control.measure(this.get_options());
     this.default_units = L.extend({}, this.obj.options.units);
+    // Re-initialize so that custom units synced before view creation apply
+    this.obj.initialize(this.get_measure_control_options());
   }
 
   get_measure_control_options() {
@@ -79,5 +81,8 @@ export class LeafletMeasureControlView extends control.LeafletControlView {
         this.obj.initialize(this.get_measure_control_options());
       });
     }
+    this.listenTo(this.model, 'change:_custom_units', () => {
+      this.obj.initialize(this.get_measure_control_options());
+    });
   }
 }

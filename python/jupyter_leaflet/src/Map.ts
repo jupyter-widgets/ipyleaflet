@@ -281,10 +281,21 @@ export class LeafletMapView extends LeafletDOMWidgetView {
     });
   }
 
+  private get_map_options() {
+    const options = this.get_options();
+    // Leaflet expresses wheel sensitivity in scroll pixels per zoom level.
+    const wheelPixels = L.Map.prototype.options.wheelPxPerZoomLevel;
+    if (wheelPixels !== undefined) {
+      options.wheelPxPerZoomLevel =
+        options.zoomDelta > 0 ? wheelPixels / options.zoomDelta : wheelPixels;
+    }
+    return options;
+  }
+
   async create_obj() {
     return this.layoutPromise.then(() => {
       const options = {
-        ...this.get_options(),
+        ...this.get_map_options(),
         crs: getProjection(this.model.get('crs')),
         zoomControl: false,
         attributionControl: false,
@@ -356,7 +367,7 @@ export class LeafletMapView extends LeafletDOMWidgetView {
     for (let i = 0; i < o.length; i++) {
       key = o[i];
       this.listenTo(this.model, 'change:' + key, () => {
-        L.setOptions(this.obj, this.get_options());
+        L.setOptions(this.obj, this.get_map_options());
       });
     }
     this.listenTo(this.model, 'change:panes', this.rerender);

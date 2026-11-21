@@ -2818,6 +2818,8 @@ class Map(DOMWidget, InteractMixin):
     zoom_delta: float, default 1
         Controls how much the map’s zoom level will change after
         pressing + or - on the keyboard, or using the zoom controls.
+        Positive values also scale scroll-wheel sensitivity. Use a smaller
+        zoom_snap to allow fractional zoom levels.
     crs: projection, default projections.EPSG3857
         Coordinate reference system, which can be ‘Earth’, ‘EPSG3395’, ‘EPSG3857’,
         ‘EPSG4326’, ‘Base’, ‘Simple’ or user defined projection.

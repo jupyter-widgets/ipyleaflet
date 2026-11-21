@@ -30,7 +30,7 @@ export class LeafletMeasureControlModel extends control.LeafletControlModel {
       primary_length_unit: 'feet',
       secondary_length_unit: undefined,
       primary_area_unit: 'acres',
-      secondar_area_unit: undefined,
+      secondary_area_unit: undefined,
       active_color: '#ABE67E',
       completed_color: '#C8F2BE',
       popup_options: {
@@ -45,7 +45,6 @@ export class LeafletMeasureControlModel extends control.LeafletControlModel {
 
 export class LeafletMeasureControlView extends control.LeafletControlView {
   obj: any;
-  default_units: any;
 
   initialize(parameters: any) {
     super.initialize(parameters);
@@ -53,25 +52,17 @@ export class LeafletMeasureControlView extends control.LeafletControlView {
   }
 
   create_obj() {
-    this.obj = L.control.measure(this.get_options());
-    this.default_units = L.extend({}, this.obj.options.units);
+    this.obj = L.control.measure(this.get_measure_control_options());
   }
 
   get_measure_control_options() {
     const options = this.get_options();
-    options['units'] = L.extend(
-      {},
-      this.default_units,
-      this.model.get('_custom_units')
-    );
+    options['units'] = this.model.get('_custom_units');
     return options;
   }
 
   model_events() {
-    let key;
-    const o = this.model.get('options');
-    for (let i = 0; i < o.length; i++) {
-      key = o[i];
+    for (const key of [...this.model.get('options'), '_custom_units']) {
       this.listenTo(this.model, 'change:' + key, () => {
         // Workaround for https://github.com/ljagis/leaflet-measure/issues/112
         // and https://github.com/ljagis/leaflet-measure/issues/113
